@@ -138,7 +138,7 @@ implementation
 
 {$R BitmapEditorCursors.res}
 
-uses GraphFlip, Clipbrd, cmpGradientShape, GifImage;
+uses GraphFlip, Clipbrd, cmpGradientShape, Vcl.Imaging.GifImg;
 
 { TBitmapEditor }
 

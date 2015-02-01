@@ -58,6 +58,7 @@ contains
   unitPEModuleRW in 'unitPEModuleRW.pas',
   unitRCFile in 'unitRCFile.pas',
   unitParser in 'unitParser.pas',
-  unitCExpression in 'unitCExpression.pas';
+  unitCExpression in 'unitCExpression.pas',
+  unitNTModule in 'unitNTModule.pas';
 
 end.

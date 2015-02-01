@@ -2,7 +2,7 @@ object dlgCloneResource: TdlgCloneResource
   Left = 0
   Top = 0
   Caption = 'Clone Resource'
-  ClientHeight = 185
+  ClientHeight = 173
   ClientWidth = 340
   Color = clBtnFace
   Constraints.MaxHeight = 212
@@ -18,7 +18,7 @@ object dlgCloneResource: TdlgCloneResource
   OnShow = FormShow
   DesignSize = (
     340
-    185)
+    173)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -37,13 +37,12 @@ object dlgCloneResource: TdlgCloneResource
     Width = 226
     Height = 21
     Anchors = [akLeft, akTop, akRight]
-    ItemHeight = 13
     Sorted = True
     TabOrder = 2
   end
   object btnOK: TButton
     Left = 169
-    Top = 146
+    Top = 134
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -54,7 +53,7 @@ object dlgCloneResource: TdlgCloneResource
   end
   object btnCancel: TButton
     Left = 247
-    Top = 146
+    Top = 134
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -81,7 +80,7 @@ object dlgCloneResource: TdlgCloneResource
     Caption = '&Language'
     TabOrder = 1
   end
-  object ntedName: TTntEdit
+  object ntedName: TEdit
     Left = 96
     Top = 68
     Width = 225

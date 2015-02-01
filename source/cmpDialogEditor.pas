@@ -1334,7 +1334,7 @@ begin
     else
     begin
       fOldWindowProc := Pointer (SetWindowLong (fControlHWND, GWL_WNDPROC, Integer (@ControlWindowProc)));
-      SetPropA (fControlHWND, PChar (gWndAtom), Integer (Self));
+      SetPropA (fControlHWND, PAnsiChar (gWndAtom), Integer (Self));
     end;
 
 

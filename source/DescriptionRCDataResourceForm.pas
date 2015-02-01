@@ -4,12 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, StdCtrls, TntStdCtrls;
+  ResourceForm, StdCtrls, TntVCLStubs;
 
 type
   TfmRCDataDescriptionResource = class(TfmResource)
     Label1: TLabel;
-    ntedDescription: TTntEdit;
+    ntedDescription: TEdit;
     procedure ntedDescriptionExit(Sender: TObject);
   private
     procedure SaveResource (const undoDetails : string);

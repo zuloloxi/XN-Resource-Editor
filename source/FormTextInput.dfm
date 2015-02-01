@@ -20,15 +20,13 @@ object fmTextInput: TfmTextInput
     210)
   PixelsPerInch = 96
   TextHeight = 13
-  object mmoText: TTntMemo
+  object mmoText: TMemo
     Left = 8
     Top = 8
     Width = 293
     Height = 191
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
-    ExplicitWidth = 367
-    ExplicitHeight = 95
   end
   object Button1: TButton
     Left = 307
@@ -40,8 +38,6 @@ object fmTextInput: TfmTextInput
     Default = True
     ModalResult = 1
     TabOrder = 1
-    ExplicitLeft = 420
-    ExplicitTop = 46
   end
   object Button2: TButton
     Left = 307
@@ -52,7 +48,6 @@ object fmTextInput: TfmTextInput
     Caption = '&Font...'
     TabOrder = 2
     OnClick = Button2Click
-    ExplicitLeft = 521
   end
   object Button3: TButton
     Left = 307
@@ -64,8 +59,6 @@ object fmTextInput: TfmTextInput
     Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 3
-    ExplicitLeft = 420
-    ExplicitTop = 77
   end
   object FontDialog1: TFontDialog
     Font.Charset = DEFAULT_CHARSET

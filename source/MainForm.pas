@@ -21,7 +21,8 @@ uses
   ComCtrls, Menus, ToolWin, ExtCtrls, ImgList, StdActns, ActnList, unitResourceDetails,
   cmpStandardSystemMenu, cmpPersistentPosition, cmpMRUList,
   StdCtrls, shellapi, unitCREdProperties,
-  cmpNTAboutBox, ExtDlgs, ResourceForm, GifImage, JPeg, PngImage,
+  cmpNTAboutBox, ExtDlgs, ResourceForm, Vcl.Imaging.GIFImg, Vcl.Imaging.jpeg,
+  Vcl.Imaging.pngimage,
   AppEvnts, unitHTMLHelpViewer, ActnMan, ActnCtrls, ActnMenus, XPStyleActnCtrls,
   VirtualTrees, ExVirtualStringTree, unitResourceExaminer, XPMan;
 {$endregion}

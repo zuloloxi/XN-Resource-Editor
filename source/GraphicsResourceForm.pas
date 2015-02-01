@@ -24,7 +24,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ResourceForm, cmpPropertyListBox, ExtCtrls, cmpBitmapEditor, unitResourceGraphics,
   cmpColorSelector, unitExIcon, ComCtrls, ImgList, ToolWin,
-  cmpSizingPageControl, ActnList, Menus, GifImage;
+  cmpSizingPageControl, ActnList, Menus, Vcl.Imaging.GifImg;
 
 const
   WM_STATUSBAR = WM_USER + $203;

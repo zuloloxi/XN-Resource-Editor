@@ -2,7 +2,7 @@ object dlgResourceProperties: TdlgResourceProperties
   Left = 199
   Top = 124
   Caption = 'Resource Properties'
-  ClientHeight = 134
+  ClientHeight = 122
   ClientWidth = 304
   Color = clBtnFace
   Constraints.MaxHeight = 161
@@ -18,7 +18,7 @@ object dlgResourceProperties: TdlgResourceProperties
   OnShow = FormShow
   DesignSize = (
     304
-    134)
+    122)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -42,13 +42,12 @@ object dlgResourceProperties: TdlgResourceProperties
     Width = 213
     Height = 21
     Anchors = [akLeft, akTop, akRight]
-    ItemHeight = 13
     Sorted = True
     TabOrder = 1
   end
   object btnOK: TButton
     Left = 140
-    Top = 94
+    Top = 82
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -59,7 +58,7 @@ object dlgResourceProperties: TdlgResourceProperties
   end
   object btnCancel: TButton
     Left = 218
-    Top = 94
+    Top = 82
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -68,7 +67,7 @@ object dlgResourceProperties: TdlgResourceProperties
     ModalResult = 2
     TabOrder = 3
   end
-  object ntedName: TTntEdit
+  object ntedName: TEdit
     Left = 80
     Top = 12
     Width = 209

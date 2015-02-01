@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, unitResourceDetails, TntStdCtrls;
+  Dialogs, StdCtrls, unitResourceDetails, TntVCLStubs;
 
 type
   TdlgCloneResource = class(TForm)
@@ -14,7 +14,7 @@ type
     rbByName: TRadioButton;
     rbByLanguage: TRadioButton;
     Label1: TLabel;
-    ntedName: TTntEdit;
+    ntedName: TEdit;
     procedure FormShow(Sender: TObject);
   private
     function GetLanguage: LCID;

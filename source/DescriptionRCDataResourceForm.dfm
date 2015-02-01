@@ -14,7 +14,7 @@ inherited fmRCDataDescriptionResource: TfmRCDataDescriptionResource
     AutoSize = False
     Caption = '&Description'
   end
-  object ntedDescription: TTntEdit
+  object ntedDescription: TEdit
     Left = 112
     Top = 12
     Width = 185
