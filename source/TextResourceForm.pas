@@ -42,7 +42,7 @@ type
     mmoMessage: TExRichEdit;
     vstStrings: TVirtualStringTree;
     procedure vstStringsNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; NewText: WideString);
+      Column: TColumnIndex; NewText: string);
     procedure FormShow(Sender: TObject);
     procedure vstStringsEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
@@ -52,7 +52,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure vstStringsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+      Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure actStringsModifyExecute(Sender: TObject);
     procedure mmoMessageExit(Sender: TObject);
     procedure actStringsDeleteExecute(Sender: TObject);
@@ -230,7 +230,7 @@ var
   st : string;
   adding : Boolean;
   si : TStringInfo;
-  ws : WideString;
+  ws : string;
 begin
   adding := fAdding;
   fAdding := False;
@@ -420,7 +420,7 @@ end;
 
 procedure TfmTextResource.vstStringsGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: WideString);
+  var CellText: string);
 var
   si : TStringInfo;
 begin
@@ -449,7 +449,7 @@ begin
 end;
 
 procedure TfmTextResource.vstStringsNewText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
+  Node: PVirtualNode; Column: TColumnIndex; NewText: string);
 var
   i, newID : Integer;
   st : TStringInfo;
