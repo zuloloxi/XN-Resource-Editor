@@ -11,7 +11,10 @@ uses
   cmpBitmapEditor,
   cmpMenuDesigner,
   cmpDialogBox,
-  cmpDialogEditor;
+  cmpDialogEditor,
+  cmpGradientShape,
+  cmpStandardSystemMenu;
+  
 
 procedure Register;
 begin

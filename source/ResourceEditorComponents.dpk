@@ -1,6 +1,7 @@
-package ResourceEditorComponents100;
+package ResourceEditorComponents;
 
 {$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -11,27 +12,29 @@ package ResourceEditorComponents100;
 {$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
+{$OPTIMIZATION OFF}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
 {$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'Colin Wilson - Resource Editor Components'}
 {$IMPLICITBUILD OFF}
 
 requires
   rtl,
-  LowLevel100,
+  LowLevel,
   vcl,
-  ResourceUtils100,
+  ResourceUtils,
   vcljpg,
-  ImageTypes100;
+  ImageTypes;
 
 contains
   ResourceEditorComponentsReg in 'ResourceEditorComponentsReg.pas',
@@ -51,6 +54,7 @@ contains
   DialogUpDownControls in 'DialogUpDownControls.pas',
   cmpBitmapEditor in 'cmpBitmapEditor.pas',
   DialogListViewControls in 'DialogListViewControls.pas',
-  cmpGradientShape in 'cmpGradientShape.pas';
+  cmpGradientShape in 'cmpGradientShape.pas',
+  cmpStandardSystemMenu in 'cmpStandardSystemMenu.pas';
 
 end.
