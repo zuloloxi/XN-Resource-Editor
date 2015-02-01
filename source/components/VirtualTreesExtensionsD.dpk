@@ -1,4 +1,4 @@
-package VirtualTreesExtensions120;
+package VirtualTreesExtensionsD;
 
 {$R *.res}
 {$ALIGN 8}
@@ -22,15 +22,16 @@ package VirtualTreesExtensions120;
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$RUNONLY}
+{$DESCRIPTION 'Colin Wilson''s Virtual Tree Extensions'}
+{$DESIGNONLY}
 {$IMPLICITBUILD OFF}
 
 requires
   rtl,
   vcl,
-  VirtualTreesD12;
+  VirtualTreesExtensions;
 
 contains
-  ExVirtualStringTree in 'ExVirtualStringTree.pas';
+  VirtualTreesExtensionsReg in 'VirtualTreesExtensionsReg.pas';
 
 end.

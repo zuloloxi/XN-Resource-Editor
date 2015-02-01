@@ -3,7 +3,8 @@ unit ExVirtualStringTree;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Controls, VirtualTrees, Forms;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Controls, VirtualTrees, Vcl.Forms;
 
 type
   TVTIteratorProc = procedure (p : PVirtualNode; param : Integer; var continue : boolean) of object;
