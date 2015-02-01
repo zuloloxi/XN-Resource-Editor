@@ -2,8 +2,6 @@ inherited fmTextResource: TfmTextResource
   Caption = 'fmTextResource'
   OnCreate = FormCreate
   OnShow = FormShow
-  ExplicitWidth = 701
-  ExplicitHeight = 455
   PixelsPerInch = 96
   TextHeight = 13
   object vstStrings: TVirtualStringTree
@@ -40,7 +38,7 @@ inherited fmTextResource: TfmTextResource
       item
         Options = [coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
         Position = 1
-        Width = 597
+        Width = 595
         WideText = 'String'
       end>
   end

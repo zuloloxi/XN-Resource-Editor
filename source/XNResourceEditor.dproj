@@ -47,7 +47,7 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
-        <DCC_UnitSearchPath>..\lib\$(Platform)\$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\lib\$(Platform)\$(Config);.\components;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1031</VerInfo_Locale>
@@ -102,12 +102,6 @@
         <DCCReference Include="MainForm.pas">
             <Form>fmMain</Form>
         </DCCReference>
-        <DCCReference Include="ResourceObjectForm.pas">
-            <Form>fmResourceObject</Form>
-        </DCCReference>
-        <DCCReference Include="ResourceForm.pas">
-            <Form>fmResource</Form>
-        </DCCReference>
         <DCCReference Include="RawResourceForm.pas">
             <Form>fmRawResource</Form>
         </DCCReference>
@@ -117,7 +111,6 @@
         <DCCReference Include="TextResourceForm.pas">
             <Form>fmTextResource</Form>
         </DCCReference>
-        <DCCReference Include="unitCREdProperties.pas"/>
         <DCCReference Include="PropertiesForm.pas">
             <Form>fmProperties</Form>
         </DCCReference>
@@ -136,9 +129,6 @@
         <DCCReference Include="ResourcePropertiesDialog.pas">
             <Form>dlgResourceProperties</Form>
         </DCCReference>
-        <DCCReference Include="DialogResourceForm.pas">
-            <Form>fmDialogResource</Form>
-        </DCCReference>
         <DCCReference Include="DescriptionRCDataResourceForm.pas">
             <Form>fmRCDataDescriptionResource</Form>
         </DCCReference>
@@ -154,8 +144,6 @@
         <DCCReference Include="AcceleratorResourceForm.pas">
             <Form>fmAcceleratorResource</Form>
         </DCCReference>
-        <DCCReference Include="DialogStrings.pas"/>
-        <DCCReference Include="DialogSliderControls.pas"/>
         <DCCReference Include="CloneResourceDialog.pas">
             <Form>dlgCloneResource</Form>
         </DCCReference>
@@ -171,8 +159,6 @@
         <DCCReference Include="PropertyPageProgramSettings.pas">
             <Form>fmPropertyPageProgramSettings</Form>
         </DCCReference>
-        <DCCReference Include="unitIncludePathPackages.pas"/>
-        <DCCReference Include="unitIncludePaths.pas"/>
         <DCCReference Include="HelpContext.pas"/>
         <DCCReference Include="IconCursorGraphicsResourceForm.pas">
             <Form>fmIconCursorGraphicsResource</Form>
@@ -183,7 +169,6 @@
         <DCCReference Include="IconGraphicsResourceForm.pas">
             <Form>fmIconGraphicsResource</Form>
         </DCCReference>
-        <DCCReference Include="DialogListViewControls.pas"/>
         <DCCReference Include="FormTextInput.pas">
             <Form>fmTextInput</Form>
         </DCCReference>

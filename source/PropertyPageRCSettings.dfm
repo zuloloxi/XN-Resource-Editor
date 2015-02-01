@@ -31,7 +31,6 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Width = 231
     Height = 109
     Anchors = [akLeft, akTop, akRight, akBottom]
-    CheckImageKind = ckSystem
     Header.AutoSizeIndex = 0
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
@@ -49,7 +48,7 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Columns = <
       item
         Position = 0
-        Width = 227
+        Width = 225
         WideText = 'Include Header Packages'
       end>
   end

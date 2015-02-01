@@ -90,7 +90,7 @@ type
     procedure btnApplyClick(Sender: TObject);
     procedure vstSectionsGetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-      var CellText: WideString);
+      var CellText: string);
     procedure FormShow(Sender: TObject);
     procedure vstSectionsFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
@@ -582,7 +582,7 @@ end;
  *----------------------------------------------------------------------*}
 procedure TfmPropertyBase.vstSectionsGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: WideString);
+  var CellText: string);
 var
   d : TPropertyPageDetails;
 begin

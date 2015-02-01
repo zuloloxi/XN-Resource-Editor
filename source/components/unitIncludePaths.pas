@@ -47,9 +47,6 @@ var
 
 procedure RegisterIncludePathPackage (const key : string; cls : TIncludePathPackageClass);
 begin
-  if gRegisteredPackages = Nil then
-    gRegisteredPackages := TClassStringAssociations.Create;
-
   gRegisteredPackages.Associate(key, cls);
 end;
 
@@ -144,6 +141,7 @@ begin
 end;
 
 initialization
+  gRegisteredPackages := TClassStringAssociations.Create;
 finalization
   gRegisteredPackages.Free
 end.

@@ -31,7 +31,7 @@ type
       Node: PVirtualNode);
     procedure vstIncludePackagesGetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-      var CellText: WideString);
+      var CellText: string);
     procedure vstIncludePackagesInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure FormDestroy(Sender: TObject);
@@ -189,7 +189,7 @@ end;
 
 procedure TfmPropertyPageRCSettings.vstIncludePackagesGetText(
   Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
-  TextType: TVSTTextType; var CellText: WideString);
+  TextType: TVSTTextType; var CellText: string);
 var
   package : TIncludePathPackage;
 begin
