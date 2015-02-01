@@ -1,0 +1,62 @@
+package ResourceUtils120;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl,
+  vclimg,
+  ImageTypes120,
+  LowLevel120;
+
+contains
+  unitResourceDetails in 'unitResourceDetails.pas',
+  unitResFile in 'unitResFile.pas',
+  unitResourceGraphics in 'unitResourceGraphics.pas',
+  unitResourceMessages in 'unitResourceMessages.pas',
+  unitResourceAccelerator in 'unitResourceAccelerator.pas',
+  unitResourceGIF in 'unitResourceGIF.pas',
+  unitResourceJPEG in 'unitResourceJPEG.pas',
+  unitResourceHTML in 'unitResourceHTML.pas',
+  unitResourcePNG in 'unitResourcePNG.pas',
+  unitResourceMenus in 'unitResourceMenus.pas',
+  unitResourceDialogs in 'unitResourceDialogs.pas',
+  DialogConsts in 'DialogConsts.pas',
+  unitResourceXPManifests in 'unitResourceXPManifests.pas',
+  unitResourceRCData in 'unitResourceRCData.pas',
+  unitResourceVersionInfo in 'unitResourceVersionInfo.pas',
+  unitResourceToolbar in 'unitResourceToolbar.pas',
+  unitResourceExaminer in 'unitResourceExaminer.pas',
+  unitPEFile in 'unitPEFile.pas',
+  unitDisassembler in 'unitDisassembler.pas',
+  unitObjFile in 'unitObjFile.pas',
+  unitPEModuleRW in 'unitPEModuleRW.pas',
+  unitNTModule in 'unitNTModule.pas',
+  unitRCFile in 'unitRCFile.pas',
+  unitParser in 'unitParser.pas',
+  unitCExpression in 'unitCExpression.pas';
+
+end.

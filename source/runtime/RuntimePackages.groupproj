@@ -1,0 +1,110 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{67214D77-BEBC-4CE6-A9E4-55CA3A6D0C33}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="LowLevel120.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="ImageTypes120.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="ResourceUtils120.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="NTLowLevel120.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="OTAUtils120.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="RuntimePackagesTest.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<BorlandProject>
+					<BorlandProject>
+						<BorlandProject>
+							<BorlandProject>
+								<BorlandProject>
+									<BorlandProject>
+										<BorlandProject>
+											<Default.Personality/>
+										</BorlandProject>
+									</BorlandProject>
+								</BorlandProject>
+							</BorlandProject>
+						</BorlandProject>
+					</BorlandProject>
+				</BorlandProject>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="LowLevel120">
+			<MSBuild Projects="LowLevel120.dproj"/>
+		</Target>
+		<Target Name="LowLevel120:Clean">
+			<MSBuild Targets="Clean" Projects="LowLevel120.dproj"/>
+		</Target>
+		<Target Name="LowLevel120:Make">
+			<MSBuild Targets="Make" Projects="LowLevel120.dproj"/>
+		</Target>
+		<Target Name="ImageTypes120">
+			<MSBuild Projects="ImageTypes120.dproj"/>
+		</Target>
+		<Target Name="ImageTypes120:Clean">
+			<MSBuild Targets="Clean" Projects="ImageTypes120.dproj"/>
+		</Target>
+		<Target Name="ImageTypes120:Make">
+			<MSBuild Targets="Make" Projects="ImageTypes120.dproj"/>
+		</Target>
+		<Target Name="ResourceUtils120">
+			<MSBuild Projects="ResourceUtils120.dproj"/>
+		</Target>
+		<Target Name="ResourceUtils120:Clean">
+			<MSBuild Targets="Clean" Projects="ResourceUtils120.dproj"/>
+		</Target>
+		<Target Name="ResourceUtils120:Make">
+			<MSBuild Targets="Make" Projects="ResourceUtils120.dproj"/>
+		</Target>
+		<Target Name="NTLowLevel120">
+			<MSBuild Projects="NTLowLevel120.dproj"/>
+		</Target>
+		<Target Name="NTLowLevel120:Clean">
+			<MSBuild Targets="Clean" Projects="NTLowLevel120.dproj"/>
+		</Target>
+		<Target Name="NTLowLevel120:Make">
+			<MSBuild Targets="Make" Projects="NTLowLevel120.dproj"/>
+		</Target>
+		<Target Name="OTAUtils120">
+			<MSBuild Projects="OTAUtils120.dproj"/>
+		</Target>
+		<Target Name="OTAUtils120:Clean">
+			<MSBuild Targets="Clean" Projects="OTAUtils120.dproj"/>
+		</Target>
+		<Target Name="OTAUtils120:Make">
+			<MSBuild Targets="Make" Projects="OTAUtils120.dproj"/>
+		</Target>
+		<Target Name="RuntimePackagesTest">
+			<MSBuild Projects="RuntimePackagesTest.dproj"/>
+		</Target>
+		<Target Name="RuntimePackagesTest:Clean">
+			<MSBuild Targets="Clean" Projects="RuntimePackagesTest.dproj"/>
+		</Target>
+		<Target Name="RuntimePackagesTest:Make">
+			<MSBuild Targets="Make" Projects="RuntimePackagesTest.dproj"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="LowLevel120;ImageTypes120;ResourceUtils120;NTLowLevel120;OTAUtils120;RuntimePackagesTest"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="LowLevel120:Clean;ImageTypes120:Clean;ResourceUtils120:Clean;NTLowLevel120:Clean;OTAUtils120:Clean;RuntimePackagesTest:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="LowLevel120:Make;ImageTypes120:Make;ResourceUtils120:Make;NTLowLevel120:Make;OTAUtils120:Make;RuntimePackagesTest:Make"/>
+		</Target>
+		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+	</Project>

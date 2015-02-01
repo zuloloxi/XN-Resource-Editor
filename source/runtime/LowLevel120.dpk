@@ -1,0 +1,50 @@
+package LowLevel120;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Colin Wilson''s Low Level Runtime Units'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl;
+
+contains
+  unitExIniSettings in 'unitExIniSettings.pas',
+  unitExRegSettings in 'unitExRegSettings.pas',
+  unitExSettings in 'unitExSettings.pas',
+  unitExXMLSettings in 'unitExXMLSettings.pas',
+  unitSearchString in 'unitSearchString.pas',
+  unitStreamTextReader in 'unitStreamTextReader.pas',
+  unitCharsetMap in 'unitCharsetMap.pas',
+  MultiLanguage_tlb in 'MultiLanguage_tlb.pas',
+  unitExFileSettings in 'unitExFileSettings.pas',
+  RichOle in 'RichOle.pas',
+  unitObjectCache in 'unitObjectCache.pas',
+  unitProcesses in 'unitProcesses.pas',
+  GraphFlip in 'GraphFlip.pas',
+  unitHTMLHelp in 'unitHTMLHelp.pas',
+  unitExGraphics in 'unitExGraphics.pas';
+
+end.

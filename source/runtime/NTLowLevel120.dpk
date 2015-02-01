@@ -1,0 +1,51 @@
+package NTLowLevel120;
+
+{$R *.res}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DESCRIPTION 'Colin Wilson''s Low Level NT Units'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  LowLevel120;
+
+contains
+  unitNTSecurity in 'unitNTSecurity.pas',
+  lmglobal in 'lmglobal.pas',
+  lmaccess in 'lmaccess.pas',
+  sspi in 'sspi.pas',
+  SChannel in 'SChannel.pas',
+  SSPIUtils in 'SSPIUtils.pas',
+  WinCrypt in 'WinCrypt.pas',
+  unitMIMECodec in 'unitMIMECodec.pas',
+  unitNTHandles in 'unitNTHandles.pas',
+  NTDDK in 'NTDDK.pas',
+  iprtrmib in 'iprtrmib.pas',
+  iphlpapi in 'iphlpapi.pas',
+  ipifcons in 'ipifcons.pas',
+  ipexport in 'ipexport.pas',
+  iptypes in 'iptypes.pas',
+  ntprocess in 'ntprocess.pas';
+
+end.
