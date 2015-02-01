@@ -1,6 +1,7 @@
-package PropertyPageForms120;
+package PropertyPageForms;
 
 {$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -11,28 +12,29 @@ package PropertyPageForms120;
 {$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
+{$OPTIMIZATION OFF}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
 {$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DESCRIPTION 'Colin Wilson''''s Property Page Forms'}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
 {$IMPLICITBUILD ON}
 
 requires
   rtl,
   vcl,
-  VirtualTreesD12,
-  MiscComponents120,
+  VirtualTreesD,
+  MiscComponents,
   vclie,
   vclimg,
-  LowLevel120;
+  LowLevel;
 
 contains
   PropertyBaseForm in 'PropertyBaseForm.pas',

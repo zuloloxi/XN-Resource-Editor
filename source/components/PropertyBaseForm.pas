@@ -27,9 +27,10 @@ interface
 
 {$region 'Interface ''Uses'' section'}
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, VirtualTrees, PropertyPageForm, ConTnrs, StdCtrls,
-  cmpPersistentPosition, Menus;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.ExtCtrls, VirtualTrees, PropertyPageForm, System.Contnrs, Vcl.StdCtrls,
+  cmpPersistentPosition, Vcl.Menus;
 {$include 'compilers.inc'}  // Use Mike Lischke's version detection
 
 {$endregion}
@@ -717,7 +718,7 @@ begin
       HandleNeeded;
     end;
     ActiveWindow := GetActiveWindow;
-    SaveFocusState := Forms.SaveFocusState;
+    SaveFocusState := Vcl.Forms.SaveFocusState;
     Screen.SaveFocusedList.Insert(0, Screen.FocusedForm);
     Screen.FocusedForm := Self;
     SaveCursor := Screen.Cursor;
