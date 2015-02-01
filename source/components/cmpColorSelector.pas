@@ -3,7 +3,8 @@ unit cmpColorSelector;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, GraphUtil, unitExGraphics;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.GraphUtil, unitExGraphics;
 
 const
   HLSMAX =240;

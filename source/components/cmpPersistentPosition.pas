@@ -33,7 +33,8 @@ unit cmpPersistentPosition;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, unitExSettings;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, unitExSettings;
 
 type
 //------------------------------------------------------------------------
@@ -162,7 +163,7 @@ destructor TPersistentPosition.Destroy;
 begin
   UnSubclass;
   if Assigned (fObjectInstance) then
-    Classes.FreeObjectInstance (fObjectInstance);
+    System.Classes.FreeObjectInstance (fObjectInstance);
   inherited;
 end;
 

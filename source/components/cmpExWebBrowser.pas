@@ -3,7 +3,8 @@ unit cmpExWebBrowser;
 interface
 
 uses
-  Windows, Messages, Menus, SysUtils, Classes, Controls, OleCtrls, SHDocVw, ActiveX, Forms, URLMon;
+  WinAPI.Windows, WinAPI.Messages, Vcl.Menus, System.SysUtils, System.Classes,
+  Vcl.Controls, Vcl.OleCtrls, SHDocVw, WinAPI.ActiveX, Vcl.Forms, WinAPI.URLMon;
 
 const
   CGID_DocHostCommandHandler : TGuid = '{f38bc242-b950-11d1-8918-00c04fc2c836}';

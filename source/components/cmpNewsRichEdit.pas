@@ -30,7 +30,8 @@ unit cmpNewsRichEdit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Forms, Controls, Graphics, RichEdit, cmpCWRichEdit;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes, Vcl.Forms,
+  Vcl.Controls, Vcl.Graphics, WinAPI.RichEdit, cmpCWRichEdit;
 
 type
   TNewsRichEdit = class;

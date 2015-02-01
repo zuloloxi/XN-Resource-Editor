@@ -27,7 +27,9 @@ unit cmpCWRichEdit;
 interface
 
 uses
-  Windows, Messages, Classes, SysUtils, Forms, Graphics, Controls, StdCtrls, ComCtrls, StdActns, RichEdit, Dialogs, RichOLE, CommDlg;
+  WinAPI.Windows, WinAPI.Messages, System.Classes, System.SysUtils, Vcl.Forms,
+  Vcl.Graphics, Vcl.Controls, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.StdActns,
+  WinAPI.RichEdit, Vcl.Dialogs, RichOLE, WinAPI.CommDlg;
 
 type
   TCustomExRichEdit = class;
@@ -410,7 +412,8 @@ type
 
 implementation
 
-uses ShellAPI, ClipBrd, printers, unitCharsetMap;
+uses
+  WinAPI.ShellAPI, Vcl.ClipBrd, Vcl.Printers, unitCharsetMap;
 
 var
   gRichEditModule : THandle;
@@ -1432,9 +1435,9 @@ begin
       case Perform(WM_NCHITTEST, 0, MakeLong(X, Y)) of
         HTVSCROLL,
         HTHSCROLL:      // Arrow on scroll-bars
-          Windows.SetCursor(Screen.Cursors[crArrow]);
+          WinAPI.Windows.SetCursor(Screen.Cursors[crArrow]);
         HTCLIENT:       // I-Beam on client
-          Windows.SetCursor(Screen.Cursors[crIBeam]);
+          WinAPI.Windows.SetCursor(Screen.Cursors[crIBeam]);
       end;
   end;
 end;

@@ -3,7 +3,7 @@ unit cmpCountryComboBox;
 interface
 
 uses
-  SysUtils, Classes, Controls, StdCtrls, unitCharsetMap;
+  System.SysUtils, System.Classes, Vcl.Controls, Vcl.StdCtrls, unitCharsetMap;
 
 type
   TCountryComboBox = class(TCustomComboBox)

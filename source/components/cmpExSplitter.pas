@@ -13,7 +13,8 @@ unit cmpExSplitter;
 interface
 
 uses
-  Windows, Messages, SysUtils, Forms, Classes, Controls, ExtCtrls, Graphics;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, Vcl.Forms, System.Classes,
+  Vcl.Controls, Vcl.ExtCtrls, Vcl.Graphics;
 
 type
   TExSplitterArrow = (arLeft, arRight, arUp, arDown);

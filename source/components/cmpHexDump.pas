@@ -3,8 +3,8 @@ unit cmpHexDump;
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls;
+  System.SysUtils, WinAPI.Windows, WinAPI.Messages, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 const
   MAXDIGITS = 16;
@@ -305,7 +305,7 @@ begin
         R.Bottom := FItemHeight;
       end;
 
-      Windows.InvalidateRect(Handle, @R, False);
+      WinAPI.Windows.InvalidateRect(Handle, @R, False);
 
     end
     else Invalidate;
@@ -411,13 +411,13 @@ begin
     begin
       R := Bounds(0, 0, 1, FItemHeight);
       OffsetRect(R, 0, (FCurrentLine - FTopLine) * FItemHeight);
-      Windows.InvalidateRect(Handle, @R, True);
+      WinAPI.Windows.InvalidateRect(Handle, @R, True);
     end;
     FCurrentLine := Value;
 
     R := Bounds(0, 0, 1, FItemHeight);
     OffsetRect(R, 0, (FCurrentLine - FTopLine) * FItemHeight);
-    Windows.InvalidateRect(Handle, @R, True);
+    WinAPI.Windows.InvalidateRect(Handle, @R, True);
     ScrollIntoView;
     SetCaretPos
   end;
@@ -712,7 +712,7 @@ begin
       if FLowNibble then
         Inc (x, FItemWidth - 1)
     end;
-    Windows.SetCaretPos (x, y)
+    WinAPI.Windows.SetCaretPos (x, y)
   end
 end;
 

@@ -27,7 +27,8 @@ unit cmpSplitterPanel;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Controls, ExtCtrls, Graphics, Forms;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Controls, Vcl.ExtCtrls, Vcl.Graphics, Vcl.Forms;
 
 type
   TSplitterPanelSplitter = (splLeft, splTop, splRight, splBottom);

@@ -3,7 +3,7 @@ unit cmpRunOnce;
 interface
 
 uses
-  Windows, Messages, SysUtils, classes, Forms;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes, Vcl.Forms;
 
 const
   WM_PARAMS = WM_USER + $200;
@@ -46,7 +46,7 @@ begin
   if hwnd <> TForm (Owner).Handle then
   begin
     if GetWindowLong (hwnd, GWL_USERDATA) = $badf00d then
-      if (SendMessageTimeout (hwnd, fUniqueMessage, 0, 0, SMTO_BLOCK or SMTO_ABORTIFHUNG, 1000, msgResult) <> 0) and (msgResult = fUniqueMessage) then
+      if (SendMessageTimeout(hwnd, fUniqueMessage, 0, 0, SMTO_BLOCK or SMTO_ABORTIFHUNG, 1000, @msgResult) <> 0) and (msgResult = fUniqueMessage) then
       begin
         fOtherWindowHandle := hwnd;
         result := True
@@ -62,7 +62,7 @@ end;
 destructor TRunOnce.Destroy;
 begin
   if Assigned (fObjectInstance) then
-    Classes.FreeObjectInstance (fObjectInstance);
+    System.Classes.FreeObjectInstance (fObjectInstance);
 
 
   if fMutex <> 0 then
@@ -114,7 +114,7 @@ begin
     fUniqueMessage := RegisterWindowMessage (PChar (fName));
     fParamsMessage := RegisterWindowMessage ('WoozleRunOnce');
 
-    fObjectInstance := Classes.MakeObjectInstance (OwnerWindowProc);
+    fObjectInstance := System.Classes.MakeObjectInstance (OwnerWindowProc);
     fOldOwnerWindowProc := TfnWndProc (SetWindowLong (TForm (Owner).Handle, GWL_WNDPROC, Integer (fObjectInstance)));
 
     if fMutex = 0 then

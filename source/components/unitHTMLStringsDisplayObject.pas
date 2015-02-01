@@ -2,7 +2,10 @@ unit unitHTMLStringsDisplayObject;
 
 interface
 
-uses Windows, Classes, SysUtils, Graphics, Forms, cmpMessageDisplay, OleCtrls, SHDocVw, ComObj, ActiveX, ShlObj, MSHTML, ShellAPI;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics, Vcl.Forms,
+  cmpMessageDisplay, Vcl.OleCtrls, SHDocVw, System.Win.ComObj, WinAPI.ActiveX,
+  WinAPI.ShlObj, MSHTML, WinAPI.ShellAPI;
 
 type                                                     
   THTMLStringsDisplayObjectLink = class (TWinControlObjectLink)
@@ -11,12 +14,12 @@ type
     fRendering : boolean;
     fNavigating : boolean;
     fXanaLink : string;
-    procedure DoOnDocumentComplete (Sender: TObject; const pDisp: IDispatch; var URL: OleVariant);
-    procedure DoOnBeforeNavigate2 (Sender: TObject; const pDisp: IDispatch; var URL: OleVariant;
-                                                          var Flags: OleVariant;
-                                                          var TargetFrameName: OleVariant;
-                                                          var PostData: OleVariant;
-                                                          var Headers: OleVariant;
+    procedure DoOnDocumentComplete (Sender: TObject; const pDisp: IDispatch; const URL: OleVariant);
+    procedure DoOnBeforeNavigate2 (Sender: TObject; const pDisp: IDispatch; const URL: OleVariant;
+                                                          const Flags: OleVariant;
+                                                          const TargetFrameName: OleVariant;
+                                                          const PostData: OleVariant;
+                                                          const Headers: OleVariant;
                                                           var Cancel: WordBool);
 
     procedure DoOnNewWindow2 (Sender: TObject; var ppDisp: IDispatch; var Cancel: WordBool);
@@ -120,7 +123,7 @@ begin
 end;
 
 procedure THTMLStringsDisplayObjectLink.DoOnBeforeNavigate2(
-  Sender: TObject; const pDisp: IDispatch; var URL, Flags, TargetFrameName,
+  Sender: TObject; const pDisp: IDispatch; const URL, Flags, TargetFrameName,
   PostData, Headers: OleVariant; var Cancel: WordBool);
 var
   urlStr : string;
@@ -134,9 +137,8 @@ begin
     ctrl.Invalidate
   end
 end;
-
 procedure THTMLStringsDisplayObjectLink.DoOnDocumentComplete(
-  Sender: TObject; const pDisp: IDispatch; var URL: OleVariant);
+  Sender: TObject; const pDisp: IDispatch; const URL: OleVariant);
 var
   ctrl : TExWebBrowser;
   doc : IHTMLDocument2;
@@ -232,7 +234,7 @@ begin
   Stop;
   if fRendering or fNavigating or Busy then
   begin
-    Windows.Beep (440, 10);
+    WinAPI.Windows.Beep (440, 10);
     Exit
   end;
   ctrl.Width := Owner.MessageWidth;

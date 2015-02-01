@@ -3,7 +3,8 @@ unit cmpThemedScrollBox;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Controls, Graphics, Forms, UxTheme,Themes;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Controls, Vcl.Graphics, Vcl.Forms, WinAPI.UxTheme, Vcl.Themes;
 
 type
   TThemedScrollBox = class(TScrollBox)
@@ -127,7 +128,7 @@ begin
 
     // Erase parts not drawn.
     Brush.Color := clBtnFace; // FColors.BorderColor;
-    Windows.FillRect(DC, RW, Brush.Handle);
+    WinAPI.Windows.FillRect(DC, RW, Brush.Handle);
   end
 end;
 

@@ -4,8 +4,10 @@ unit cmpNTAboutBox;
 
 interface
 
-uses Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls,
-  Buttons, ExtCtrls, cmpHyperlinkButton, ComCtrls;
+uses
+  WinAPI.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms,
+  Vcl.Controls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, cmpHyperlinkButton,
+  Vcl.ComCtrls;
 
 type
   TfmNTAboutBox = class(TForm)
@@ -60,7 +62,8 @@ var
 
 implementation
 
-uses Registry, GifImg;
+uses
+  System.Win.Registry, Vcl.Imaging.GIFImg;
 
 {$R *.DFM}
 

@@ -3,7 +3,8 @@ unit cmpHyperlinkButton;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ImgList;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ImgList;
 
 type
   THyperlinkButton = class(TGraphicControl)
@@ -233,7 +234,7 @@ begin
     Flags := DT_EXPANDTABS or DT_VCENTER or DT_LEFT or DT_NOPREFIX;
     Flags := DrawTextBiDiModeFlags(Flags);
 
-    SetBkMode (Handle, Windows.TRANSPARENT);
+    SetBkMode (Handle, WinAPI.Windows.TRANSPARENT);
     DrawText(Handle, PChar(Caption), -1, Rect, Flags);
   end;
 

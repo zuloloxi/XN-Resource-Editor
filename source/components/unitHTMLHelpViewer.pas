@@ -9,7 +9,9 @@ procedure InitializeHTMLHelp;
 
 implementation
 
-uses HelpIntfs, unitHTMLHelp, Forms;
+uses
+  System.HelpIntfs, unitHTMLHelp, Vcl.Forms;
+
 type
 
  TWHCommandType = (twhContext, twhCommand, twhContents, twhQuit);
@@ -71,7 +73,7 @@ begin
   begin
     HtmlHelp (0, nil, HH_INITIALIZE, DWORD (@dwHHCookie));
     HTMLHelpViewer := THTMLHelpViewer.Create;
-    HelpIntfs.RegisterViewer(HTMLHelpViewer, HTMLHelpViewer.FHelpManager);
+    System.HelpIntfs.RegisterViewer(HTMLHelpViewer, HTMLHelpViewer.FHelpManager);
     GetHelpSystem (helpSystem);
     helpSystem.AssignHelpSelector(HTMLHelpViewer);
     gInitialized := True

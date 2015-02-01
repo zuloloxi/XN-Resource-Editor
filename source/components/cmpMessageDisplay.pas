@@ -26,7 +26,9 @@ unit cmpMessageDisplay;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Controls, Graphics, Forms, Contnrs, Math, StrUtils, StdActns, ShellAPI, Dialogs;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Controls, Vcl.Graphics, Vcl.Forms, System.Contnrs, System.Math,
+  System.StrUtils, Vcl.StdActns, WinAPI.ShellAPI, Vcl.Dialogs;
 
 type
   TMessageDisplay = class;
@@ -276,7 +278,8 @@ procedure RegisterDisplayObjectLink (dispObj : TDisplayObjectLinkClass; Position
 
 implementation
 
-uses ClipBrd, unitCharsetMap, Printers, unitHTMLStringsDisplayObject;
+uses
+  Vcl.ClipBrd, unitCharsetMap, Vcl.Printers, unitHTMLStringsDisplayObject;
 
 //----------------------------------------------------------------------------
 // Keep details of registered display objects
@@ -438,7 +441,7 @@ begin
     until (n <= 0) or not busy;
 
     if busy then
-      Windows.Beep (440, 100);
+      WinAPI.Windows.Beep (440, 100);
   except
   end;
 

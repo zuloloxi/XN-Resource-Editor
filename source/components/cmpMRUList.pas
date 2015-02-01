@@ -26,7 +26,7 @@ unit cmpMRUList;
 interface
 
 uses
-  Windows, Classes, SysUtils, Menus, Forms;
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Menus, Vcl.Forms;
 
 type
   TMRUList = class(TComponent)
@@ -121,7 +121,7 @@ var
   app : string;
 begin
   if Application = '' then
-    app := Forms.Application.Title
+    app := Vcl.Forms.Application.Title
   else
     app := Application;
 
