@@ -1840,8 +1840,4 @@ object fmMain: TfmMain
     Left = 284
     Top = 214
   end
-  object XPManifest1: TXPManifest
-    Left = 288
-    Top = 184
-  end
 end

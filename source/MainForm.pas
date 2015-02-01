@@ -24,7 +24,7 @@ uses
   cmpNTAboutBox, ExtDlgs, ResourceForm, Vcl.Imaging.GIFImg, Vcl.Imaging.jpeg,
   Vcl.Imaging.pngimage,
   AppEvnts, unitHTMLHelpViewer, ActnMan, ActnCtrls, ActnMenus, XPStyleActnCtrls,
-  VirtualTrees, ExVirtualStringTree, unitResourceExaminer, XPMan, System.Actions;
+  VirtualTrees, ExVirtualStringTree, unitResourceExaminer, System.Actions;
 {$endregion}
 
 {$region 'Constant Definitions'}
@@ -145,7 +145,6 @@ type
     actResourceClone: TAction;
     CloneResource1: TMenuItem;
     vstResources: TExVirtualStringTree;
-    XPManifest1: TXPManifest;
     tbMenu: TToolBar;
     btnFile: TToolButton;
     btnEdit: TToolButton;
