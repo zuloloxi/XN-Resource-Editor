@@ -24,7 +24,7 @@ uses
   cmpNTAboutBox, ExtDlgs, ResourceForm, Vcl.Imaging.GIFImg, Vcl.Imaging.jpeg,
   Vcl.Imaging.pngimage,
   AppEvnts, unitHTMLHelpViewer, ActnMan, ActnCtrls, ActnMenus, XPStyleActnCtrls,
-  VirtualTrees, ExVirtualStringTree, unitResourceExaminer, XPMan;
+  VirtualTrees, ExVirtualStringTree, unitResourceExaminer, XPMan, System.Actions;
 {$endregion}
 
 {$region 'Constant Definitions'}
@@ -161,7 +161,7 @@ type
     ToolButton4: TToolButton;
     ToolButton5: TToolButton;
     procedure vstResourcesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; NewText: WideString);
+      Column: TColumnIndex; NewText: string);
     procedure vstResourcesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
     procedure vstResourcesGetImageIndex(Sender: TBaseVirtualTree;
@@ -171,8 +171,8 @@ type
       Node: PVirtualNode; Column: TColumnIndex);
     procedure vstResourcesInitChildren(Sender: TBaseVirtualTree;
       Node: PVirtualNode; var ChildCount: Cardinal);
-    procedure vstResourcesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstResourcesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+    TextType: TVSTTextType; var CellText: string);
     procedure vstResourcesInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure actResourceGrabExecute(Sender: TObject);
@@ -206,7 +206,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
-    function ApplicationEvents1Help(Command: Word; Data: Integer;
+    function ApplicationEvents1Help(Command: Word; Data: NativeInt;
       var CallHelp: Boolean): Boolean;
     procedure actResourceImportRCDataResourceExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -1093,7 +1093,7 @@ begin
   gProperties.ShowToolbar := not gProperties.ShowToolbar;
 end;
 
-function TfmMain.ApplicationEvents1Help(Command: Word; Data: Integer;
+function TfmMain.ApplicationEvents1Help(Command: Word; Data: NativeInt;
   var CallHelp: Boolean): Boolean;
 begin
   CallHelp := not (command = HELP_FINDER);
@@ -1888,9 +1888,8 @@ begin
   SwitchView (GetNodeResourceDetails (Node));
 end;
 
-procedure TfmMain.vstResourcesGetText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: WideString);
+procedure TfmMain.vstResourcesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
+    TextType: TVSTTextType; var CellText: string);
 var
   elem : TResExamElement;
 begin
@@ -1980,7 +1979,7 @@ begin
 end;
 
 procedure TfmMain.vstResourcesNewText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
+  Node: PVirtualNode; Column: TColumnIndex; NewText: string);
 var
   elem : TResExamElement;
 

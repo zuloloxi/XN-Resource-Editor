@@ -13,7 +13,8 @@ unit cmpMenuDesigner;
 interface
 
 uses
-  Windows, Messages, Menus, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls;
+  WinAPI.Windows, WinAPI.Messages, Vcl.Menus, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
 
 type
 

@@ -2,7 +2,9 @@ unit DialogListViewControls;
 
 interface
 
-uses Windows, Classes, SysUtils, cmpDialogEditor, Graphics, DialogConsts, CommCtrl, Controls;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, cmpDialogEditor,
+  Vcl.Graphics, DialogConsts, WinAPI.CommCtrl, Vcl.Controls;
 
 type
 TListviewControlInfo = class (TStandardControlInfo)

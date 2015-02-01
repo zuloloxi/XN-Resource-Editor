@@ -13,7 +13,9 @@ unit cmpDialogBox;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, commctrl, richedit, DialogConsts, DialogStrings, Menus;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, WinAPI.CommCtrl,
+  WinAPI.RichEdit, DialogConsts, DialogStrings, Vcl.Menus;
 
 type
   TOnDlgMessage = procedure (sender : TObject; var msg : TMessage; bcontinue : boolean) of object;

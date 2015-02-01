@@ -25,16 +25,15 @@ package ResourceEditorComponents;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'Colin Wilson - Resource Editor Components'}
-{$IMPLICITBUILD OFF}
+{$IMPLICITBUILD ON}
 
 requires
   rtl,
   LowLevel,
   vcl,
   ResourceUtils,
-  vcljpg,
-  ImageTypes;
+  ImageTypes,
+  MiscComponents;
 
 contains
   ResourceEditorComponentsReg in 'ResourceEditorComponentsReg.pas',
@@ -55,6 +54,13 @@ contains
   cmpBitmapEditor in 'cmpBitmapEditor.pas',
   DialogListViewControls in 'DialogListViewControls.pas',
   cmpGradientShape in 'cmpGradientShape.pas',
-  cmpStandardSystemMenu in 'cmpStandardSystemMenu.pas';
+  cmpStandardSystemMenu in 'cmpStandardSystemMenu.pas',
+  DialogResourceForm in 'DialogResourceForm.pas',
+  ResourceForm in 'ResourceForm.pas',
+  ResourceObjectForm in 'ResourceObjectForm.pas' {fmResourceObject},
+  unitCREdProperties in 'unitCREdProperties.pas',
+  unitIncludePaths in 'unitIncludePaths.pas',
+  unitIncludePathPackages in 'unitIncludePathPackages.pas';
 
 end.
+

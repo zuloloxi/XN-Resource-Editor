@@ -3,7 +3,8 @@ unit cmpBitmapEditor;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
 
 type
   TDrawingTool = (dtNone, dtPencil, dtLine,
@@ -138,7 +139,8 @@ implementation
 
 {$R BitmapEditorCursors.res}
 
-uses GraphFlip, Clipbrd, cmpGradientShape, Vcl.Imaging.GifImg;
+uses
+  GraphFlip, Vcl.Clipbrd, cmpGradientShape, Vcl.Imaging.GifImg;
 
 { TBitmapEditor }
 

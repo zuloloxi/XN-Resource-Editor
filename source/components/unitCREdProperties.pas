@@ -2,7 +2,8 @@ unit unitCREdProperties;
 
 interface
 
-uses Windows, Messages, Classes, SysUtils, Forms;
+uses
+  WinAPI.Windows, WinAPI.Messages, System.Classes, System.SysUtils, Vcl.Forms;
 
 const
   WM_PROPERTIES_CHANGED = WM_USER + $30E;
@@ -100,7 +101,8 @@ var
 
 implementation
 
-uses Registry, unitIncludePaths;
+uses
+  System.Win.Registry, unitIncludePaths;
 
 { TPEResourceExplorerProperties }
 

@@ -2,7 +2,9 @@ unit cmpGradientShape;
 
 interface
 
-uses Windows, Messages, Classes, SysUtils, Controls, Graphics;
+uses
+  WinAPI.Windows, WinAPI.Messages, System.Classes, System.SysUtils,
+  Vcl.Controls, Vcl.Graphics;
 
 type
 

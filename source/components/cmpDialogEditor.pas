@@ -25,7 +25,9 @@ unit cmpDialogEditor;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, commctrl, richedit, cmpDialogBox, extCtrls, DialogConsts;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, WinAPI.commctrl,
+  WinAPI.RichEdit, cmpDialogBox, Vcl.ExtCtrls, DialogConsts;
 
 const
   WM_RECREATEDLG = WM_USER + $212;
@@ -917,7 +919,7 @@ begin
       ctrl.fTitleSzOrID := titleSzOrID
     end
     else
-      Windows.Beep (880, 10);
+      WinAPI.Windows.Beep (880, 10);
 
     if extraCount > 0 then
     begin
@@ -1231,7 +1233,7 @@ var
 begin
   if Self = fOwner.fDialogInfo then
   begin
-    windows.GetClientRect (fControlHWND, result);
+    WinAPI.Windows.GetClientRect (fControlHWND, result);
     if HasStyle [WS_VSCROLL] then dw := GetSystemMetrics (SM_CXVSCROLL) else dw := 0;
     if HasStyle [WS_HSCROLL] then dh := GetSystemMetrics (SM_CYHSCROLL) else dh := 0;
 
@@ -1242,7 +1244,7 @@ begin
   end
   else
   begin
-    windows.GetWindowRect (fControlHWND, result);
+    WinAPI.Windows.GetWindowRect (fControlHWND, result);
     MapWindowPoints (HWND_DESKTOP, GetParent (fControlHWND), result, 2);
   end;
   result := fOwner.RectToDialogRect (result)
@@ -1251,7 +1253,7 @@ end;
 function TControlInfo.GetWindowText: WideString;
 begin
   SetLength (Result, 1024);
-  windows.GetWindowTextW (fControlHWND, PWideChar (Result), 1024);
+  WinAPI.Windows.GetWindowTextW (fControlHWND, PWideChar (Result), 1024);
   Result := PWideChar (Result);
 end;
 
@@ -1304,7 +1306,7 @@ begin
       setResizeControl := True
     end;
 
-    windows.GetWindowRect (fControlHWND, rect);
+    WinAPI.Windows.GetWindowRect (fControlHWND, rect);
     MapWindowPoints (HWND_DESKTOP, Owner.DialogHandle, rect, 2);
 
     RemoveProp (fControlHWND, PChar (gWndAtom));
@@ -1483,7 +1485,7 @@ end;
 
 procedure TControlInfo.SetWindowText(const Value: WideString);
 begin
-  windows.SetWindowTextW (fControlHWND, PWideChar (Value));
+  WinAPI.Windows.SetWindowTextW (fControlHWND, PWideChar (Value));
 end;
 
 function TControlInfo.WindowProc(uMsg: UINT; wParam: WPARAM;

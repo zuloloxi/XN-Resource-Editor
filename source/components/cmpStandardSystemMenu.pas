@@ -26,7 +26,8 @@ unit cmpStandardSystemMenu;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Menus;
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus;
 
 const
   scxRESTORE  = $fff0;
@@ -133,10 +134,10 @@ end;
 destructor TStandardSystemMenu.Destroy;
 begin
   if Assigned (fObjectInstance) then
-    Classes.FreeObjectInstance (fObjectInstance);
+    System.Classes.FreeObjectInstance (fObjectInstance);
 
   if Assigned (fObjectInstance) then
-    Classes.FreeObjectInstance (fSysObjectInstance);
+    System.Classes.FreeObjectInstance (fSysObjectInstance);
 
   inherited;
 end;
@@ -175,10 +176,10 @@ begin
     fWindowMenuHandle := GetSystemMenu ((Owner as TForm).Handle, False);
     CloneSystemMenu;
 
-    fObjectInstance := Classes.MakeObjectInstance (OwnerWindowProc);
+    fObjectInstance := System.Classes.MakeObjectInstance (OwnerWindowProc);
     fOldOwnerWindowProc := TfnWndProc (SetWindowLong (TForm (Owner).Handle, GWL_WNDPROC, Integer (fObjectInstance)));
 
-    fSysObjectInstance := Classes.MakeObjectInstance (SysOwnerWindowProc);
+    fSysObjectInstance := System.Classes.MakeObjectInstance (SysOwnerWindowProc);
     fOldSysWindowProc := TfnWndProc (SetWindowLong (Application.Handle, GWL_WNDPROC, Integer (fSysObjectInstance)));
 
     Application.HookMainWindow(HookProc);
