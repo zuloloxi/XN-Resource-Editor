@@ -342,7 +342,7 @@ var
   hProcess : THandle;
   processInfo : TProcessBasicInformation;
   baseName : array [0..MAX_PATH] of char;
-  buffer, p : PDWORD;
+  buffer, p : PHMODULE;
   bufLen : DWORD;
   i, modCount : Integer;
 begin

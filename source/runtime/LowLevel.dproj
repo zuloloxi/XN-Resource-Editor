@@ -52,7 +52,6 @@
         <BRCC_OutputDir>..\..\lib\$(Platform)\$(Config)</BRCC_OutputDir>
         <GenDll>true</GenDll>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
-        <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
         <GenPackage>true</GenPackage>
         <DCC_DcuOutput>..\..\lib\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_ExeOutput>..\..\lib\$(Platform)\$(Config)</DCC_ExeOutput>

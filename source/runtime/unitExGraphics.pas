@@ -30,7 +30,7 @@ unit unitEXGraphics;
 
 interface
 
-uses Windows, Classes, SysUtils, Graphics;
+uses WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics;
 
 var
   SystemPalette256 : HPALETTE;  // 256 color 'web' palette.

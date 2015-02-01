@@ -25,7 +25,9 @@ unit unitCharsetMap;
 
 interface
 
-uses Windows, Classes, SysUtils, Graphics, MultiLanguage_TLB, richedit, ConTnrs;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
+  MultiLanguage_TLB, WinAPI.RichEdit, System.Contnrs;
 
 var
   CP_USASCII : Integer = 0;

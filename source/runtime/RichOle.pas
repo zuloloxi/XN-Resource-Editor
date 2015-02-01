@@ -23,7 +23,8 @@ unit RichOle;
 
 interface
 
-uses Windows, Classes, ActiveX, RichEdit, Clipbrd;
+uses
+  WinAPI.Windows, System.Classes, WinAPI.ActiveX, WinAPI.RichEdit, Vcl.Clipbrd;
 
 type
 

@@ -45,7 +45,9 @@ unit MultiLanguage_TLB;
 {$VARPROPSETTER ON}
 interface
 
-uses Windows, ActiveX, Classes, Graphics, OleServer, StdVCL, Variants;
+uses
+  WinAPI.Windows, WinAPI.ActiveX, System.Classes, Vcl.Graphics, Vcl.OleServer,
+  System.Win.StdVCL, System.Variants;
   
 
 // *********************************************************************//
