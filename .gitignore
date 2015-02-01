@@ -3,3 +3,4 @@
 __history
 lib
 bin
+*.tvsconfig
