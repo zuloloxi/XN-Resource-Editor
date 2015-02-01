@@ -43,7 +43,8 @@ unit unitExIcon;
 
 interface
 
-uses Windows, Classes, SysUtils, Graphics, Controls;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics, Vcl.Controls;
 
 type
 
@@ -230,7 +231,8 @@ var
 
 implementation
 
-uses Clipbrd;
+uses
+  Vcl.Clipbrd;
 
 resourceString
   rstInvalidIcon           = 'Invalid Icon or Cursor';
@@ -959,7 +961,7 @@ begin
         GetBitmapInfoSizes (hdr^, bitsOffset, bitsSize, False);
 
                                                 // Create Color Bitmap from Color bits & ColorTable
-        colorBmp := GDICheck (CreateDIBitmap (dc, info^.bmiHeader, CBM_INIT, PChar (PByte (info) + bitsOffset), info^, DIB_RGB_COLORS));
+        colorBmp := GDICheck (CreateDIBitmap (dc, info^.bmiHeader, CBM_INIT, PAnsiChar (PByte (info) + bitsOffset), info^, DIB_RGB_COLORS));
         colorDC := GDICheck (CreateCompatibleDC (0));
         oldColorBmp := GDICheck (SelectObject(colorDC, colorBmp));
 

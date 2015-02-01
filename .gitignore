@@ -1,2 +1,5 @@
 *.local
 *.identcache
+__history
+lib
+bin
