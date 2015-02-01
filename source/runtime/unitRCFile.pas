@@ -24,7 +24,9 @@ unit unitRCFile;
 
 interface
 
-uses Windows, Classes, SysUtils, Menus,Graphics, ConTnrs, unitResFile, unitResourceDetails, DialogConsts;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Menus, Vcl.Graphics,
+  System.Contnrs, unitResFile, unitResourceDetails, DialogConsts;
 
 type
 

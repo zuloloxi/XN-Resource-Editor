@@ -16,7 +16,9 @@ unit unitResourceGIF;
 
 interface
 
-uses Windows, Classes, SysUtils, graphics, gifimg, unitResourceDetails, unitResourceGraphics;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
+  Vcl.Imaging.GIFImg, unitResourceDetails, unitResourceGraphics;
 
 type
 //------------------------------------------------------------------------

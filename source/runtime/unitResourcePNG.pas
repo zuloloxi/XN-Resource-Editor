@@ -16,7 +16,9 @@ unit unitResourcePNG;
 
 interface
 
-uses Windows, Classes, SysUtils, graphics, pngimage, unitResourceDetails, unitResourceGraphics;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
+  Vcl.Imaging.pngimage, unitResourceDetails, unitResourceGraphics;
 
 type
 //------------------------------------------------------------------------

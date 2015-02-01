@@ -309,7 +309,7 @@ begin
 
   fSectionList.Clear;
 
-  optionalHeaderSize := Integer (@(PImageOptionalHeader (0)^.DataDirectory));
+  optionalHeaderSize := Integer (@(PImageOptionalHeader32 (0)^.DataDirectory));
   Inc (optionalHeaderSize, NUM_DATA_DIRECTORIES * sizeof (TImageDataDirectory));
 
   fCOFFHeader.TimeDateStamp := SecondsBetween (dt, UnixDateDelta);

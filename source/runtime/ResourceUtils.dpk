@@ -1,6 +1,7 @@
-package ResourceUtils120;
+package ResourceUtils;
 
 {$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
@@ -11,26 +12,27 @@ package ResourceUtils120;
 {$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
+{$OPTIMIZATION OFF}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
 {$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$RUNONLY}
-{$IMPLICITBUILD OFF}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$IMPLICITBUILD ON}
 
 requires
   rtl,
   vcl,
   vclimg,
-  ImageTypes120,
-  LowLevel120;
+  ImageTypes,
+  LowLevel;
 
 contains
   unitResourceDetails in 'unitResourceDetails.pas',
@@ -54,7 +56,6 @@ contains
   unitDisassembler in 'unitDisassembler.pas',
   unitObjFile in 'unitObjFile.pas',
   unitPEModuleRW in 'unitPEModuleRW.pas',
-  unitNTModule in 'unitNTModule.pas',
   unitRCFile in 'unitRCFile.pas',
   unitParser in 'unitParser.pas',
   unitCExpression in 'unitCExpression.pas';

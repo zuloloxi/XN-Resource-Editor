@@ -13,7 +13,9 @@ unit unitResourceJPEG;
 
 interface
 
-uses Windows, Classes, SysUtils, graphics, jpeg, unitResourceDetails, unitResourceGraphics;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
+  Vcl.Imaging.jpeg, unitResourceDetails, unitResourceGraphics;
 
 type
 //------------------------------------------------------------------------

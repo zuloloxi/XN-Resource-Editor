@@ -17,7 +17,9 @@ unit unitResourceAccelerator;
 
 interface
 
-uses Windows, Classes, SysUtils, Contnrs, unitResourceDetails, Menus;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs,
+  unitResourceDetails, Vcl.Menus;
 
 type
 TAccelerator = packed record

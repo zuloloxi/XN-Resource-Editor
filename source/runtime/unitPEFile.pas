@@ -224,13 +224,13 @@ private
 
 protected
   fDOSHeader : TImageDosHeader;
-  fOptionalHeader : PImageOptionalHeader;
+  fOptionalHeader : PImageOptionalHeader32;
 
   procedure ApplyGlobalFixups; override;
   procedure Decode (memory : pointer; exeSize : Integer); override;
   procedure Encode; override;
 
-  property OptionalHeaderPtr : PImageOptionalHeader read fOptionalHeader;
+  property OptionalHeaderPtr : PImageOptionalHeader32 read fOptionalHeader;
 public
   constructor Create;
   destructor Destroy; override;

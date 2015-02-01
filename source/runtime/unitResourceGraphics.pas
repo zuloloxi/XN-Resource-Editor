@@ -12,7 +12,9 @@ unit unitResourceGraphics;
 
 interface
 
-uses Windows, Classes, SysUtils, unitResourceDetails, graphics, unitExIcon, gifimg;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, unitResourceDetails,
+  Vcl.Graphics, unitExIcon, Vcl.Imaging.GIFImg;
 
 type
 

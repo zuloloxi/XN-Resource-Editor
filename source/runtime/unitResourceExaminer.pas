@@ -27,7 +27,9 @@ unit unitResourceExaminer;
 
 interface
 
-uses Windows, Classes, SysUtils, unitResourceDetails, contnrs, Graphics, unitPEFile;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, unitResourceDetails,
+  System.Contnrs, Vcl.Graphics, unitPEFile;
 
 type
 TResourceExaminer = class;

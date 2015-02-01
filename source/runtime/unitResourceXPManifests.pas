@@ -2,7 +2,9 @@ unit unitResourceXPManifests;
 
 interface
 
-uses Windows, Classes, SysUtils, Contnrs, unitResourceDetails, AxCtrls;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs,
+  unitResourceDetails, Vcl.AxCtrls;
 
 type
 TXPManifestResourceDetails = class (TUTF8ResourceDetails)

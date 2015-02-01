@@ -16,7 +16,9 @@ unit unitResourceMenus;
 
 interface
 
-uses Windows, Classes, SysUtils, Contnrs, unitResourceDetails, Menus;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs,
+  unitResourceDetails, Vcl.Menus;
 
 type
 TMenuResourceDetails = class (TResourceDetails)
