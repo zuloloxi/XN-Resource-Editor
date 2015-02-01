@@ -577,10 +577,10 @@ initialization
   RegisterResourceDetails (TRCDataDescriptionResourceDetails);
   RegisterResourceDetails (TRCDataPackagesResourceDetails);
   RegisterResourceDetails (TRCDataFormResourceDetails);
-  RegisterResourceDetails (TRCDataCompressedBitmapResourceDetails);
+  //RegisterResourceDetails (TRCDataCompressedBitmapResourceDetails);
 finalization
   UnregisterResourceDetails (TRCDataDescriptionResourceDetails);
   UnregisterResourceDetails (TRCDataPackagesResourceDetails);
   UnregisterResourceDetails (TRCDataFormResourceDetails);
-  UnregisterResourceDetails (TRCDataCompressedBitmapResourceDetails);
+  //UnregisterResourceDetails (TRCDataCompressedBitmapResourceDetails);
 end.
