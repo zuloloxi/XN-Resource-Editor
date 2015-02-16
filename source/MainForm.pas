@@ -1195,6 +1195,7 @@ end;
 
 procedure TfmMain.FormShow(Sender: TObject);
 begin
+  vstResources.Header.Options := vstResources.Header.Options + [hoAutoResize];
   InitializeHTMLHelp;
   tbMenu.Font := Screen.MenuFont;
   UseInternationalFont (vstresources.Font);
