@@ -17,7 +17,7 @@
 
 // A PE file looks like this...
 //
-//   [ DOS Header      ]     First word is 'MK'
+//   [ DOS Header      ]     First word is 'MZ'
 //   [ COFF header     ]     Starts at DOSHdr._lfaNew.  First dword is COFF signature
 //   [ Optional header ]     Follows COFF header.  First word is IMAGE_NT_OPTIONAL_HDR_MAGIC
 //   [ Data Directory  ]     Really part of the optional header
@@ -30,6 +30,118 @@ unit unitPEFile;
 interface
 
 uses Windows, Classes, SysUtils, ConTnrs, unitResourceDetails, ImageHlp;
+
+type
+  TXnImageOptionalHeader = class
+  strict private
+    FIsPE32Plus: Boolean;
+    FCheckSumOffset: NativeUInt;
+    FIOH32: PImageOptionalHeader32;
+    FIOH64: PImageOptionalHeader64;
+  private
+    function GetAddressOfEntryPoint: DWORD;
+    function GetBaseOfCode: DWORD;
+    function GetDataDirectory(Index: Cardinal): TImageDataDirectory;
+    function GetDllCharacteristics: Word;
+    function GetFileAlignment: DWORD;
+    function GetPE32PlusImageBase: ULONGLONG;
+    function GetLoaderFlags: DWORD;
+    function GetMagic: Word;
+    function GetMajorImageVersion: Word;
+    function GetMajorLinkerVersion: Byte;
+    function GetMajorOperatingSystemVersion: Word;
+    function GetMajorSubsystemVersion: Word;
+    function GetMinorImageVersion: Word;
+    function GetMinorOperatingSystemVersion: Word;
+    function GetMinorSubsystemVersion: Word;
+    function GetNumberOfRvaAndSizes: DWORD;
+    function GetPE32BaseOfData: DWORD;
+    function GetSectionAlignment: DWORD;
+    function GetSizeOfCode: DWORD;
+    function GetPE32PlusSizeOfHeapCommit: ULONGLONG;
+    function GetPE32PlusSizeOfHeapReserve: ULONGLONG;
+    function GetSizeOfImage: DWORD;
+    function GetSizeOfInitializedData: DWORD;
+    function GetPE32PlusSizeOfStackCommit: ULONGLONG;
+    function GetPE32PlusSizeOfStackReserve: ULONGLONG;
+    function GetSizeOfUninitializedData: DWORD;
+    function GetSubsystem: Word;
+    function GetWin32VersionValue: DWORD;
+    function GetMinorLinkerVersion: Byte;
+    function GetCheckSum: DWORD;
+    function GetSizeOfHeaders: DWORD;
+    procedure SetSizeOfHeaders(const Value: DWORD);
+    procedure SetBaseOfCode(const Value: DWORD);
+    procedure SetCheckSum(const Value: DWORD);
+    procedure SetDataDirectory(Index: Cardinal;
+      const Value: TImageDataDirectory);
+    procedure SetSizeOfCode(const Value: DWORD);
+    procedure SetSizeOfInitializedData(const Value: DWORD);
+    procedure SetSizeOfUninitializedData(const Value: DWORD);
+    procedure SetSizeOfImage(const Value: DWORD);
+    procedure SetAddressOfEntryPoint(const Value: DWORD);
+    function GetRawData: Pointer;
+    function GetMagicAsString: string;
+    function GetPE32ImageBase: DWORD;
+    function GetPE32SizeOfHeapCommit: DWORD;
+    function GetPE32SizeOfHeapReserve: DWORD;
+    function GetPE32SizeOfStackCommit: DWORD;
+    function GetPE32SizeOfStackReserve: DWORD;
+    procedure SetPE32BaseOfData(const Value: DWORD);
+  public
+    constructor Create(ImageOptionalHeader: Pointer; Size: Integer);
+    destructor Destroy; override;
+
+    property IsPE32Plus: Boolean read FIsPE32Plus;
+    property CheckSumOffset: NativeUInt read FCheckSumOffset;
+    property RawData: Pointer read GetRawData;
+  public
+    property Magic: Word read GetMagic;
+    property MagicAsString: string read GetMagicAsString;
+    property MajorLinkerVersion: Byte read GetMajorLinkerVersion;
+    property MinorLinkerVersion: Byte read GetMinorLinkerVersion;
+    property SizeOfCode: DWORD read GetSizeOfCode write SetSizeOfCode;
+    property SizeOfInitializedData: DWORD read GetSizeOfInitializedData
+      write SetSizeOfInitializedData;
+    property SizeOfUninitializedData: DWORD read GetSizeOfUninitializedData
+      write SetSizeOfUninitializedData;
+    property AddressOfEntryPoint: DWORD read GetAddressOfEntryPoint write
+      SetAddressOfEntryPoint;
+    property BaseOfCode: DWORD read GetBaseOfCode write SetBaseOfCode;
+
+    property PE32_BaseOfData: DWORD read GetPE32BaseOfData write SetPE32BaseOfData;
+
+    property PE32_ImageBase: DWORD read GetPE32ImageBase;
+    property PE32Plus_ImageBase: ULONGLONG read GetPE32PlusImageBase;
+    property SectionAlignment: DWORD read GetSectionAlignment;
+    property FileAlignment: DWORD read GetFileAlignment;
+    property MajorOperatingSystemVersion: Word read GetMajorOperatingSystemVersion;
+    property MinorOperatingSystemVersion: Word read GetMinorOperatingSystemVersion;
+    property MajorImageVersion: Word read GetMajorImageVersion;
+    property MinorImageVersion: Word read GetMinorImageVersion;
+    property MajorSubsystemVersion: Word read GetMajorSubsystemVersion;
+    property MinorSubsystemVersion: Word read GetMinorSubsystemVersion;
+    property Win32VersionValue: DWORD read GetWin32VersionValue;
+    property SizeOfImage: DWORD read GetSizeOfImage write SetSizeOfImage;
+    property SizeOfHeaders: DWORD read GetSizeOfHeaders write SetSizeOfHeaders;
+    property CheckSum: DWORD read GetCheckSum write SetCheckSum;
+    property Subsystem: Word read GetSubsystem;
+    property DllCharacteristics: Word read GetDllCharacteristics;
+
+    property PE32_SizeOfStackReserve: DWORD read GetPE32SizeOfStackReserve;
+    property PE32_SizeOfStackCommit: DWORD read GetPE32SizeOfStackCommit;
+    property PE32_SizeOfHeapReserve: DWORD read GetPE32SizeOfHeapReserve;
+    property PE32_SizeOfHeapCommit: DWORD read GetPE32SizeOfHeapCommit;
+
+    property PE32Plus_SizeOfStackReserve: ULONGLONG read GetPE32PlusSizeOfStackReserve;
+    property PE32Plus_SizeOfStackCommit: ULONGLONG read GetPE32PlusSizeOfStackCommit;
+    property PE32Plus_SizeOfHeapReserve: ULONGLONG read GetPE32PlusSizeOfHeapReserve;
+    property PE32Plus_SizeOfHeapCommit: ULONGLONG read GetPE32PlusSizeOfHeapCommit;
+    property LoaderFlags: DWORD read GetLoaderFlags;
+    property NumberOfRvaAndSizes: DWORD read GetNumberOfRvaAndSizes;
+    property DataDirectory[Index: Cardinal]: TImageDataDirectory
+      read GetDataDirectory write SetDataDirectory;
+  end;
 
 const
   PE_LINKER_VERSION_HI = 1;
@@ -208,9 +320,10 @@ private
   fCommentSize : Integer;
   fEndComment : PByte;
   fEndCommentSize : Integer;
+  FIsPE32Plus: Boolean;
 
-  function GetOptionalHeader: TImageOptionalHeader;
-  function GetDataDirectory(index: Integer): PImageDataDirectory;
+  function GetOptionalHeader: TXnImageOptionalHeader;
+  function GetDataDirectory(index: Integer): TImageDataDirectory;
   function GetDataDirectoryCount: Integer;
   function GetDOSHeader: TImageDosHeader;
   function GetExportCount: Integer;
@@ -221,16 +334,16 @@ private
   function GetImport(idx: Integer): PImageImportDescriptor;
   function GetImportSectionData: PByte;
   function GetExportSectionData: PByte;
+    procedure SetDataDirectory(index: Integer;
+      const Value: TImageDataDirectory);
 
 protected
   fDOSHeader : TImageDosHeader;
-  fOptionalHeader : PImageOptionalHeader32;
+  fOptionalHeader : TXnImageOptionalHeader;
 
   procedure ApplyGlobalFixups; override;
   procedure Decode (memory : pointer; exeSize : Integer); override;
   procedure Encode; override;
-
-  property OptionalHeaderPtr : PImageOptionalHeader32 read fOptionalHeader;
 public
   constructor Create;
   destructor Destroy; override;
@@ -240,12 +353,15 @@ public
 
   function FindDirectoryEntrySection (entryNo : Integer; var offset : Integer): Integer;
 
+  property IsPE32Plus: Boolean read FIsPE32Plus;
+
   property DOSHeader : TImageDosHeader read GetDOSHeader;
   property DOSStub : TMemoryStream read fDOSStub;
-  property OptionalHeader : TImageOptionalHeader read GetOptionalHeader;
+  property OptionalHeader : TXnImageOptionalHeader read GetOptionalHeader;
 
   property DataDirectoryCount : Integer read GetDataDirectoryCount;
-  property DataDirectory [index : Integer] : PImageDataDirectory read GetDataDirectory;
+  property DataDirectory [index : Integer] : TImageDataDirectory
+    read GetDataDirectory write SetDataDirectory;
 
   property ImportCount : Integer read GetImportCount;
   property Import [idx : Integer] : PImageImportDescriptor read GetImport;
@@ -327,6 +443,8 @@ resourcestring
   rstBadDirectoryIndex     = 'Index exceeds data directory count';
   rstBadLangID             = 'Unsupported non-integer language ID in resource';
   rstEncode                = 'Error encoding module';
+  rstPropertyOnlyValidForPE32 = '%s property only exists in PE32 format';
+  rstPropertyOnlyVAlidForPE32Plus = '%s property only exists in PE32+ format';
 
 type
   TResourceNode = class;
@@ -414,12 +532,16 @@ begin
                                 // Check the Optional Header signature.  nb
                                 // the optional header is compulsory for
                                 // 32 bit windows modules!
-  if PWORD (PByte (Memory) + offset)^ <> IMAGE_NT_OPTIONAL_HDR_MAGIC then
+  if (PWORD (PByte (Memory) + offset)^ <> IMAGE_NT_OPTIONAL_HDR32_MAGIC) and
+    (PWORD (PByte (Memory) + offset)^ <> IMAGE_NT_OPTIONAL_HDR64_MAGIC) then
     raise EPEException.Create (rstInvalidOptionalHeader);
 
+  FIsPE32Plus := PWORD (PByte (Memory) + offset)^ = IMAGE_NT_OPTIONAL_HDR64_MAGIC;
+
                                 // Save the 'optional' header
-  ReallocMem (fOptionalHeader, fCOFFHeader.SizeOfOptionalHeader);
-  Move ((PByte (Memory) + Offset)^, fOptionalHeader^, fCOFFHeader.SizeOfOptionalHeader);
+
+  fOptionalHeader := TXnImageOptionalHeader.Create((PByte (Memory) + Offset),
+    fCOFFHeader.SizeOfOptionalHeader);
 
   Inc (offset, fCOFFHeader.SizeOfOptionalHeader);
 
@@ -482,7 +604,7 @@ end;
  *----------------------------------------------------------------------*)
 destructor TPEModule.Destroy;
 begin
-  ReallocMem (fOptionalHeader, 0);
+  fOptionalHeader.Free;
   fDOSStub.Free;
   ReallocMem (fCommentBlock, 0);
   ReallocMem (fEndComment, 0);
@@ -506,6 +628,7 @@ var
   address : Integer;
   alignedSize, AddrAlignedSize : Integer;
   codeSize, iDataSize, uDataSize, iSize, vs : Integer;
+  DataDir: TImageDataDirectory;
 begin
   codeSize := 0;
   iDataSize := 0;
@@ -524,8 +647,8 @@ begin
 
   offset := iSize + fCommentSize;
 
-  align := fOptionalHeader^.FileAlignment;
-  addrAlign := fOptionalHeader^.SectionAlignment;
+  align := fOptionalHeader.FileAlignment;
+  addrAlign := fOptionalHeader.SectionAlignment;
 
   address := addrAlign;
   offset := DWORD ((integer (offset) + align - 1) div align * align);
@@ -533,10 +656,10 @@ begin
                                                 // First section starts at $1000 (when loaded)
                                                 // and at 'offset' in file.
 
-  fOptionalHeader^.SizeOfHeaders := DWORD ((integer (iSize) + align - 1) div align * align);
+  fOptionalHeader.SizeOfHeaders := DWORD ((integer (iSize) + align - 1) div align * align);
 
-  fOptionalHeader^.BaseOfCode := $ffffffff;
-  fOptionalHeader^.CheckSum := 0;               // Calculate it during 'SaveToStream' when
+  fOptionalHeader.BaseOfCode := $ffffffff;
+  fOptionalHeader.CheckSum := 0;               // Calculate it during 'SaveToStream' when
                                                 // we've got all the info.
 
   iSize  := DWORD ((integer (iSize) + addrAlign - 1) div addrAlign * addrAlign);
@@ -573,8 +696,9 @@ begin
 
     if (section.fDirectoryEntry <> $ffffffff) and (vs <> 0) then
     begin
-      fOptionalHeader^.DataDirectory [section.fDirectoryEntry].VirtualAddress := address;
-      fOptionalHeader^.DataDirectory [section.fDirectoryEntry].Size := section.fSectionHeader.Misc.VirtualSize
+      DataDir.VirtualAddress := address;
+      DataDir.Size := section.fSectionHeader.Misc.VirtualSize;
+      fOptionalHeader.DataDirectory [section.fDirectoryEntry] := DataDir;
     end;
 
     alignedSize := (Integer (vs) + align - 1) div align * align;
@@ -583,8 +707,8 @@ begin
     if (section.fSectionHeader.Characteristics and IMAGE_SCN_MEM_EXECUTE) <> 0 then
     begin
       Inc (codeSize, alignedSize);
-      if DWORD (address) < fOptionalHeader^.BaseOfCode then
-        fOptionalHeader^.BaseOfCode := address;
+      if DWORD (address) < fOptionalHeader.BaseOfCode then
+        fOptionalHeader.BaseOfCode := address;
     end
     else
       if (section.fSectionHeader.Characteristics and IMAGE_SCN_CNT_INITIALIZED_DATA) <> 0 then
@@ -602,9 +726,9 @@ begin
   // derived classes)
   ApplyGlobalFixups;
 
-  fOptionalHeader^.SizeOfCode := codeSize;
-  fOptionalHeader^.SizeOfInitializedData := iDataSize;
-  fOptionalHeader^.SizeOfUninitializedData := uDataSize;
+  fOptionalHeader.SizeOfCode := codeSize;
+  fOptionalHeader.SizeOfInitializedData := iDataSize;
+  fOptionalHeader.SizeOfUninitializedData := uDataSize;
 
   i := SizeOf (DWORD) +                   // NT signature
        sizeof (fCoffHeader) +
@@ -623,9 +747,10 @@ begin
   // doesn't do any harm making it $16000 instead, and the formula works for everything
   // else I've tested...
 
-  fOptionalHeader^.BaseOfData := fOptionalHeader.BaseOfCode + DWORD (i);
+  if not fOptionalHeader.IsPE32Plus then
+    fOptionalHeader.PE32_BaseOfData := fOptionalHeader.BaseOfCode + DWORD (i);
 
-  fOptionalHeader^.SizeOfImage := iSize;
+  fOptionalHeader.SizeOfImage := iSize;
 
   if fOptionalHeader.AddressOfEntryPoint = 0 then
   begin
@@ -645,18 +770,18 @@ end;
 function TPEModule.FindDirectoryEntrySection (entryNo: Integer; var offset : Integer): Integer;
 var
   i : Integer;
-  p : PImageDataDirectory;
+  dir: TImageDataDirectory;
 begin
   result := -1;
-  p := DataDirectory [entryNo];
+  dir := DataDirectory [entryNo];
                                 // Find section with matching virt address.
   for i := 0 to ImageSectionCount - 1 do
-    if (p^.VirtualAddress >= ImageSection [i].fSectionHeader.VirtualAddress) and (p^.VirtualAddress < ImageSection [i].fSectionHeader.VirtualAddress + ImageSection [i].fSectionHeader.Misc.VirtualSize) then
+    if (dir.VirtualAddress >= ImageSection [i].fSectionHeader.VirtualAddress) and (dir.VirtualAddress < ImageSection [i].fSectionHeader.VirtualAddress + ImageSection [i].fSectionHeader.Misc.VirtualSize) then
     begin
-      if p^.Size <> 0 then
+      if dir.Size <> 0 then
       begin
         result := i;
-        offset := p^.VirtualAddress - ImageSection [i].fSectionHeader.VirtualAddress;
+        offset := dir.VirtualAddress - ImageSection [i].fSectionHeader.VirtualAddress;
       end;
       break
     end
@@ -668,15 +793,11 @@ end;
  | Return the data dictionary for a specified                           |
  | IMAGE_DIRECTORY_ENTRY_xxxx  index                                    |
  *----------------------------------------------------------------------*)
-function TPEModule.GetDataDirectory(index: Integer): PImageDataDirectory;
-var
-  p : PImageDataDirectory;
+function TPEModule.GetDataDirectory(index: Integer): TImageDataDirectory;
 begin
   if index < DataDirectoryCount then
   begin
-    p := @fOptionalHeader.DataDirectory [0];
-    Inc (p, index);
-    result := p
+    Result := fOptionalHeader.DataDirectory [index];
   end
   else
     raise ERangeError.Create (rstBadDirectoryIndex);
@@ -689,7 +810,7 @@ end;
  *----------------------------------------------------------------------*)
 function TPEModule.GetDataDirectoryCount: Integer;
 begin
-  result := fOptionalHeader^.NumberOfRvaAndSizes
+  result := fOptionalHeader.NumberOfRvaAndSizes
 end;
 
 (*----------------------------------------------------------------------*
@@ -843,9 +964,9 @@ begin
   result := PByte (section.fRawData.Memory) - section.fSectionHeader.VirtualAddress;
 end;
 
-function TPEModule.GetOptionalHeader: TImageOptionalHeader;
+function TPEModule.GetOptionalHeader: TXnImageOptionalHeader;
 begin
-  result := fOptionalHeader^
+  result := fOptionalHeader
 end;
 
 function TPEModule.GetResourceSection (var offset : Integer): TImageSection;
@@ -874,7 +995,7 @@ var
   f : TMemoryStream;
   oldCheckSum, newCheckSum : DWORD;
   ntHeaders : PImageNTHEaders;
-  ckOffset : DWORD;
+  ckOffset : NativeUInt;
 begin
   Encode;                       // Encode the data.
 
@@ -887,8 +1008,8 @@ begin
                                 // Write NT sig and COFF header
   s.Write (NTSignature, sizeof (NTSignature));
   s.Write (fCOFFHeader, sizeof (fCOFFHeader));
-  ckOffset := s.Position + Integer (@fOptionalHeader^.CheckSum) - Integer (@fOptionalHeader^);
-  s.Write (fOptionalHeader^, fCOFFHeader.SizeOfOptionalHeader);
+  ckOffset := s.Position + fOptionalHeader.CheckSumOffset;
+  s.Write (fOptionalHeader.RawData^, fCOFFHeader.SizeOfOptionalHeader);
 
                                 // Write the section headers
   for i := 0 to fSectionList.Count - 1 do
@@ -969,6 +1090,17 @@ begin
   s.Seek (0, soFromEnd);
 end;
 
+
+procedure TPEModule.SetDataDirectory(index: Integer;
+  const Value: TImageDataDirectory);
+begin
+  if index < DataDirectoryCount then
+  begin
+    fOptionalHeader.DataDirectory [index] := Value;
+  end
+  else
+    raise ERangeError.Create (rstBadDirectoryIndex);
+end;
 
 { TImageSection }
 
@@ -1899,6 +2031,439 @@ begin
   fSectionNumber := ASectionNumber;
   fType := AType;
   fStorageClass := AStorageClass;
+end;
+
+{ TXnImageOptionalHeader }
+
+destructor TXnImageOptionalHeader.Destroy;
+begin
+  FreeMem(FIOH32);
+  FreeMem(FIOH64);
+  inherited;
+end;
+
+function TXnImageOptionalHeader.GetAddressOfEntryPoint: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.AddressOfEntryPoint
+  else
+    Result := FIOH32.AddressOfEntryPoint;
+end;
+
+function TXnImageOptionalHeader.GetBaseOfCode: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.BaseOfCode
+  else
+    Result := FIOH32.BaseOfCode;
+end;
+
+function TXnImageOptionalHeader.GetCheckSum: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.CheckSum
+  else
+    Result := FIOH32.CheckSum;
+end;
+
+function TXnImageOptionalHeader.GetDataDirectory(
+  Index: Cardinal): TImageDataDirectory;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.DataDirectory[Index]
+  else
+    Result := FIOH32.DataDirectory[Index]
+end;
+
+function TXnImageOptionalHeader.GetDllCharacteristics: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.DllCharacteristics
+  else
+    Result := FIOH32.DllCharacteristics;
+end;
+
+function TXnImageOptionalHeader.GetFileAlignment: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.FileAlignment
+  else
+    Result := FIOH32.FileAlignment;
+end;
+
+function TXnImageOptionalHeader.GetPE32PlusImageBase: ULONGLONG;
+begin
+  if not FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyVAlidForPE32Plus,
+      ['PE32PlusImageBase']);
+
+  Result := FIOH64.ImageBase
+end;
+
+function TXnImageOptionalHeader.GetLoaderFlags: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.LoaderFlags
+  else
+    Result := FIOH32.LoaderFlags;
+end;
+
+function TXnImageOptionalHeader.GetMagic: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.Magic
+  else
+    Result := FIOH32.Magic;
+end;
+
+function TXnImageOptionalHeader.GetMagicAsString: string;
+begin
+  if FIsPE32Plus then
+    Result := 'PE32+'
+  else
+    Result := 'PE32';
+end;
+
+function TXnImageOptionalHeader.GetMajorImageVersion: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MajorImageVersion
+  else
+    Result := FIOH32.MajorImageVersion;
+end;
+
+function TXnImageOptionalHeader.GetMajorLinkerVersion: Byte;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MajorLinkerVersion
+  else
+    Result := FIOH32.MajorLinkerVersion;
+end;
+
+function TXnImageOptionalHeader.GetMajorOperatingSystemVersion: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MajorOperatingSystemVersion
+  else
+    Result := FIOH32.MajorOperatingSystemVersion;
+end;
+
+function TXnImageOptionalHeader.GetMajorSubsystemVersion: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MajorSubsystemVersion
+  else
+    Result := FIOH32.MajorSubsystemVersion;
+end;
+
+function TXnImageOptionalHeader.GetMinorImageVersion: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MinorImageVersion
+  else
+    Result := FIOH32.MinorImageVersion;
+end;
+
+function TXnImageOptionalHeader.GetMinorLinkerVersion: Byte;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MinorLinkerVersion
+  else
+    Result := FIOH32.MinorLinkerVersion;
+end;
+
+function TXnImageOptionalHeader.GetMinorOperatingSystemVersion: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MinorOperatingSystemVersion
+  else
+    Result := FIOH32.MinorOperatingSystemVersion;
+end;
+
+function TXnImageOptionalHeader.GetMinorSubsystemVersion: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.MinorSubsystemVersion
+  else
+    Result := FIOH32.MinorSubsystemVersion;
+end;
+
+function TXnImageOptionalHeader.GetNumberOfRvaAndSizes: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.NumberOfRvaAndSizes
+  else
+    Result := FIOH32.NumberOfRvaAndSizes;
+end;
+
+function TXnImageOptionalHeader.GetPE32BaseOfData: DWORD;
+begin
+  if FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyValidForPE32, ['BaseOfData']);
+  Result := FIOH32.BaseOfData;
+end;
+
+function TXnImageOptionalHeader.GetPE32ImageBase: DWORD;
+begin
+  if FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyValidForPE32,
+      ['PE32ImageBase']);
+
+  Result := FIOH32.ImageBase
+end;
+
+function TXnImageOptionalHeader.GetRawData: Pointer;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64
+  else
+    Result := FIOH32;
+end;
+
+function TXnImageOptionalHeader.GetSectionAlignment: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.SectionAlignment
+  else
+    Result := FIOH32.SectionAlignment;
+end;
+
+function TXnImageOptionalHeader.GetSizeOfCode: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.SizeOfCode
+  else
+    Result := FIOH32.SizeOfCode;
+end;
+
+function TXnImageOptionalHeader.GetSizeOfHeaders: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.SizeOfHeaders
+  else
+    Result := FIOH32.SizeOfHeaders;
+end;
+
+function TXnImageOptionalHeader.GetPE32PlusSizeOfHeapCommit: ULONGLONG;
+begin
+  if not FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyVAlidForPE32Plus,
+      ['PE32PlusSizeOfHeapCommit']);
+  Result := FIOH64.SizeOfHeapCommit
+end;
+
+function TXnImageOptionalHeader.GetPE32PlusSizeOfHeapReserve: ULONGLONG;
+begin
+  if not FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyVAlidForPE32Plus,
+      ['PE32PlusSizeOfHeapReserve']);
+
+  Result := FIOH64.SizeOfHeapReserve
+end;
+
+function TXnImageOptionalHeader.GetSizeOfImage: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.SizeOfImage
+  else
+    Result := FIOH32.SizeOfImage;
+end;
+
+function TXnImageOptionalHeader.GetSizeOfInitializedData: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.SizeOfInitializedData
+  else
+    Result := FIOH32.SizeOfInitializedData;
+end;
+
+function TXnImageOptionalHeader.GetPE32PlusSizeOfStackCommit: ULONGLONG;
+begin
+  if not FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyVAlidForPE32Plus,
+      ['PE32PlusSizeOfStackCommit']);
+
+  Result := FIOH64.SizeOfStackCommit
+end;
+
+function TXnImageOptionalHeader.GetPE32PlusSizeOfStackReserve: ULONGLONG;
+begin
+  if not FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyVAlidForPE32Plus,
+      ['PE32PlusSizeOfStackReserve']);
+
+  Result := FIOH64.SizeOfStackReserve
+end;
+
+function TXnImageOptionalHeader.GetPE32SizeOfHeapCommit: DWORD;
+begin
+  if FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyValidForPE32,
+      ['PE32SizeOfHeapCommit']);
+
+  Result := FIOH32.SizeOfHeapCommit;
+end;
+
+function TXnImageOptionalHeader.GetPE32SizeOfHeapReserve: DWORD;
+begin
+  if FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyValidForPE32,
+      ['PE32SizeOfHeapReserve']);
+
+  Result := FIOH32.SizeOfHeapReserve;
+end;
+
+function TXnImageOptionalHeader.GetPE32SizeOfStackCommit: DWORD;
+begin
+  if FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyValidForPE32,
+      ['PE32SizeOfStackCommit']);
+
+  Result := FIOH32.SizeOfStackCommit;
+end;
+
+function TXnImageOptionalHeader.GetPE32SizeOfStackReserve: DWORD;
+begin
+  if FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyValidForPE32,
+      ['PE32SizeOfStackReserve']);
+
+  Result := FIOH32.SizeOfStackReserve;
+end;
+
+function TXnImageOptionalHeader.GetSizeOfUninitializedData: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.SizeOfUninitializedData
+  else
+    Result := FIOH32.SizeOfUninitializedData;
+end;
+
+function TXnImageOptionalHeader.GetSubsystem: Word;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.Subsystem
+  else
+    Result := FIOH32.Subsystem;
+end;
+
+function TXnImageOptionalHeader.GetWin32VersionValue: DWORD;
+begin
+  if FIsPE32Plus then
+    Result := FIOH64.Win32VersionValue
+  else
+    Result := FIOH32.Win32VersionValue;
+end;
+
+procedure TXnImageOptionalHeader.SetAddressOfEntryPoint(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.AddressOfEntryPoint := Value
+  else
+    FIOH32.AddressOfEntryPoint := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetBaseOfCode(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.BaseOfCode := Value
+  else
+    FIOH32.BaseOfCode := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetCheckSum(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.CheckSum := Value
+  else
+    FIOH32.CheckSum := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetDataDirectory(Index: Cardinal;
+  const Value: TImageDataDirectory);
+begin
+  if FIsPE32Plus then
+    FIOH64.DataDirectory[Index] := Value
+  else
+    FIOH32.DataDirectory[Index] := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetPE32BaseOfData(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    raise EPEException.CreateFmt(rstPropertyOnlyValidForPE32, ['BaseOfData']);
+  FIOH32.BaseOfData := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetSizeOfCode(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.SizeOfCode := Value
+  else
+    FIOH32.SizeOfCode := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetSizeOfHeaders(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.SizeOfHeaders := Value
+  else
+    FIOH32.SizeOfHeaders := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetSizeOfImage(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.SizeOfImage := Value
+  else
+    FIOH32.SizeOfImage := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetSizeOfInitializedData(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.SizeOfInitializedData := Value
+  else
+    FIOH32.SizeOfInitializedData := Value;
+end;
+
+procedure TXnImageOptionalHeader.SetSizeOfUninitializedData(const Value: DWORD);
+begin
+  if FIsPE32Plus then
+    FIOH64.SizeOfUninitializedData := Value
+  else
+    FIOH32.SizeOfUninitializedData := Value;
+end;
+
+constructor TXnImageOptionalHeader.Create(ImageOptionalHeader: Pointer;
+  Size: Integer);
+var
+  Magic: Word;
+begin
+  inherited Create;
+
+  Magic := PWord(ImageOptionalHeader)^;
+
+  FIsPE32Plus := Magic = IMAGE_NT_OPTIONAL_HDR64_MAGIC;
+
+  if FIsPE32Plus then
+  begin
+    FIOH32 := nil;
+
+    GetMem(FIOH64, Size);
+    Move(ImageOptionalHeader^, FIOH64^, Size);
+
+    FCheckSumOffset := UIntPtr(@(FIOH64^.CheckSum)) - UIntPtr(FIOH64);
+  end
+  else
+  begin
+    FIOH64 := nil;
+
+    GetMem(FIOH32, Size);
+    Move(ImageOptionalHeader^, FIOH32^, Size);
+
+    FCheckSumOffset := UIntPtr(@(FIOH32^.CheckSum)) - UIntPtr(FIOH32);
+  end;
 end;
 
 end.
