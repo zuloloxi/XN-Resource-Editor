@@ -11,14 +11,11 @@ type
     Memo1: TMemo;
     procedure Memo1Exit(Sender: TObject);
   private
-    fDetails : TRCDataFormResourceDetails;
-    procedure SaveResource (const undoDetails : string);
+    FDetails: TRCDataFormResourceDetails;
+    procedure SaveResource (const undoDetails: string);
   public
     procedure SetObject(const Value: TObject); override;
   end;
-
-var
-  fmRCDataFormResource: TfmRCDataFormResource;
 
 implementation
 
@@ -33,9 +30,9 @@ procedure TfmRCDataFormResource.SetObject(const Value: TObject);
 begin
   inherited;
 
-  fDetails := obj as TRCDataFormResourceDetails;
+  FDetails := obj as TRCDataFormResourceDetails;
 
-  Memo1.Text := fDetails.Text
+  Memo1.Text := FDetails.Text
 end;
 
 procedure TfmRCDataFormResource.Memo1Exit(Sender: TObject);
@@ -43,13 +40,13 @@ begin
   inherited;
 
   if Memo1.CanUndo then
-   SaveResource (rstFormChange);
+   SaveResource(rstFormChange);
 end;
 
 procedure TfmRCDataFormResource.SaveResource(const undoDetails: string);
 begin
-  AddUndoEntry (undoDetails);
-  fDetails.Text := Memo1.Text
+  AddUndoEntry(undoDetails);
+  FDetails.Text := Memo1.Text
 end;
 
 end.

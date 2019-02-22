@@ -2,7 +2,7 @@ object dlgCloneResource: TdlgCloneResource
   Left = 0
   Top = 0
   Caption = 'Clone Resource'
-  ClientHeight = 173
+  ClientHeight = 185
   ClientWidth = 340
   Color = clBtnFace
   Constraints.MaxHeight = 212
@@ -18,7 +18,7 @@ object dlgCloneResource: TdlgCloneResource
   OnShow = FormShow
   DesignSize = (
     340
-    173)
+    185)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel

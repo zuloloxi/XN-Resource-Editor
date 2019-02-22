@@ -4,28 +4,24 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, ExtCtrls;
+  ExtCtrls, ResourceForm;
 
 type
   TfmGroupResource = class(TfmResource)
     ScrollBox1: TScrollBox;
     Image1: TImage;
-  private
-    { Private declarations }
   protected
     procedure SetObject(const Value: TObject); override;
     function GetImportExportType: TImportExportType; override;
-    function GetCanCopy : Boolean; override;
+    function GetCanCopy: Boolean; override;
   public
     procedure Copy; override;
   end;
 
-var
-  fmGroupResource: TfmGroupResource;
-
 implementation
 
-uses unitResourceGraphics, ClipBrd;
+uses
+  ClipBrd, unitResourceGraphics;
 
 {$R *.DFM}
 
@@ -48,7 +44,7 @@ end;
 
 procedure TfmGroupResource.SetObject(const Value: TObject);
 var
-  details : TIconCursorGroupResourceDetails;
+  details: TIconCursorGroupResourceDetails;
 begin
   inherited;
   

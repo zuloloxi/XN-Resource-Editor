@@ -10,14 +10,7 @@ uses
 
 type
   TfmIconGraphicsResource = class(TfmIconCursorGraphicsResource)
-  private
-    { Private declarations }
-  public
-    { Public declarations }
   end;
-
-var
-  fmIconGraphicsResource: TfmIconGraphicsResource;
 
 implementation
 

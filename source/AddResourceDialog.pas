@@ -16,24 +16,23 @@ type
     procedure ListView1DblClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
-    fResourceDetailsClass: TResourceDetailsClass;
-    { Private declarations }
+    FResourceDetailsClass: TResourceDetailsClass;
   public
-    property ResourceDetailsClass : TResourceDetailsClass read fResourceDetailsClass;
-    { Public declarations }
+    property ResourceDetailsClass: TResourceDetailsClass read FResourceDetailsClass;
   end;
-
-var
-  dlgAddResource: TdlgAddResource;
 
 implementation
 
-uses MainForm, unitResourceGraphics, unitResourceMessages, unitResourceDialogs, unitResourceMenus, unitResourceXPManifests, unitResourceGIF, unitResourceVersionInfo, unitResourceToolbar, unitResourceAccelerator, unitResourceExaminer;
+uses
+  MainForm, unitResourceGraphics, unitResourceMessages, unitResourceDialogs,
+  unitResourceMenus, unitResourceXPManifests, unitResourceGIF,
+  unitResourceVersionInfo, unitResourceToolbar, unitResourceAccelerator,
+  unitResourceExaminer;
 
 {$R *.DFM}
 
 const
-  addableItems : array [0..13] of TResourceDetailsClass = (
+  addableItems: array [0..13] of TResourceDetailsClass = (
     TCursorGroupResourceDetails,
     TBitmapResourceDetails,
     TIconGroupResourceDetails,
@@ -52,7 +51,7 @@ const
 
 procedure TdlgAddResource.FormCreate(Sender: TObject);
 var
-  i : Integer;
+  i: Integer;
 begin
   for i := Low (AddableItems) to High (AddableItems) do
     with ListView1.Items.Add do
@@ -65,9 +64,9 @@ end;
 procedure TdlgAddResource.btnOKClick(Sender: TObject);
 begin
   if Assigned (ListView1.Selected) then
-    fResourceDetailsClass := AddableItems [ListView1.Selected.Index]
+    FResourceDetailsClass := AddableItems [ListView1.Selected.Index]
   else
-    fResourceDetailsClass := Nil
+    FResourceDetailsClass := Nil
 end;
 
 procedure TdlgAddResource.ListView1DblClick(Sender: TObject);

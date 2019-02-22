@@ -19,13 +19,10 @@ type
     procedure FormShow(Sender: TObject);
   private
     function GetLanguage: LCID;
-    { Private declarations }
   public
     ResourceDetails : TResourceDetails;
 
     property Language : LCID read GetLanguage;
-
-    { Public declarations }
   end;
 
 var
@@ -35,7 +32,8 @@ implementation
 
 {$R *.DFM}
 
-uses unitResourceMessages, ResourceForm;
+uses
+  unitResourceMessages, ResourceForm;
 
 resourcestring
   rstNeutral = 'Language Neutral';

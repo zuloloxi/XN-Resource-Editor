@@ -18,13 +18,10 @@ type
     lvContains: TListView;
     procedure FormShow(Sender: TObject);
   private
-    fDetails : TRCDataPackagesResourceDetails;
+    FDetails: TRCDataPackagesResourceDetails;
   public
     procedure SetObject(const Value: TObject); override;
   end;
-
-var
-  fmPackagesResource: TfmPackagesResource;
 
 implementation
 
@@ -34,38 +31,38 @@ implementation
 
 procedure TfmPackagesResource.SetObject(const Value: TObject);
 var
-  prop : TPropertyListProperty;
-  i : Integer;
-  st : string;
-  flgs : Integer;
+  prop: TPropertyListProperty;
+  i: Integer;
+  st: string;
+  flgs: Integer;
 begin
   inherited;
 
-  fDetails := Obj as TRCDataPackagesResourceDetails;
+  FDetails := Obj as TRCDataPackagesResourceDetails;
 
   prop := plbFlags.FindProperty ('Environment');
-  prop.PropertyValue := fDetails.Environment;
+  prop.PropertyValue := FDetails.Environment;
 
   prop := plbFlags.FindProperty ('Module Type');
-  prop.PropertyValue := fDetails.ModuleType;
+  prop.PropertyValue := FDetails.ModuleType;
 
   prop := plbFlags.FindProperty ('Never Build');
-  prop.PropertyValue := fDetails.NeverBuild;
+  prop.PropertyValue := FDetails.NeverBuild;
 
   prop := plbFlags.FindProperty ('Design Only');
-  prop.PropertyValue := fDetails.DesignTimeOnly;
+  prop.PropertyValue := FDetails.DesignTimeOnly;
 
   prop := plbFlags.FindProperty ('Runtime Only');
-  prop.PropertyValue := fDetails.RuntimeOnly;
+  prop.PropertyValue := FDetails.RuntimeOnly;
 
   prop := plbFlags.FindProperty ('Check Duplicates');
-  prop.PropertyValue := fDetails.CheckForDuplicates;
+  prop.PropertyValue := FDetails.CheckForDuplicates;
 
   lvRequires.Items.BeginUpdate;
   try
-    for i := 0 to fDetails.RequiresCount - 1 do
+    for i := 0 to FDetails.RequiresCount - 1 do
       with lvRequires.Items.Add do
-        Caption := fDetails.Requires [i];
+        Caption := FDetails.Requires [i];
     if lvRequires.Items.Count > 0 then
       lvRequires.ItemIndex := 0;
   finally
@@ -74,10 +71,10 @@ begin
 
   lvContains.Items.BeginUpdate;
   try
-    for i := 0 to fDetails.ContainsCount - 1 do
+    for i := 0 to FDetails.ContainsCount - 1 do
       with lvContains.Items.Add do
       begin
-        Caption := fDetails.Contains [i];
+        Caption := FDetails.Contains [i];
   { PackageUnitFlags:
     bit      meaning
     -----------------------------------------------------------------------------------------
@@ -88,7 +85,7 @@ begin
     4      | implicitly imported
     5..7   | reserved
   }
-        flgs := fDetails.ContainsFlag [i];
+        flgs := FDetails.ContainsFlag [i];
 
         st := '';
         if (flgs and  1) <> 0 then st := st + ', main unit';

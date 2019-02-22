@@ -3,8 +3,8 @@ unit CloneResourceDialog;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, unitResourceDetails, TntVCLStubs;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, unitResourceDetails;
 
 type
   TdlgCloneResource = class(TForm)
@@ -20,29 +20,26 @@ type
     function GetLanguage: LCID;
   protected
     procedure UpdateActions; override;
-    { Private declarations }
   public
-    ResourceDetails : TResourceDetails;
+    ResourceDetails: TResourceDetails;
 
-    property Language : LCID read GetLanguage;
+    property Language: LCID read GetLanguage;
   end;
-
-var
-  dlgCloneResource: TdlgCloneResource;
 
 implementation
 
 {$R *.dfm}
 
-uses unitResourceMessages, ResourceForm;
+uses
+  unitResourceMessages, ResourceForm;
 
 resourcestring
   rstNeutral = 'Language Neutral';
 
 procedure TdlgCloneResource.FormShow(Sender: TObject);
 var
-  i : Integer;
-  def : string;
+  i: Integer;
+  def: string;
 begin
   UseInternationalFont (ntedName.Font);
   if Assigned (ResourceDetails) then
@@ -71,7 +68,7 @@ end;
 
 function TdlgCloneResource.GetLanguage: LCID;
 var
-  i : Integer;
+  i: Integer;
 begin
   Result := 0;
   if cbLanguage.ItemIndex <> 0 then
@@ -87,7 +84,6 @@ procedure TdlgCloneResource.UpdateActions;
 begin
   ntedName.Enabled := rbByName.Checked;
   cbLanguage.Enabled := rbByLanguage.Checked;
-
 end;
 
 end.

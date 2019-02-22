@@ -9,11 +9,8 @@ uses
 type
   TfmRawResource = class(TfmResource)
     HexDump1: THexDump;
-  private
   protected
     procedure SetObject(const Value: TObject); override;
-  public
-    { Public declarations }
   end;
 
 var

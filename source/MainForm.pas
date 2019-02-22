@@ -24,7 +24,8 @@ uses
   cmpNTAboutBox, ExtDlgs, ResourceForm, Vcl.Imaging.GIFImg, Vcl.Imaging.jpeg,
   Vcl.Imaging.pngimage,
   AppEvnts, unitHTMLHelpViewer, ActnMan, ActnCtrls, ActnMenus, XPStyleActnCtrls,
-  VirtualTrees, ExVirtualStringTree, unitResourceExaminer, System.Actions;
+  VirtualTrees, ExVirtualStringTree, unitResourceExaminer, System.Actions,
+  System.ImageList;
 {$endregion}
 
 {$region 'Constant Definitions'}
@@ -163,9 +164,6 @@ type
       Column: TColumnIndex; NewText: string);
     procedure vstResourcesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; var Allowed: Boolean);
-    procedure vstResourcesGetImageIndex(Sender: TBaseVirtualTree;
-      Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var ImageIndex: Integer);
     procedure vstResourcesFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
     procedure vstResourcesInitChildren(Sender: TBaseVirtualTree;
@@ -212,6 +210,9 @@ type
     procedure actResourceImportOtherResourceExecute(Sender: TObject);
     procedure ApplicationEvents1Message(var Msg: tagMSG;
       var Handled: Boolean);
+    procedure vstResourcesGetImageIndex(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+      var Ghosted: Boolean; var ImageIndex: TImageIndex);
   private
     fResourceModule : TResourceModule;
     fUndo, fRedo : string;
@@ -1888,6 +1889,25 @@ begin
   SwitchView (GetNodeResourceDetails (Node));
 end;
 
+procedure TfmMain.vstResourcesGetImageIndex(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+  var Ghosted: Boolean; var ImageIndex: TImageIndex);
+var
+  details : TResourceDetails;
+begin
+  if Kind = ikOverlay then
+    Exit;
+
+  details := GetNodeResourceDetails (Node);
+  if Assigned (details) then
+    ImageIndex := GetTypeImage (details.ResourceType)
+  else
+    if vsExpanded in Node^.States then
+      ImageIndex := imgOpenFolder
+    else
+      ImageIndex := imgClosedFolder
+end;
+
 procedure TfmMain.vstResourcesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
     TextType: TVSTTextType; var CellText: string);
 var
@@ -1925,25 +1945,6 @@ begin
     if elem.Count > 0 then
       Include (InitialStates, ivsHasChildren)
   end
-end;
-
-procedure TfmMain.vstResourcesGetImageIndex(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-  var Ghosted: Boolean; var ImageIndex: Integer);
-var
-  details : TResourceDetails;
-begin
-  if Kind = ikOverlay then
-    Exit;
-  
-  details := GetNodeResourceDetails (Node);
-  if Assigned (details) then
-    ImageIndex := GetTypeImage (details.ResourceType)
-  else
-    if vsExpanded in Node^.States then
-      ImageIndex := imgOpenFolder
-    else
-      ImageIndex := imgClosedFolder
 end;
 
 procedure TfmMain.vstResourcesEditing(Sender: TBaseVirtualTree;

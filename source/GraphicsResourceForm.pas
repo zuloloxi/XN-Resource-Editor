@@ -128,25 +128,25 @@ type
     procedure PopupMenu1Popup(Sender: TObject);
     procedure actImageAddImageExecute(Sender: TObject);
   private
-    fPCWidth : Integer;
-    details : TGraphicsResourceDetails;
+    FPCWidth: Integer;
+    FDetails: TGraphicsResourceDetails;
 
-    procedure SetPaletteForPixelFormat (reset : Boolean);
+    procedure SetPaletteForPixelFormat (reset: Boolean);
   protected
     procedure SetObject(const Value: TObject); override;
-    function GetMenuItem : TMenuItem; override;
+    function GetMenuItem: TMenuItem; override;
     function GetImportExportType: TImportExportType; override;
 
-    function GetCanCut : Boolean; override;
-    function GetCanCopy : Boolean; override;
-    function GetCanPaste : Boolean; override;
-    function GetCanSelectAll : Boolean; override;
-    function GetCanDelete : Boolean; override;
+    function GetCanCut: Boolean; override;
+    function GetCanCopy: Boolean; override;
+    function GetCanPaste: Boolean; override;
+    function GetCanSelectAll: Boolean; override;
+    function GetCanDelete: Boolean; override;
     procedure UpdateActions; override;
 
   public
-    procedure PreviewKey (var key : Word; shift : TShiftState); override;
-    procedure SaveResource (const undoDetails : string); virtual;
+    procedure PreviewKey (var key: Word; shift: TShiftState); override;
+    procedure SaveResource (const undoDetails: string); virtual;
     procedure SelectAll; override;
     procedure EditDelete; override;
     procedure Copy; override;
@@ -154,12 +154,10 @@ type
     procedure Paste; override;
   end;
 
-var
-  fmGraphicsResource: TfmGraphicsResource;
-
 implementation
 
-uses ClipBrd, Jpeg, FormTextInput;
+uses
+  ClipBrd, Jpeg, FormTextInput;
 
 {$R *.DFM}
 
@@ -187,13 +185,13 @@ const
   taHeight = 1;
   taPixelFormat = 2;
 
-function GetPixelFormat (graphic : TGraphic) : TPixelFormat;
+function GetPixelFormat (graphic: TGraphic): TPixelFormat;
 begin
   if graphic is TGifImage then
   begin
     case TGifImage (graphic).BitsPerPixel of
-      1 : Result := pf1Bit;
-      4 : Result := pf4Bit;
+      1: Result := pf1Bit;
+      4: Result := pf4Bit;
       else Result := pf8Bit;
     end
   end
@@ -207,13 +205,13 @@ end;
  | Resize a picture, handling anomolies like JPEG                       |
  |                                                                      |
  | Parameters:                                                          |
- |   p : TPicture;        The picture to resize                         |
- |   newWidth : Integer   The new width                                 |
- |   newHeight : Integer  The new height                                |
+ |   p: TPicture;        The picture to resize                         |
+ |   newWidth: Integer   The new width                                 |
+ |   newHeight: Integer  The new height                                |
  *----------------------------------------------------------------------*)
-procedure ResizePicture (p : TPicture; newWidth, newHeight : Integer);
+procedure ResizePicture (p: TPicture; newWidth, newHeight: Integer);
 var
-  b : TBitmap;
+  b: TBitmap;
 begin
   if (p.graphic is TJPegImage) or (p.Graphic is TGifImage) then
   begin
@@ -245,8 +243,8 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmGraphicsResource.SetObject(const Value: TObject);
 var
-  newImage : Boolean;
-  transp : boolean;
+  newImage: Boolean;
+  transp: boolean;
 begin
   newImage := Value <> Obj;                     // If 'obj' hasn't changed, it must
                                                 // be after an 'Undo'  Try to preserve
@@ -256,9 +254,9 @@ begin
                                                 // up underlying stuff.
 
   PropertyListBox1.Reset;
-  details := obj as TGraphicsResourceDetails;
+  FDetails := obj as TGraphicsResourceDetails;
 
-  details.GetImage (Image1.Picture);            // Set the thumbnail picture
+  FDetails.GetImage (Image1.Picture);            // Set the thumbnail picture
   if Image1.Picture.Graphic is TGifImage then
   begin
 //    transp := TGIFImage (Image1.Picture.Graphic).IsTransparent;
@@ -304,11 +302,11 @@ begin
       Tag := taPixelFormat;
 
       case GetPixelFormat (Image1.Picture.Graphic) of
-        pf1Bit : PropertyValue := 0;
-        pf4Bit : PropertyValue := 1;
-        pf8Bit : PropertyValue := 2;
-        pf24Bit : PropertyValue := 3;
-        pf32Bit : propertyValue := 4;
+        pf1Bit: PropertyValue := 0;
+        pf4Bit: PropertyValue := 1;
+        pf8Bit: PropertyValue := 2;
+        pf24Bit: PropertyValue := 3;
+        pf32Bit: propertyValue := 4;
         else
           PropertyValue := 3; // 24 bit ??
       end;
@@ -338,9 +336,9 @@ begin
   BitmapEditor1.DrawingTool := dtPencil;
                                                 // Save the palette panel Width,
                                                 // so we can restore it if we dock.
-  fPCWidth := pnlGraphics.Width;
-  if pnlColours.Width > fPCWidth then
-    fPCWidth := pnlColours.Width;
+  FPCWidth := pnlGraphics.Width;
+  if pnlColours.Width > FPCWidth then
+    FPCWidth := pnlColours.Width;
 
 
                                                 // Manually dock the panels
@@ -357,14 +355,14 @@ end;
 procedure TfmGraphicsResource.SizingPageControl1DockDrop(Sender: TObject;
   Source: TDragDockObject; X, Y: Integer);
 var
-  i : Integer;
+  i: Integer;
 begin
   with SizingPageControl1 do
   begin
     for i := 0 to PageCount - 1 do
       Pages [i].Caption := TPanel (Pages [i].Controls [0]).Caption;
 
-    Width := fPCWidth + 8;      // Restore the width to it's original setting
+    Width := FPCWidth + 8;      // Restore the width to it's original setting
                                 // - we've got at least one tab.
   end
 end;
@@ -474,12 +472,12 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmGraphicsResource.SaveResource(const undoDetails: string);
 var
-  details : TGraphicsResourceDetails;
+  FDetails: TGraphicsResourceDetails;
 begin
   AddUndoEntry (undoDetails);           // Call inherited to take undo snapshot
-  details := obj as TGraphicsResourceDetails;
-  details.SetImage (BitmapEditor1.Picture);
-  details.GetImage (Image1.Picture);    // Make sure the thumnail *really*
+  FDetails := obj as TGraphicsResourceDetails;
+  FDetails.SetImage (BitmapEditor1.Picture);
+  FDetails.GetImage (Image1.Picture);    // Make sure the thumnail *really*
                                         // relflects what we've got..
 end;
 
@@ -497,7 +495,7 @@ end;
 procedure TfmGraphicsResource.BitmapEditor1GetText(sender: TObject; font: TFont;
   var txt: WideString);
 var
-  frm : TfmTextInput;
+  frm: TfmTextInput;
 begin
   frm := TfmTextInput.Create(nil);
   try
@@ -535,7 +533,7 @@ end;
 procedure TfmGraphicsResource.pnlTransparentMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
-  tc : TColor;
+  tc: TColor;
 begin
   tc := BitmapEditor1.TransparentColor;
   if Button = mbLeft then
@@ -575,8 +573,8 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmGraphicsResource.BitmapEditor1DrawToolChange(Sender: TObject);
 var
-  dt : TDrawingTool;
-  i : Integer;
+  dt: TDrawingTool;
+  i: Integer;
 begin
   dt := BitmapEditor1.DrawingTool;
 
@@ -593,18 +591,18 @@ begin
   shpBack.Brush.Color := BitmapEditor1.DrawBrush.Color;
 end;
 
-function CreatePaletteBitmap (pf : TPixelFormat) : TBitmap;
+function CreatePaletteBitmap (pf: TPixelFormat): TBitmap;
 var
-  i : Integer;
-  colorCount : DWORD;
-  paletteEntries : array [0..255] of TPaletteEntry;
-  pal : HPalette;
+  i: Integer;
+  colorCount: DWORD;
+  paletteEntries: array [0..255] of TPaletteEntry;
+  pal: HPalette;
 begin
   result := Nil;
   case pf of
-    pf1Bit : pal := SystemPalette2;
-    pf4Bit : pal := SystemPalette16;
-    pf8Bit : pal := SystemPalette256;
+    pf1Bit: pal := SystemPalette2;
+    pf4Bit: pal := SystemPalette16;
+    pf8Bit: pal := SystemPalette256;
     else
       Exit;
   end;
@@ -644,12 +642,12 @@ end;
 procedure TfmGraphicsResource.PropertyListBox1PropertyChanged(
   Sender: TObject);
 var
-  prop : TPropertyListProperty;
-  change : string;
-  oldPf, newPf : TPixelFormat;
-  b1, bmp, b2 : TBitmap;
-  l : TList;
-  pal : HPalette;
+  prop: TPropertyListProperty;
+  change: string;
+  oldPf, newPf: TPixelFormat;
+  b1, bmp, b2: TBitmap;
+  l: TList;
+  pal: HPalette;
 begin
   with PropertyListBox1 do
     prop := Properties [SelectedPropertyNo];
@@ -658,13 +656,13 @@ begin
   newPf := pfDevice;
 
   case prop.Tag of
-    taWidth : if Image1.Picture.Graphic.Width <> prop.PropertyValue then
+    taWidth: if Image1.Picture.Graphic.Width <> prop.PropertyValue then
               begin
                 change := rstWidthChanged;
                 ResizePicture (Image1.Picture, prop.PropertyValue, Image1.Picture.Graphic.Height);
               end;
 
-    taHeight : if Image1.Picture.Graphic.Height <> prop.PropertyValue then
+    taHeight: if Image1.Picture.Graphic.Height <> prop.PropertyValue then
                begin
                  change := rstHeightChanged;
                  ResizePicture (Image1.Picture, Image1.Picture.Graphic.Width, prop.PropertyValue);
@@ -674,11 +672,11 @@ begin
                begin
                  oldPf := GetPixelFormat (Image1.Picture.Graphic);
                  case prop.PropertyValue of
-                   0 : newPf := pf1Bit;
-                   1 : newPf := pf4Bit;
-                   2 : newPf := pf8Bit;
-                   3 : newPf := pf24Bit;
-                   4 : newPf := pf32Bit;
+                   0: newPf := pf1Bit;
+                   1: newPf := pf4Bit;
+                   2: newPf := pf8Bit;
+                   3: newPf := pf24Bit;
+                   4: newPf := pf32Bit;
                  end;
                  if oldPf <> newPf then
                  begin
@@ -703,9 +701,9 @@ begin
                            b1 := TBitmap.Create;
                            b1.PixelFormat := newPF;
                            case newPF of
-                             pf1Bit : b1.Palette := SystemPalette2;
-                             pf4Bit : b1.Palette := SystemPalette16;
-                             pf8Bit : b1.Palette := CopyPalette (SystemPalette256); // unitExIcon.WebPalette
+                             pf1Bit: b1.Palette := SystemPalette2;
+                             pf4Bit: b1.Palette := SystemPalette16;
+                             pf8Bit: b1.Palette := CopyPalette (SystemPalette256); // unitExIcon.WebPalette
                            end;
 
                            b1.Width := bmp.Width;
@@ -772,8 +770,8 @@ end;
 
 procedure TfmGraphicsResource.SetPaletteForPixelFormat(reset: Boolean);
 var
-  fc, bc : TColor;
-  pf : TPixelFormat;
+  fc, bc: TColor;
+  pf: TPixelFormat;
 begin
   fc := clWhite;
   bc := clBlack;
@@ -909,7 +907,7 @@ end;
 procedure TfmGraphicsResource.BitmapEditor1SelectionRectChange(
   Sender: TObject);
 var
-  Msg : string;
+  Msg: string;
 begin
   if BitmapEditor1.SelectionValid then
     with BitmapEditor1.SelectionRect do
@@ -928,7 +926,7 @@ end;
 
 procedure TfmGraphicsResource.actImageAddImageExecute(Sender: TObject);
 var
-  tp : Integer;
+  tp: Integer;
 begin
   if Image1.Picture.Graphic is TExCursor then
     tp := 0
@@ -943,7 +941,7 @@ end;
 
 procedure TfmGraphicsResource.UpdateActions;
 var
-  dt : boolean;
+  dt: Boolean;
 begin
   actImageAddImage.Enabled := ResourceDetails is TIconCursorResourceDetails;
 

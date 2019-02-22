@@ -26,8 +26,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, VirtualTrees, PropertyPageForm, ConTnrs, StdCtrls,
-  cmpPersistentPosition, Menus;
+  Dialogs, ExtCtrls, Menus, Contnrs, StdCtrls, PropertyPageForm,
+  cmpPersistentPosition, VirtualTrees;
 
 const
   WM_UPDATESPLITTER = WM_USER + $201;
@@ -131,7 +131,10 @@ type
     constructor Create (AOwner : TComponent); override;
     destructor Destroy; override;
 
-    function AddPropertyPageDetails (APropertyPageClass : TPropertyPageClass; AParent : TPropertyPageDetails; const ACaption : string = ''; const AHelpText : string = ''; const AHelpKeyword : string = ''; AParam : Integer = 0) : TPropertyPageDetails;
+    function AddPropertyPageDetails (APropertyPageClass : TPropertyPageClass;
+      AParent : TPropertyPageDetails; const ACaption : string = '';
+      const AHelpText : string = ''; const AHelpKeyword : string = '';
+      AParam : Integer = 0) : TPropertyPageDetails;
     function ForEachPropertyPageDetails (proc : TPropertyPageDetailsProc; param : pointer) : TPropertyPageDetails;
   end;
 
@@ -144,12 +147,10 @@ type
     procedure PopulateControls (AData : TPropertyPageData); override;
   end;
 
-var
-  fmPropertyBase: TfmPropertyBase;
-
 implementation
 
-uses unitCredProperties;
+uses
+  unitCredProperties;
 
 {$R *.dfm}
 

@@ -22,27 +22,27 @@ uses
 
 type
   TfmVersionResource = class(TfmResource)
-    MainMenu1: TMainMenu;
-    mnuStrings: TMenuItem;
-    mnuAddString: TMenuItem;
-    mnuModifyString: TMenuItem;
-    mnuDeleteString: TMenuItem;
     ActionList1: TActionList;
     actStringAddString: TAction;
-    actStringModifyString: TAction;
     actStringDeleteString: TAction;
+    actStringModifyString: TAction;
     actStringModifyStringName: TAction;
-    PopupMenu1: TPopupMenu;
-    AddString2: TMenuItem;
-    ModifyString2: TMenuItem;
-    DeleteString2: TMenuItem;
-    Splitter1: TSplitter;
-    lvVersionStrings: TListView;
     actStringModifyStringName1: TMenuItem;
+    AddString2: TMenuItem;
+    DeleteString2: TMenuItem;
+    lvVersionStrings: TListView;
+    MainMenu1: TMainMenu;
+    mmoMessage: TExRichEdit;
+    mnuAddString: TMenuItem;
+    mnuDeleteString: TMenuItem;
+    mnuModifyString: TMenuItem;
+    mnuStrings: TMenuItem;
+    ModifyString2: TMenuItem;
     ModifyStringName1: TMenuItem;
     Panel1: TPanel;
+    PopupMenu1: TPopupMenu;
     PropertyListBox1: TPropertyListBox;
-    mmoMessage: TExRichEdit;
+    Splitter1: TSplitter;
     procedure FormResize(Sender: TObject);
     procedure actStringDeleteStringExecute(Sender: TObject);
     procedure actStringModifyStringExecute(Sender: TObject);
@@ -116,7 +116,7 @@ const
  *----------------------------------------------------------------------------*)
 function VersionToString (version : TULargeInteger) : string;
 begin
-  with version do
+  with _ULARGE_INTEGER(version) do
     result := Format ('%d.%d.%d.%d', [HiWord (HighPart), LoWord (HighPart), HiWord (LowPart), LoWord (LowPart)]);
 end;
 
@@ -167,8 +167,8 @@ begin
   if not ok then
     raise exception.Create (rstVersionFormatError);
 
-  result.HighPart := 65536 * hh + h;
-  result.LowPart := 65536 * l + ll;
+  _ULARGE_INTEGER(result).HighPart := 65536 * hh + h;
+  _ULARGE_INTEGER(result).LowPart := 65536 * l + ll;
 end;
 
 
@@ -216,7 +216,7 @@ begin
 
       v := StringToVersion (PropertyListBox1.Properties [prProductVersion].PropertyValue);
                                         // Has the product version changed ??
-      if v.QuadPart <> ProductVersion.QuadPart then
+      if _ULARGE_INTEGER(v).QuadPart <> _ULARGE_INTEGER(ProductVersion).QuadPart then
       begin
         AddUndoEntry (rstChangeProductVersion);
         ProductVersion := v
@@ -224,7 +224,7 @@ begin
 
       v := StringToVersion (PropertyListBox1.Properties [prFileVersion].PropertyValue);
                                         // Has the file version changed ??
-      if v.QuadPart <> FileVersion.QuadPart then
+      if _ULARGE_INTEGER(v).QuadPart <> _ULARGE_INTEGER(FileVersion).QuadPart then
       begin
         AddUndoentry (rstChangeFileVersion);
         FileVersion := v

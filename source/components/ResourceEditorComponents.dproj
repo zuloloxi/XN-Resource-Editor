@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{682EA4FA-54B2-4045-B962-E5EA70625E3B}</ProjectGuid>
         <MainSource>ResourceEditorComponents.dpk</MainSource>
-        <ProjectVersion>14.4</ProjectVersion>
+        <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
@@ -71,17 +71,17 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
+        <SanitizedProjectName>ResourceEditorComponents</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX32)'!=''">
         <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <DCC_UsePackage>vcl;rtl;LowLevel;ImageTypes;ResourceUtils;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_UsePackage>vcl;rtl;LowLevel;ImageTypes;ResourceUtils;MiscComponents;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_UsePackage>vcl;rtl;$(DCC_UsePackage)</DCC_UsePackage>
@@ -103,7 +103,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
         <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-        <DCC_DebugInformation>false</DCC_DebugInformation>
+        <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_OSX32)'!=''">
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
@@ -205,8 +205,11 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp170.bpl">Microsoft Office XP Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
-            <Deployment/>
+            <Deployment Version="3"/>
             <Platforms>
+                <Platform value="Android">False</Platform>
+                <Platform value="iOSDevice32">False</Platform>
+                <Platform value="iOSSimulator">False</Platform>
                 <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
@@ -216,12 +219,37 @@ $(PostBuildEvent)]]></PostBuildEvent>
     </ProjectExtensions>
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+    <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Android'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='iOSDevice32'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='iOSSimulator'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='OSX32'">
         <PreBuildEvent/>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win32'">
@@ -229,7 +257,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
@@ -237,7 +265,31 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Android'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='iOSDevice32'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='iOSSimulator'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='OSX32'">
@@ -245,7 +297,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
@@ -253,7 +305,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
@@ -261,7 +313,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
+        <PostBuildEvent>copy DialogResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceObjectForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy ResourceForm.dfm ..\..\lib\$(Platform)\$(Config)&amp;&amp;copy BitmapEditorCursors.res ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>

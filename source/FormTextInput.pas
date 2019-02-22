@@ -3,8 +3,8 @@ unit FormTextInput;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls;
 
 type
   TfmTextInput = class(TForm)
@@ -14,14 +14,7 @@ type
     Button3: TButton;
     FontDialog1: TFontDialog;
     procedure Button2Click(Sender: TObject);
-  private
-    { Private declarations }
-  public
-    { Public declarations }
   end;
-
-var
-  fmTextInput: TfmTextInput;
 
 implementation
 

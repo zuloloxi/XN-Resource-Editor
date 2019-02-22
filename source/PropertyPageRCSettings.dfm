@@ -32,11 +32,6 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Height = 109
     Anchors = [akLeft, akTop, akRight, akBottom]
     Header.AutoSizeIndex = 0
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'MS Shell Dlg 2'
-    Header.Font.Style = []
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
     NodeDataSize = 4
     TabOrder = 2
@@ -48,7 +43,7 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Columns = <
       item
         Position = 0
-        Width = 225
+        Width = 227
         WideText = 'Include Header Packages'
       end>
   end

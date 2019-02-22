@@ -24,7 +24,7 @@ inherited fmPropertyPageProgramSettings: TfmPropertyPageProgramSettings
   end
   inherited Panel1: TPanel
     Width = 318
-    ExplicitWidth = 278
+    ExplicitWidth = 318
     inherited Bevel1: TBevel
       Width = 318
       ExplicitWidth = 269
@@ -61,7 +61,6 @@ inherited fmPropertyPageProgramSettings: TfmPropertyPageProgramSettings
     Width = 258
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
     ItemIndex = 0
     TabOrder = 3
     Text = 'Windows API resource parser'

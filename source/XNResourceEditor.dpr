@@ -50,9 +50,5 @@ begin
   Application.Title := 'XN Resource Editor';
   Application.HelpFile := 'XNResourceEditor.chm';
   Application.CreateForm(TfmMain, fmMain);
-  Application.CreateForm(TfmIconCursorGraphicsResource, fmIconCursorGraphicsResource);
-  Application.CreateForm(TfmCursorGraphicsResource, fmCursorGraphicsResource);
-  Application.CreateForm(TfmIconGraphicsResource, fmIconGraphicsResource);
-  Application.CreateForm(TfmTextInput, fmTextInput);
   Application.Run;
 end.

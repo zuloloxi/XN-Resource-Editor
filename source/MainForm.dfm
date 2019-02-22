@@ -62,11 +62,6 @@ object fmMain: TfmMain
     Align = alLeft
     BorderWidth = 1
     Header.AutoSizeIndex = 0
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'MS Shell Dlg 2'
-    Header.Font.Style = []
     Header.Options = [hoColumnResize, hoDrag]
     Images = ilResources
     PopupMenu = pomResources
@@ -182,12 +177,12 @@ object fmMain: TfmMain
       Style = tbsDropDown
     end
     object btnFileSave: TToolButton
-      Left = 68
+      Left = 66
       Top = 0
       Action = actFileSave
     end
     object ToolButton3: TToolButton
-      Left = 91
+      Left = 89
       Top = 0
       Width = 8
       Caption = 'ToolButton3'
@@ -195,12 +190,12 @@ object fmMain: TfmMain
       Style = tbsSeparator
     end
     object ToolButton4: TToolButton
-      Left = 99
+      Left = 97
       Top = 0
       Action = actResourceAddResource
     end
     object ToolButton5: TToolButton
-      Left = 122
+      Left = 120
       Top = 0
       Action = actResourceDeleteResource
     end
@@ -343,7 +338,7 @@ object fmMain: TfmMain
     Left = 256
     Top = 118
     Bitmap = {
-      494C010112001300680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010112006C006C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000E6CEC300E3CDC300DFCBC200DBC7BE00DCC4B900E5C9BB000000
@@ -1247,7 +1242,7 @@ object fmMain: TfmMain
     Left = 224
     Top = 177
     Bitmap = {
-      494C01010E001300680010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010E006C006C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

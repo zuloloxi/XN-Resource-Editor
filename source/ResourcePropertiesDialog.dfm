@@ -2,7 +2,7 @@ object dlgResourceProperties: TdlgResourceProperties
   Left = 199
   Top = 124
   Caption = 'Resource Properties'
-  ClientHeight = 122
+  ClientHeight = 134
   ClientWidth = 304
   Color = clBtnFace
   Constraints.MaxHeight = 161
@@ -18,7 +18,7 @@ object dlgResourceProperties: TdlgResourceProperties
   OnShow = FormShow
   DesignSize = (
     304
-    122)
+    134)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel

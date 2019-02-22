@@ -10,9 +10,9 @@ uses
 type
   TPropertyPageProgramSettingsData = class (TPropertyPageData)
   private
-    fInternationalFontName : string;
-    fInternationalFontHeight : Integer;
-    fParserType : Integer;  // 0 = NT API; 1 = Internal
+    FInternationalFontName: string;
+    FInternationalFontHeight: Integer;
+    FParserType: Integer;  // 0 = NT API; 1 = Internal
   protected
     procedure Initialize; override;
   public
@@ -29,11 +29,11 @@ type
     procedure cbModuleParserChange(Sender: TObject);
     procedure Button1Click(Sender: TObject);
   private
-    fData : TPropertyPageProgramSettingsData;
+    FData: TPropertyPageProgramSettingsData;
   protected
   public
-    class function GetDataClass : TPropertyPageDataClass; override;
-    procedure PopulateControls (AData : TPropertyPageData); override;
+    class function GetDataClass: TPropertyPageDataClass; override;
+    procedure PopulateControls (AData: TPropertyPageData); override;
   end;
 
 var
@@ -48,20 +48,20 @@ uses ResourceForm, unitCredProperties;
 
 procedure TfmPropertyPageProgramSettings.Button1Click(Sender: TObject);
 begin
-  FontDialog1.Font.Name := fData.fInternationalFontName;
-  FontDialog1.Font.Height := fData.fInternationalFontHeight;
+  FontDialog1.Font.Name := FData.FInternationalFontName;
+  FontDialog1.Font.Height := FData.FInternationalFontHeight;
   if FontDialog1.Execute(Handle) then
   begin
-    fData.fInternationalFontName := FontDialog1.Font.Name;
-    fData.fInternationalFontHeight := FontDialog1.Font.Height;
+    FData.FInternationalFontName := FontDialog1.Font.Name;
+    FData.FInternationalFontHeight := FontDialog1.Font.Height;
 
-    stFontDetails.Caption := fData.fInternationalFontName
+    stFontDetails.Caption := FData.FInternationalFontName
   end;
 end;
 
 procedure TfmPropertyPageProgramSettings.cbModuleParserChange(Sender: TObject);
 begin
-  fData.fParserType := cbModuleParser.ItemIndex
+  FData.FParserType := cbModuleParser.ItemIndex
 end;
 
 class function TfmPropertyPageProgramSettings.GetDataClass: TPropertyPageDataClass;
@@ -72,11 +72,11 @@ end;
 procedure TfmPropertyPageProgramSettings.PopulateControls(AData: TPropertyPageData);
 begin
   inherited;
-  fData := AData as TPropertyPageProgramSettingsData;
-  stFontDetails.Caption := fData.fInternationalFontName;
+  FData := AData as TPropertyPageProgramSettingsData;
+  stFontDetails.Caption := FData.FInternationalFontName;
 
   if Win32Platform = VER_PLATFORM_WIN32_NT then
-    cbModuleParser.ItemIndex := fData.fParserType
+    cbModuleParser.ItemIndex := FData.FParserType
   else
   begin
     cbModuleParser.Visible := False;
@@ -88,15 +88,15 @@ end;
 
 procedure TPropertyPageProgramSettingsData.Apply;
 begin
-  SetInternationalFont (fInternationalFontName, fInternationalFontHeight);
-  gProperties.ParserType := fParserType;
+  SetInternationalFont (FInternationalFontName, FInternationalFontHeight);
+  gProperties.ParserType := FParserType;
 end;
 
 procedure TPropertyPageProgramSettingsData.Initialize;
 begin
-  fInternationalFontName := gProperties.InternationalFontName;
-  fInternationalFontHeight := gProperties.InternationalFontHeight;
-  fParserType := gProperties.ParserType;
+  FInternationalFontName := gProperties.InternationalFontName;
+  FInternationalFontHeight := gProperties.InternationalFontHeight;
+  FParserType := gProperties.ParserType;
 end;
 
 end.

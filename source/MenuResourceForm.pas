@@ -42,17 +42,14 @@ type
     procedure actMenuAppendItemExecute(Sender: TObject);
     procedure actMenuAddChildItemExecute(Sender: TObject);
   private
-    fDetails : TMenuResourceDetails;
-    procedure SaveResource (const undoDetails : string);
+    FDetails: TMenuResourceDetails;
+    procedure SaveResource (const undoDetails: string);
   protected
     procedure SetObject(const Value: TObject); override;
-    function GetMenuItem : TMenuItem; override;
+    function GetMenuItem: TMenuItem; override;
   public
     procedure UpdateFonts; override;
   end;
-
-var
-  fmMenuResource: TfmMenuResource;
 
 implementation
 
@@ -88,14 +85,14 @@ const
 
 procedure TfmMenuResource.SetObject(const Value: TObject);
 var
-  item : TMenuItem;
+  item: TMenuItem;
 begin
   inherited;
-  fDetails := Obj as TMenuResourceDetails;
+  FDetails := Obj as TMenuResourceDetails;
 
   item := TMenuItem.Create (nil);
   try
-    fDetails.GetItems (item);
+    FDetails.GetItems (item);
     MenuDesigner1.SetItems (item, False)
   finally
     item.Free
@@ -110,8 +107,8 @@ end;
 
 procedure TfmMenuResource.MenuDesigner1SelectedItemChange(Sender: TObject);
 var
-  item : TDesignerMenuItem;
-  s : WideString;
+  item: TDesignerMenuItem;
+  s: WideString;
 begin
   inherited;
 
@@ -155,12 +152,12 @@ end;
 
 procedure TfmMenuResource.FormShow(Sender: TObject);
 var
-  prop : TPropertyListProperty;
+  prop: TPropertyListProperty;
 
-  procedure AddShortcutRange (lo, hi, flags : Word);
+  procedure AddShortcutRange (lo, hi, flags: Word);
   var
-    w : Word;
-    s : string;
+    w: Word;
+    s: string;
   begin
     for w := lo to hi do
     begin
@@ -220,7 +217,7 @@ end;
 
 procedure TfmMenuResource.SaveResource(const undoDetails: string);
 var
-  sel : TMenuItem;
+  sel: TMenuItem;
 begin
   AddUndoEntry (undoDetails);
   sel := MenuDesigner1.SelectedItem;
@@ -229,7 +226,7 @@ begin
     MenuDesigner1.RestoreTags;    // Ensure that tags hold the item ID - even if the item is
                                   // selected - that's what SetItems expects.
 
-    fDetails.SetItems (MenuDesigner1.Items);
+    FDetails.SetItems (MenuDesigner1.Items);
   finally
     MenuDesigner1.SelectedItem := sel
   end
@@ -237,9 +234,9 @@ end;
 
 procedure TfmMenuResource.PropertyListBox1PropertyChanged(Sender: TObject);
 var
-  prop : TPropertyListProperty;
-  s : WideString;
-  idx : Integer;
+  prop: TPropertyListProperty;
+  s: WideString;
+  idx: Integer;
 
 begin
   s := '';

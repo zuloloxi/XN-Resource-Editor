@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  PropertyBaseForm, Menus, cmpPersistentPosition, StdCtrls, VirtualTrees,
-  ExtCtrls;
+  Menus, StdCtrls, ExtCtrls, VirtualTrees, PropertyBaseForm,
+  cmpPersistentPosition;
 
 type
   TfmProperties = class(TfmPropertyBase)
@@ -13,17 +13,16 @@ type
   private
   protected
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
   end;
-
-var
-  fmProperties: TfmProperties;
 
 implementation
 
-uses unitCredProperties, PropertyPageProgramSettings, PropertyPageRCSettings;
+uses
+  unitCredProperties, PropertyPageProgramSettings, PropertyPageRCSettings;
 
 {$R *.DFM}
+
 { TfmProperties }
 
 constructor TfmProperties.Create(AOwner: TComponent);
@@ -31,14 +30,14 @@ begin
   inherited;
 
   gProperties.BeginUpdate;
-  AddPropertyPageDetails (TfmPropertyPageProgramSettings, Nil);
-  AddPropertyPageDetails (TfmPropertyPageRCSettings, Nil);
+  AddPropertyPageDetails(TfmPropertyPageProgramSettings, nil);
+  AddPropertyPageDetails(TfmPropertyPageRCSettings, nil);
 end;
 
 procedure TfmProperties.FormDestroy(Sender: TObject);
 begin
   inherited;
-  gProperties.EndUpdate
+  gProperties.EndUpdate;
 end;
 
 end.

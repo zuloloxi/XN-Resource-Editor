@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, IconCursorGraphicsResourceForm, Menus, ActnList, ImgList,
-  ComCtrls, cmpColorSelector, ExtCtrls, ToolWin, cmpSizingPageControl,
+  Dialogs, Menus, ActnList, ImgList, ComCtrls, ExtCtrls, ToolWin,
+  IconCursorGraphicsResourceForm, cmpColorSelector, cmpSizingPageControl,
   cmpBitmapEditor, cmpPropertyListBox, unitExIcon;
 
 type
@@ -16,19 +16,15 @@ type
     procedure PropertyListBox1PropertyChanged(Sender: TObject);
   private
     function GetCursor: TExCursor;
-    procedure SetHotspot(const ScreenPt : TPoint);
-    { Private declarations }
+    procedure SetHotspot(const ScreenPt: TPoint);
   protected
-    procedure SetObject (const Value : TObject); override;
+    procedure SetObject (const Value: TObject); override;
   public
-    procedure PreviewKey (var key : Word; shift : TShiftState); override;
-    procedure SaveResource (const undoDetails : string); override;
+    procedure PreviewKey (var key: Word; shift: TShiftState); override;
+    procedure SaveResource (const undoDetails: string); override;
 
-    property Cursor : TExCursor read GetCursor;
+    property Cursor: TExCursor read GetCursor;
   end;
-
-var
-  fmCursorGraphicsResource: TfmCursorGraphicsResource;
 
 implementation
 
@@ -48,10 +44,10 @@ const
 
 { TfmCursorGraphicsResource }
 
-procedure TfmCursorGraphicsResource.SetHotspot (const ScreenPt : TPoint);
+procedure TfmCursorGraphicsResource.SetHotspot (const ScreenPt: TPoint);
 var
-  pt : TPoint;
-  change : string;
+  pt: TPoint;
+  change: string;
 begin
   pt := ScreenPt;
   MapWindowPoints (0, BitmapEditor1.Handle, pt, 1);
@@ -72,7 +68,7 @@ begin
 //
 end;
 
-function TfmCursorGraphicsResource.GetCursor : TExCursor;
+function TfmCursorGraphicsResource.GetCursor: TExCursor;
 begin
   result := TExCursor (Image1.Picture.Graphic);
 end;
@@ -90,8 +86,8 @@ end;
 procedure TfmCursorGraphicsResource.PropertyListBox1PropertyChanged(
   Sender: TObject);
 var
-  change : string;
-  prop : TPropertyListProperty;
+  change: string;
+  prop: TPropertyListProperty;
 begin
   with PropertyListBox1 do
     prop := Properties [SelectedPropertyNo];
@@ -133,7 +129,7 @@ type
   end;
 procedure TfmCursorGraphicsResource.SetHotspot1Click(Sender: TObject);
 var
-  pt : TPoint;
+  pt: TPoint;
 begin
   pt := PopupMenu1.PopupPoint;
   if pt.X = -1 then

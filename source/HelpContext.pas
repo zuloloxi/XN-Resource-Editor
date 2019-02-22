@@ -2,53 +2,54 @@ unit HelpContext;
 
 interface
 
-uses Windows, Classes, SysUtils;
+uses
+  Windows, Classes, SysUtils;
 
 const
   NO_CONTEXTS = 2;
   hcAddResourceDialog = 1000;
   hcNewImageDialog = 1001;
 
-function HelpLink (context : THelpContext) : string;
+function HelpLink (Context: THelpContext): string;
 
 implementation
 
 type
   THelpLink = record
-    context : THelpContext;
-    jump : string;
+    Context: THelpContext;
+    Jump: string;
   end;
 
 const
-  HelpLinks : array [0..NO_CONTEXTS - 1] of THelpLink = (
-    (context:hcAddResourceDialog; jump:'AddResourceDialog.htm'),
-    (context:hcNewImageDialog; jump:'NewImage.htm')
+  HelpLinks: array [0..NO_CONTEXTS - 1] of THelpLink = (
+    (Context:hcAddResourceDialog; Jump:'AddResourceDialog.htm'),
+    (Context:hcNewImageDialog; Jump:'NewImage.htm')
   );
 
-function HelpLink (context : THelpContext) : string;
+function HelpLink (Context: THelpContext): string;
 
-  function bsearch (s, e : Integer) : string;
+  function BSearch (s, e: Integer): string;
   var
-    m : Integer;
+    m: Integer;
   begin
     if e >= s then
     begin
       m := s + (e - s) div 2;
 
-      if context > HelpLinks [m].context then
-        result := bsearch (m + 1, e)
+      if Context > HelpLinks [m].Context then
+        Result := BSearch (m + 1, e)
       else
-        if context < HelpLinks [m].context then
-          result := bsearch (s, m - 1)
+        if Context < HelpLinks [m].Context then
+          Result := BSearch (s, m - 1)
         else
-          result := HelpLinks [m].jump
+          Result := HelpLinks [m].Jump
     end
     else
-      result := 'notfound.htm';
+      Result := 'notfound.htm';
   end;
 
 begin
-  result := bsearch (0, NO_CONTEXTS - 1)
+  Result := BSearch (0, NO_CONTEXTS - 1)
 end;
 
 
