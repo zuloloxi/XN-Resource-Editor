@@ -74,72 +74,72 @@ resourcestring
 
 { TfmAcceleratorResource }
 
-function AcceleratorToText (const accel: TAccelerator): string;
+function AcceleratorToText (const Accel: TAccelerator): string;
 begin
-  if (accel.flags and FVIRTKEY) <> 0 then
-    result := ShortcutToText (accel.code)
+  if (Accel.Flags and FVIRTKEY) <> 0 then
+    Result := ShortcutToText (Accel.Code)
   else
-    if accel.code < 32 then
-      result := 'Ctrl+' + char (accel.code + Ord ('@'))
+    if Accel.Code < 32 then
+      Result := 'Ctrl+' + char (Accel.Code + Ord ('@'))
     else
-      result := Char (accel.code);
+      Result := Char (Accel.Code);
 
-  if (accel.flags and FSHIFT) <> 0 then
-    result := 'Shift+' + result;
+  if (Accel.Flags and FSHIFT) <> 0 then
+    Result := 'Shift+' + Result;
 
-  if (accel.flags and FALT) <> 0 then
-    result := 'Alt+' + result;
+  if (Accel.Flags and FALT) <> 0 then
+    Result := 'Alt+' + Result;
 
-  if (accel.flags and FCONTROL) <> 0 then
-    result :='Ctrl+' + result
+  if (Accel.Flags and FCONTROL) <> 0 then
+    Result :='Ctrl+' + Result
 end;
 
-procedure TextToAccelerator (const st: string; virtKey: Boolean; var code, flags: Integer);
+procedure TextToAccelerator (const st: string; virtKey: Boolean; var Code, Flags: Integer);
 var
-  temp: Integer;
-  key: word;
-  shift: TShiftState;
-  ok: Boolean;
+  Temp: Integer;
+  Key: Word;
+  Shift: TShiftState;
+  Ok: Boolean;
 begin
-  ok := False;
+  Ok := False;
   if not virtKey then
   begin
-    temp := TextToShortcut (st);
-    key := temp and not (scAlt or scShift or scCtrl);
-    if (key >= $30) and (key <= $39) or
-       (key >= $41) and (key <= $5A) then
+    Temp := TextToShortcut (st);
+    Key := Temp and not (scAlt or scShift or scCtrl);
+    if (Key >= $30) and (Key <= $39) or
+       (Key >= $41) and (Key <= $5A) then
     begin
-      ShortcutToKey (temp, key, shift);
-      code := key;
-      flags := 0;
-      if ssShift in shift then
-        flags := flags or FSHIFT;
-      if ssAlt in shift then
-        flags := flags or FALT;
-      if ssCtrl in shift then
-        flags := flags or FCONTROL;
-        ok := True;
+      ShortcutToKey (Temp, Key, Shift);
+      Code := Key;
+      Flags := 0;
+      if ssShift in Shift then
+        Flags := Flags or FSHIFT;
+      if ssAlt in Shift then
+        Flags := Flags or FALT;
+      if ssCtrl in Shift then
+        Flags := Flags or FCONTROL;
+        Ok := True;
     end
   end;
 
-  if not ok then
+  if not Ok then
   begin
-    code := TextToShortcut (st);
-    flags := FVIRTKEY;
-    if (code and scAlt) <> 0 then
-      flags := flags or FALT;
-    if (code and scShift) <> 0 then
-      flags := flags or FSHIFT;
-    if (code and scCtrl) <> 0 then
-      flags := flags or FCONTROL;
-    code := code and not (scAlt or scShift or scCtrl);
+    Code := TextToShortcut (st);
+    Flags := FVIRTKEY;
+    if (Code and scAlt) <> 0 then
+      Flags := Flags or FALT;
+    if (Code and scShift) <> 0 then
+      Flags := Flags or FSHIFT;
+    if (Code and scCtrl) <> 0 then
+      Flags := Flags or FCONTROL;
+    Code := Code and not (scAlt or scShift or scCtrl);
   end
 end;
 
 procedure TfmAcceleratorResource.SetObject(const Value: TObject);
 var
   i: Integer;
-  accel: TAccelerator;
+  Accel: TAccelerator;
 begin
   inherited;            // *Must* call inherited
   Application.ProcessMessages;
@@ -151,16 +151,16 @@ begin
     lvAccelerator.Items.Clear;
     for i := 0 to FDetails.Count - 1 do
     begin
-      accel := FDetails.Accelerator [i];
+      Accel := FDetails.Accelerator [i];
       with lvAccelerator.Items.Add do
       begin
-        Caption := IntToStr (accel.id);
-        SubItems.Add(AcceleratorToText (accel));
-        if (accel.flags and FVIRTKEY) <> 0 then
+        Caption := IntToStr (Accel.id);
+        SubItems.Add(AcceleratorToText (Accel));
+        if (Accel.Flags and FVIRTKEY) <> 0 then
           SubItems.Add(rstVirtKey)
         else
           SubItems.Add(rstCharCode);
-//        SubItems.Add(IntToStr (accel.flags))
+//        SubItems.Add(IntToStr (Accel.Flags))
       end
     end
   finally
@@ -195,7 +195,7 @@ end;
 
 function TfmAcceleratorResource.GetMenuItem: TMenuItem;
 begin
-  result := mnuAccelerators
+  Result := mnuAccelerators
 end;
 
 procedure TfmAcceleratorResource.actAccelAddExecute(Sender: TObject);
@@ -205,7 +205,7 @@ var
 begin
   item := lvAccelerator.Items.Add;
 
-                                        // Work out string / message ID
+  // Work out string / message ID
   if item.Index = 0 then
     item.Caption := '1'
   else
@@ -270,7 +270,7 @@ end;
 
 procedure TfmAcceleratorResource.SaveResource(const undoDetails: string);
 var
-  i, flags, code, id: Integer;
+  i, Flags, Code, id: Integer;
   item: TListItem;
   virtKey: Boolean;
 begin
@@ -280,15 +280,15 @@ begin
     item := lvAccelerator.Items [i];
     id := StrToInt (item.Caption);
     virtKey := item.SubItems [1] = rstVirtKey;
-    TextToAccelerator (item.SubItems [0], virtKey, code, flags);
+    TextToAccelerator (item.SubItems [0], virtKey, Code, Flags);
 
-    if not virtKey and ((flags and FVIRTKEY) <> 0) then
+    if not virtKey and ((Flags and FVIRTKEY) <> 0) then
       item.SubItems [1] := rstVirtKey;
 
     if i < FDetails.Count then
-      FDetails.SetAccelDetails (i, flags, code, id)
+      FDetails.SetAccelDetails (i, Flags, Code, id)
     else
-      FDetails.Add(flags, code, id)
+      FDetails.Add(Flags, Code, id)
   end;
 
   i := lvAccelerator.Items.Count;

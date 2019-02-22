@@ -16,9 +16,8 @@ unit ResourceObjectForm;
 interface
 
 uses
-  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, unitResourceDetails,
-  Vcl.Menus;
+  WinAPI.Windows, System.SysUtils, System.Classes, Vcl.Controls, Vcl.Forms,
+  Vcl.Menus, unitResourceDetails;
 
 type
 //=======================================================================
@@ -28,20 +27,19 @@ type
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormDestroy(Sender: TObject);
   private
-    fObject: TObject;
-    fResourceModule : TResourceModule;
+    FObject: TObject;
+    FResourceModule: TResourceModule;
   protected
     procedure SetObject(const Value: TObject); virtual;
-    function GetMenuItem : TMenuItem; virtual;
+    function GetMenuItem: TMenuItem; virtual;
   public
-    procedure PreviewKey (var key : Word; shift : TShiftState); virtual;
+    procedure PreviewKey (var Key: Word; Shift: TShiftState); virtual;
     procedure TidyUp; virtual;
     procedure UpdateFonts; virtual;
 
-    property ResourceModule : TResourceModule read fResourceModule write fResourceModule;
-    property Obj : TObject read fObject write SetObject;
-    property Menu : TMenuItem read GetMenuItem;
-    { Public declarations }
+    property ResourceModule: TResourceModule read FResourceModule write FResourceModule;
+    property Obj: TObject read FObject write SetObject;
+    property Menu: TMenuItem read GetMenuItem;
   end;
 
   TResourceObjectFormClass = class of TfmResourceObject;
@@ -62,7 +60,7 @@ implementation
  *----------------------------------------------------------------------*)
 procedure TfmResourceObject.SetObject(const Value: TObject);
 begin
-  fObject := Value;
+  FObject := Value;
   UpdateFonts;
 end;
 
@@ -84,7 +82,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmResourceObject.FormDestroy(Sender: TObject);
 begin
-  fmResourceObject := Nil
+  fmResourceObject := nil;
 end;
 
 (*----------------------------------------------------------------------*
@@ -94,22 +92,19 @@ end;
  *----------------------------------------------------------------------*)
 function TfmResourceObject.GetMenuItem: TMenuItem;
 begin
-  result := Nil
+  Result := nil;
 end;
 
 procedure TfmResourceObject.PreviewKey(var key: Word; shift: TShiftState);
 begin
-
 end;
 
 procedure TfmResourceObject.TidyUp;
 begin
-//
 end;
 
 procedure TfmResourceObject.UpdateFonts;
 begin
-// Stub
 end;
 
 end.

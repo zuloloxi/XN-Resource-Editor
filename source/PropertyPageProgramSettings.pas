@@ -3,9 +3,8 @@ unit PropertyPageProgramSettings;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  PropertyPageForm, Menus, cmpPersistentPosition, StdCtrls, VirtualTrees,
-  ExtCtrls;
+  Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs, ExtCtrls,
+  Menus, StdCtrls, VirtualTrees, PropertyPageForm, cmpPersistentPosition;
 
 type
   TPropertyPageProgramSettingsData = class (TPropertyPageData)
@@ -36,14 +35,13 @@ type
     procedure PopulateControls (AData: TPropertyPageData); override;
   end;
 
-var
-  fmPropertyPageProgramSettings: TfmPropertyPageProgramSettings;
-
 implementation
 
-uses ResourceForm, unitCredProperties;
+uses
+  ResourceForm, unitCredProperties;
 
 {$R *.DFM}
+
 { TfmPropertyPageProgramSettings }
 
 procedure TfmPropertyPageProgramSettings.Button1Click(Sender: TObject);
@@ -66,7 +64,7 @@ end;
 
 class function TfmPropertyPageProgramSettings.GetDataClass: TPropertyPageDataClass;
 begin
-  result := TPropertyPageProgramSettingsData;
+  Result := TPropertyPageProgramSettingsData;
 end;
 
 procedure TfmPropertyPageProgramSettings.PopulateControls(AData: TPropertyPageData);

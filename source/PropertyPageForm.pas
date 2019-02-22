@@ -3,33 +3,33 @@ unit PropertyPageForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ExtCtrls, StdCtrls;
 
 type
   TPropertyPageData = class
   private
     FCaption: string;
     FHelpText: string;
-    FHelpKeyword : string;
+    FHelpKeyword: string;
     FParam: Integer;
-    FMinX : Integer;
-    FMinY : Integer;
-    FInitialized : boolean;
+    FMinX: Integer;
+    FMinY: Integer;
+    FInitialized: Boolean;
   protected
 
-    property Param : Integer read FParam;
+    property Param: Integer read FParam;
     procedure Initialize; virtual; abstract;
     function GetCaption: string; virtual;
     function GetHelpText: string; virtual;
   public
-    constructor Create (const ACaption, AHelpText, AHelpKeyword : string; AMinCX, AMinCY : Integer; AParam : Integer = 0);
+    constructor Create (const ACaption, AHelpText, AHelpKeyword: string; AMinCX, AMinCY: Integer; AParam: Integer = 0);
 
     procedure Apply; virtual;
     procedure Cancel; virtual;
 
     property Caption: string read GetCaption;
-    property Initialized: boolean read FInitialized write FInitialized;
+    property Initialized: Boolean read FInitialized write FInitialized;
     property HelpText: string read GetHelpText;
     property HelpKeyword: string read FHelpKeyword;
 
@@ -44,15 +44,15 @@ type
     Bevel1: TBevel;
     stSectionDetails: TLabel;
   private
-    fAltKeyword: string;
+    FAltKeyword: string;
   protected
-    fPopulating: boolean;
+    FPopulating: Boolean;
   public
     class function GetDataClass: TPropertyPageDataClass; virtual; abstract;
     procedure PopulateControls (AData: TPropertyPageData); virtual;
 
-    property Populating: boolean read fPopulating write fPopulating;
-    property AltKeyword: string read fAltKeyword;
+    property Populating: Boolean read FPopulating write FPopulating;
+    property AltKeyword: string read FAltKeyword;
   end;
 
   TPropertyPageClass = class of TfmPropertyPage;
@@ -71,7 +71,7 @@ begin
     AData.FInitialized := True
   end;
   stSectionDetails.Caption := AData.HelpText;
-  fAltKeyword := AData.HelpKeyword;
+  FAltKeyword := AData.HelpKeyword;
 end;
 
 { TPropertyPageData }
@@ -99,12 +99,12 @@ end;
 
 function TPropertyPageData.GetCaption: string;
 begin
-  result := FCaption
+  Result := FCaption
 end;
 
 function TPropertyPageData.GetHelpText: string;
 begin
-  result := FHelpText
+  Result := FHelpText
 end;
 
 end.

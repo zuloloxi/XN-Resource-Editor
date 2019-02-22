@@ -20,13 +20,10 @@ type
   private
     function GetLanguage: LCID;
   public
-    ResourceDetails : TResourceDetails;
+    ResourceDetails: TResourceDetails;
 
-    property Language : LCID read GetLanguage;
+    property Language: LCID read GetLanguage;
   end;
-
-var
-  dlgResourceProperties: TdlgResourceProperties;
 
 implementation
 
@@ -40,8 +37,8 @@ resourcestring
 
 procedure TdlgResourceProperties.FormShow(Sender: TObject);
 var
-  i : Integer;
-  def : string;
+  LanguageIndex: Integer;
+  LanguageName: string;
 begin
   UseInternationalFont (ntedName.Font);
   if Assigned (ResourceDetails) then
@@ -53,33 +50,33 @@ begin
   end;
 
   cbLanguage.Items.Add ('- ' + rstNeutral);
-  def := '-';
+  LanguageName := '-';
 
-  for i := 0 to Languages.Count - 1 do
+  for LanguageIndex := 0 to Languages.Count - 1 do
   begin
-    cbLanguage.Items.Add (Languages.Name [i]);
-    if Assigned (ResourceDetails) and (ResourceDetails.ResourceLanguage <> 0) and (DWORD (ResourceDetails.ResourceLanguage) = Languages.LocaleID [i]) then
-      def := Languages.Name [i];
+    cbLanguage.Items.Add (Languages.Name[LanguageIndex]);
+    if Assigned (ResourceDetails) and (ResourceDetails.ResourceLanguage <> 0) and (DWORD (ResourceDetails.ResourceLanguage) = Languages.LocaleID[LanguageIndex]) then
+      LanguageName := Languages.Name[LanguageIndex];
   end;
 
-  if def = '-' then
+  if LanguageName = '-' then
     cbLanguage.ItemIndex := 0
   else
-    cbLanguage.Text := def;
+    cbLanguage.Text := LanguageName;
 end;
 
 function TdlgResourceProperties.GetLanguage: LCID;
 var
-  i : Integer;
+  LanguageIndex: Integer;
 begin
   Result := 0;
   if cbLanguage.ItemIndex <> 0 then
-    for i := 0 to Languages.Count -1 do
-      if Languages.Name [i] = cbLanguage.Text then
+    for LanguageIndex := 0 to Languages.Count -1 do
+      if Languages.Name[LanguageIndex] = cbLanguage.Text then
       begin
-        result := Languages.LocaleID [i];
-        break
-      end
+        Result := Languages.LocaleID[LanguageIndex];
+        Break;
+      end;
 end;
 
 end.

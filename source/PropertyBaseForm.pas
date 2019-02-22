@@ -1,7 +1,7 @@
 {*======================================================================*
  | PropertyBaseForm                                                     |
  |                                                                      |
- | Base class for property tree/page forms                              |
+ | Base class for property tree/Page forms                              |
  |                                                                      |
  | The contents of this file are subject to the Mozilla Public License  |
  | Version 1.1 (the "License"); you may not use this file except in     |
@@ -44,27 +44,27 @@ type
 
   TPropertyPageDetails = class
   private
-    fPropertyPageClass : TPropertyPageClass;
-    fChild: TPropertyPageDetails;
-    fSibling: TPropertyPageDetails;
-    fParent: TPropertyPageDetails;
-    fData : TPropertyPageData;
+    FPropertyPageClass: TPropertyPageClass;
+    FChild: TPropertyPageDetails;
+    FSibling: TPropertyPageDetails;
+    FParent: TPropertyPageDetails;
+    FData: TPropertyPageData;
     function GetChild(idx: Integer): TPropertyPageDetails;
     function GetChildCount: Integer;
   public
-    constructor Create (AOwner : TfmPropertyBase; APropertyPageClass : TPropertyPageClass; AParent : TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyword : string; AParam : Integer = 0);
+    constructor Create (AOwner: TfmPropertyBase; APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyword: string; AParam: Integer = 0);
     destructor Destroy; override;
-    property PropertyPageClass : TPropertyPageClass read fPropertyPageClass;
+    property PropertyPageClass: TPropertyPageClass read FPropertyPageClass;
 
-    property Sibling : TPropertyPageDetails read fSibling;
-    property FirstChild : TPropertyPageDetails read fChild;
-    property Parent : TPropertyPageDetails read fParent;
-    property ChildCount : Integer read GetChildCount;
-    property Child [idx : Integer] : TPropertyPageDetails read GetChild;
-    property Data : TPropertyPageData read fData;
+    property Sibling: TPropertyPageDetails read FSibling;
+    property FirstChild: TPropertyPageDetails read FChild;
+    property Parent: TPropertyPageDetails read FParent;
+    property ChildCount: Integer read GetChildCount;
+    property Child [idx: Integer]: TPropertyPageDetails read GetChild;
+    property Data: TPropertyPageData read FData;
   end;
 
-  TPropertyPageDetailsProc = procedure (page : TPropertyPageDetails; param : pointer; var continue : boolean) of object;
+  TPropertyPageDetailsProc = procedure (Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean) of object;
 
 //----------------------------------------------------------------------
 // TfmPropertyBase is the base class for derived property tree forms
@@ -101,50 +101,50 @@ type
       Node: PVirtualNode; var ChildCount: Cardinal);
     procedure FormDestroy(Sender: TObject);
   private
-    fPropertyPageDetails : TObjectList;
-    fDetailsConstraints : TPoint;
-    fUseConstraints : boolean;
-    fSaved : boolean;
-    fSelectedPage : TfmPropertyPage;
-    fOrigHelpType : THelpType;
-    fOrigHelpContext : Integer;
-    fOrigHelpKeyword : string;
+    FPropertyPageDetails: TObjectList;
+    FDetailsConstraints: TPoint;
+    FUseConstraints: Boolean;
+    FSaved: Boolean;
+    FSelectedPage: TfmPropertyPage;
+    FOrigHelpType: THelpType;
+    FOrigHelpContext: Integer;
+    FOrigHelpKeyword: string;
 
-    procedure DoGetLargestConstraints (details : TPropertyPageDetails; param : pointer; var continue : boolean);
-    procedure DoSavePropertyPageSettings (page : TPropertyPageDetails; param : pointer; var continue : boolean);
-    procedure DoCancelPropertyPageSettings (page : TPropertyPageDetails; param : pointer; var continue : boolean);
-    procedure DoCheckFormClassMatches (details : TPropertyPageDetails; param : pointer; var continue : boolean);
-    procedure DoCheckDataMatches (details : TPropertyPageDetails; param : pointer; var continue : boolean);
+    procedure DoGetLargestConstraints (Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
+    procedure DoSavePropertyPageSettings (Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
+    procedure DoCancelPropertyPageSettings (Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
+    procedure DoCheckFormClassMatches (Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
+    procedure DoCheckDataMatches (Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 
 
-    function GetNodePropertyPageDetails (node : PVirtualNode) : TPropertyPageDetails;
-    procedure SetNodePropertyPageDetails (node : PVirtualNode; details : TPropertyPageDetails);
-    procedure SelectPage (details : TPropertyPageDetails);
+    function GetNodePropertyPageDetails (node: PVirtualNode): TPropertyPageDetails;
+    procedure SetNodePropertyPageDetails (node: PVirtualNode; Details: TPropertyPageDetails);
+    procedure SelectPage (Details: TPropertyPageDetails);
     procedure SaveSettings;
     procedure CancelChanges;
-    function FindSameData (formClass : TPropertyPageClass) : TPropertyPageData;
-    function FindDetailsWithData (data : TPropertyPageData) : TPropertyPageDetails;
-    procedure WmUpdateSplitter (var msg : TMessage); message WM_UPDATESPLITTER;
+    function FindSameData (formClass: TPropertyPageClass): TPropertyPageData;
+    function FindDetailsWithData (data: TPropertyPageData): TPropertyPageDetails;
+    procedure WmUpdateSplitter (var msg: TMessage); message WM_UPDATESPLITTER;
 
   protected
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
 
-    function AddPropertyPageDetails (APropertyPageClass : TPropertyPageClass;
-      AParent : TPropertyPageDetails; const ACaption : string = '';
-      const AHelpText : string = ''; const AHelpKeyword : string = '';
-      AParam : Integer = 0) : TPropertyPageDetails;
-    function ForEachPropertyPageDetails (proc : TPropertyPageDetailsProc; param : pointer) : TPropertyPageDetails;
+    function AddPropertyPageDetails (APropertyPageClass: TPropertyPageClass;
+      AParent: TPropertyPageDetails; const ACaption: string = '';
+      const AHelpText: string = ''; const AHelpKeyword: string = '';
+      AParam: Integer = 0): TPropertyPageDetails;
+    function ForEachPropertyPageDetails (proc: TPropertyPageDetailsProc; Param: Pointer): TPropertyPageDetails;
   end;
 
 //----------------------------------------------------------------------
 // TfmPropertyPageDummy class provides an empty 'separator' property
-// page.  It's also used as a cracker class(!)
+// Page.  It's also used as a cracker class(!)
   TfmPropertyPageDummy = class (TfmPropertyPage)
   public
-    class function GetDataClass : TPropertyPageDataClass; override;
-    procedure PopulateControls (AData : TPropertyPageData); override;
+    class function GetDataClass: TPropertyPageDataClass; override;
+    procedure PopulateControls (AData: TPropertyPageData); override;
   end;
 
 implementation
@@ -158,12 +158,12 @@ type
   PObject = ^TObject;
 
 //----------------------------------------------------
-function Max (x, y : Integer) : Integer;
+function Max(x, y: Integer): Integer;
 begin
   if x > y then
-    result := x
+    Result := x
   else
-    result := y
+    Result := y
 end;
 
 {*----------------------------------------------------------------------*
@@ -176,9 +176,9 @@ end;
  | windows                                                              |
  |                                                                      |
  | Parameters:                                                          |
- |   form : TForm                       The form to fix                 |
+ |   form: TForm                       The form to fix                 |
  *----------------------------------------------------------------------*}
-procedure FixFormConstraints (form : TForm);
+procedure FixFormConstraints (form: TForm);
 begin
   with form do
   begin
@@ -193,44 +193,44 @@ end;
  | function TfmPropertyBase.AddPropertyPageDetails                      |
  |                                                                      |
  | Create and add a new TPropertyPageDetails class to the tree.  The    |
- | details class holds data for the class in a TPropetryPageData        |
+ | Details class holds data for the class in a TPropetryPageData        |
  | derived instance.  It also holds the class reference of a            |
  | TPropetryPageForm, which it uses to create the form dynamically      |
  | when it's tree item is selected.                                     |
  |                                                                      |
  | Parameters:                                                          |
  |   APropertyPageClass: TPropertyPageClass                             |
- |                                      The class of the property page  |
+ |                                      The class of the property Page  |
  |                                      form to add.                    |
  |                                                                      |
- |   AParent: TPropertyPageDetails      The parent page details         |
- |   const ACaption : string            Form caption.                   |
- |   const AHelpText : string           Form help text                  |
- |   AParam : Integer                   Parameter passed to page data   |
+ |   AParent: TPropertyPageDetails      The parent Page Details         |
+ |   const ACaption: string            Form caption.                   |
+ |   const AHelpText: string           Form help text                  |
+ |   AParam: Integer                   Parameter passed to Page data   |
  |                                                                      |
- | The function returns the TPropertyPageDetails class for the page     |
+ | The function returns the TPropertyPageDetails class for the Page     |
  *----------------------------------------------------------------------*}
 function TfmPropertyBase.AddPropertyPageDetails(
-  APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails; const ACaption : string; const AHelpText, AHelpKeyword : string; AParam : Integer) : TPropertyPageDetails;
+  APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails; const ACaption: string; const AHelpText, AHelpKeyword: string; AParam: Integer): TPropertyPageDetails;
 var
-  details : TPropertyPageDetails;
-  p : ^TPropertyPageDetails;
+  Details: TPropertyPageDetails;
+  PropPageDetails: ^TPropertyPageDetails;
 begin
-  details := TPropertyPageDetails.Create(self, APropertyPageClass, AParent, ACaption, AHelpText, AHelpKeyword, AParam);
+  Details := TPropertyPageDetails.Create(self, APropertyPageClass, AParent, ACaption, AHelpText, AHelpKeyword, AParam);
   if AParent = Nil then
   begin
-    fPropertyPageDetails.Add(details);
-    vstSections.RootNodeCount := fPropertyPageDetails.Count
+    FPropertyPageDetails.Add(Details);
+    vstSections.RootNodeCount := FPropertyPageDetails.Count
   end
   else
   begin
-    p := @AParent.FirstChild;
-    while p^ <> Nil do
-      p := @p^.Sibling;
-    p^ := details
+    PropPageDetails := @AParent.FirstChild;
+    while PropPageDetails^ <> Nil do
+      PropPageDetails := @PropPageDetails^.Sibling;
+    PropPageDetails^ := Details
   end;
 
-  result := details;
+  Result := Details;
 end;
 
 {*----------------------------------------------------------------------*
@@ -240,7 +240,7 @@ end;
  *----------------------------------------------------------------------*}
 procedure TfmPropertyBase.btnOKClick(Sender: TObject);
 begin
-  fSaved := True;
+  FSaved := True;
   SaveSettings;
 end;
 
@@ -257,8 +257,8 @@ end;
 constructor TfmPropertyBase.Create(AOwner: TComponent);
 begin
   inherited Create (AOwner);
-  fPropertyPageDetails := TObjectList.Create;
-  fPropertyPageDetails.OwnsObjects := True;
+  FPropertyPageDetails := TObjectList.Create;
+  FPropertyPageDetails.OwnsObjects := True;
 end;
 
 {*----------------------------------------------------------------------*
@@ -270,18 +270,18 @@ end;
  *----------------------------------------------------------------------*}
 destructor TfmPropertyBase.Destroy;
 begin
-  fPropertyPageDetails.Free;
+  FPropertyPageDetails.Free;
   inherited;
 end;
 
 procedure TfmPropertyBase.DoCancelPropertyPageSettings(
-  page: TPropertyPageDetails; param: pointer; var continue: boolean);
+  Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 begin
-  if Assigned (page.fData) then
-                // nb.  fData.Initialized won't be set (and its data won't be
-                //      valid unless a page has been selected.
-    if page.fData.Initialized then
-      page.fData.Cancel
+  if Assigned (Page.FData) then
+                // nb.  FData.Initialized won't be set (and its data won't be
+                //      valid unless a Page has been selected.
+    if Page.FData.Initialized then
+      Page.FData.Cancel
 end;
 
 {*----------------------------------------------------------------------*
@@ -291,23 +291,23 @@ end;
  | 'continue := False' when the function is passed a 'details' class    |
  | whose data matches the data given                                    |
  *----------------------------------------------------------------------*}
-procedure TfmPropertyBase.DoCheckDataMatches(details: TPropertyPageDetails;
-  param: pointer; var continue: boolean);
+procedure TfmPropertyBase.DoCheckDataMatches(Details: TPropertyPageDetails;
+  Param: Pointer; var Continue: Boolean);
 begin
-  continue := details.fData <> param
+  Continue := Details.FData <> Param
 end;
 
 {*----------------------------------------------------------------------*
  | procedure TfmPropertyBase.DoCheckFormClassMatches                    |
  |                                                                      |
  | ForEach callback routine used in FindSameData.  Set 'continue :=     |
- | False' when the function is passed a 'details' class whose form      |
+ | False' when the function is passed a 'Details' class whose form      |
  | class matches the given form class.                                  |
  *----------------------------------------------------------------------*}
 procedure TfmPropertyBase.DoCheckFormClassMatches(
-  details: TPropertyPageDetails; param: pointer; var continue: boolean);
+  Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 begin
-  continue := details.fPropertyPageClass <> param
+  Continue := Details.FPropertyPageClass <> Param
 end;
 
 {*----------------------------------------------------------------------*
@@ -315,15 +315,15 @@ end;
  |                                                                      |
  | ForEach handler used to find the largest form's constraints.         |
  *----------------------------------------------------------------------*}
-procedure TfmPropertyBase.DoGetLargestConstraints(details : TPropertyPageDetails;
-  param: pointer; var continue: boolean);
+procedure TfmPropertyBase.DoGetLargestConstraints(Details: TPropertyPageDetails;
+  Param: Pointer; var Continue: Boolean);
 var
-  p : PPoint;
+  PropPageDetails: PPoint;
 begin
-  p := PPoint (param);
+  PropPageDetails := PPoint (Param);
 
-  p.X := Max (details.fData.MinX, p.X);
-  p.Y := Max (details.fData.MinY, p.Y)
+  PropPageDetails.X := Max (Details.FData.MinX, PropPageDetails.X);
+  PropPageDetails.Y := Max (Details.FData.MinY, PropPageDetails.Y)
 end;
 
 {*----------------------------------------------------------------------*
@@ -332,87 +332,87 @@ end;
  | For Each handler used to apply the settings for a given form         |
  *----------------------------------------------------------------------*}
 procedure TfmPropertyBase.DoSavePropertyPageSettings(
-  page: TPropertyPageDetails; param: pointer; var continue: boolean);
+  Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 begin
-  if Assigned (page.fData) then
-                // nb.  fData.Initialized won't be set (and its data won't be
-                //      valid unless a page has been selected.
-    if page.fData.Initialized then
-      page.fData.Apply
+  if Assigned (Page.FData) then
+                // nb.  FData.Initialized won't be set (and its data won't be
+                //      valid unless a Page has been selected.
+    if Page.FData.Initialized then
+      Page.FData.Apply
 end;
 
 {*----------------------------------------------------------------------*
  | function TfmPropertyBase.FindDetailsWithData                         |
  |                                                                      |
- | Find the property page whose data matches the given data.            |
+ | Find the property Page whose data matches the given data.            |
  *----------------------------------------------------------------------*}
 function TfmPropertyBase.FindDetailsWithData(
   data: TPropertyPageData): TPropertyPageDetails;
 begin
-  result := ForEachPropertyPageDetails (DoCheckDataMatches, data);
+  Result := ForEachPropertyPageDetails (DoCheckDataMatches, data);
 end;
 
 {*----------------------------------------------------------------------*
  | function TfmPropertyBase.FindSameData                                |
  |                                                                      |
- | Find the first page whose form class matches the given form class    |
+ | Find the first Page whose form class matches the given form class    |
  *----------------------------------------------------------------------*}
 function TfmPropertyBase.FindSameData(
   formClass: TPropertyPageClass): TPropertyPageData;
 var
-  details : TPropertyPageDetails;
+  Details: TPropertyPageDetails;
 begin
-  details := ForEachPropertyPageDetails (DoCheckFormClassMatches, formClass);
-  if Assigned (details) then
-    result := details.fData
+  Details := ForEachPropertyPageDetails (DoCheckFormClassMatches, formClass);
+  if Assigned (Details) then
+    Result := Details.FData
   else
-    result := Nil
+    Result := Nil
 end;
 
 {*----------------------------------------------------------------------*
  | function TfmPropertyBase.ForEachPropertyPageDetails                  |
  |                                                                      |
- | Iterate through the tree of page details, calling 'proc' for each    |
+ | Iterate through the tree of Page Details, calling 'proc' for each    |
  | one.                                                                 |
  |                                                                      |
  | 'Proc' may request that the iteration stops at a particular          |
- | page details.  In which case, the function returns this.             |
+ | Page Details.  In which case, the function returns this.             |
  |                                                                      |
  | Parameters:                                                          |
  |   proc: TPropertyPageDetailsProc     Method to call for each node    |
- |   param : pointer                    Parameter to pass to the        |
+ |   Param: Pointer                    Parameter to pass to the        |
  |                                      iterator proc.                  |
  *----------------------------------------------------------------------*}
-function TfmPropertyBase.ForEachPropertyPageDetails(proc: TPropertyPageDetailsProc; param : pointer) : TPropertyPageDetails;
+function TfmPropertyBase.ForEachPropertyPageDetails(proc: TPropertyPageDetailsProc; Param: Pointer): TPropertyPageDetails;
 var
-  i : Integer;
-  cont : boolean;
-  rv : TPropertyPageDetails;
+  i: Integer;
+  cont: Boolean;
+  rv: TPropertyPageDetails;
 
-  procedure DoForEach (details : TPropertyPageDetails);
+  procedure DoForEach (Details: TPropertyPageDetails);
   begin
-    if Assigned (details) then
+    if Assigned (Details) then
     begin
-      rv := details;
-      proc (details, param, cont);
-      if cont then DoForEach (details.FirstChild);
-      if cont then DoForEach (details.Sibling)
+      rv := Details;
+      proc (Details, Param, cont);
+      if cont then DoForEach (Details.FirstChild);
+      if cont then DoForEach (Details.Sibling)
     end
   end;
 
 begin
   rv := Nil;
   cont := True;
-  for i := 0 to fPropertyPageDetails.Count - 1 do
+  for i := 0 to FPropertyPageDetails.Count - 1 do
   begin
-    DoForEach (TPropertyPageDetails (fPropertyPageDetails [i]));
+    DoForEach (TPropertyPageDetails (FPropertyPageDetails [i]));
     if not cont then
       break
   end;
 
   // If 'cont', the iterator reached the end without being told to 'stop' on
   // a particular PropertyPageDetails.
-  if cont then result := Nil else result := rv
+  if cont then Result := Nil else Result := rv
 end;
 
 {*----------------------------------------------------------------------*
@@ -422,25 +422,25 @@ end;
  *----------------------------------------------------------------------*}
 procedure TfmPropertyBase.FormShow(Sender: TObject);
 var
-  n : PVirtualNode;
+  n: PVirtualNode;
 begin
-  fDetailsConstraints := Point (0, 0);
-  fOrigHelpType := HelpType;
-  fOrigHelpContext := HelpContext;
-  fOrigHelpKeyword := HelpKeyword;
+  FDetailsConstraints := Point (0, 0);
+  FOrigHelpType := HelpType;
+  FOrigHelpContext := HelpContext;
+  FOrigHelpKeyword := HelpKeyword;
 
   HelpKeyword := '';
   HelpContext := 0;
   HelpType := htContext;
 
   // Get the largest constraints
-  ForEachPropertyPageDetails (DoGetLargestConstraints, @fDetailsConstraints);
-  fUseConstraints := (fDetailsConstraints.X <> 0) and (fDetailsConstraints.Y <> 0);
+  ForEachPropertyPageDetails (DoGetLargestConstraints, @FDetailsConstraints);
+  FUseConstraints := (FDetailsConstraints.X <> 0) and (FDetailsConstraints.Y <> 0);
 
-  if fUseConstraints then
+  if FUseConstraints then
   begin
-    pnlOptions.Constraints.MinWidth := fDetailsConstraints.X;
-    pnlOptions.Constraints.MinHeight := fDetailsConstraints.Y + Bevel1.Height;
+    pnlOptions.Constraints.MinWidth := FDetailsConstraints.X;
+    pnlOptions.Constraints.MinHeight := FDetailsConstraints.Y + Bevel1.Height;
   end;
 
   n := vstSections.GetFirst;
@@ -463,20 +463,20 @@ end;
 function TfmPropertyBase.GetNodePropertyPageDetails(
   node: PVirtualNode): TPropertyPageDetails;
 var
-  obj : PObject;
+  obj: PObject;
 begin
   obj := vstSections.GetNodeData(node);
 
   if Assigned (obj) then
-    result := TPropertyPageDetails (obj^)
+    Result := TPropertyPageDetails (obj^)
   else
-    result := Nil
+    Result := Nil
 end;
 
 {*----------------------------------------------------------------------*
  | procedure TfmPropertyBase.SaveSettings                               |
  |                                                                      |
- | Apply the settings held in the property details data to the actual   |
+ | Apply the settings held in the property Details data to the actual   |
  | settings held for XanaNews.  (This is called when the 'OK' button    |
  | is clicked)                                                          |
  *----------------------------------------------------------------------*}
@@ -493,56 +493,56 @@ type
  | procedure TfmPropertyBase.SelectPage                                 |
  |                                                                      |
  | Called when a node is selected in the tree.  Create a form of the    |
- | correct class and initialize it with data held in details.fData      |
+ | correct class and initialize it with data held in Details.FData      |
  *----------------------------------------------------------------------*}
-procedure TfmPropertyBase.SelectPage(details : TPropertyPageDetails);
+procedure TfmPropertyBase.SelectPage(Details: TPropertyPageDetails);
 var
-  page : TfmPropertyPage;
-  newPage : boolean;
+  Page: TfmPropertyPage;
+  newPage: Boolean;
 begin
-        // (try to) provent flickering!
+  // (try to) provent flickering!
   SendMessage (pnlOptions.Handle, WM_SETREDRAW, 0, 0);
   try
-                // Free the old form (if there was one)
+    // Free the old form (if there was one)
     if pnlOptions.ControlCount > 1 then
     begin
-      page := pnlOptions.Controls [1] as TfmPropertyPage;
+      Page := pnlOptions.Controls [1] as TfmPropertyPage;
 
-      if Assigned (details) and (page.ClassType <> details.fPropertyPageClass) then
-        FreeAndNil (page);
+      if Assigned (Details) and (Page.ClassType <> Details.FPropertyPageClass) then
+        FreeAndNil (Page);
     end
     else
-      page := Nil;
+      Page := Nil;
 
-    if Assigned (details) then
+    if Assigned (Details) then
     begin
-      if not Assigned (page) then
+      if not Assigned (Page) then
       begin
-                  // Create new form of the correct class.
-        page := details.fPropertyPageClass.Create(self);
-        FixFormConstraints (page);
-        page.Parent := pnlOptions;
+        // Create new form of the correct class.
+        Page := Details.FPropertyPageClass.Create(self);
+        FixFormConstraints (Page);
+        Page.Parent := pnlOptions;
         newPage := True;
       end
       else
         newPage := False;
 
-                // Populate the form
-      TfmPropertyPageDummy (page).fPopulating := True;
+      // Populate the form
+      TfmPropertyPageDummy (Page).FPopulating := True;
       try
-        page.PopulateControls(details.fData);
+        Page.PopulateControls(Details.FData);
       finally
-        TfmPropertyPageDummy (page).fPopulating := False
+        TfmPropertyPageDummy (Page).FPopulating := False
       end;
 
       if newPage then
       begin
-        page.Visible := True;
-        page.Align := alClient
+        Page.Visible := True;
+        Page.Align := alClient
       end
     end;
 
-    fSelectedPage := page;
+    FSelectedPage := Page;
   finally
     SendMessage (pnlOptions.Handle, WM_SETREDRAW, 1, 0);
     RedrawWindow(pnlOptions.Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
@@ -554,20 +554,20 @@ end;
  |                                                                      |
  | Set the given tree node's data to point to the given details class   |
  *----------------------------------------------------------------------*}
-procedure TfmPropertyBase.SetNodePropertyPageDetails(node: PVirtualNode;details: TPropertyPageDetails);
+procedure TfmPropertyBase.SetNodePropertyPageDetails(node: PVirtualNode;Details: TPropertyPageDetails);
 var
-  obj : PObject;
+  obj: PObject;
 begin
   obj := vstSections.GetNodeData(node);
 
   if Assigned (obj) then
-    obj^ := details
+    obj^ := Details
 end;
 
 {*----------------------------------------------------------------------*
  | procedure TfmPropertyBase.vstSectionsFocusChanged                    |
  |                                                                      |
- | OnFocusedChanged handler for the tree.  Create the page for the      |
+ | OnFocusedChanged handler for the tree.  Create the Page for the      |
  | newly selected node.                                                 |
  *----------------------------------------------------------------------*}
 procedure TfmPropertyBase.vstSectionsFocusChanged(Sender: TBaseVirtualTree;
@@ -585,10 +585,10 @@ procedure TfmPropertyBase.vstSectionsGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 var
-  d : TPropertyPageDetails;
+  d: TPropertyPageDetails;
 begin
   d := GetNodePropertyPageDetails (Node);
-  CellText := d.fData.Caption
+  CellText := d.FData.Caption
 end;
 
 
@@ -600,11 +600,11 @@ end;
 procedure TfmPropertyBase.vstSectionsInitChildren(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var ChildCount: Cardinal);
 var
-  details : TPropertyPageDetails;
+  Details: TPropertyPageDetails;
 begin
-  details := GetNodePropertyPageDetails (Node);
-  if Assigned (details) then
-    ChildCount := details.ChildCount
+  Details := GetNodePropertyPageDetails (Node);
+  if Assigned (Details) then
+    ChildCount := Details.ChildCount
   else
     ChildCount := 0
 end;
@@ -619,17 +619,17 @@ procedure TfmPropertyBase.vstSectionsInitNode(Sender: TBaseVirtualTree;
   ParentNode, Node: PVirtualNode;
   var InitialStates: TVirtualNodeInitStates);
 var
-  details, parentDetails : TPropertyPageDetails;
+  Details, parentDetails: TPropertyPageDetails;
 begin
   if ParentNode = Nil then
-    details := TPropertyPageDetails (fPropertyPageDetails [Node.Index])
+    Details := TPropertyPageDetails (FPropertyPageDetails [Node.Index])
   else
   begin
     parentDetails := GetNodePropertyPageDetails (ParentNode);
-    details := parentDetails.Child [node.Index]
+    Details := parentDetails.Child [node.Index]
   end;
-  SetNodePropertyPageDetails (node, details);
-  if details.ChildCount > 0 then
+  SetNodePropertyPageDetails (node, Details);
+  if Details.ChildCount > 0 then
     InitialStates := InitialStates + [ivsHasChildren];
 end;
 
@@ -642,19 +642,19 @@ end;
  | class.  Don't initialize the data class (until its page is displayed)|
  | - but fill in its MinX, MaxX, Caption and HelpText properties        |
  *----------------------------------------------------------------------*}
-constructor TPropertyPageDetails.Create(AOwner : TfmPropertyBase; APropertyPageClass : TPropertyPageClass;
-  AParent: TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyword : string; AParam : Integer);
+constructor TPropertyPageDetails.Create(AOwner: TfmPropertyBase; APropertyPageClass: TPropertyPageClass;
+  AParent: TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyword: string; AParam: Integer);
 var
-  dataClass : TPropertyPageDataClass;
-  tempPropertyPage : TfmPropertyPage;
-  tempData : TPropertyPageData;
-  caption : string;
-  helpText : string;
-  helpKeyword : string;
-  minX, minY : Integer;
+  dataClass: TPropertyPageDataClass;
+  tempPropertyPage: TfmPropertyPage;
+  tempData: TPropertyPageData;
+  caption: string;
+  helpText: string;
+  helpKeyword: string;
+  minX, minY: Integer;
 begin
-  fPropertyPageClass := APropertyPageClass;
-  fParent := AParent;
+  FPropertyPageClass := APropertyPageClass;
+  FParent := AParent;
   tempPropertyPage := Nil;
   try
 
@@ -663,8 +663,8 @@ begin
   // time for each form class.  If we've already created a temporary
   // instance for this class, use it's constraints & caption details.
 
-    dataClass := fPropertyPageClass.GetDataClass;
-    tempData := AOwner.FindSameData (fPropertyPageClass);
+    dataClass := FPropertyPageClass.GetDataClass;
+    tempData := AOwner.FindSameData (FPropertyPageClass);
 
     if Assigned (tempData) then
 
@@ -695,7 +695,7 @@ begin
                 // create a tempoary instance of the form to get its
                 // constraints and caption.
 
-      tempPropertyPage := fPropertyPageClass.Create(nil);
+      tempPropertyPage := FPropertyPageClass.Create(nil);
       FixFormConstraints (tempPropertyPage);
 
       if (ACaption = '') and (tempPropertyPage.Caption <> tempPropertyPage.Name) then
@@ -715,7 +715,7 @@ begin
     end;
 
                 // Create the data class.
-    fData := dataClass.Create (caption, helpText, helpKeyword, minX, minY, AParam);
+    FData := dataClass.Create (caption, helpText, helpKeyword, minX, minY, AParam);
   finally
     tempPropertyPage.Free
   end
@@ -724,14 +724,14 @@ end;
 {*----------------------------------------------------------------------*
  | destructor TPropertyPageDetails.Destroy                              |
  |                                                                      |
- | Recursively destroy a property page details class and its siblings & |
+ | Recursively destroy a property Page Details class and its siblings & |
  | chidren.                                                             ||
  *----------------------------------------------------------------------*}
 destructor TPropertyPageDetails.Destroy;
 begin
-  fData.Free;
-  fChild.Free;
-  fSibling.Free;  // Obviously the root items 'Sibling's aren't populated!
+  FData.Free;
+  FChild.Free;
+  FSibling.Free;  // Obviously the root items 'Sibling's aren't populated!
 
   inherited;
 end;
@@ -739,14 +739,14 @@ end;
 {*----------------------------------------------------------------------*
  | function TPropertyPageDetails.GetChild                               |
  |                                                                      |
- | Get the 'nth' child node of a details class                          |
+ | Get the 'nth' child node of a Details class                          |
  *----------------------------------------------------------------------*}
 function TPropertyPageDetails.GetChild(idx: Integer): TPropertyPageDetails;
 begin
-  result := fChild;
-  while (result <> Nil) and (idx > 0) do
+  Result := FChild;
+  while (Result <> Nil) and (idx > 0) do
   begin
-    result := result.Sibling;
+    Result := Result.Sibling;
     Dec (idx)
   end
 end;
@@ -754,18 +754,18 @@ end;
 {*----------------------------------------------------------------------*
  | function TPropertyPageDetails.GetChildCount                          |
  |                                                                      |
- | Count the children for a given details node                          |
+ | Count the children for a given Details node                          |
  *----------------------------------------------------------------------*}
 function TPropertyPageDetails.GetChildCount: Integer;
 var
-  p : TPropertyPageDetails;
+  PropPageDetails: TPropertyPageDetails;
 begin
-  result := 0;
-  p := fChild;
-  while p <> Nil do
+  Result := 0;
+  PropPageDetails := FChild;
+  while PropPageDetails <> Nil do
   begin
-    Inc (result);
-    p := p.Sibling
+    Inc (Result);
+    PropPageDetails := PropPageDetails.Sibling
   end
 end;
 
@@ -773,7 +773,7 @@ end;
 
 class function TfmPropertyPageDummy.GetDataClass: TPropertyPageDataClass;
 begin
-  result := TPropertyPageData
+  Result := TPropertyPageData
 end;
 
 procedure TfmPropertyPageDummy.PopulateControls(AData: TPropertyPageData);
@@ -784,13 +784,13 @@ end;
 procedure TfmPropertyBase.FormDestroy(Sender: TObject);
 begin
   PersistentPosition1.SetValue('Splitter', vstSections.Width);
-  if not fSaved then
+  if not FSaved then
     CancelChanges;
 end;
 
 procedure TfmPropertyBase.WmUpdateSplitter(var msg: TMessage);
 var
-  w : Integer;
+  w: Integer;
 begin
   w := PersistentPosition1.GetValue('Splitter');
 
@@ -816,28 +816,28 @@ end;
 
 procedure TfmPropertyBase.btnHelpClick(Sender: TObject);
 var
-  kw : string;
-  co : Integer;
+  kw: string;
+  co: Integer;
 begin
   kw := '';
   co := 0;
 
-  if Assigned (fSelectedPage) then
-    if (fSelectedPage.HelpType = htKeyword) and (fSelectedPage.HelpKeyword <> '') then
+  if Assigned (FSelectedPage) then
+    if (FSelectedPage.HelpType = htKeyword) and (FSelectedPage.HelpKeyword <> '') then
     begin
-      kw := fSelectedPage.HelpKeyword;
+      kw := FSelectedPage.HelpKeyword;
       if kw = '' then
-        kw := fSelectedPage.AltKeyword
+        kw := FSelectedPage.AltKeyword
     end
     else
-      if (fSelectedPage.HelpType = htContext ) then
-        co := fSelectedPage.HelpContext;
+      if (FSelectedPage.HelpType = htContext ) then
+        co := FSelectedPage.HelpContext;
 
   if (kw = '') and (co = 0) then
-    if fOrigHelpType = htContext then
-      co := fOrigHelpContext
+    if FOrigHelpType = htContext then
+      co := FOrigHelpContext
     else
-      kw := fOrigHelpKeyword;
+      kw := FOrigHelpKeyword;
 
 
   if kw <> '' then

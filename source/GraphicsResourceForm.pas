@@ -22,9 +22,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, cmpPropertyListBox, ExtCtrls, cmpBitmapEditor, unitResourceGraphics,
-  cmpColorSelector, unitExIcon, ComCtrls, ImgList, ToolWin,
-  cmpSizingPageControl, ActnList, Menus, Vcl.Imaging.GifImg;
+  ActnList, Menus, ExtCtrls, ComCtrls, ImgList, ToolWin, Vcl.Imaging.GifImg,
+  ResourceForm, cmpPropertyListBox, cmpBitmapEditor, unitResourceGraphics,
+  cmpColorSelector, unitExIcon, cmpSizingPageControl;
 
 const
   WM_STATUSBAR = WM_USER + $203;
@@ -185,7 +185,7 @@ const
   taHeight = 1;
   taPixelFormat = 2;
 
-function GetPixelFormat (graphic: TGraphic): TPixelFormat;
+function GetPixelFormat(graphic: TGraphic): TPixelFormat;
 begin
   if graphic is TGifImage then
   begin
@@ -209,11 +209,11 @@ end;
  |   newWidth: Integer   The new width                                 |
  |   newHeight: Integer  The new height                                |
  *----------------------------------------------------------------------*)
-procedure ResizePicture (p: TPicture; newWidth, newHeight: Integer);
+procedure ResizePicture(p: TPicture; newWidth, newHeight: Integer);
 var
   b: TBitmap;
 begin
-  if (p.graphic is TJPegImage) or (p.Graphic is TGifImage) then
+  if (p.graphic is TJpegImage) or (p.Graphic is TGifImage) then
   begin
     b := TBitmap.Create;
     try
@@ -244,7 +244,7 @@ end;
 procedure TfmGraphicsResource.SetObject(const Value: TObject);
 var
   newImage: Boolean;
-  transp: boolean;
+  transp: Boolean;
 begin
   newImage := Value <> Obj;                     // If 'obj' hasn't changed, it must
                                                 // be after an 'Undo'  Try to preserve
@@ -259,7 +259,6 @@ begin
   FDetails.GetImage (Image1.Picture);            // Set the thumbnail picture
   if Image1.Picture.Graphic is TGifImage then
   begin
-//    transp := TGIFImage (Image1.Picture.Graphic).IsTransparent;
     transp := False;                            // Can't get transparent GIFs
                                                 // to work in initial D2006 release
     Image1.Transparent := transp
@@ -342,8 +341,8 @@ begin
 
 
                                                 // Manually dock the panels
-  pnlGraphics.ManualDock (SizingPageControl1, Nil, alNone);
-  pnlColours.ManualDock (SizingPageControl1, Nil, alNone);
+  pnlGraphics.ManualDock (SizingPageControl1, nil, alNone);
+  pnlColours.ManualDock (SizingPageControl1, nil, alNone);
 end;
 
 (*----------------------------------------------------------------------*
@@ -432,7 +431,7 @@ end;
  *----------------------------------------------------------------------*)
 function TfmGraphicsResource.GetMenuItem: TMenuItem;
 begin
-  result := mnuImage
+  Result := mnuImage
 end;
 
 (*----------------------------------------------------------------------*
@@ -598,7 +597,7 @@ var
   paletteEntries: array [0..255] of TPaletteEntry;
   pal: HPalette;
 begin
-  result := Nil;
+  Result := Nil;
   case pf of
     pf1Bit: pal := SystemPalette2;
     pf4Bit: pal := SystemPalette16;
@@ -613,7 +612,7 @@ begin
 
   if ColorCount = 0 then
   begin
-    result := Nil;
+    Result := Nil;
     exit
   end;
 
@@ -621,16 +620,16 @@ begin
   if i = 0 then
     RaiseLastOSError;
 
-  result := TBitmap.Create;
+  Result := TBitmap.Create;
 
-  result.PixelFormat := pf;
-  result.Palette := CopyPalette (pal);
+  Result.PixelFormat := pf;
+  Result.Palette := CopyPalette (pal);
 
-  result.Height := 1;
-  result.Width := colorCount;
+  Result.Height := 1;
+  Result.Width := colorCount;
 
   for i := 0 to ColorCount - 1 do
-    result.Canvas.Pixels [i, 0] := RGB (paletteEntries [i].peRed, paletteEntries [i].peGreen, paletteEntries [i].peBlue);
+    Result.Canvas.Pixels [i, 0] := RGB (paletteEntries [i].peRed, paletteEntries [i].peGreen, paletteEntries [i].peBlue);
 end;
 
 (*----------------------------------------------------------------------*

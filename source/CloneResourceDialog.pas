@@ -75,9 +75,9 @@ begin
     for i := 0 to Languages.Count -1 do
       if Languages.Name [i] = cbLanguage.Text then
       begin
-        result := Languages.LocaleID [i];
-        break
-      end
+        Result := Languages.LocaleID [i];
+        Break;
+      end;
 end;
 
 procedure TdlgCloneResource.UpdateActions;

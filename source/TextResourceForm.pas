@@ -18,28 +18,28 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, ComCtrls, unitResourceMessages, ActnList, Menus, StdCtrls, ConTnrs,
-  cmpCWRichEdit, VirtualTrees;
+  ActnList, Menus, StdCtrls, Contnrs, ComCtrls, ResourceForm, VirtualTrees,
+  unitResourceMessages, cmpCWRichEdit;
 
 type
   TfmTextResource = class(TfmResource)
-    mnuStringsMenu: TMainMenu;
-    mnuStrings: TMenuItem;
     ActionList1: TActionList;
     actStringsAdd: TAction;
-    actStringsModify: TAction;
-    actStringsDelete: TAction;
-    AddString1: TMenuItem;
-    ModifyString1: TMenuItem;
-    DeleteString1: TMenuItem;
-    pomStrings: TPopupMenu;
-    AddString2: TMenuItem;
-    ModifyString2: TMenuItem;
-    DeleteString2: TMenuItem;
     actStringsChangeID: TAction;
+    actStringsDelete: TAction;
+    actStringsModify: TAction;
+    AddString1: TMenuItem;
+    AddString2: TMenuItem;
     ChangeID1: TMenuItem;
     ChangeID2: TMenuItem;
+    DeleteString1: TMenuItem;
+    DeleteString2: TMenuItem;
     mmoMessage: TExRichEdit;
+    mnuStrings: TMenuItem;
+    mnuStringsMenu: TMainMenu;
+    ModifyString1: TMenuItem;
+    ModifyString2: TMenuItem;
+    pomStrings: TPopupMenu;
     vstStrings: TVirtualStringTree;
     procedure vstStringsNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; NewText: string);
@@ -60,31 +60,30 @@ type
     procedure actStringsChangeIDExecute(Sender: TObject);
   protected
     procedure SetObject(const Value: TObject); override;
-    function GetMenuItem : TMenuItem; override;
+    function GetMenuItem: TMenuItem; override;
     procedure UpdateActions; override;
   private
-    fDetails : TTextResourceDetails;
-    fAdding : Boolean;
-    fChangeId : Boolean;
-    fHexMode : Boolean;
-    fIsStrings : Boolean;
-    fWorkStrings : TObjectList;
-    procedure SaveResource (const undoDetails : string);
-    function SelectedString : TStringInfo;
+    FDetails: TTextResourceDetails;
+    FAdding: Boolean;
+    FChangeId: Boolean;
+    FHexMode: Boolean;
+    FIsStrings: Boolean;
+    FWorkStrings: TObjectList;
+    procedure SaveResource (const undoDetails: string);
+    function SelectedString: TStringInfo;
     function NodeString(node: PVirtualNode): TStringInfo;
-    procedure UpdateDisplay (selectedString : TStringInfo);
-    function NodeN (n : Integer) : PVirtualNode;
+    procedure UpdateDisplay (selectedString: TStringInfo);
+    function NodeN (n: Integer): PVirtualNode;
   public
     procedure TidyUp; override;
     procedure UpdateFonts; override;
   end;
 
-var
-  fmTextResource: TfmTextResource;
 
 implementation
 
-uses DialogStrings;
+uses
+  DialogStrings;
 
 {$R *.DFM}
 
@@ -108,21 +107,21 @@ resourcestring
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.actStringsAddExecute(Sender: TObject);
 var
-  newID : Integer;
-  si : TStringInfo;
+  newID: Integer;
+  si: TStringInfo;
 begin
-  if (fWorkStrings.Count < 16) or not fIsStrings then
+  if (FWorkStrings.Count < 16) or not FIsStrings then
   begin
-    if fWorkStrings.Count = 0 then
-      if fIsStrings then
-        newID := StrToIntDef (ResIdToStringsId (fDetails.ResourceName), 1)
+    if FWorkStrings.Count = 0 then
+      if FIsStrings then
+        newID := StrToIntDef(ResIdToStringsId(FDetails.ResourceName), 1)
       else
         newID := 1
     else
-      newId := TStringInfo (fWorkStrings [fWorkStrings.Count - 1]).Id + 1;
+      newId := TStringInfo (FWorkStrings [FWorkStrings.Count - 1]).Id + 1;
 
     si := TStringInfo.Create('', newId);
-    fWorkStrings.Add(si);
+    FWorkStrings.Add(si);
     UpdateDisplay (si);
     actStringsModifyExecute (nil);
   end
@@ -130,8 +129,8 @@ end;
 
 procedure TfmTextResource.actStringsChangeIDExecute(Sender: TObject);
 begin
-  if Assigned (vstStrings.FocusedNode) then
-    if not fIsStrings then
+  if Assigned(vstStrings.FocusedNode) then
+    if not FIsStrings then
       vstStrings.EditNode(vstStrings.FocusedNode, 0)
 end;
 
@@ -142,23 +141,23 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.actStringsDeleteExecute(Sender: TObject);
 var
-  idx : Integer;
-  p : PVirtualNode;
+  idx: Integer;
+  p: PVirtualNode;
 begin
-  if Assigned (vstStrings.FocusedNode) then
+  if Assigned(vstStrings.FocusedNode) then
   begin
     idx := vstStrings.FocusedNode^.Index;
-    fWorkStrings.Delete(idx);
+    FWorkStrings.Delete(idx);
     UpdateDisplay (Nil);
 
-    while idx >= fWorkStrings.Count do
+    while idx >= FWorkStrings.Count do
       Dec (idx);
 
     p := NodeN (idx);
-    if Assigned (p) then
+    if Assigned(p) then
       vstStrings.Selected [p] := True;
 
-    if fDetails is TMessageResourceDetails then
+    if FDetails is TMessageResourceDetails then
       SaveResource (rstDeleteMessage)
     else
       SaveResource (rstDeleteString)
@@ -173,9 +172,9 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.actStringsModifyExecute(Sender: TObject);
 var
-  r : TRect;
+  r: TRect;
 begin
-  if Assigned (vstStrings.FocusedNode) then
+  if Assigned(vstStrings.FocusedNode) then
   begin
     mmoMessage.Width := vstStrings.Width - 2;
     r := vstStrings.GetDisplayRect(vstStrings.FocusedNode, 1, False);
@@ -196,12 +195,12 @@ procedure TfmTextResource.FormCreate(Sender: TObject);
 begin
   inherited;
 
-  fWorkStrings := TObjectList.Create
+  FWorkStrings := TObjectList.Create
 end;
 
 procedure TfmTextResource.FormDestroy(Sender: TObject);
 begin
-  fWorkStrings.Free;
+  FWorkStrings.Free;
   inherited;
 end;
 
@@ -217,7 +216,7 @@ end;
  *----------------------------------------------------------------------*)
 function TfmTextResource.GetMenuItem: TMenuItem;
 begin
-  result := mnuStrings
+  Result := mnuStrings
 end;
 
 (*----------------------------------------------------------------------*
@@ -227,13 +226,13 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.mmoMessageExit(Sender: TObject);
 var
-  st : string;
-  adding : Boolean;
-  si : TStringInfo;
-  ws : string;
+  st: string;
+  adding: Boolean;
+  si: TStringInfo;
+  ws: string;
 begin
-  adding := fAdding;
-  fAdding := False;
+  adding := FAdding;
+  FAdding := False;
   mmoMessage.Visible := False;
 
   si := SelectedString;
@@ -244,12 +243,12 @@ begin
     si.St := ws;
 
     if adding then
-      if fDetails is TMessageResourceDetails then
+      if FDetails is TMessageResourceDetails then
         st := rstAddmessage
       else
         st := rstAddString
     else
-      if fDetails is TMessageResourceDetails then
+      if FDetails is TMessageResourceDetails then
         st := rstChangeMessage
       else
         st := rstChangeString;
@@ -263,23 +262,23 @@ function TfmTextResource.NodeN(n: Integer): PVirtualNode;
 begin
   if n >= 0 then
   begin
-    result := vstStrings.GetFirst;
-    while (result <> Nil) and (n > 0) do
+    Result := vstStrings.GetFirst;
+    while (Result <> Nil) and (n > 0) do
     begin
-      result := vstStrings.GetNextSibling(result);
+      Result := vstStrings.GetNextSibling(Result);
       Dec (n)
     end
   end
   else
-    result := Nil
+    Result := Nil
 end;
 
-function TfmTextResource.NodeString(node : PVirtualNode) : TStringInfo;
+function TfmTextResource.NodeString(node: PVirtualNode): TStringInfo;
 begin
-  if Assigned (node) and (Integer (node^.Index) < fWorkStrings.Count) then
-    result := TStringInfo (fWorkStrings [node^.Index])
+  if Assigned(node) and (Integer (node^.Index) < FWorkStrings.Count) then
+    Result := TStringInfo (FWorkStrings [node^.Index])
   else
-    result := Nil
+    Result := Nil
 end;
 
 (*----------------------------------------------------------------------*
@@ -289,31 +288,31 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.SaveResource(const undoDetails: string);
 var
-  i : Integer;
-  si : TStringInfo;
+  i: Integer;
+  si: TStringInfo;
 begin
   AddUndoEntry (undoDetails);
-  fDetails.BeginUpdate;
+  FDetails.BeginUpdate;
   try
-    for i := 0 to fWorkStrings.Count - 1 do
+    for i := 0 to FWorkStrings.Count - 1 do
     begin
-      si := TStringInfo(fWorkStrings [i]);
+      si := TStringInfo(FWorkStrings [i]);
 
-      fDetails.Strings [i] := si.St;
-      fDetails.Ids [i] := si.Id
+      FDetails.Strings [i] := si.St;
+      FDetails.Ids [i] := si.Id
     end;
 
-    i := fWorkStrings.Count;
-    while i < fDetails.Count do
-      fDetails.Delete(i);
+    i := FWorkStrings.Count;
+    while i < FDetails.Count do
+      FDetails.Delete(i);
   finally
-    fDetails.EndUpdate
+    FDetails.EndUpdate
   end
 end;
 
 function TfmTextResource.SelectedString: TStringInfo;
 begin
-  result := NodeString (vstStrings.FocusedNode);
+  Result := NodeString (vstStrings.FocusedNode);
 end;
 
 (*----------------------------------------------------------------------*
@@ -323,20 +322,20 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.SetObject(const Value: TObject);
 var
-  i : Integer;
+  i: Integer;
 begin
-  inherited;            // *Must* call inherited
+  inherited; // *Must* call inherited
 
-  fDetails := ResourceDetails as TTextResourceDetails;
+  FDetails := ResourceDetails as TTextResourceDetails;
 
-  fIsStrings := not (fDetails is TMessageResourceDetails);
-  fHexMode := not fIsStrings;
+  FIsStrings := not (FDetails is TMessageResourceDetails);
+  FHexMode := not FIsStrings;
 
-  fWorkStrings.Clear;
-  for i := 0 to fDetails.Count - 1 do
-    fWorkStrings.Add(TStringInfo.Create(fDetails [i], fDetails.Ids [i]));
+  FWorkStrings.Clear;
+  for i := 0 to FDetails.Count - 1 do
+    FWorkStrings.Add(TStringInfo.Create(FDetails [i], FDetails.Ids [i]));
 
-  UpdateDisplay (Nil);
+  UpdateDisplay(nil);
 end;
 
 (*----------------------------------------------------------------------*
@@ -346,31 +345,31 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.UpdateActions;
 var
-  sel : Boolean;
+  sel: Boolean;
 begin
-  sel := Assigned (vstStrings.FocusedNode);
+  sel := Assigned(vstStrings.FocusedNode);
 
-  actStringsAdd.Enabled := fDetails is TMessageResourceDetails;
+  actStringsAdd.Enabled := FDetails is TMessageResourceDetails;
   actStringsModify.Enabled := sel;
   actStringsDelete.Enabled := sel;
-  actStringsChangeID.Enabled := sel and not fIsStrings;
+  actStringsChangeID.Enabled := sel and not FIsStrings;
 
-  if fChangeId then
+  if FChangeId then
   begin
-    fChangeID := False;
+    FChangeId := False;
     actStringsChangeId.Execute
   end
 end;
 
 procedure TfmTextResource.UpdateDisplay(selectedString: TStringInfo);
 var
-  p : PVirtualNode;
-  i : Integer;
+  p: PVirtualNode;
+  i: Integer;
 begin
   vstStrings.BeginUpdate;
   try
-    if fWorkStrings.Count <> Integer (vstStrings.RootNodeCount) then
-      vstStrings.RootNodeCount := fWorkStrings.Count
+    if FWorkStrings.Count <> Integer (vstStrings.RootNodeCount) then
+      vstStrings.RootNodeCount := FWorkStrings.Count
     else
       vstStrings.ReinitNode(Nil, True);
   finally
@@ -378,9 +377,9 @@ begin
   end;
 
   vstStrings.ClearSelection;
-  if Assigned (selectedString) then
+  if Assigned(selectedString) then
   begin
-    i := fWorkStrings.IndexOf (selectedString);
+    i := FWorkStrings.IndexOf (selectedString);
     p := NodeN (i);
     if p <> Nil then
     begin
@@ -403,14 +402,14 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmTextResource.vstStringsDblClick(Sender: TObject);
 var
-  p : TPoint;
+  p: TPoint;
 begin
-  if Assigned (vstStrings.FocusedNode) then
+  if Assigned(vstStrings.FocusedNode) then
   begin
     p := Mouse.CursorPos;
     MapWindowPoints (0, vstStrings.Handle, p, 1);
     if p.X <= vstStrings.Header.Columns [0].Width then
-      fChangeId := True
+      FChangeId := True
     else
       actStringsModify.Execute
   end
@@ -422,17 +421,19 @@ procedure TfmTextResource.vstStringsGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 var
-  si : TStringInfo;
+  si: TStringInfo;
 begin
   si := NodeString (Node);
 
   if si <> Nil then
   case Column of
-    0 : if fHexMode then
-          CellText := IntToHex (si.Id , 8)
-        else
-          CellText := IntToStr (si.Id);
-    1 : CellText := si.St
+    0:
+      if FHexMode then
+        CellText := IntToHex (si.Id , 8)
+      else
+        CellText := IntToStr (si.Id);
+    1:
+      CellText := si.St
   end
 end;
 
@@ -451,26 +452,26 @@ end;
 procedure TfmTextResource.vstStringsNewText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; NewText: string);
 var
-  i, newID : Integer;
-  st : TStringInfo;
+  i, newID: Integer;
+  st: TStringInfo;
 begin
   if Column <> 0 then
     Exit;
 
   st := NodeString (node);
-  if not Assigned (st) then
+  if not Assigned(st) then
     Exit;
 
   try
-    if fHexMode then
+    if FHexMode then
       newId := StrToInt ('$' + NewText)
     else
       newID := StrToInt (NewText);
 
     if st.Id <> newID then
     begin
-      for i := 0 to fDetails.Count - 1 do
-        if fDetails.Ids [i] = newID then
+      for i := 0 to FDetails.Count - 1 do
+        if FDetails.Ids [i] = newID then
           raise Exception.Create (rstDuplicateMessageID);
 
       st.Id := NewId;

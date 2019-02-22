@@ -2,57 +2,58 @@ unit unitIncludePaths;
 
 interface
 
-uses Windows, Classes, SysUtils, ConTnrs;
+uses
+  Windows, Classes, SysUtils, Contnrs;
 
 type
+  TIncludePathPackage = class
+  protected
+    function GetRootDirectory: string; virtual; abstract;
+    function GetInstalled: Boolean; virtual;
+    function GetIncludePath: string; virtual;
+    function GetName: string; virtual;
+  public
+    property Installed: Boolean read GetInstalled;
+    property IncludePath: string read GetIncludePath;
+    property Name: string read GetName;
+  end;
 
-TIncludePathPackage = class
-protected
-  function GetRootDirectory : string; virtual; abstract;
-  function GetInstalled: boolean; virtual;
-  function GetIncludePath: string; virtual;
-  function GetName: string; virtual;
-public
-  property Installed : boolean read GetInstalled;
-  property IncludePath : string read GetIncludePath;
-  property Name : string read GetName;
-end;
+  TIncludePathPackageClass = class of TIncludePathPackage;
 
-TIncludePathPackageClass = class of TIncludePathPackage;
+  TIncludePathPackages = class
+  private
+    FIncludePathPackages: TObjectList;
+    procedure Analyze;
 
-TIncludePathPackages = class
-private
-  fIncludePathPackages : TObjectList;
-  procedure Analyze;
+    function GetCount: Integer;
+    function GetPackage(idx: Integer): TIncludePathPackage;
+    function GetIncludePath(const PackageName: string): string;
+    function FindIncludePathPackage (const PackageName: string): TIncludePathPackage;
+  public
+    property Count: Integer read GetCount;
+    property Package [idx: Integer]: TIncludePathPackage read GetPackage;
+    property IncludePath [const PackageName: string]: string read GetIncludePath;
+  end;
 
-  function GetCount: Integer;
-  function GetPackage(idx: Integer): TIncludePathPackage;
-  function GetIncludePath(const PackageName: string): string;
-  function FindIncludePathPackage (const PackageName : string) : TIncludePathPackage;
-public
-  property Count : Integer read GetCount;
-  property Package [idx : Integer] : TIncludePathPackage read GetPackage;
-  property IncludePath [const PackageName : string] : string read GetIncludePath;
-end;
-
-function GetIncludePathForPackage (const PackageName : string) : string;
-procedure RegisterIncludePathPackage (const key : string; cls : TIncludePathPackageClass);
+function GetIncludePathForPackage (const PackageName: string): string;
+procedure RegisterIncludePathPackage (const key: string; cls: TIncludePathPackageClass);
 
 implementation
 
-uses unitObjectCache;
+uses
+  unitObjectCache;
 
 var
-  gRegisteredPackages : TClassStringAssociations;
+  gRegisteredPackages: TClassStringAssociations;
 
-procedure RegisterIncludePathPackage (const key : string; cls : TIncludePathPackageClass);
+procedure RegisterIncludePathPackage (const key: string; cls: TIncludePathPackageClass);
 begin
   gRegisteredPackages.Associate(key, cls);
 end;
 
-function GetIncludePathForPackage (const PackageName : string) : string;
+function GetIncludePathForPackage (const PackageName: string): string;
 var
-  packages : TIncludePathPackages;
+  packages: TIncludePathPackages;
 begin
   packages := TIncludePathPackages.Create;
   result := packages.IncludePath [PackageName]
@@ -62,18 +63,18 @@ end;
 
 procedure TIncludePathPackages.Analyze;
 var
-  i : Integer;
-  pckg : TIncludePathPackage;
+  i: Integer;
+  pckg: TIncludePathPackage;
 begin
-  if fIncludePathPackages <> Nil then Exit;
+  if FIncludePathPackages <> Nil then Exit;
 
-  fIncludePathPackages := TObjectList.Create;
+  FIncludePathPackages := TObjectList.Create;
 
   for i := gRegisteredPackages.Count - 1 downto 0 do
   begin
     pckg := TIncludePathPackageClass (gRegisteredPackages.Classes [i]).Create;
     if pckg.Installed then
-      fIncludePathPackages.Add(pckg)
+      FIncludePathPackages.Add(pckg)
     else
       pckg.Free
   end
@@ -82,7 +83,7 @@ end;
 function TIncludePathPackages.FindIncludePathPackage(
   const PackageName: string): TIncludePathPackage;
 var
-  i : Integer;
+  i: Integer;
 begin
   result := Nil;
   for i := 0 to Count - 1 do
@@ -96,12 +97,12 @@ end;
 function TIncludePathPackages.GetCount: Integer;
 begin
   Analyze;
-  result := fIncludePathPackages.Count;
+  result := FIncludePathPackages.Count;
 end;
 
 function TIncludePathPackages.GetIncludePath(const PackageName: string): string;
 var
-  incl : TIncludePathPackage;
+  incl: TIncludePathPackage;
 begin
   incl := FindIncludePathPackage (PackageName);
   if Assigned (incl) then
@@ -113,7 +114,7 @@ end;
 function TIncludePathPackages.GetPackage(idx: Integer): TIncludePathPackage;
 begin
   Analyze;
-  result := TIncludePathPackage (fIncludePathPackages [idx]);
+  result := TIncludePathPackage (FIncludePathPackages [idx]);
 end;
 
 { TIncludePathPackage }
@@ -123,14 +124,14 @@ begin
   result := GetRootDirectory + '\Include'
 end;
 
-function TIncludePathPackage.GetInstalled: boolean;
+function TIncludePathPackage.GetInstalled: Boolean;
 begin
   result := DirectoryExists (GetRootDirectory);
 end;
 
 function TIncludePathPackage.GetName: string;
 var
-  i : Integer;
+  i: Integer;
 begin
   for i := 0 to gRegisteredPackages.Count - 1 do
     if self is gRegisteredPackages.Classes [i] then

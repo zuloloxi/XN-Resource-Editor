@@ -70,16 +70,17 @@ end;
 
 function TfmCursorGraphicsResource.GetCursor: TExCursor;
 begin
-  result := TExCursor (Image1.Picture.Graphic);
+  Result := TExCursor (Image1.Picture.Graphic);
 end;
 
 procedure TfmCursorGraphicsResource.PreviewKey(var key: Word;
   shift: TShiftState);
 begin
   inherited;
+
   case key of
     VK_MULTIPLY :
-      SetHotspot (Mouse.CursorPos);
+      SetHotspot(Mouse.CursorPos);
   end;
 end;
 

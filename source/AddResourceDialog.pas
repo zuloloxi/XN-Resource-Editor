@@ -41,7 +41,7 @@ const
     TMessageResourceDetails,
     TMenuResourceDetails,
     TDialogResourceDetails,
-    TJPegResourceDetails,
+    TJpegResourceDetails,
     TGIFResourceDetails,
     TXPManifestResourceDetails,
     TVersionInfoResourceDetails,

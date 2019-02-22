@@ -13,9 +13,6 @@ type
     procedure SetObject(const Value: TObject); override;
   end;
 
-var
-  fmRawResource: TfmRawResource;
-
 implementation
 
 {$R *.DFM}
@@ -24,14 +21,14 @@ implementation
 
 procedure TfmRawResource.SetObject(const Value: TObject);
 var
-  details : TResourceDetails;
+  Details: TResourceDetails;
 begin
   inherited;
 
-  details := obj as TResourceDetails;
+  Details := obj as TResourceDetails;
 
-  HexDump1.Address := details.Data.Memory;
-  HexDump1.DataSize := details.Data.Size
+  HexDump1.Address := Details.Data.Memory;
+  HexDump1.DataSize := Details.Data.Size
 end;
 
 end.
