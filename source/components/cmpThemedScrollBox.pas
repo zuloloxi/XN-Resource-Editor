@@ -9,19 +9,18 @@ uses
 type
   TThemedScrollBox = class(TScrollBox)
   private
-    fUseTheme: boolean;
-    fTheme : HTHEME;
-    procedure DoWMNCPaint (DC : HDC);
+    FUseTheme: boolean;
+    FTheme: HTHEME;
+    procedure DoWMNCPaint (DC: HDC);
     procedure SetUseTheme(const Value: boolean);
-    procedure WMNCPaint (var msg : TwmNCPaint); message WM_NCPAINT;
+    procedure WMNCPaint (var msg: TwmNCPaint); message WM_NCPAINT;
     procedure WMThemeChanged(var Message: TMessage); message WM_THEMECHANGED;
   protected
     procedure CreateWnd; override;
   public
-    constructor Create (AOwner : TComponent); override;
-    { Public declarations }
+    constructor Create (AOwner: TComponent); override;
   published
-    property UseTheme : boolean read fUseTheme write SetUseTheme default True;
+    property UseTheme: boolean read FUseTheme write SetUseTheme default True;
   end;
 
 implementation
@@ -37,13 +36,13 @@ var
 constructor TThemedScrollBox.Create(AOwner: TComponent);
 begin
   inherited;
-  fUseTheme := True;
-
+  FUseTheme := True;
 end;
 
 procedure TThemedScrollBox.CreateWnd;
 begin
   inherited;
+
   if IsWinXP then
     Perform (WM_THEMECHANGED, 0, 0);
 end;
@@ -76,7 +75,7 @@ begin
   if HasClientEdge then
   begin
 
-    if fUseTheme and (FTheme <> 0) then
+    if FUseTheme and (FTheme <> 0) then
     begin
       ExcludeClipRect(DC, RC.Left + 2, RC.Top + 2, RC.Right - 2, RC.Bottom - 2);
       DrawThemeBackground(FTheme, DC, 0, 0, RC, nil);
@@ -134,9 +133,9 @@ end;
 
 procedure TThemedScrollBox.SetUseTheme(const Value: boolean);
 begin
-  if value <> fUseTheme then
+  if value <> FUseTheme then
   begin
-    fUseTheme := Value;
+    FUseTheme := Value;
     if IsWinXP then
       Perform (WM_THEMECHANGED, 0, 0);
   end
@@ -173,7 +172,7 @@ begin
     FTheme := 0;
   end;
 
-  if fUseTheme then
+  if FUseTheme then
     FTheme := OpenThemeData(Handle, 'listbox');
 
   RedrawWindow(Handle, nil, 0, RDW_FRAME or RDW_INVALIDATE or RDW_NOERASE or RDW_NOCHILDREN);

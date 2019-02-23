@@ -153,6 +153,10 @@ object fmNTAboutBox: TfmNTAboutBox
     object TabSheet2: TTabSheet
       Caption = 'Thank You!'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object stThankYou: TLabel
         Left = 16
         Top = 16

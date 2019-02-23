@@ -48,10 +48,10 @@ type
     fName: string;
     fEnumValues: TStringList;
     fOptionType: TOptionType;
-    fIntVal : Integer;
-    fStrVal : string;
-    fBoolVal : boolean;
-    fDirty : boolean;
+    fIntVal: Integer;
+    fStrVal: string;
+    fBoolVal: boolean;
+    fDirty: boolean;
 
     function GetBase: TPersistentOptions;
     function GetAsBoolean: Boolean;
@@ -69,24 +69,24 @@ type
     procedure Flush;
     function GetHasDefaultValue: boolean;
   protected
-    function GetDisplayName : string; override;
+    function GetDisplayName: string; override;
   public
-    constructor Create (Collection : TCollection); override;
+    constructor Create (Collection: TCollection); override;
     destructor Destroy; override;
-    property Base : TPersistentOptions read GetBase;
+    property Base: TPersistentOptions read GetBase;
 
-    property AsInteger : Integer read GetAsInteger write SetAsInteger;
-    property AsString : string read GetAsString write SetAsString;
-    property AsBoolean : Boolean read GetAsBoolean write SetAsBoolean;
-    property AsEnum : string read GetAsEnum write SetAsEnum;
+    property AsInteger: Integer read GetAsInteger write SetAsInteger;
+    property AsString: string read GetAsString write SetAsString;
+    property AsBoolean: Boolean read GetAsBoolean write SetAsBoolean;
+    property AsEnum: string read GetAsEnum write SetAsEnum;
 
-    property HasDefaultValue : boolean read GetHasDefaultValue;
+    property HasDefaultValue: boolean read GetHasDefaultValue;
 
   published
-    property Name : string read fName write fName;
-    property DefaultValue : string read fDefaultValue write fDefaultValue;
-    property EnumValues : TStrings read GetEnumValues write SetEnumValues;
-    property OptionType : TOptionType read fOptionType write SetOptionType;
+    property Name: string read fName write fName;
+    property DefaultValue: string read fDefaultValue write fDefaultValue;
+    property EnumValues: TStrings read GetEnumValues write SetEnumValues;
+    property OptionType: TOptionType read fOptionType write SetOptionType;
   end;
 
 //---------------------------------------------------------------------
@@ -98,10 +98,10 @@ type
     function GetOptionByName(const name: string): TOption;
   public
     constructor Create(AOwner: TPersistent; ItemClass: TCollectionItemClass);
-    property Option [idx : Integer] : TOption read GetOption; default;
-    property OptionByName [const name : string] : TOption read GetOptionByName;
+    property Option [idx: Integer]: TOption read GetOption; default;
+    property OptionByName [const name: string]: TOption read GetOptionByName;
   published
-    property DeleteObsoleteOptions : boolean read fDeleteObsoleteOptions write fDeleteObsoleteOptions default True;
+    property DeleteObsoleteOptions: boolean read fDeleteObsoleteOptions write fDeleteObsoleteOptions default True;
   end;
 
 //---------------------------------------------------------------------
@@ -114,17 +114,17 @@ type
     function GetOption(const name: string): TOption;
     function GetSection(const name: string): TSection;
   protected
-    function GetDisplayName : string; override;
+    function GetDisplayName: string; override;
   public
     constructor Create(Collection: TCollection); override;
     destructor Destroy; override;
 
-    property Option [const name : string] : TOption read GetOption;
-    property Section [const name : string] : TSection read GetSection;
+    property Option [const name: string]: TOption read GetOption;
+    property Section [const name: string]: TSection read GetSection;
   published
-    property Name : string read fName write fName;
-    property Options : TOptions read fOptions write fOptions;
-    property Sections : TSections read fSections write fSections;
+    property Name: string read fName write fName;
+    property Options: TOptions read fOptions write fOptions;
+    property Sections: TSections read fSections write fSections;
   end;
 
 //---------------------------------------------------------------------
@@ -135,10 +135,10 @@ type
     function GetSection(idx: Integer): TSection;
     function GetSectionByName(const name: string): TSection;
   public
-    property Section [idx : Integer] : TSection read GetSection; default;
-    property SectionByName [const name : string] : TSection read GetSectionByName;
+    property Section [idx: Integer]: TSection read GetSection; default;
+    property SectionByName [const name: string]: TSection read GetSectionByName;
   published
-    property DeleteObsoleteSections : boolean read fDeleteObsoleteSections write fDeleteObsoleteSections default False;
+    property DeleteObsoleteSections: boolean read fDeleteObsoleteSections write fDeleteObsoleteSections default False;
   end;
 
 //---------------------------------------------------------------------
@@ -161,69 +161,69 @@ type
     procedure SetApplication(const Value: string);
     procedure SetManufacturer(const Value: string);
     procedure SetVersion(const Value: string);
-    procedure RemoveLeadingSlash (var path : string);
+    procedure RemoveLeadingSlash (var path: string);
 
-    property Designing : boolean read GetDesigning;
-    property Loading : boolean read GetLoading;
-    property Persist : boolean read GetPersist;
+    property Designing: boolean read GetDesigning;
+    property Loading: boolean read GetLoading;
+    property Persist: boolean read GetPersist;
     function GetDirty: boolean;
     { Private declarations }
   protected
     procedure Loaded; override;
-    procedure DeleteOldOptions (const application, manufacturer, version : string); virtual; abstract;
-    property InUpdate : boolean read fUpdating;
+    procedure DeleteOldOptions (const application, manufacturer, version: string); virtual; abstract;
+    property InUpdate: boolean read fUpdating;
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Save; virtual; abstract;
     procedure Load; virtual; abstract;
     procedure BeginUpdate;
     procedure EndUpdate;
-    property Option [path : string] : TOption read GetOption; default;
-    property Section [name : string] : TSection read GetSection;
-    property Dirty : boolean read GetDirty;
+    property Option [path: string]: TOption read GetOption; default;
+    property Section [name: string]: TSection read GetSection;
+    property Dirty: boolean read GetDirty;
     { Public declarations }
   published
-    property Application : string read fApplication write SetApplication;
-    property Manufacturer : string read fManufacturer write SetManufacturer;
-    property Version : string read fVersion write SetVersion;
-    property Options : TOptions read fOptions write fOptions;
-    property Sections : TSections read fSections write fSections;
+    property Application: string read fApplication write SetApplication;
+    property Manufacturer: string read fManufacturer write SetManufacturer;
+    property Version: string read fVersion write SetVersion;
+    property Options: TOptions read fOptions write fOptions;
+    property Sections: TSections read fSections write fSections;
   end;
 
   TCustomPersistentOptions = class (TPersistentOptions)
   private
     fOptionsType: TExSettingsType;
-    procedure LoadOptions (settings : TExSettings; Options : TOptions; forceDefaults : boolean);
-    procedure LoadSections (settings : TExSettings; Sections : TSections; forceDefaults : boolean);
-    procedure SaveOptions (settings : TExSettings; Options : TOptions);
-    procedure SaveSections (settings : TExSettings; Sections : TSections);
+    procedure LoadOptions (settings: TExSettings; Options: TOptions; forceDefaults: boolean);
+    procedure LoadSections (settings: TExSettings; Sections: TSections; forceDefaults: boolean);
+    procedure SaveOptions (settings: TExSettings; Options: TOptions);
+    procedure SaveSections (settings: TExSettings; Sections: TSections);
   protected
-    procedure DeleteOldOptions (const application, manufacturer, version : string); override;
-    property OptionsType : TExSettingsType read fOptionsType write fOptionsType;
-    function GetSettingsClass : TExSettingsClass; virtual; abstract;
-    function GetSettingsFile : string; virtual;
-    procedure SettingsCreated (settings : TExSettings); virtual;
+    procedure DeleteOldOptions (const application, manufacturer, version: string); override;
+    property OptionsType: TExSettingsType read fOptionsType write fOptionsType;
+    function GetSettingsClass: TExSettingsClass; virtual; abstract;
+    function GetSettingsFile: string; virtual;
+    procedure SettingsCreated (settings: TExSettings); virtual;
   public
     procedure Load; override;
     procedure Save; override;
   published
   end;
 
-  TOnGetSettingsClass = procedure (sender : TObject; var settingsType : TExSettingsClass) of object;
-  TOnGetSettingsFile = procedure (sender : TObject; var fileName : string) of object;
+  TOnGetSettingsClass = procedure (sender: TObject; var settingsType: TExSettingsClass) of object;
+  TOnGetSettingsFile = procedure (sender: TObject; var fileName: string) of object;
 
   TUniPersistentOptions = class (TCustomPersistentOptions)
   private
     fOnGetSettingsClass: TOnGetSettingsClass;
     fOnGetSettingsFile: TOnGetSettingsFile;
   protected
-    function GetSettingsClass : TExSettingsClass; override;
-    function GetSettingsFile : string; override;
+    function GetSettingsClass: TExSettingsClass; override;
+    function GetSettingsFile: string; override;
   published
     property OptionsType;
-    property OnGetSettingsClass : TOnGetSettingsClass read fOnGetSettingsClass write fOnGetSettingsClass;
-    property OnGetSettingsFile : TOnGetSettingsFile read fOnGetSettingsFile write fOnGetSettingsFile;
+    property OnGetSettingsClass: TOnGetSettingsClass read fOnGetSettingsClass write fOnGetSettingsClass;
+    property OnGetSettingsFile: TOnGetSettingsFile read fOnGetSettingsFile write fOnGetSettingsFile;
   end;
 
   EOptionError = class (Exception)
@@ -231,7 +231,7 @@ type
 
   EOptionTypeMismatch = class (EOptionError)
   public
-    constructor Create (Option : TOption);
+    constructor Create (Option: TOption);
   end;
 
 resourcestring
@@ -248,7 +248,7 @@ resourcestring
   rstOptionNotFound = 'Option %s not found in section %s';
 
 const
-  OptionTypeNames : array [TOptionType] of string = ('integer', 'boolean', 'string', 'emumerated');
+  OptionTypeNames: array [TOptionType] of string = ('integer', 'boolean', 'string', 'emumerated');
 
 { TPersistentOptions }
 
@@ -267,7 +267,7 @@ end;
  |                                                                      |
  | Constructor for TPersistentOptions                                   |
  *----------------------------------------------------------------------*)
-constructor TPersistentOptions.Create (AOwner : TComponent);
+constructor TPersistentOptions.Create (AOwner: TComponent);
 begin
   inherited Create (AOwner);
   fOptions := TOptions.Create(self, TOption);
@@ -320,9 +320,9 @@ end;
  *----------------------------------------------------------------------*)
 function TPersistentOptions.GetDirty: boolean;
 
-  function OptionsDirty (options : TOptions) : boolean;
+  function OptionsDirty (options: TOptions): boolean;
   var
-    i : Integer;
+    i: Integer;
   begin
     result := False;
     for i := 0 to options.Count - 1 do
@@ -333,10 +333,10 @@ function TPersistentOptions.GetDirty: boolean;
       end
   end;
 
-  function SectionsDirty (sections : TSections) : boolean;
+  function SectionsDirty (sections: TSections): boolean;
   var
-    i : Integer;
-    section : TSection;
+    i: Integer;
+    section: TSection;
   begin
     result := False;
     for i := 0 to sections.Count - 1 do
@@ -383,10 +383,10 @@ end;
 
 function TPersistentOptions.GetOption(path: string): TOption;
 var
-  p : PChar;
-  n : Integer;
-  s : TSection;
-  secName  : string;
+  p: PChar;
+  n: Integer;
+  s: TSection;
+  secName : string;
 begin
   RemoveLeadingSlash (path);
   p := StrRScan (PChar (path), '\');
@@ -468,7 +468,7 @@ end;
  | Remove the leading slash from a path.                                |
  *----------------------------------------------------------------------*)
 
-procedure TPersistentOptions.RemoveLeadingSlash (var path : string);
+procedure TPersistentOptions.RemoveLeadingSlash (var path: string);
 begin
   if Copy (path, 1, 1) = '\' then
     path := Copy (path, 2, MaxInt);
@@ -547,8 +547,8 @@ end;
  *----------------------------------------------------------------------*)
 function TOptions.GetOptionByName(const name: string): TOption;
 var
-  o : TOption;
-  i : Integer;
+  o: TOption;
+  i: Integer;
 begin
   result := Nil;
   for i := 0 to Count - 1 do
@@ -664,7 +664,7 @@ end;
  *----------------------------------------------------------------------*)
 function TOption.GetBase: TPersistentOptions;
 var
-  own : TPersistent;
+  own: TPersistent;
 begin
   own := TOwnedCollection (Collection).Owner;
 
@@ -685,7 +685,7 @@ begin
 end;
 
 (*----------------------------------------------------------------------*
- | function TOption.GetEnumValues : TStringList                         |
+ | function TOption.GetEnumValues: TStringList                         |
  |                                                                      |
  | 'Get' method for EnumValues property                                 |
  *----------------------------------------------------------------------*)
@@ -695,7 +695,7 @@ begin
 end;
 
 (*----------------------------------------------------------------------*
- | function TOption.GetHasDefaultValue : boolean                        |
+ | function TOption.GetHasDefaultValue: boolean                        |
  |                                                                      |
  | Return True if the option's current value is it's default.           |
  *----------------------------------------------------------------------*)
@@ -703,10 +703,10 @@ function TOption.GetHasDefaultValue: boolean;
 begin
   result := False;
   case OptionType of
-    otString  : result := AnsiCompareStr (DefaultValue, fStrVal) = 0;
-    otInteger : result := StrToIntDef (DefaultValue, 0) = fIntVal;
-    otBoolean : result := StrToBoolDef (DefaultValue, False) = fBoolVal;
-    otEnum    : result := fIntVal = EnumValues.IndexOf(DefaultValue)
+    otString : result := AnsiCompareStr (DefaultValue, fStrVal) = 0;
+    otInteger: result := StrToIntDef (DefaultValue, 0) = fIntVal;
+    otBoolean: result := StrToBoolDef (DefaultValue, False) = fBoolVal;
+    otEnum   : result := fIntVal = EnumValues.IndexOf(DefaultValue)
   end
 end;
 
@@ -907,8 +907,8 @@ end;
  *----------------------------------------------------------------------*)
 function TSections.GetSectionByName(const name: string): TSection;
 var
-  i, p : Integer;
-  s : TSection;
+  i, p: Integer;
+  s: TSection;
 begin
   result := Nil;
 
@@ -952,8 +952,8 @@ end;
 
 procedure TCustomPersistentOptions.Load;
 var
-  settings : TExSettings;
-  openedOK : boolean;
+  settings: TExSettings;
+  openedOK: boolean;
 begin
   if not Persist then Exit;
 
@@ -971,8 +971,8 @@ end;
 procedure TCustomPersistentOptions.LoadOptions(settings: TExSettings;
   Options: TOptions; forceDefaults: boolean);
 var
-  i : Integer;
-  option : TOption;
+  i: Integer;
+  option: TOption;
 begin
   for i := 0 to Options.Count - 1 do
   begin
@@ -980,17 +980,17 @@ begin
 
     if forceDefaults or not settings.HasValue(option.Name) then
     case option.OptionType of
-      otString  : option.fStrVal  := option.fDefaultValue;
-      otInteger : option.fIntVal  := StrToIntDef (option.fDefaultValue, 0);
-      otBoolean : option.fBoolVal := StrToBoolDef (option.fDefaultValue, False);
-      otEnum    : option.fIntVal  := option.fEnumValues.IndexOf(option.fDefaultValue)
+      otString : option.fStrVal  := option.fDefaultValue;
+      otInteger: option.fIntVal  := StrToIntDef (option.fDefaultValue, 0);
+      otBoolean: option.fBoolVal := StrToBoolDef (option.fDefaultValue, False);
+      otEnum   : option.fIntVal  := option.fEnumValues.IndexOf(option.fDefaultValue)
     end
     else
     case option.OptionType of
-      otString  : option.fStrVal  := settings.StringValue [option.Name];
-      otInteger : option.fIntVal  := settings.IntegerValue [option.Name];
-      otBoolean : option.fBoolVal := settings.BooleanValue [option.Name];
-      otEnum    : option.fIntVal  := settings.IntegerValue [option.Name]
+      otString : option.fStrVal  := settings.StringValue [option.Name];
+      otInteger: option.fIntVal  := settings.IntegerValue [option.Name];
+      otBoolean: option.fBoolVal := settings.BooleanValue [option.Name];
+      otEnum   : option.fIntVal  := settings.IntegerValue [option.Name]
     end;
     option.fDirty := False
   end
@@ -999,9 +999,9 @@ end;
 procedure TCustomPersistentOptions.LoadSections(settings: TExSettings;
   Sections: TSections; forceDefaults: boolean);
 var
-  i : Integer;
-  section : TSection;
-  settings1 : TExSettings;
+  i: Integer;
+  section: TSection;
+  settings1: TExSettings;
 begin
   for i := 0 to Sections.Count - 1 do
   begin
@@ -1024,7 +1024,7 @@ end;
 
 procedure TCustomPersistentOptions.Save;
 var
-  settings : TExSettings;
+  settings: TExSettings;
 begin
   if not Persist then Exit;
 
@@ -1038,11 +1038,11 @@ begin
   end
 end;
 
-procedure TCustomPersistentOptions.SaveOptions(settings : TExSettings; Options: TOptions);
+procedure TCustomPersistentOptions.SaveOptions(settings: TExSettings; Options: TOptions);
 var
-  i, idx : Integer;
-  deleteValues : TStringList;
-  option : TOption;
+  i, idx: Integer;
+  deleteValues: TStringList;
+  option: TOption;
 
 begin
   deleteValues := TStringList.Create;
@@ -1063,10 +1063,10 @@ begin
         deleteValues.Delete(idx);
 
       case Option.OptionType of
-        otString  : settings.SetStringValue (Option.Name, Option.fStrVal, Option.DefaultValue);
-        otInteger : settings.SetIntegerValue (Option.Name,  Option.fIntVal, StrToIntDef (Option.DefaultValue, 0));
-        otBoolean : settings.SetBooleanValue (Option.Name, Option.fBoolVal, StrToBoolDef (Option.DefaultValue, false));
-        otEnum    : settings.SetIntegerValue (Option.Name, Option.fIntVal, Option.EnumValues.IndexOf(Option.DefaultValue));
+        otString : settings.SetStringValue (Option.Name, Option.fStrVal, Option.DefaultValue);
+        otInteger: settings.SetIntegerValue (Option.Name,  Option.fIntVal, StrToIntDef (Option.DefaultValue, 0));
+        otBoolean: settings.SetBooleanValue (Option.Name, Option.fBoolVal, StrToBoolDef (Option.DefaultValue, false));
+        otEnum   : settings.SetIntegerValue (Option.Name, Option.fIntVal, Option.EnumValues.IndexOf(Option.DefaultValue));
 
       // The logic behind the 'enum' stuff works so that if the default string value is
       // not a member of the enum, the actual enum value gets saved.
@@ -1083,12 +1083,12 @@ begin
   end
 end;
 
-procedure TCustomPersistentOptions.SaveSections(settings : TExSettings; Sections: TSections);
+procedure TCustomPersistentOptions.SaveSections(settings: TExSettings; Sections: TSections);
 var
-  i, idx : Integer;
-  section : TSection;
-  settings1 : TExSettings;
-  deleteSections : TStringList;
+  i, idx: Integer;
+  section: TSection;
+  settings1: TExSettings;
+  deleteSections: TStringList;
 begin
   deleteSections := TStringList.Create;
   try

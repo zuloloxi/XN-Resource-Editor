@@ -9,29 +9,28 @@ const
   WM_PARAMS = WM_USER + $200;
 
 type
-  TOnOtherInstance = procedure (Sender : TObject; ParamCount : DWORD; ParamStr : array of string) of object;
+  TOnOtherInstance = procedure (Sender: TObject; ParamCount: DWORD; ParamStr: array of string) of object;
 
   TRunOnce = class(TComponent)
   private
-    fOtherWindowHandle : HWND;
-    fUniqueMessage : DWORD;
-    fParamsMessage : DWORD;
-    fOldOwnerWindowProc : TFNWndProc;
-    fObjectInstance : pointer;
-    fOnOtherInstance: TOnOtherInstance;
-    fMutex : THandle;
-    fName : string;
-    function CheckOtherApp (hwnd : HWND) : boolean;
+    FOtherWindowHandle: HWND;
+    FUniqueMessage: DWORD;
+    FParamsMessage: DWORD;
+    FOldOwnerWindowProc: TFNWndProc;
+    FObjectInstance: pointer;
+    FOnOtherInstance: TOnOtherInstance;
+    FMutex: THandle;
+    FName: string;
+    function CheckOtherApp (hwnd: HWND): boolean;
     procedure OwnerWindowProc(var msg: TMessage);
-    procedure ProcessParameters (remoteMemHandle : THandle; remoteProcessID : DWORD);
-
+    procedure ProcessParameters (remoteMemHandle: THandle; remoteProcessID: DWORD);
   protected
     procedure Loaded; override;
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
   published
-    property OnOtherInstance : TOnOtherInstance read fOnOtherInstance write fOnOtherInstance;
+    property OnOtherInstance: TOnOtherInstance read FOnOtherInstance write FOnOtherInstance;
   end;
 
 implementation
@@ -40,15 +39,15 @@ implementation
 
 function TRunOnce.CheckOtherApp(hwnd: HWND): boolean;
 var
-  msgResult : DWORD;
+  msgResult: DWORD;
 begin
   result := False;
   if hwnd <> TForm (Owner).Handle then
   begin
     if GetWindowLong (hwnd, GWL_USERDATA) = $badf00d then
-      if (SendMessageTimeout(hwnd, fUniqueMessage, 0, 0, SMTO_BLOCK or SMTO_ABORTIFHUNG, 1000, @msgResult) <> 0) and (msgResult = fUniqueMessage) then
+      if (SendMessageTimeout(hwnd, FUniqueMessage, 0, 0, SMTO_BLOCK or SMTO_ABORTIFHUNG, 1000, @msgResult) <> 0) and (msgResult = FUniqueMessage) then
       begin
-        fOtherWindowHandle := hwnd;
+        FOtherWindowHandle := hwnd;
         result := True
       end
   end
@@ -61,68 +60,68 @@ end;
 
 destructor TRunOnce.Destroy;
 begin
-  if Assigned (fObjectInstance) then
-    System.Classes.FreeObjectInstance (fObjectInstance);
+  if Assigned (FObjectInstance) then
+    System.Classes.FreeObjectInstance (FObjectInstance);
 
 
-  if fMutex <> 0 then
+  if FMutex <> 0 then
   begin
-    ReleaseMutex (fMutex);
-    CloseHandle (fMutex)
+    ReleaseMutex (FMutex);
+    CloseHandle (FMutex)
   end;
   inherited;
 end;
 
-function EnumWindowsProc (hwnd : HWND; lParam : LPARAM) : BOOL; stdcall;
+function EnumWindowsProc (hwnd: HWND; lParam: LPARAM): BOOL; stdcall;
 begin
   result := not TRunOnce (lParam).CheckOtherApp (hwnd)
 end;
 
-procedure TRunOnce.OwnerWindowProc (var msg : TMessage);
+procedure TRunOnce.OwnerWindowProc (var msg: TMessage);
 begin
   with msg do
-    if Msg = fUniqueMessage then
-      result := fUniqueMessage
+    if Msg = FUniqueMessage then
+      result := FUniqueMessage
     else
-      if Msg = fParamsMessage then
+      if Msg = FParamsMessage then
       try
         ProcessParameters (wParam, lParam)
       except
         Application.HandleException (self)
       end
       else
-        result := CallWindowProc (fOldOwnerWindowProc, TForm (Owner).Handle, msg, wParam, lParam);
+        result := CallWindowProc (FOldOwnerWindowProc, TForm (Owner).Handle, msg, wParam, lParam);
 end;
 
 procedure TRunOnce.Loaded;
 var
-  mapHandle : THandle;
-  paramPtr, p : PChar;
-  paramSize : DWORD;
-  i : Integer;
+  mapHandle: THandle;
+  paramPtr, p: PChar;
+  paramSize: DWORD;
+  i: Integer;
 begin
   inherited;
   if not (csDesigning in ComponentState) and (Owner is TForm) then
   begin
-    fName := UpperCase (ExtractFileName (Application.Exename));
-    fMutex := CreateMutex (Nil, True, PChar (fName));
+    FName := UpperCase (ExtractFileName (Application.Exename));
+    FMutex := CreateMutex (Nil, True, PChar (FName));
     if GetLastError <>  0 then
     begin
-      CloseHandle (fMutex);
-      fMutex := 0
+      CloseHandle (FMutex);
+      FMutex := 0
     end;
-    fUniqueMessage := RegisterWindowMessage (PChar (fName));
-    fParamsMessage := RegisterWindowMessage ('WoozleRunOnce');
+    FUniqueMessage := RegisterWindowMessage (PChar (FName));
+    FParamsMessage := RegisterWindowMessage ('WoozleRunOnce');
 
-    fObjectInstance := System.Classes.MakeObjectInstance (OwnerWindowProc);
-    fOldOwnerWindowProc := TfnWndProc (SetWindowLong (TForm (Owner).Handle, GWL_WNDPROC, Integer (fObjectInstance)));
+    FObjectInstance := System.Classes.MakeObjectInstance (OwnerWindowProc);
+    FOldOwnerWindowProc := TfnWndProc (SetWindowLong (TForm (Owner).Handle, GWL_WNDPROC, Integer (FObjectInstance)));
 
-    if fMutex = 0 then
+    if FMutex = 0 then
     begin
       Sleep (100);
       EnumWindows (@EnumWindowsProc, LPARAM (self));
 
-      if fOtherWindowHandle <> 0 then
+      if FOtherWindowHandle <> 0 then
       begin
         paramSize := 1;
         for i := 0 to ParamCount do
@@ -146,14 +145,14 @@ begin
           else
             RaiseLastOSError;
 
-          SendMessage (fOtherWindowHandle, fParamsMessage, mapHandle, GetCurrentProcessID);
+          SendMessage (FOtherWindowHandle, FParamsMessage, mapHandle, GetCurrentProcessID);
         finally
           CloseHandle (mapHandle);
         end
         else
           RaiseLastOSError;
 
-        SetForegroundWindow (fOtherWindowHandle)
+        SetForegroundWindow (FOtherWindowHandle)
       end;
       Halt
     end
@@ -162,15 +161,15 @@ begin
   end
 end;
 
-procedure TRunOnce.ProcessParameters(remoteMemHandle : THandle; remoteProcessID: DWORD);
+procedure TRunOnce.ProcessParameters(remoteMemHandle: THandle; remoteProcessID: DWORD);
 var
-  memHandle : THandle;
-  remoteProcessHandle : THandle;
-  paramPtr : PChar;
-  p : PChar;
-  paramCount : DWORD;
-  params : array of string;
-  i : Integer;
+  memHandle: THandle;
+  remoteProcessHandle: THandle;
+  paramPtr: PChar;
+  p: PChar;
+  paramCount: DWORD;
+  params: array of string;
+  i: Integer;
 begin
   remoteProcessHandle := OpenProcess (PROCESS_DUP_HANDLE, false, remoteProcessID);
   if remoteProcessHandle <> 0 then
@@ -180,7 +179,7 @@ begin
       paramPtr := MapViewOfFile (memHandle, FILE_MAP_READ, 0, 0, 65536);
       if paramPtr <> Nil then
       try
-        if Assigned (fOnOtherInstance) and not (csDestroying in ComponentState) then
+        if Assigned (FOnOtherInstance) and not (csDestroying in ComponentState) then
         begin
           p := paramPtr;
           paramCount := 0;

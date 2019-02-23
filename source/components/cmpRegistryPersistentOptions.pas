@@ -12,9 +12,9 @@ type
   private
     function GetRootKeyName: string;
   protected
-    function GetSettingsClass : TExSettingsClass; override;
+    function GetSettingsClass: TExSettingsClass; override;
   public
-    property RootKeyName : string read GetRootKeyName;
+    property RootKeyName: string read GetRootKeyName;
   published
     property OptionsType;
   end;

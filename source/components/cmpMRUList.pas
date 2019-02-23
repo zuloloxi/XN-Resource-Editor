@@ -31,10 +31,10 @@ uses
 type
   TMRUList = class(TComponent)
   private
-    fMRU : TStringList;
-    fManufacturer : string;
+    fMRU: TStringList;
+    fManufacturer: string;
     fCapacity: Integer;
-    fLoaded : boolean;
+    fLoaded: boolean;
     fPopupMenu: TPopupMenu;
     fOnPopupMenuClick: TNotifyEvent;
     fAppSection: string;
@@ -42,37 +42,37 @@ type
 
     procedure SetManufacturer(const Value: string);
     procedure SetCapacity(const Value: Integer);
-    function GetStrings : TStrings;
+    function GetStrings: TStrings;
     procedure SetPopupMenu(const Value: TPopupMenu);
     procedure PopulateMenu;
-    procedure PopupMenuItemOnClick (sender : TObject);
+    procedure PopupMenuItemOnClick (sender: TObject);
     procedure SetAppSection(const Value: string);
     function GetMRUDirectory: string;
     function GetMRUFile: string;
     procedure SetApplication(const Value: string);
   protected
-    function GetKeyName : string; virtual;
+    function GetKeyName: string; virtual;
 
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure AddFile (fileName : string);
+    procedure AddFile (fileName: string);
     procedure SaveList;
     procedure LoadList;
-    property Strings : TStrings read GetStrings;
-    property MRUFile : string read GetMRUFile;
-    property MRUDirectory : string read GetMRUDirectory;
+    property Strings: TStrings read GetStrings;
+    property MRUFile: string read GetMRUFile;
+    property MRUDirectory: string read GetMRUDirectory;
 
 
   published
-    property Manufacturer : string read fManufacturer write SetManufacturer;
-    property Application : string read fApplication write SetApplication;
-    property AppSection : string read fAppSection write SetAppSection;
-    property Capacity : Integer read fCapacity write SetCapacity default 5;
-    property PopupMenu : TPopupMenu read fPopupMenu write SetPopupMenu;
+    property Manufacturer: string read fManufacturer write SetManufacturer;
+    property Application: string read fApplication write SetApplication;
+    property AppSection: string read fAppSection write SetAppSection;
+    property Capacity: Integer read fCapacity write SetCapacity default 5;
+    property PopupMenu: TPopupMenu read fPopupMenu write SetPopupMenu;
 
-    property OnPopupMenuClick : TNotifyEvent read fOnPopupMenuClick write fOnPopupMenuClick;
+    property OnPopupMenuClick: TNotifyEvent read fOnPopupMenuClick write fOnPopupMenuClick;
   end;
 
 implementation
@@ -83,7 +83,7 @@ uses Registry;
 
 procedure TMRUList.AddFile(fileName: string);
 var
-  idx : Integer;
+  idx: Integer;
 begin
   LoadList;
   idx := 0;
@@ -118,7 +118,7 @@ end;
 
 function TMRUList.GetKeyName: string;
 var
-  app : string;
+  app: string;
 begin
   if Application = '' then
     app := Vcl.Forms.Application.Title
@@ -144,7 +144,7 @@ begin
     result := ''
 end;
 
-function TMRUList.GetStrings : TStrings;
+function TMRUList.GetStrings: TStrings;
 begin
   LoadList;
   result := fMRU
@@ -152,8 +152,8 @@ end;
 
 procedure TMRUList.LoadList;
 var
-  values : TStringList;
-  i : Integer;
+  values: TStringList;
+  i: Integer;
 begin
   if not fLoaded then
   begin
@@ -181,8 +181,8 @@ end;
 
 procedure TMRUList.PopulateMenu;
 var
-  i : Integer;
-  item : TMenuItem;
+  i: Integer;
+  item: TMenuItem;
 begin
   if not (csDesigning in ComponentState) then
   begin
@@ -208,9 +208,9 @@ end;
 
 procedure TMRUList.SaveList;
 var
-  i, idx : Integer;
-  s : TStrings;
-  vn : string;
+  i, idx: Integer;
+  s: TStrings;
+  vn: string;
 begin
   if (Manufacturer <> '') and fLoaded then
     if fMRU.Count > 0 then

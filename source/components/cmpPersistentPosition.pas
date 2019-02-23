@@ -40,54 +40,54 @@ type
 //------------------------------------------------------------------------
 // TPersistentPosition class
 
-  TOnGetSettingsClass = procedure (Owner : TObject; var SettingsClass : TExSettingsClass) of object;
-  TOnGetSettingsFile = procedure (Owner : TObject; var fileName : string) of object;
+  TOnGetSettingsClass = procedure (Owner: TObject; var SettingsClass: TExSettingsClass) of object;
+  TOnGetSettingsFile = procedure (Owner: TObject; var fileName: string) of object;
   TPersistentPosition = class(TComponent)
   private
-    fOldOwnerWindowMethod : TWndMethod;
-    fObjectInstance : pointer;
+    fOldOwnerWindowMethod: TWndMethod;
+    fObjectInstance: pointer;
     fManufacturer: string;
     fProduct: string;
     fVersion: string;
     fSubKey: string;
-    fSaved : boolean;
-    fMoved : boolean;
+    fSaved: boolean;
+    fMoved: boolean;
     fEnabled: boolean;
-    fSubclassed : boolean;
+    fSubclassed: boolean;
     fOnGetSettingsClass: TOnGetSettingsClass;
     fOnGetSettingsFile: TOnGetSettingsFile;
-    procedure OwnerWindowMethod (var msg : TMessage);
+    procedure OwnerWindowMethod (var msg: TMessage);
     function GetAppKey: string;
     procedure MoveToPosition;
     function GetPosition: TRect;
     procedure SavePosition;
-    function CreateReg(canCreate: boolean; var reg : TExSettings): boolean;
+    function CreateReg(canCreate: boolean; var reg: TExSettings): boolean;
     procedure Subclass;
     procedure UnSubClass;
   protected
     procedure Loaded; override;
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
-    property ApplicationKey : string read GetAppKey;
+    property ApplicationKey: string read GetAppKey;
     { Public declarations }
 
-    function GetValue (const valueName : string) : Integer;
-    function GetSzValue (const valueName : string) : string;
-    procedure SetValue (const valueName : string; value : Integer);
-    procedure SetSzValue (const valueName, value : string);
+    function GetValue (const valueName: string): Integer;
+    function GetSzValue (const valueName: string): string;
+    procedure SetValue (const valueName: string; value: Integer);
+    procedure SetSzValue (const valueName, value: string);
 
-    property Position : TRect read GetPosition;
+    property Position: TRect read GetPosition;
 
   published
-    property Manufacturer : string read fManufacturer write fManufacturer;
-    property Version : string read fVersion write fVersion;
-    property Product : string read fProduct write fProduct;
-    property SubKey : string read fSubKey write fSubKey;
-    property Enabled : boolean read fEnabled write fEnabled default True;
+    property Manufacturer: string read fManufacturer write fManufacturer;
+    property Version: string read fVersion write fVersion;
+    property Product: string read fProduct write fProduct;
+    property SubKey: string read fSubKey write fSubKey;
+    property Enabled: boolean read fEnabled write fEnabled default True;
 
-    property OnGetSettingsClass : TOnGetSettingsClass read fOnGetSettingsClass write fOnGetSettingsClass;
-    property OnGetSettingsFile : TOnGetSettingsFile read fOnGetSettingsFile write fOnGetSettingsFile;
+    property OnGetSettingsClass: TOnGetSettingsClass read fOnGetSettingsClass write fOnGetSettingsClass;
+    property OnGetSettingsFile: TOnGetSettingsFile read fOnGetSettingsFile write fOnGetSettingsFile;
     { Published declarations }
   end;
 
@@ -118,11 +118,11 @@ end;
  | The function returns false if the registry key couldn't be opened    |
  | - maybe because canCreate was false and it didn't already exist      |
  *----------------------------------------------------------------------*}
-function TPersistentPosition.CreateReg(canCreate: boolean; var reg : TExSettings): boolean;
+function TPersistentPosition.CreateReg(canCreate: boolean; var reg: TExSettings): boolean;
 var
-  prod : string;
-  settingsClass : TExSettingsClass;
-  st : string;
+  prod: string;
+  settingsClass: TExSettingsClass;
+  st: string;
 begin
   if Product = '' then
     prod := Application.Title
@@ -174,7 +174,7 @@ end;
  *----------------------------------------------------------------------*}
 function TPersistentPosition.GetAppKey: string;
 var
-  prod : string;
+  prod: string;
 begin
   if Product = '' then
     prod := Application.Title
@@ -200,7 +200,7 @@ end;
  *----------------------------------------------------------------------*}
 function TPersistentPosition.GetSzValue(const valueName: string): string;
 var
-  reg : TExSettings;
+  reg: TExSettings;
 begin
   if CreateReg (false, reg) then
   try
@@ -217,7 +217,7 @@ end;
  *----------------------------------------------------------------------*}
 function TPersistentPosition.GetValue(const valueName: string): Integer;
 var
-  reg : TExSettings;
+  reg: TExSettings;
 begin
   if CreateReg (false, reg) then
   try
@@ -253,11 +253,11 @@ end;
  *----------------------------------------------------------------------*}
 procedure TPersistentPosition.MoveToPosition;
 var
-  fm : TForm;
-  wp : TWindowPlacement;
-  wasVisible : boolean;
-  reg : TExSettings;
-  requiredState : TWindowState;
+  fm: TForm;
+  wp: TWindowPlacement;
+  wasVisible: boolean;
+  reg: TExSettings;
+  requiredState: TWindowState;
 begin
   if fMoved or not fEnabled then Exit;
   fMoved := True;
@@ -275,9 +275,9 @@ begin
         wasVisible := fm.Visible;
         if wasVisible then
           case requiredState of
-            wsNormal : wp.ShowCmd := SW_SHOW;
-            wsMinimized : wp.showCmd := SW_SHOWMINIMIZED;
-            wsMaximized : wp.showCmd := SW_SHOWMAXIMIZED
+            wsNormal: wp.ShowCmd := SW_SHOW;
+            wsMinimized: wp.showCmd := SW_SHOWMINIMIZED;
+            wsMaximized: wp.showCmd := SW_SHOWMAXIMIZED
           end
         else
           wp.ShowCmd := SW_HIDE;
@@ -310,10 +310,10 @@ end;
 
 procedure TPersistentPosition.SavePosition;
 var
-  fm : TForm;
-  state : Integer;
-  wp : TWindowPlacement;
-  reg : TExSettings;
+  fm: TForm;
+  state: Integer;
+  wp: TWindowPlacement;
+  reg: TExSettings;
 begin
   if fSaved then Exit;
   fSaved := True;
@@ -329,8 +329,8 @@ begin
       state := Ord (wsMinimized)
     else
       case wp.showCmd of
-        SW_SHOWMINIMIZED : state := Ord (wsMinimized);
-        SW_SHOWMAXIMIZED : state := Ord (wsMaximized);
+        SW_SHOWMINIMIZED: state := Ord (wsMinimized);
+        SW_SHOWMAXIMIZED: state := Ord (wsMaximized);
         else
           state := Ord (wsNormal)
       end;
@@ -357,7 +357,7 @@ end;
 procedure TPersistentPosition.SetValue(const valueName: string;
   value: Integer);
 var
-  reg : TExSettings;
+  reg: TExSettings;
 begin
   if CreateReg (true, reg) then
   try
@@ -374,7 +374,7 @@ end;
  *----------------------------------------------------------------------*}
 procedure TPersistentPosition.SetSzValue(const valueName, value: string);
 var
-  reg : TExSettings;
+  reg: TExSettings;
 begin
   if CreateReg (true, reg) then
   try
@@ -386,7 +386,7 @@ end;
 
 function TPersistentPosition.GetPosition: TRect;
 var
-  reg : TExSettings;
+  reg: TExSettings;
 begin
   if CreateReg (false, reg) then
   try
@@ -405,7 +405,7 @@ end;
 
 procedure TPersistentPosition.Subclass;
 var
-  ownerForm : TForm;
+  ownerForm: TForm;
 begin
   if not fSubclassed then
   begin
@@ -421,7 +421,7 @@ end;
 
 procedure TPersistentPosition.UnSubClass;
 var
-  ownerForm : TForm;
+  ownerForm: TForm;
 begin
   if fSubclassed then
   begin
@@ -438,9 +438,9 @@ end;
 procedure TPersistentPosition.OwnerWindowMethod(var msg: TMessage);
 begin
   case Msg.Msg of
-    WM_MOVE    : if not fMoved then
+    WM_MOVE   : if not fMoved then
                    MoveToPosition;
-    WM_DESTROY : if csDestroying in ComponentState then
+    WM_DESTROY: if csDestroying in ComponentState then
                    SavePosition;
   end;
 

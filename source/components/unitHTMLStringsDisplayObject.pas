@@ -4,42 +4,41 @@ interface
 
 uses
   WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics, Vcl.Forms,
-  cmpMessageDisplay, Vcl.OleCtrls, SHDocVw, System.Win.ComObj, WinAPI.ActiveX,
-  WinAPI.ShlObj, MSHTML, WinAPI.ShellAPI;
+  Vcl.OleCtrls, System.Win.ComObj, WinAPI.ActiveX, WinAPI.ShellAPI,
+  WinAPI.ShlObj, SHDocVw, cmpMessageDisplay, MSHTML;
 
 type                                                     
   THTMLStringsDisplayObjectLink = class (TWinControlObjectLink)
   private
-    fOrigObj : TStrings;
-    fRendering : boolean;
-    fNavigating : boolean;
-    fXanaLink : string;
-    procedure DoOnDocumentComplete (Sender: TObject; const pDisp: IDispatch; const URL: OleVariant);
-    procedure DoOnBeforeNavigate2 (Sender: TObject; const pDisp: IDispatch; const URL: OleVariant;
-                                                          const Flags: OleVariant;
-                                                          const TargetFrameName: OleVariant;
-                                                          const PostData: OleVariant;
-                                                          const Headers: OleVariant;
-                                                          var Cancel: WordBool);
-
+    FOrigObj: TStrings;
+    FRendering: boolean;
+    FNavigating: boolean;
+    FXanaLink: string;
+    procedure DoOnDocumentComplete (Sender: TObject; const pDisp: IDispatch;
+      const URL: OleVariant);
+    procedure DoOnBeforeNavigate2 (Sender: TObject; const pDisp: IDispatch;
+      const URL: OleVariant; const Flags: OleVariant;
+      const TargetFrameName: OleVariant; const PostData: OleVariant;
+      const Headers: OleVariant; var Cancel: WordBool);
     procedure DoOnNewWindow2 (Sender: TObject; var ppDisp: IDispatch; var Cancel: WordBool);
     procedure RecalcHeight;
-    procedure LoadFromString (const st : string);
+    procedure LoadFromString (const st: string);
   protected
-    class function DisplaysObject (obj : TObject) : Boolean; override;
+    class function DisplaysObject (obj: TObject): Boolean; override;
     procedure SetHeight(const Value: Integer); override;
     procedure SetWidth(const Value: Integer); override;
-    procedure SetObj (const Value : TObject); override;
-    function GetBusy : boolean; override;
+    procedure SetObj (const Value: TObject); override;
+    function GetBusy: boolean; override;
   public
-    constructor Create (AOwner : TMessageDisplay; AObj : TObject; codepage : Integer); override;
+    constructor Create (AOwner: TMessageDisplay; AObj: TObject; codepage: Integer); override;
     destructor Destroy; override;
     procedure Stop; override;
   end;
 
 implementation
 
-uses cmpExWebBrowser;
+uses
+  cmpExWebBrowser;
 
 resourcestring
   rstCantSetHeight = 'Can''t set height of this object';
@@ -47,37 +46,37 @@ resourcestring
 { THTMLStringsDisplayObjectLink }
 
 constructor THTMLStringsDisplayObjectLink.Create(AOwner: TMessageDisplay;
-  AObj: TObject; codepage : Integer);
+  AObj: TObject; codepage: Integer);
 var
-  ctrl : TExWebBrowser;
-  xanalink : string;
-  p : Integer;
+  Ctrl: TExWebBrowser;
+  xanalink: string;
+  p: Integer;
 begin
-  fOrigObj := AObj as TStrings;
-  ctrl := TEXWebBrowser.Create(AOwner.Owner);
-  inherited Create (AOwner, ctrl, codepage);
-  ctrl.OnDocumentComplete := DoOnDocumentComplete;
-  ctrl.UIProperties.EnableContextMenu := True;
-  ctrl.Width := AOwner.Parent.Width - Margin * 2 - GetSystemMetrics (SM_CXVSCROLL);
-  ctrl.Height := AOwner.Parent.Height;
-  if (fOrigObj.Count > 0) and (Copy (fOrigObj [0], 1, 16) = '<HTML><XanaLink>') then
+  FOrigObj := AObj as TStrings;
+  Ctrl := TEXWebBrowser.Create(AOwner.Owner);
+  inherited Create (AOwner, Ctrl, codepage);
+  Ctrl.OnDocumentComplete := DoOnDocumentComplete;
+  Ctrl.UIProperties.EnableContextMenu := True;
+  Ctrl.Width := AOwner.Parent.Width - Margin * 2 - GetSystemMetrics (SM_CXVSCROLL);
+  Ctrl.Height := AOwner.Parent.Height;
+  if (FOrigObj.Count > 0) and (Copy (FOrigObj [0], 1, 16) = '<HTML><XanaLink>') then
   begin
-    xanaLink := Copy (fOrigObj [0], 17, MaxInt);
+    xanaLink := Copy (FOrigObj [0], 17, MaxInt);
     p := Pos ('</XanaLink>', xanaLink);
     if p > 0 then
       xanaLink := Copy (xanaLink, 1, p - 1);
-    fXanaLink := xanaLink;
-    ctrl.OnNewWindow2 := DoOnNewWindow2;
-    ctrl.Navigate(xanaLink)
+    FXanaLink := xanaLink;
+    Ctrl.OnNewWindow2 := DoOnNewWindow2;
+    Ctrl.Navigate(xanaLink)
   end
   else
   begin
-    ctrl.OnBeforeNavigate2 := DoOnBeforeNavigate2;
-    ctrl.OnNewWindow2 := DoOnNewWindow2;
-    ctrl.Offline := True;
-    LoadFromString (fOrigObj.Text)
+    Ctrl.OnBeforeNavigate2 := DoOnBeforeNavigate2;
+    Ctrl.OnNewWindow2 := DoOnNewWindow2;
+    Ctrl.Offline := True;
+    LoadFromString (FOrigObj.Text)
   end;
-  fRendering := True;
+  FRendering := True;
 end;
 
 destructor THTMLStringsDisplayObjectLink.Destroy;
@@ -89,9 +88,9 @@ end;
 class function THTMLStringsDisplayObjectLink.DisplaysObject(
   obj: TObject): Boolean;
 var
-  s : TStrings;
-  i : Integer;
-  st, st1 : string;
+  s: TStrings;
+  i: Integer;
+  st, st1: string;
 begin
   Result := False;
   if obj is TStrings then
@@ -126,133 +125,134 @@ procedure THTMLStringsDisplayObjectLink.DoOnBeforeNavigate2(
   Sender: TObject; const pDisp: IDispatch; const URL, Flags, TargetFrameName,
   PostData, Headers: OleVariant; var Cancel: WordBool);
 var
-  urlStr : string;
+  urlStr: string;
 begin
   urlStr := url;
 
   if urlStr <> 'about:blank' then
   begin
-    cancel := True;
+    Cancel := True;
     ShellExecute (HWND_DESKTOP, 'open', PChar (urlStr), nil, Nil, SW_NORMAL);
-    ctrl.Invalidate
+    Ctrl.Invalidate
   end
 end;
 procedure THTMLStringsDisplayObjectLink.DoOnDocumentComplete(
   Sender: TObject; const pDisp: IDispatch; const URL: OleVariant);
 var
-  ctrl : TExWebBrowser;
-  doc : IHTMLDocument2;
-  elm : IHTMLElement2;
+  Ctrl: TExWebBrowser;
+  doc: IHTMLDocument2;
+  elm: IHTMLElement2;
 begin
   try
-    ctrl := TExWebBrowser (obj);
-    if Supports (ctrl.Document, IHTMLDocument2, doc) then
+    Ctrl := TExWebBrowser (obj);
+    if Supports (Ctrl.Document, IHTMLDocument2, doc) then
     begin
       elm := doc.ActiveElement as IHTMLElement2; //body as IHTMLElement2;
 
       if Assigned (elm) then
       begin
-        ctrl.Width := elm.scrollWidth;
-        ctrl.Height := elm.scrollHeight;
+        Ctrl.Width := elm.scrollWidth;
+        Ctrl.Height := elm.scrollHeight;
         Owner.RecalcBounds;
       end
     end
   finally
-    fRendering := False;
+    FRendering := False;
   end
 end;
 
 procedure THTMLStringsDisplayObjectLink.DoOnNewWindow2(Sender: TObject;
   var ppDisp: IDispatch; var Cancel: WordBool);
 var
-  ctrl : TExWebBrowser;
+  Ctrl: TExWebBrowser;
 begin
-  ctrl := TExWebBrowser (obj);
-  cancel := not ctrl.UIProperties.OpenLinksInNewWindow
+  Ctrl := TExWebBrowser (obj);
+  Cancel := not Ctrl.UIProperties.OpenLinksInNewWindow
 end;
 
-function THTMLStringsDisplayObjectLink.GetBusy : boolean;
+function THTMLStringsDisplayObjectLink.GetBusy: boolean;
 var
-  b : TExWebBrowser;
+  b: TExWebBrowser;
 begin
 //  Application.ProcessMessages;
   try
     if Assigned (obj) then
     begin
       b := TExWebBrowser (obj);
-      result := b.Busy;
+      Result := b.Busy;
 
-      if result then
+      if Result then
         if b.ReadyState = READYSTATE_INTERACTIVE then
-          result := False;
+          Result := False;
     end
     else
-      result := False
+      Result := False
   except
-    result := True
+    Result := True
   end
 end;
 
 procedure THTMLStringsDisplayObjectLink.LoadFromString(const st: string);
 begin
-  if fNavigating then exit;
+  if FNavigating then
+    Exit;
 
-  fNavigating := True;
+  FNavigating := True;
   try
     TExWebBrowser (obj).LoadFromString(st);
   finally
-    fNavigating := False
-  end
+    FNavigating := False
+  end;
 end;
 
 procedure THTMLStringsDisplayObjectLink.RecalcHeight;
 var
-  ctrl : TExWebBrowser;
-  doc : IHTMLDocument2;
-  elm : IHTMLElement2;
+  Ctrl: TExWebBrowser;
+  doc: IHTMLDocument2;
+  elm: IHTMLElement2;
 begin
-  ctrl := TExWebBrowser (obj);
-  if Supports (ctrl.Document, IHTMLDocument2, doc) then
+  Ctrl := TExWebBrowser (obj);
+  if Supports (Ctrl.Document, IHTMLDocument2, doc) then
   begin
     elm := doc.body as IHTMLElement2;
 
     if Assigned (elm) then
     begin
-      ctrl.Height := elm.scrollHeight;
+      Ctrl.Height := elm.scrollHeight;
       Owner.RecalcBounds
-    end
-  end
+    end;
+  end;
 end;
 
 procedure THTMLStringsDisplayObjectLink.SetHeight(const Value: Integer);
 begin
 end;
 
-procedure THTMLStringsDisplayObjectLink.SetObj(const Value : TObject);
+procedure THTMLStringsDisplayObjectLink.SetObj(const Value: TObject);
 begin
-  fOrigObj := Value as TStrings;
+  FOrigObj := Value as TStrings;
   Stop;
-  if fRendering or fNavigating or Busy then
+  if FRendering or FNavigating or Busy then
   begin
     WinAPI.Windows.Beep (440, 10);
-    Exit
+    Exit;
   end;
-  ctrl.Width := Owner.MessageWidth;
-  ctrl.Height := Owner.ClientHeight;
-  fRendering := True;
-  LoadFromString (fOrigObj.Text);
+  Ctrl.Width := Owner.MessageWidth;
+  Ctrl.Height := Owner.ClientHeight;
+  FRendering := True;
+  LoadFromString (FOrigObj.Text);
 end;
 
 procedure THTMLStringsDisplayObjectLink.SetWidth(const Value: Integer);
 begin
   inherited;
-  RecalcHeight
+  RecalcHeight;
 end;
 
 procedure THTMLStringsDisplayObjectLink.Stop;
 var
-  n : Integer;
-  b : TExWebBrowser;
+  n: Integer;
+  b: TExWebBrowser;
 begin
   if Busy then
     if Assigned (obj) then
@@ -274,9 +274,9 @@ begin
       except
       end;
       Sleep (200);
-    end
+    end;
 end;
 
 initialization
-  RegisterDisplayObjectLink (THTMLStringsDisplayObjectLink)
+  RegisterDisplayObjectLink (THTMLStringsDisplayObjectLink);
 end.

@@ -36,59 +36,56 @@ type
 
   TCustomSplitterPanel = class(TCustomPanel)
   private
-    fSplitters: TSplitterPanelSplitters;
-    fSplitterWidth: Integer;
-    fPainting : boolean;
-    fLineDC : HDC;
-    fBrush : Tbrush;
-    fPrevBrush : HBrush;
+    FSplitters: TSplitterPanelSplitters;
+    FSplitterWidth: Integer;
+    FPainting: boolean;
+    FLineDC: HDC;
+    FBrush: Tbrush;
+    FPrevBrush: HBrush;
     FResizeStyle: TResizeStyle;
     FActiveControl: TWinControl;
     FOldKeyDown: TKeyEvent;
-    FMaxSize : Integer;
-    FLineVisible : boolean;
-    FSplitterRect : TRect;
-    FDownPos : TPoint;
-    FLastDownPos : TPoint;
-    FCurrentSplitter : TSplitterPanelSplitter;
-    FSizing : boolean;
-    fBevelled: boolean;
-    fSplitterCursorShowing : boolean;
-    fOldCursor : TCursor;
+    FMaxSize: Integer;
+    FLineVisible: boolean;
+    FSplitterRect: TRect;
+    FDownPos: TPoint;
+    FLastDownPos: TPoint;
+    FCurrentSplitter: TSplitterPanelSplitter;
+    FSizing: boolean;
+    FBevelled: boolean;
+    FSplitterCursorShowing: boolean;
+    FOldCursor: TCursor;
     procedure SetSplitters(const Value: TSplitterPanelSplitters);
     procedure SetSplitterWidth(const Value: Integer);
 
     procedure WMWindowPosChanged(var Message: TWMWindowPosChanged); message WM_WINDOWPOSCHANGED;
     procedure InternalAdjustClientRect(var Rect: TRect);
-    function FindSplitterRect (x, y : Integer; var splt : TSplitterPanelSplitter; var rr : TRect) : boolean;
+    function FindSplitterRect (x, y: Integer; var splt: TSplitterPanelSplitter; var rr: TRect): boolean;
     procedure AllocateLineDC;
     procedure ReleaseLineDC;
     procedure FocusKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure StopSizing;
     procedure DrawLine;
-    procedure UpdateControlSize (x, y : Integer);
+    procedure UpdateControlSize (x, y: Integer);
     procedure SetBevelled(const Value: boolean);
-    function GetSplitterRect (splt : TSplitterPanelSplitter; var r : TRect) : boolean;
+    function GetSplitterRect (splt: TSplitterPanelSplitter; var r: TRect): boolean;
   protected
     function GetClientRect: TRect; override;
     procedure AdjustClientRect(var Rect: TRect); override;
     procedure AdjustSize; override;
     procedure Paint; override;
 
-    property Splitters : TSplitterPanelSplitters read fSplitters write SetSplitters;
-    property SplitterWidth : Integer read fSplitterWidth write SetSplitterWidth;
+    property Splitters: TSplitterPanelSplitters read FSplitters write SetSplitters;
+    property SplitterWidth: Integer read FSplitterWidth write SetSplitterWidth;
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState;
       X, Y: Integer); override;
     property ResizeStyle: TResizeStyle read FResizeStyle write FResizeStyle default rsPattern;
-    property BevelledSplitters : boolean read fBevelled write SetBevelled;
+    property BevelledSplitters: boolean read FBevelled write SetBevelled;
   public
-    constructor Create (AOwner : TComponent); override;
-    { Public declarations }
-  published
-    { Published declarations }
+    constructor Create (AOwner: TComponent); override;
   end;
 
   TSplitterPanel = class (TCustomSplitterPanel)
@@ -171,7 +168,7 @@ end;
 
 procedure TCustomSplitterPanel.AdjustSize;
 begin
-  if not fSizing then
+  if not FSizing then
     inherited;
 end;
 
@@ -198,12 +195,12 @@ end;
 constructor TCustomSplitterPanel.Create(AOwner: TComponent);
 begin
   inherited;
-  fResizeStyle := rsPattern
+  FResizeStyle := rsPattern
 end;
 
 procedure TCustomSplitterPanel.DrawLine;
 var
-  r : TRect;
+  r: TRect;
 begin
   FLineVisible := not FLineVisible;
   r := FSplitterRect;
@@ -212,17 +209,17 @@ begin
     PatBlt (FLineDC, Left, Top, Right - Left, Bottom - Top, PATINVERT);
 end;
 
-function TCustomSplitterPanel.FindSplitterRect(x, y : Integer; var splt : TSplitterPanelSplitter; var rr: TRect): boolean;
+function TCustomSplitterPanel.FindSplitterRect(x, y: Integer; var splt: TSplitterPanelSplitter; var rr: TRect): boolean;
 var
-  r : TRect;
-  s : TSplitterPanelSplitter;
+  r: TRect;
+  s: TSplitterPanelSplitter;
 begin
-  result := False;
+  Result := False;
 
   for s := Low (TSplitterPanelSplitter) to High (TSplitterPanelSplitter) do
     if GetSplitterRect (s, r) and PtInRect (r, point (x, y)) then
     begin
-      result := True;
+      Result := True;
       rr := r;
       splt := s;
       break
@@ -240,21 +237,21 @@ end;
 
 function TCustomSplitterPanel.GetClientRect: TRect;
 begin
-  result := inherited GetClientRect;
-  if fPainting then
-    InternalAdjustClientRect (result)
+  Result := inherited GetClientRect;
+  if FPainting then
+    InternalAdjustClientRect (Result)
 end;
 
 function TCustomSplitterPanel.GetSplitterRect(splt: TSplitterPanelSplitter;
   var r: TRect): boolean;
 begin
-  result := splt in Splitters;
+  Result := splt in Splitters;
 
   case splt of
-    splLeft   : r := Rect (0, 0, SplitterWidth, Height);
-    splRight  : r := Rect (Width - SplitterWidth, 0, Width, Height);
-    splTop    : r := Rect (0, 0, Width, SplitterWidth);
-    splBottom : r := Rect (0, Height - SplitterWidth, Width, Height);
+    splLeft  : r := Rect (0, 0, SplitterWidth, Height);
+    splRight : r := Rect (Width - SplitterWidth, 0, Width, Height);
+    splTop   : r := Rect (0, 0, Width, SplitterWidth);
+    splBottom: r := Rect (0, Height - SplitterWidth, Width, Height);
   end
 end;
 
@@ -269,9 +266,9 @@ end;
 procedure TCustomSplitterPanel.MouseDown(Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
-  r : TRect;
-  s : TSplitterPanelSplitter;
-  i : Integer;
+  r: TRect;
+  s: TSplitterPanelSplitter;
+  i: Integer;
 begin
   Inherited;
   if FindSplitterRect (x, y, s, r) then
@@ -316,10 +313,10 @@ end;
 procedure TCustomSplitterPanel.MouseMove(Shift: TShiftState; X,
   Y: Integer);
 var
-  dx, dy : Integer;
-  needsRedraw : boolean;
-  r : TRect;
-  s : TSplitterPanelSplitter;
+  dx, dy: Integer;
+  needsRedraw: boolean;
+  r: TRect;
+  s: TSplitterPanelSplitter;
 begin
   inherited;
   if FSizing then
@@ -329,8 +326,8 @@ begin
 
     needsRedraw := False;
     case FCurrentSplitter of
-      splLeft, splRight : needsRedraw := dx <> 0;
-      splTop, splBottom : needsRedraw := dy <> 0
+      splLeft, splRight: needsRedraw := dx <> 0;
+      splTop, splBottom: needsRedraw := dy <> 0
     end;
 
     FLastDownPos := Point (x, y);
@@ -340,8 +337,8 @@ begin
       DrawLine;
 
       case FCurrentSplitter of
-        splLeft, splRight : OffsetRect (FSplitterRect, dx, 0);
-        splTop, splBottom : OffsetRect (FSplitterRect, 0, dy);
+        splLeft, splRight: OffsetRect (FSplitterRect, dx, 0);
+        splTop, splBottom: OffsetRect (FSplitterRect, 0, dy);
       end;
 
       DrawLine
@@ -354,21 +351,21 @@ begin
   begin
     if FindSplitterRect (x, y, s, r) then
     begin
-      if not fSplitterCursorShowing then
+      if not FSplitterCursorShowing then
       begin
-        fOldCursor := Cursor;
+        FOldCursor := Cursor;
         if (s = splLeft) or (s = splRight) then
           Cursor := crHSplit
         else
           Cursor := crVSplit;
-        fSplitterCursorShowing := True
+        FSplitterCursorShowing := True
       end
     end
     else
-      if fSplitterCursorShowing then
+      if FSplitterCursorShowing then
       begin
-        Cursor := fOldCursor;
-        fSplitterCursorShowing := False
+        Cursor := FOldCursor;
+        FSplitterCursorShowing := False
       end
   end
 end;
@@ -387,23 +384,23 @@ end;
 
 procedure TCustomSplitterPanel.Paint;
 var
-  r : TRect;
-  s : TSplitterPanelSplitter;
+  r: TRect;
+  s: TSplitterPanelSplitter;
 
-  procedure PaintSplitter (rect : TRect);
+  procedure PaintSplitter (rect: TRect);
   var
-    oldColor : TColor;
+    oldColor: TColor;
   begin
     oldColor := canvas.Brush.Color;
     canvas.Brush.Color := Color;
     Canvas.FillRect(rect);
     canvas.Brush.Color := oldColor;
-    if fBevelled then
+    if FBevelled then
       Frame3D (Canvas, rect, clBtnShadow, clBtnHighlight, 1);
   end;
 
 begin
-  fPainting := True;
+  FPainting := True;
   try
 
     for s := Low (TSplitterPanelSplitter) to High (TSplitterPanelSplitter) do
@@ -411,7 +408,7 @@ begin
         PaintSplitter (r);
     inherited;
   finally
-    fPainting := False
+    FPainting := False
   end
 end;
 
@@ -429,9 +426,9 @@ end;
 
 procedure TCustomSplitterPanel.SetBevelled(const Value: boolean);
 begin
-  if value <> fBevelled then
+  if value <> FBevelled then
   begin
-    fBevelled := value;
+    FBevelled := value;
     Realign;
     Invalidate
   end
@@ -440,9 +437,9 @@ end;
 procedure TCustomSplitterPanel.SetSplitters(
   const Value: TSplitterPanelSplitters);
 begin
-  if value <> fSplitters then
+  if value <> FSplitters then
   begin
-    fSplitters := value;
+    FSplitters := value;
     Realign;
     Invalidate
   end
@@ -450,9 +447,9 @@ end;
 
 procedure TCustomSplitterPanel.SetSplitterWidth(const Value: Integer);
 begin
-  if value <> fSplitterWidth then
+  if value <> FSplitterWidth then
   begin
-    fSplitterWidth := Value;
+    FSplitterWidth := Value;
     Realign;
     Invalidate
   end
@@ -470,10 +467,10 @@ begin
   FSizing := False;
 end;
 
-procedure TCustomSplitterPanel.UpdateControlSize (x, y : Integer);
+procedure TCustomSplitterPanel.UpdateControlSize (x, y: Integer);
 var
-  dx, dy : Integer;
-  oldAutoSize : boolean;
+  dx, dy: Integer;
+  oldAutoSize: boolean;
 begin
   oldAutoSize := AutoSize;
   AutoSize := False;
@@ -482,7 +479,7 @@ begin
     dy := y - FDownPos.Y;
 
     case FCurrentSplitter of
-      splRight : Width := Width + dx;
+      splRight: Width := Width + dx;
       splLeft :
         begin
           Left := Left - dx;
@@ -493,7 +490,7 @@ begin
           Top := Top - dy;
           Height := Height - dy
         end;
-      splBottom : Height := Height + dy
+      splBottom: Height := Height + dy
     end;
 
     FDownPos := point (x, y);
@@ -505,9 +502,8 @@ end;
 procedure TCustomSplitterPanel.WMWindowPosChanged(
   var Message: TWMWindowPosChanged);
 var
-  r : TRect;
-  s : TSplitterPanelSplitter;
-
+  r: TRect;
+  s: TSplitterPanelSplitter;
 begin
   inherited;
 

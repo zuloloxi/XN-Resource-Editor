@@ -31,8 +31,8 @@ type
     lbDonations: TListBox;
     procedure FormShow(Sender: TObject);
   private
-    fThanksTo : string;
-    procedure GetRegistrationInformation (isNT : boolean; var owner, organization : string);
+    fThanksTo: string;
+    procedure GetRegistrationInformation (isNT: boolean; var owner, organization: string);
     { Private declarations }
   public
     { Public declarations }
@@ -49,13 +49,13 @@ type
   public
     procedure Execute;
   published
-    property Copyright : string read fCopyright Write fCopyright;
-    property DisplaySupportLink : boolean read fDisplaySupportLink write fDisplaySupportLink;
-    property ThanksTo : string read fThanksTo write fThanksTo;
+    property Copyright: string read fCopyright Write fCopyright;
+    property DisplaySupportLink: boolean read fDisplaySupportLink write fDisplaySupportLink;
+    property ThanksTo: string read fThanksTo write fThanksTo;
     { Published declarations }
   end;
 
-  function LoadGifResource (const resName : string; image : TImage) : boolean;
+  function LoadGifResource (const resName: string; image: TImage): boolean;
 
 var
   fmNTAboutBox: TfmNTAboutBox;
@@ -67,10 +67,10 @@ uses
 
 {$R *.DFM}
 
-function LoadGifResource (const resName : string; image : TImage) : boolean;
+function LoadGifResource (const resName: string; image: TImage): boolean;
 var
-  g : TGifImage;
-  rs : TResourceStream;
+  g: TGifImage;
+  rs: TResourceStream;
 begin
   result := False;
   g := Nil;
@@ -93,12 +93,12 @@ begin
   end;
 end;
 
-procedure TfmNTAboutBox.GetRegistrationInformation (isNT : boolean; var owner, organization : string);
+procedure TfmNTAboutBox.GetRegistrationInformation (isNT: boolean; var owner, organization: string);
 var
-  product : string;
-  p : Integer;
-  reg : TRegistry;
-  gotDetails : boolean;
+  product: string;
+  p: Integer;
+  reg: TRegistry;
+  gotDetails: boolean;
 begin
   gotDetails := False;
   product := ExtractFileName (Application.ExeName);
@@ -161,11 +161,11 @@ end;
 
 procedure TfmNTAboutBox.FormShow(Sender: TObject);
 var
-  memInfo : TMemoryStatus;
-  os, owner, organization, st : string;
-  size, zero : DWORD;
+  memInfo: TMemoryStatus;
+  os, owner, organization, st: string;
+  size, zero: DWORD;
   buffer, pBuffer: pointer;
-  info : PVSFixedFileInfo;
+  info: PVSFixedFileInfo;
 begin
   GlobalMemoryStatus (memInfo);
   Caption := 'About ' + Application.Title;
@@ -211,15 +211,15 @@ begin
   os := '';
   if Win32Platform = VER_PLATFORM_WIN32_NT then
   case Win32MajorVersion of
-    3, 4 : os := 'Windows NT';
-    5 : if Win32MinorVersion = 0 then
+    3, 4: os := 'Windows NT';
+    5: if Win32MinorVersion = 0 then
           os := 'Windows 2000'
         else
           os := 'Windows XP'
   end
   else
   case Win32MajorVersion of
-    4 : if Win32MinorVersion = 0 then
+    4: if Win32MinorVersion = 0 then
           os := 'Windows 95'
         else
           if Win32MinorVersion = 10 then
@@ -240,7 +240,7 @@ end;
 
 procedure TNTAboutBox.Execute;
 var
-  dlg : TfmNTAboutBox;
+  dlg: TfmNTAboutBox;
 begin
   dlg := TfmNTAboutBox.Create (nil);
   try

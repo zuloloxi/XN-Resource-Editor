@@ -42,15 +42,15 @@ type
 
   TNewsCharFormatter = class (TCharFormatter)
   private
-    fIsFormatted : boolean;
-    fEOL : boolean;
-    fInSignature : boolean;
-    fInHighlight : boolean;
-    fStrictSigSeparator : boolean;
+    fIsFormatted: boolean;
+    fEOL: boolean;
+    fInSignature: boolean;
+    fInHighlight: boolean;
+    fStrictSigSeparator: boolean;
   public
     constructor Create;
     procedure Reset; override;
-    procedure GetFormattedChars (stream : TRichEditStream; var fc : TCharFormat); override;
+    procedure GetFormattedChars (stream: TRichEditStream; var fc: TCharFormat); override;
   end;
 
 //----------------------------------------------------------------------
@@ -60,7 +60,7 @@ type
     fLevel3QuoteFont: TFont;
     fLevel1QuoteFont: TFont;
     fLevel2QuoteFont: TFont;
-    fFormatter : TCharFormatter;
+    fFormatter: TCharFormatter;
     fHeaderFont: TFont;
     fSignatureFont: TFont;
     fRawText: boolean;
@@ -74,21 +74,21 @@ type
     procedure SetRawText(const Value: boolean);
    { Private declarations }
   protected
-    function GetCharFormatter : TCharFormatter; override;
+    function GetCharFormatter: TCharFormatter; override;
     { Protected declarations }
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
-    property TruncateFrom : WideString read fTruncateFrom write fTruncateFrom;
-    property StrictSigSeparator : boolean read fStrictSigSeparator write fStrictSigSeparator;
+    property TruncateFrom: WideString read fTruncateFrom write fTruncateFrom;
+    property StrictSigSeparator: boolean read fStrictSigSeparator write fStrictSigSeparator;
     { Public declarations }
   published
-    property HeaderFont : TFont read fHeaderFont write SetHeaderFont;
-    property Level1QuoteFont : TFont read fLevel1QuoteFont write SetLevel1QuoteFont;
-    property Level2QuoteFont : TFont read fLevel2QuoteFont write SetLevel2QuoteFont;
-    property Level3QuoteFont : TFont read fLevel3QuoteFont write SetLevel3QuoteFont;
-    property SignatureFont : TFont read fSignatureFont write SetSignatureFont;
-    property RawText : boolean read fRawText write SetRawText;
+    property HeaderFont: TFont read fHeaderFont write SetHeaderFont;
+    property Level1QuoteFont: TFont read fLevel1QuoteFont write SetLevel1QuoteFont;
+    property Level2QuoteFont: TFont read fLevel2QuoteFont write SetLevel2QuoteFont;
+    property Level3QuoteFont: TFont read fLevel3QuoteFont write SetLevel3QuoteFont;
+    property SignatureFont: TFont read fSignatureFont write SetSignatureFont;
+    property RawText: boolean read fRawText write SetRawText;
     { Published declarations }
   end;
 
@@ -242,15 +242,15 @@ end;
  |                                                                      |
  | Bit of a black hole this - sorry!                                    |
  *----------------------------------------------------------------------*)
-procedure TNewsCharFormatter.GetFormattedChars(stream: TRichEditStream; var fc : TCharFormat);
+procedure TNewsCharFormatter.GetFormattedChars(stream: TRichEditStream; var fc: TCharFormat);
 var
-  c, pc : WideChar;
-  p, p1 : PWideChar;
-  i, n, n1 : DWORD;
-  sol, trc : boolean;
-  own : TNewsRichEdit;
-  quoteLevel : Integer;
-  hl : TFontStyles;
+  c, pc: WideChar;
+  p, p1: PWideChar;
+  i, n, n1: DWORD;
+  sol, trc: boolean;
+  own: TNewsRichEdit;
+  quoteLevel: Integer;
+  hl: TFontStyles;
 
 begin
   own := TNewsRichEdit (stream.Owner);
@@ -322,8 +322,8 @@ begin
                                 // The chunk was empty, so select the new font
                                 // an use it for the chunk
           case QuoteLevel of
-            1 : Owner.FontToCharFormat(own.fLevel1QuoteFont, fc);
-            2 : Owner.FontToCharFormat(own.fLevel2QuoteFont, fc);
+            1: Owner.FontToCharFormat(own.fLevel1QuoteFont, fc);
+            2: Owner.FontToCharFormat(own.fLevel2QuoteFont, fc);
             else Owner.FontToCharFormat(own.fLevel3QuoteFont, fc)
           end;
 

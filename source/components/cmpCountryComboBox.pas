@@ -8,17 +8,17 @@ uses
 type
   TCountryComboBox = class(TCustomComboBox)
   private
-    fCodes : TCountryCodes;
-    fPreferredCountryCodes: string;
+    FCodes: TCountryCodes;
+    FPreferredCountryCodes: string;
     procedure SetPreferredCountryCodes(const Value: string);
     function GetCountryCode(idx: Integer): TCountryCode;
   protected
     procedure CreateWnd; override;
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
 
-    property CountryCode [idx : Integer] : TCountryCode read GetCountryCode;
+    property CountryCode [idx: Integer]: TCountryCode read GetCountryCode;
     property Items;
     property Text;
   published
@@ -59,7 +59,7 @@ type
     // Eg. Set this property to '44,1' to sort with United Kindom first, United States second, and the
     //     other countries next
 
-    property PreferredCountryCodes : string read fPreferredCountryCodes write SetPreferredCountryCodes;
+    property PreferredCountryCodes: string read FPreferredCountryCodes write SetPreferredCountryCodes;
     property ShowHint;
     property Sorted;
     property TabOrder;
@@ -102,8 +102,8 @@ end;
 
 procedure TCountryComboBox.CreateWnd;
 var
-  i : Integer;
-  cc : TCountryCode;
+  i: Integer;
+  cc: TCountryCode;
 begin
   inherited;
 
@@ -111,17 +111,17 @@ begin
     Items.Add ('Countries')
   else
   begin
-    if fCodes = Nil then
-      fCodes := TCountryCodes.Create;
+    if FCodes = Nil then
+      FCodes := TCountryCodes.Create;
 
-    fCodes.SortByName(fPreferredCountryCodes);
+    FCodes.SortByName(FPreferredCountryCodes);
 
     Items.BeginUpdate;
     try
       Items.Clear;
-      for i := 0 to fCodes.Count - 1 do
+      for i := 0 to FCodes.Count - 1 do
       begin
-        cc := fCodes.CountryCode [i];
+        cc := FCodes.CountryCode [i];
 
         Items.Add(cc.Name)
       end;
@@ -138,21 +138,21 @@ end;
 
 destructor TCountryComboBox.Destroy;
 begin
-  FreeAndNil (fCodes);
+  FreeAndNil (FCodes);
 
   inherited;
 end;
 
 function TCountryComboBox.GetCountryCode(idx: Integer): TCountryCode;
 begin
-  result := TCountryCode (fCodes [idx]);
+  result := TCountryCode (FCodes [idx]);
 end;
 
 procedure TCountryComboBox.SetPreferredCountryCodes(const Value: string);
 begin
-  if Value <> fPreferredCountryCodes then
+  if Value <> FPreferredCountryCodes then
   begin
-    fPreferredCountryCodes := Value;
+    FPreferredCountryCodes := Value;
     if not (csDesigning in ComponentState) then
       RecreateWnd;
   end

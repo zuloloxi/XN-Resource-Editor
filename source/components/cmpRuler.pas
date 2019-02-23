@@ -27,8 +27,8 @@ type
     procedure Loaded; override;
     procedure Paint; override;
   public
-    constructor Create (AOwner : TComponent); override;
-    property DialogBox : HWND read fDialogBox write SetDialogBox;
+    constructor Create (AOwner: TComponent); override;
+    property DialogBox: HWND read fDialogBox write SetDialogBox;
   published
     property Align;
     property Anchors;
@@ -40,11 +40,11 @@ type
     property Constraints;
     property ParentColor;
 
-    property SmallTickSpacing : Integer read fSmallTickSpacing write SetSmallTickSpacing default 10;
-    property SmallTicksPerLargeTick : Integer read fSmallTicksPerLargeTick write SetSmallTicksperLargeTick default 5;
-    property SmallTickLength : Integer read fSmallTickLength write SetSmallTickLength default 5;
-    property LargeTickLength : Integer read fLargeTickLength write SetLargeTickLength default 10;
-    property Orientation : TRulerOrientation read GetOrientation write SetOrientation stored False;
+    property SmallTickSpacing: Integer read fSmallTickSpacing write SetSmallTickSpacing default 10;
+    property SmallTicksPerLargeTick: Integer read fSmallTicksPerLargeTick write SetSmallTicksperLargeTick default 5;
+    property SmallTickLength: Integer read fSmallTickLength write SetSmallTickLength default 5;
+    property LargeTickLength: Integer read fLargeTickLength write SetLargeTickLength default 10;
+    property Orientation: TRulerOrientation read GetOrientation write SetOrientation stored False;
   end;
 
 implementation
@@ -80,12 +80,12 @@ end;
 
 procedure TRuler.Paint;
 var
-  x, y : Integer;
-  w, h : Integer;
-  t : Integer;
-  sm : Integer;
-  r : TRect;
-  offset : Integer;
+  x, y: Integer;
+  w, h: Integer;
+  t: Integer;
+  sm: Integer;
+  r: TRect;
+  offset: Integer;
 begin
   Canvas.Brush.Color := Color;
   Canvas.Font := Font;
@@ -175,7 +175,7 @@ end;
 
 procedure TRuler.SetOrientation(const Value: TRulerOrientation);
 var
-  h : Integer;
+  h: Integer;
 begin
   if value <> Orientation then
   begin

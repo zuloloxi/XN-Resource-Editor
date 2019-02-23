@@ -11,12 +11,12 @@ type
 // file
   TXMLPersistentOptions = class (TCustomPersistentOptions)
   private
-    fCustomFileName : string;
+    FCustomFileName: string;
   protected
-    function GetSettingsClass : TExSettingsClass; override;
-    procedure SettingsCreated (settings : TExSettings); override;
+    function GetSettingsClass: TExSettingsClass; override;
+    procedure SettingsCreated(Settings: TExSettings); override;
   published
-    property FileName : string read fCustomFileName write fCustomFileName;
+    property FileName: string read FCustomFileName write FCustomFileName;
   end;
 
 implementation
@@ -30,11 +30,11 @@ begin
   result := TExXMLSettings;
 end;
 
-procedure TXMLPersistentOptions.SettingsCreated(settings: TExSettings);
+procedure TXMLPersistentOptions.SettingsCreated(Settings: TExSettings);
 begin
   inherited;
 
-  TExXMLSettings (settings).CustomPath := FileName;
+  TExXMLSettings(Settings).CustomPath := FileName;
 end;
 
 end.

@@ -49,46 +49,46 @@ type
 
   TRichEditProvider = class
   private
-    fOwner: TCustomExRichEdit;
+    FOwner: TCustomExRichEdit;
 
   protected
-    procedure CreateSubclass (var params : TCreateParams); virtual; abstract;
-    procedure SetText (const st : UnicodeString); virtual; abstract;
-    function GetText : UnicodeString; virtual; abstract;
-    function GetSelText : UnicodeString; virtual; abstract;
-    function GetTextLen : Integer; virtual; abstract;
-    function GetCRLFTextLen : Integer; virtual; abstract;
-    procedure SetSelText (const value : UnicodeString); virtual; abstract;
-    function UsesCRLF : boolean; virtual; abstract;
-    function GetIRichEditOLE : IRichEditOLE; virtual;
+    procedure CreateSubclass (var params: TCreateParams); virtual; abstract;
+    procedure SetText (const st: UnicodeString); virtual; abstract;
+    function GetText: UnicodeString; virtual; abstract;
+    function GetSelText: UnicodeString; virtual; abstract;
+    function GetTextLen: Integer; virtual; abstract;
+    function GetCRLFTextLen: Integer; virtual; abstract;
+    procedure SetSelText (const value: UnicodeString); virtual; abstract;
+    function UsesCRLF: Boolean; virtual; abstract;
+    function GetIRichEditOLE: IRichEditOLE; virtual;
   public
-    constructor Create (AOwner : TCustomExRichEdit);
+    constructor Create (AOwner: TCustomExRichEdit);
 
-    property Owner : TCustomExRichEdit read fOwner;
+    property Owner: TCustomExRichEdit read FOwner;
   end;
 
 //--------------------------------------------------------------
 // Stream class used to support EM_STREAMIN & EM_STREAMOUT
   TRichEditStream = class
   private
-    fBuffer : PWideChar;
-    fLen : DWORD;
-    fChunkStart, fChunkEnd : DWORD;
-    fPos : DWORD;
-    fOwner : TCustomExRichEdit;
-    fOwnsBuffer : boolean;
-    fTruncate: boolean;
+    FBuffer: PWideChar;
+    FLen: DWORD;
+    FChunkStart, FChunkEnd: DWORD;
+    FPos: DWORD;
+    FOwner: TCustomExRichEdit;
+    FOwnsBuffer: Boolean;
+    FTruncate: Boolean;
   public
-    constructor Create (AOwner : TCustomExRichEdit);
+    constructor Create (AOwner: TCustomExRichEdit);
     destructor Destroy; override;
-    procedure GetWideString (var ws : UnicodeString);
-    procedure GetString (var st : string);
-    property Owner : TCustomExRichEdit read fOwner;
-    property ChunkStart : DWORD read fChunkStart write fChunkStart;
-    property ChunkEnd : DWORD read fChunkEnd write fChunkEnd;
-    property Truncate : boolean read fTruncate write fTruncate;
-    property Len : DWORD read fLen;
-    property Buffer : PWideChar read fBuffer;
+    procedure GetWideString (var ws: UnicodeString);
+    procedure GetString (var st: string);
+    property Owner: TCustomExRichEdit read FOwner;
+    property ChunkStart: DWORD read FChunkStart write FChunkStart;
+    property ChunkEnd: DWORD read FChunkEnd write FChunkEnd;
+    property Truncate: Boolean read FTruncate write FTruncate;
+    property Len: DWORD read FLen;
+    property Buffer: PWideChar read FBuffer;
   end;
 
 //---------------------------------------------------------------------
@@ -107,7 +107,7 @@ type
 
   TCharFormatter = class
   public
-    procedure GetFormattedChars (stream : TRichEditStream; var fc : TCharFormat); virtual;
+    procedure GetFormattedChars (stream: TRichEditStream; var fc: TCharFormat); virtual;
     procedure Reset; virtual;
   end;
 
@@ -127,36 +127,36 @@ type
     FScrollBars: TScrollStyle;
     FHideSelection: Boolean;
     FHideScrollBars: Boolean;
-    fRichEditProvider : TRichEditProvider;
+    FRichEditProvider: TRichEditProvider;
     FReadOnly: Boolean;
     FMaxLength: Integer;
     FOnProtectChange: TExRichEditProtectChange;
     FOnResizeRequest: TExRichEditResizeEvent;
     FOnSaveClipboard: TExRichEditSaveClipboard;
     FOnSelChange: TNotifyEvent;
-    FCharFormatter : TCharFormatter;
+    FCharFormatter: TCharFormatter;
     FDefaultCharFormat: TCharFormat;
-    fAutoURLDetect: Boolean;
-    fAutoURLExecute: Boolean;
-    fURLText : string;
-    fOnURLMouseDown: TMouseEvent;
-    fOnURLMouseUp: TMouseEvent;
+    FAutoURLDetect: Boolean;
+    FAutoURLExecute: Boolean;
+    FURLText: string;
+    FOnURLMouseDown: TMouseEvent;
+    FOnURLMouseUp: TMouseEvent;
     FOnURLMouseMove: TMouseMoveEvent;
     FOnURLClick: TNotifyEvent;
     FOnURLDblClick: TNotifyEvent;
-    fCodePage: Integer;
-    fUpdateCount : Integer;
-    fRightMargin: Integer;
-    fOnFontChange: TNotifyEvent;
-    fFixedFont: boolean;
-    fAveCharWidth: Integer;
-    fInFontChange : boolean;
-    fPageRect: TRect;
+    FCodePage: Integer;
+    FUpdateCount: Integer;
+    FRightMargin: Integer;
+    FOnFontChange: TNotifyEvent;
+    FFixedFont: Boolean;
+    FAveCharWidth: Integer;
+    FInFontChange: Boolean;
+    FPageRect: TRect;
     FMultiLine: Boolean;
-    FInSetText : boolean;
-    FInGetText : boolean;
-    fStreamRTF: boolean;
-    fRawPaste: boolean;
+    FInSetText: Boolean;
+    FInGetText: Boolean;
+    FStreamRTF: Boolean;
+    FRawPaste: Boolean;
     procedure CMBiDiModeChanged(var Message: TMessage); message CM_BIDIMODECHANGED;
     procedure CMColorChanged(var Message: TMessage); message CM_COLORCHANGED;
     procedure CMFontChanged(var Message: TMessage); message CM_FONTCHANGED;
@@ -166,7 +166,7 @@ type
     procedure DoURLMouseUp(var Message: TWMMouse; Button: TMouseButton; Shift: TShiftState);
     procedure WMKeyDown(var Message: TWMKeyDown); message WM_KEYDOWN;
 
-    procedure SetUpFont (font : TFont; all : boolean);
+    procedure SetUpFont (font: TFont; all: Boolean);
     function ProtectChange(StartPos, EndPos: Integer): Boolean;
     function SaveClipboard(NumObj, NumChars: Integer): Boolean;
     procedure SetAlignment(const Value: TAlignment);
@@ -182,9 +182,9 @@ type
     procedure WMPaint(var Message: TWMPaint); message WM_PAINT;
     procedure WMSetCursor(var Message: TWMSetCursor); message WM_SETCURSOR;
     procedure WMSetFont(var Message: TWMSetFont); message WM_SETFONT;
-    procedure WmGetText (var Message : TWMGetText); message WM_GETTEXT;
-    procedure WmSetText (var Message : TWMSetText); message WM_SETTEXT;
-    procedure WmGetTextLength (var Message : TWMGetTextLength); message WM_GETTEXTLENGTH;
+    procedure WmGetText (var Message: TWMGetText); message WM_GETTEXT;
+    procedure WmSetText (var Message: TWMSetText); message WM_SETTEXT;
+    procedure WmGetTextLength (var Message: TWMGetTextLength); message WM_GETTEXTLENGTH;
     function GetText: UnicodeString;
     procedure SetAutoURLDetect(const Value: Boolean);
     function GetSelLength: Integer;
@@ -194,19 +194,18 @@ type
     function GetCanUndo: Boolean;
     function GetSelText: UnicodeString;
     procedure SetSelText(const Value: UnicodeString);
-    function GetUpdating: boolean;
+    function GetUpdating: Boolean;
     procedure SetRightMargin(const Value: Integer);
     function GetCodePage: Integer;
     function GetCanRedo: Boolean;
     procedure SetMultiLine(const Value: Boolean);
-    function GetUsesCRLF: boolean;
+    function GetUsesCRLF: Boolean;
     function GetLineCount: Integer;
-    { Private declarations }
   protected
     function GetCharFormatter: TCharFormatter; virtual;
-    function CreateAppropriateProvider : TRichEditProvider; virtual;
-    procedure CreateParams (var params : TCreateParams); override;
-    procedure CreateWindowHandle (const params : TCreateParams); override;
+    function CreateAppropriateProvider: TRichEditProvider; virtual;
+    procedure CreateParams (var params: TCreateParams); override;
+    procedure CreateWindowHandle (const params: TCreateParams); override;
     procedure CreateWnd; override;
     procedure DoSetMaxLength(Value: Integer); virtual;
     procedure KeyPress(var Key: Char); override;
@@ -219,14 +218,14 @@ type
     procedure URLMouseMove(Shift: TShiftState; X, Y: Integer); dynamic;
 
     property Alignment: TAlignment read FAlignment write SetAlignment default taLeftJustify;
-    property AutoURLDetect : Boolean read fAutoURLDetect write SetAutoURLDetect;
-    property AutoURLExecute : Boolean read fAutoURLExecute write fAutoURLExecute;
+    property AutoURLDetect: Boolean read FAutoURLDetect write SetAutoURLDetect;
+    property AutoURLExecute: Boolean read FAutoURLExecute write FAutoURLExecute;
     property BorderStyle: TBorderStyle read FBorderStyle write SetBorderStyle default bsSingle;
-    property CharFormatter : TCharFormatter read GetCharFormatter;
+    property CharFormatter: TCharFormatter read GetCharFormatter;
     property HideSelection: Boolean read FHideSelection write SetHideSelection default True;
     property HideScrollBars: Boolean read FHideScrollBars write SetHideScrollBars default True;
     property MaxLength: Integer read FMaxLength write SetMaxLength default 0;
-    property MultiLine : Boolean read FMultiLine write SetMultiLine default True;
+    property MultiLine: Boolean read FMultiLine write SetMultiLine default True;
     property ParentColor default False;
     property ReadOnly: Boolean read FReadOnly write SetReadOnly default False;
     property ScrollBars: TScrollStyle read FScrollBars write SetScrollBars default ssNone;
@@ -234,87 +233,85 @@ type
     property WantTabs: Boolean read FWantTabs write FWantTabs default False;
     property WordWrap: Boolean read FWordWrap write SetWordWrap default True;
 
-    property OnFontChange : TNotifyEvent read fOnFontChange write fOnFontChange;
+    property OnFontChange: TNotifyEvent read FOnFontChange write FOnFontChange;
     property OnSaveClipboard: TExRichEditSaveClipboard read FOnSaveClipboard write FOnSaveClipboard;
     property OnSelectionChange: TNotifyEvent read FOnSelChange write FOnSelChange;
     property OnProtectChange: TExRichEditProtectChange read FOnProtectChange write FOnProtectChange;
     property OnResizeRequest: TExRichEditResizeEvent read FOnResizeRequest write FOnResizeRequest;
-    property OnURLMouseDown : TMouseEvent read fOnURLMouseDown write fOnURLMouseDown;
-    property OnURLMouseUp : TMouseEvent read fOnURLMouseUp write fOnURLMouseUp;
+    property OnURLMouseDown: TMouseEvent read FOnURLMouseDown write FOnURLMouseDown;
+    property OnURLMouseUp: TMouseEvent read FOnURLMouseUp write FOnURLMouseUp;
     property OnURLMouseMove: TMouseMoveEvent read FOnURLMouseMove write FOnURLMouseMove;
-    property OnURLDblClick : TNotifyEvent read FOnURLDblClick write FOnURLDblClick;
-    property OnURLClick : TNotifyEvent read FOnURLClick write FOnURLClick;
-    property InUpdate : boolean read GetUpdating;
+    property OnURLDblClick: TNotifyEvent read FOnURLDblClick write FOnURLDblClick;
+    property OnURLClick: TNotifyEvent read FOnURLClick write FOnURLClick;
+    property InUpdate: Boolean read GetUpdating;
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Clear;
     procedure ClearUndoBuffer;
     function ExecuteAction(Action: TBasicAction): Boolean; override;
     function FindText(const SearchStr: string; StartPos, Length: Integer; Options: TSearchTypes): Integer;
-    procedure FontToCharFormat (font : TFont; var Format : TCharFormat);
+    procedure FontToCharFormat (font: TFont; var Format: TCharFormat);
     procedure CutToClipboard;
     procedure CopyToClipboard;
     procedure PasteFromClipboard;
     procedure PasteTextFromClipboard;
     procedure Print;
-    property PageRect : TRect read fPageRect write fPageRect;
+    property PageRect: TRect read FPageRect write FPageRect;
     procedure SelectAll;
     procedure SetupRightMargin;
     procedure Undo;
     procedure Redo;
-    function GetTextLen : Integer;
-    function GetCRLFTextLen : Integer;
+    function GetTextLen: Integer;
+    function GetCRLFTextLen: Integer;
 
-    procedure SetRawSelection (ss, se : Integer);
-    procedure GetRawSelection (var ss, se : Integer);
+    procedure SetRawSelection (ss, se: Integer);
+    procedure GetRawSelection (var ss, se: Integer);
 
     procedure BeginUpdate;
     procedure EndUpdate;
 
-    property CodePage : Integer read GetCodePage write fCodePage;
+    property CodePage: Integer read GetCodePage write FCodePage;
     property CanUndo: Boolean read GetCanUndo;
     property CanRedo: Boolean read GetCanRedo;
-    property DefaultCharFormat : TCharFormat read fDefaultCharFormat;
-    property SelStart : Integer read GetSelStart write SetSelStart;
-    property SelLength : Integer read GetSelLength write SetSelLength;
-    property SelText : UnicodeString read GetSelText write SetSelText;
-    property URLText : string read fURLText;
-    property AveCharWidth : Integer read fAveCharWidth;
-    property FixedFont : boolean read fFixedFont;
+    property DefaultCharFormat: TCharFormat read fDefaultCharFormat;
+    property SelStart: Integer read GetSelStart write SetSelStart;
+    property SelLength: Integer read GetSelLength write SetSelLength;
+    property SelText: UnicodeString read GetSelText write SetSelText;
+    property URLText: string read FURLText;
+    property AveCharWidth: Integer read FAveCharWidth;
+    property FixedFont: Boolean read FFixedFont;
 
     property Font;
-    property UsesCRLF : boolean read GetUsesCRLF;
-    property StreamRTF : boolean read fStreamRTF write fStreamRTF;
-    property RawPaste : boolean read fRawPaste write fRawPaste;
-    function GetIRichEditOLE : IRichEditOLE;
-    property LineCount : Integer read GetLineCount;
+    property UsesCRLF: Boolean read GetUsesCRLF;
+    property StreamRTF: Boolean read FStreamRTF write FStreamRTF;
+    property RawPaste: Boolean read FRawPaste write FRawPaste;
+    function GetIRichEditOLE: IRichEditOLE;
+    property LineCount: Integer read GetLineCount;
 
   published
-    property Text : UnicodeString read GetText write SetText;
-    property RightMargin : Integer read fRightMargin write SetRightMargin;
-
-    { Published declarations }
+    property Text: UnicodeString read GetText write SetText;
+    property RightMargin: Integer read FRightMargin write SetRightMargin;
   end;
 
 // TRichEdit1Provider.  Provider for RichEdit version 2 & 3.  They are
 // so similar that it's worth providing this base class
   TRichEdit2_3Provider = class (TRichEditProvider)
   private
-    fIRichEditOLE : IRichEditOLE;
-    fGotIRichEditOLE : boolean;
-    function RawGetText (sel : boolean) : UnicodeString;
-    procedure RawSetText (const st : UnicodeString; sel : boolean);
+    fIRichEditOLE: IRichEditOLE;
+    fGotIRichEditOLE: Boolean;
+    function RawGetText (sel: Boolean): UnicodeString;
+    procedure RawSetText (const st: UnicodeString; sel: Boolean);
   protected
-    procedure CreateSubclass (var params : TCreateParams); override;
-    procedure SetText (const st : UnicodeString); override;
-    function GetText : UnicodeString; override;
-    function GetSelText : UnicodeString; override;
-    function GetTextLen : Integer; override;
-    function GetCRLFTextLen : Integer; override;
-    procedure SetSelText (const value : UnicodeString); override;
-    function UsesCRLF : boolean; override;
-    function GetIRichEditOLE : IRichEditOLE; override;
+    procedure CreateSubclass (var params: TCreateParams); override;
+    procedure SetText (const st: UnicodeString); override;
+    function GetText: UnicodeString; override;
+    function GetSelText: UnicodeString; override;
+    function GetTextLen: Integer; override;
+    function GetCRLFTextLen: Integer; override;
+    procedure SetSelText (const value: UnicodeString); override;
+    function UsesCRLF: Boolean; override;
+    function GetIRichEditOLE: IRichEditOLE; override;
   public
     destructor Destroy; override;
 
@@ -416,7 +413,7 @@ uses
   WinAPI.ShellAPI, Vcl.ClipBrd, Vcl.Printers, unitCharsetMap;
 
 var
-  gRichEditModule : THandle;
+  gRichEditModule: THandle;
 
 resourcestring
   rstInvalidOSVersion = 'Rich Edit control is not supported on this operating system';
@@ -430,8 +427,8 @@ resourcestring
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.BeginUpdate;
 begin
-  Inc (fUpdateCount);
-  if fUpdateCount = 1 then
+  Inc (FUpdateCount);
+  if FUpdateCount = 1 then
     SendMessage (Handle, WM_SETREDRAW, 0, 0)
 end;
 
@@ -487,9 +484,9 @@ procedure TCustomExRichEdit.CNNotify(var Message: TWMNotify);
 type
   PENLink = ^TENLink;
 var
-  ENLink : PENLink;
-  mouseMsg : TWMMouse;
-  textRange : TTextRangeW;
+  ENLink: PENLink;
+  mouseMsg: TWMMouse;
+  textRange: TTextRangeW;
 begin
   with Message do
     case NMHdr^.code of
@@ -511,11 +508,11 @@ begin
           mouseMsg.YPos := HiWord (ENLink^.lParam);
           mouseMsg.Result := 0;
 
-          SetLength (fURLText, 65536);
+          SetLength (FURLText, 65536);
           textRange.chrg := ENLink^.chrg;
-          textRange.lpstrText := PChar (fURLText);
+          textRange.lpstrText := PChar (FURLText);
           SendMessage (Handle, EM_GETTEXTRANGE, 0, lParam (@textRange));
-          fURLText := PChar (fURLText);
+          FURLText := PChar (FURLText);
 
           case ENLink^.Msg of
             WM_LBUTTONDOWN :
@@ -523,11 +520,11 @@ begin
                 if csClickEvents in ControlStyle then URLClick;
                 DoURLMouseDown (mouseMsg, mbLeft, []);
               end;
-            WM_RBUTTONDOWN : DoURLMouseDown (mouseMsg, mbRight, []);
-            WM_MBUTTONDOWN : DoURLMouseDown (mouseMsg, mbMiddle, []);
-            WM_LBUTTONUP : DoURLMouseUp (mouseMsg, mbLeft, []);
-            WM_RBUTTONUP : DoURLMouseUp (mouseMsg, mbRight, []);
-            WM_MBUTTONUP : DoURLMouseUp (mouseMsg, mbMiddle, []);
+            WM_RBUTTONDOWN: DoURLMouseDown (mouseMsg, mbRight, []);
+            WM_MBUTTONDOWN: DoURLMouseDown (mouseMsg, mbMiddle, []);
+            WM_LBUTTONUP: DoURLMouseUp (mouseMsg, mbLeft, []);
+            WM_RBUTTONUP: DoURLMouseUp (mouseMsg, mbRight, []);
+            WM_MBUTTONUP: DoURLMouseUp (mouseMsg, mbMiddle, []);
             WM_LBUTTONDBLCLK :
               begin
                 if csClickEvents in ControlStyle then URLDblClick;
@@ -565,9 +562,9 @@ constructor TCustomExRichEdit.Create(AOwner: TComponent);
 const
   EditStyle = [csClickEvents, csSetCaption, csDoubleClicks, csNeedsBorderPaint];
 begin
-  fRichEditProvider := CreateAppropriateProvider;
+  FRichEditProvider := CreateAppropriateProvider;
                         // Create appropriate provider for the operating system
-  fCodePage := -1;      // RichEdit1 only!
+  FCodePage := -1;      // RichEdit1 only!
 
   inherited;
 
@@ -632,7 +629,7 @@ const
   Alignments: array[Boolean, TAlignment] of DWORD = ((ES_LEFT, ES_RIGHT, ES_CENTER),(ES_RIGHT, ES_LEFT, ES_CENTER));
   ScrollBar: array[TScrollStyle] of DWORD = (0, WS_HSCROLL, WS_VSCROLL, WS_HSCROLL or WS_VSCROLL);
   WordWraps: array[Boolean] of DWORD = (0, ES_AUTOHSCROLL);
-  MultiLines : array[Boolean] of DWORD = (0, ES_MULTILINE);
+  MultiLines: array[Boolean] of DWORD = (0, ES_MULTILINE);
   HideScrollBars: array[Boolean] of DWORD = (ES_DISABLENOSCROLL, 0);
   HideSelections: array[Boolean] of DWORD = (ES_NOHIDESEL, 0);
   BorderStyles: array[TBorderStyle] of DWORD = (0, WS_BORDER);
@@ -659,7 +656,7 @@ begin
     end
   end;
 
-  fRichEditProvider.CreateSubclass(Params);
+  FRichEditProvider.CreateSubclass(Params);
 
   with Params do
     WindowClass.style := WindowClass.style and not (CS_HREDRAW or CS_VREDRAW);
@@ -673,7 +670,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.CreateWnd;
 var
-  eventMask : DWORD;
+  eventMask: DWORD;
 begin
   inherited CreateWnd;
   if (SysLocale.FarEast) and not (SysLocale.PriLangID = LANG_JAPANESE) then
@@ -681,7 +678,7 @@ begin
 
   eventMask := ENM_CHANGE or ENM_SELCHANGE or ENM_REQUESTRESIZE or ENM_PROTECTED;
 
-  if fAutoURLDetect then
+  if FAutoURLDetect then
   begin
     SendMessage (Handle, EM_AUTOURLDETECT, 1, 0);
     EventMask := EventMask or ENM_LINK;
@@ -739,7 +736,7 @@ end;
  *----------------------------------------------------------------------*)
 destructor TCustomExRichEdit.Destroy;
 begin
-  fRichEditProvider.Free;
+  FRichEditProvider.Free;
   fCharFormatter.Free;
 
   inherited;
@@ -796,10 +793,10 @@ end;
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.EndUpdate;
 begin
-  Dec (fUpdateCount);
-  if fUpdateCount <= 0 then
+  Dec (FUpdateCount);
+  if FUpdateCount <= 0 then
   begin
-    fUpdateCount := 0;
+    FUpdateCount := 0;
     SendMessage (Handle, WM_SETREDRAW, 1, 0);
     SendMessage (Handle, EM_REQUESTRESIZE, 0, 0);
   end
@@ -910,7 +907,7 @@ end;
  *----------------------------------------------------------------------*)
 function TCustomExRichEdit.GetSelLength: Integer;
 var
-  range : TCharRange;
+  range: TCharRange;
 begin
   SendMessage (Handle, EM_EXGETSEL, 0, LongInt (@range));
   result := range.cpMax - range.cpMin
@@ -923,7 +920,7 @@ end;
  *----------------------------------------------------------------------*)
 function TCustomExRichEdit.GetSelStart: Integer;
 var
-  range : TCharRange;
+  range: TCharRange;
 begin
   SendMessage (Handle, EM_EXGETSEL, 0, LongInt (@range));
   result := range.cpMin
@@ -936,7 +933,7 @@ end;
  *----------------------------------------------------------------------*)
 function TCustomExRichEdit.GetSelText: UnicodeString;
 begin
-  result := fRichEditProvider.GetSelText;
+  result := FRichEditProvider.GetSelText;
 end;
 
 (*----------------------------------------------------------------------*
@@ -946,7 +943,7 @@ end;
  *----------------------------------------------------------------------*)
 function TCustomExRichEdit.GetText: UnicodeString;
 begin
-  result := fRichEditProvider.GetText
+  result := FRichEditProvider.GetText
 end;
 
 (*----------------------------------------------------------------------*
@@ -956,7 +953,7 @@ end;
  *----------------------------------------------------------------------*)
 function TCustomExRichEdit.GetTextLen: Integer;
 begin
-  result := fRichEditProvider.GetTextLen
+  result := FRichEditProvider.GetTextLen
 end;
 
 (*----------------------------------------------------------------------*
@@ -964,9 +961,9 @@ end;
  |                                                                      |
  | Get methpd for the IsUpdating property                               |
  *----------------------------------------------------------------------*)
-function TCustomExRichEdit.GetUpdating: boolean;
+function TCustomExRichEdit.GetUpdating: Boolean;
 begin
-  result := fUpdateCount > 0
+  result := FUpdateCount > 0
 end;
 
 (*----------------------------------------------------------------------*
@@ -1070,16 +1067,16 @@ end;
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.SetAutoURLDetect(const Value: Boolean);
 var
-  eventMask : Integer;
+  eventMask: Integer;
 begin
-  if Value <> fAutoURLDetect then
+  if Value <> FAutoURLDetect then
   begin
-    fAutoURLDetect := Value;
+    FAutoURLDetect := Value;
     if HandleAllocated then
     begin
       if SendMessage (Handle, EM_AUTOURLDETECT, Integer (Value), 0) = 0 then
       begin
-        if fAutoURLDetect then
+        if FAutoURLDetect then
           EventMask := SendMessage(Handle, EM_GETEVENTMASK, 0, 0) or ENM_LINK
         else
           EventMask := SendMessage(Handle, EM_GETEVENTMASK, 0, 0) and not ENM_LINK;
@@ -1196,7 +1193,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.SetSelText(const Value: UnicodeString);
 begin
-  fRichEditProvider.SetSelText(value);
+  FRichEditProvider.SetSelText(value);
 end;
 
 (*----------------------------------------------------------------------*
@@ -1206,7 +1203,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.SetSelStart(const Value: Integer);
 var
-  range : TCharRange;
+  range: TCharRange;
 begin
   range.cpMin := Value;
   range.cpMax := Value;
@@ -1220,14 +1217,14 @@ end;
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.SetText(const Value: UnicodeString);
 var
-  st : string;
+  st: string;
 begin
   if HandleAllocated then
   begin
     if Value = '' then
       Clear
     else
-      fRichEditProvider.SetText (value);
+      FRichEditProvider.SetText (value);
     ClearUndoBuffer
   end
   else
@@ -1243,12 +1240,12 @@ end;
  |                                                                      |
  | Set the font parameters for all text or just selected text.          |
  *----------------------------------------------------------------------*)
-procedure TCustomExRichEdit.SetUpFont (font : TFont; all : boolean);
+procedure TCustomExRichEdit.SetUpFont (font: TFont; all: Boolean);
 var
-  Format : TCharFormat;
-  Flag : DWORD;
-  canvas : TControlCanvas;
-  tm : TTextMetric;
+  Format: TCharFormat;
+  Flag: DWORD;
+  canvas: TControlCanvas;
+  tm: TTextMetric;
 begin
   if HandleAllocated then
   begin
@@ -1269,21 +1266,21 @@ begin
       canvas.Font.Assign(Font);
       GetTextMetrics (canvas.Handle, tm);
 
-      fAveCharWidth := tm.tmAveCharWidth;
-      fFixedFont := (tm.tmPitchAndFamily and TMPF_FIXED_PITCH) = 0;
+      FAveCharWidth := tm.tmAveCharWidth;
+      FFixedFont := (tm.tmPitchAndFamily and TMPF_FIXED_PITCH) = 0;
     finally
       canvas.Free
     end;
 
     SetupRightMargin;
 
-    if not fInFontChange then
+    if not FInFontChange then
     try
-      fInFontChange := True;
+      FInFontChange := True;
       if Assigned (OnFontChange) and not (csDestroying in ComponentState) then
         OnFontChange (self);
     finally
-      fInFontChange := False
+      FInFontChange := False
     end
   end
 end;
@@ -1321,7 +1318,7 @@ procedure TCustomExRichEdit.URLClick;
 begin
   if Assigned(OnURLClick) then OnURLClick(Self);
   if AutoURLExecute then
-    ShellExecute (HWND_DESKTOP, 'open', PChar (fURLText), nil, nil, SW_SHOWNORMAL);
+    ShellExecute (HWND_DESKTOP, 'open', PChar (FURLText), nil, nil, SW_SHOWNORMAL);
 end;
 
 (*----------------------------------------------------------------------*
@@ -1377,7 +1374,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TCustomExRichEdit.WMGetDlgCode(var Message: TWMGetDlgCode);
 var
-  state : SHORT;
+  state: SHORT;
 begin
   inherited;
   state := GetAsyncKeyState (VK_SHIFT);
@@ -1459,9 +1456,9 @@ end;
  |                                                                      |
  | Constructor for the TRichEditProvider basse class                    |
  *----------------------------------------------------------------------*)
-constructor TRichEditProvider.Create(AOwner : TCustomExRichEdit);
+constructor TRichEditProvider.Create(AOwner: TCustomExRichEdit);
 begin
-  fOwner := AOwner
+  FOwner := AOwner
 end;
 
 
@@ -1472,9 +1469,9 @@ end;
  |                                                                      |
  | Constructor for TRichEditStream                                      |
  *----------------------------------------------------------------------*)
-constructor TRichEditStream.Create(AOwner : TCustomExRichEdit);
+constructor TRichEditStream.Create(AOwner: TCustomExRichEdit);
 begin
-  fOwner := AOwner;
+  FOwner := AOwner;
 end;
 
 (*----------------------------------------------------------------------*
@@ -1484,8 +1481,8 @@ end;
  *----------------------------------------------------------------------*)
 destructor TRichEditStream.Destroy;
 begin
-  if fOwnsBuffer then
-    ReallocMem (fBuffer, 0);
+  if FOwnsBuffer then
+    ReallocMem (FBuffer, 0);
 
   inherited;
 end;
@@ -1498,13 +1495,13 @@ end;
 procedure TRichEditStream.GetString(var st: string);
 begin
   SetLength (st, ChunkEnd - ChunkStart);
-  Move ((fBuffer + ChunkStart)^, PChar (st)^, (ChunkEnd - ChunkStart));
+  Move ((FBuffer + ChunkStart)^, PChar (st)^, (ChunkEnd - ChunkStart));
 end;
 
 procedure TRichEditStream.GetWideString(var ws: UnicodeString);
 begin
   SetLength (ws, ChunkEnd - ChunkStart);
-  Move ((fBuffer + ChunkStart)^, PWideChar (ws)^, (ChunkEnd - ChunkStart) * SizeOf (WideChar));
+  Move ((FBuffer + ChunkStart)^, PWideChar (ws)^, (ChunkEnd - ChunkStart) * SizeOf (WideChar));
 end;
 
 { TRichEdit2_3Provider }
@@ -1515,28 +1512,28 @@ end;
  | Callback function for EM_STREAMIN                                    |
  |                                                                      |
  | Parameters:                                                          |
- |   dwCookie : DWORD           Instance of the TRichEditStream to get  |
+ |   dwCookie: DWORD           Instance of the TRichEditStream to get  |
  |                              data from                               |
  |                                                                      |
- |   pbBuff : pointer           The data buffer to fill                 |
- |   cb : DWORD;                The max length of data                  |
- |   var ret : DWORD            Length of data actually returned        |
+ |   pbBuff: pointer           The data buffer to fill                 |
+ |   cb: DWORD;                The max length of data                  |
+ |   var ret: DWORD            Length of data actually returned        |
  |                                                                      |
  | The function returns 0 if it the callback should continue steaming   |
  | in text - or <> 0 = an error code.                                   |
  *----------------------------------------------------------------------*)
-function EditStreamICallback (dwCookie : DWORD; pbBuff : pointer; cb : DWORD; var ret : DWORD) : DWORD; stdcall;
+function EditStreamICallback (dwCookie: DWORD; pbBuff: pointer; cb: DWORD; var ret: DWORD): DWORD; stdcall;
 var
-  stream : TRichEditStream;
+  stream: TRichEditStream;
 begin
   stream := TRichEditStream (dwCookie);
 
-  ret := (stream.fChunkEnd - stream.fChunkStart - stream.fPos) * sizeof (WideChar);
+  ret := (stream.FChunkEnd - stream.FChunkStart - stream.FPos) * sizeof (WideChar);
   if ret > cb then
     ret := cb;
 
-  Move ((stream.fBuffer + stream.fChunkStart + stream.fPos)^, pbBuff^, ret);
-  Inc (stream.fPos, ret div sizeof (WideChar));
+  Move ((stream.FBuffer + stream.FChunkStart + stream.FPos)^, pbBuff^, ret);
+  Inc (stream.FPos, ret div sizeof (WideChar));
   result := 0
 end;
 
@@ -1548,25 +1545,25 @@ end;
  | chars.                                                               |
  |                                                                      |
  | Parameters:                                                          |
- |   dwCookie : DWORD; pbBuff : pointer; cb : DWORD; var ret : DWORD
+ |   dwCookie: DWORD; pbBuff: pointer; cb: DWORD; var ret: DWORD
  *----------------------------------------------------------------------*)
-function EditStreamIRTFCallback (dwCookie : DWORD; pbBuff : pointer; cb : DWORD; var ret : DWORD) : DWORD; stdcall;
+function EditStreamIRTFCallback (dwCookie: DWORD; pbBuff: pointer; cb: DWORD; var ret: DWORD): DWORD; stdcall;
 var
-  stream : TRichEditStream;
-  i : Integer;
-  p1 : PChar;
-  p : PWideChar;
+  stream: TRichEditStream;
+  i: Integer;
+  p1: PChar;
+  p: PWideChar;
 begin
   stream := TRichEditStream (dwCookie);
 
-  ret := (stream.fChunkEnd - stream.fChunkStart - stream.fPos);
+  ret := (stream.FChunkEnd - stream.FChunkStart - stream.FPos);
   if ret > cb then
     ret := cb;
 
   if ret > 0 then
   begin
-    p := PWideChar (stream.fBuffer);
-    Inc (p, stream.fChunkStart + stream.fPos);
+    p := PWideChar (stream.FBuffer);
+    Inc (p, stream.FChunkStart + stream.FPos);
 
     p1 := PChar (pbBuff);
 
@@ -1575,7 +1572,7 @@ begin
       p1^ := char (Integer (p^));
       Inc (p1);
       Inc (p);
-      Inc (stream.fPos);
+      Inc (stream.FPos);
     end
   end;
 
@@ -1588,52 +1585,52 @@ end;
  | Callback function for EM_STREAMOUT                                   |
  |                                                                      |
  | Parameters:                                                          |
- |   dwCookie : DWORD;          Instance of the TRichEditStream to fill |
- |   pbBuff : pointer;          Pointer to the data  to use             |
- |   cb : DWORD;                Size of the data                        |
- |  var ret : DWORD             Bytes actually copied                   |
+ |   dwCookie: DWORD;          Instance of the TRichEditStream to fill |
+ |   pbBuff: pointer;          Pointer to the data  to use             |
+ |   cb: DWORD;                Size of the data                        |
+ |  var ret: DWORD             Bytes actually copied                   |
  |                                                                      |
  | The function returns <> 0 if the function failed                     |
  *----------------------------------------------------------------------*)
-function EditStreamOCallback (dwCookie : DWORD; pbBuff : pointer; cb : DWORD; var ret : DWORD) : DWORD; stdcall;
+function EditStreamOCallback (dwCookie: DWORD; pbBuff: pointer; cb: DWORD; var ret: DWORD): DWORD; stdcall;
 var
-  stream : TRichEditStream;
+  stream: TRichEditStream;
 begin
   stream := TRichEditStream (dwCookie);
 
   if cb > 0 then with stream do
   begin
-    fLen := fPos * sizeof (WideChar) + cb;
-    ReallocMem (fBuffer, fLen);
-    fOwnsBuffer := True;
-    fLen := fLen div sizeof (WideChar);
-    Move (pbBuff^, (stream.fBuffer + stream.fPos)^, cb);
-    Inc (fPos, cb div sizeof (WideChar));
+    FLen := FPos * sizeof (WideChar) + cb;
+    ReallocMem (FBuffer, FLen);
+    FOwnsBuffer := True;
+    FLen := FLen div sizeof (WideChar);
+    Move (pbBuff^, (stream.FBuffer + stream.FPos)^, cb);
+    Inc (FPos, cb div sizeof (WideChar));
     ret := cb
   end;
 
-  stream.fChunkEnd := stream.fPos;
+  stream.FChunkEnd := stream.FPos;
 
   result := 0
 end;
 
-function EditStreamOchCallback (dwCookie : DWORD; pbBuff : pointer; cb : DWORD; var ret : DWORD) : DWORD; stdcall;
+function EditStreamOchCallback (dwCookie: DWORD; pbBuff: pointer; cb: DWORD; var ret: DWORD): DWORD; stdcall;
 var
-  stream : TRichEditStream;
+  stream: TRichEditStream;
 begin
   stream := TRichEditStream (dwCookie);
 
   if cb > 0 then with stream do
   begin
-    fLen := fPos + cb;
-    ReallocMem (fBuffer, fLen);
-    fOwnsBuffer := True;
-    Move (pbBuff^, (stream.fBuffer + stream.fPos)^, cb);
-    Inc (fPos, cb);
+    FLen := FPos + cb;
+    ReallocMem (FBuffer, FLen);
+    FOwnsBuffer := True;
+    Move (pbBuff^, (stream.FBuffer + stream.FPos)^, cb);
+    Inc (FPos, cb);
     ret := cb
   end;
 
-  stream.fChunkEnd := stream.fPos;
+  stream.FChunkEnd := stream.FPos;
 
   result := 0
 end;
@@ -1668,7 +1665,7 @@ end;
 
 function TRichEdit2_3Provider.GetCRLFTextLen: Integer;
 var
-  ltx : TGetTextLengthEx;
+  ltx: TGetTextLengthEx;
 begin
   ltx.flags := GTL_NUMCHARS or GTL_PRECISE or GTL_USECRLF;
   ltx.codepage := 1200; // Unicode
@@ -1707,7 +1704,7 @@ end;
  *----------------------------------------------------------------------*)
 function TRichEdit2_3Provider.GetTextLen: Integer;
 var
-  ltx : TGetTextLengthEx;
+  ltx: TGetTextLengthEx;
 begin
   ltx.flags := GTL_NUMCHARS or GTL_PRECISE;
   ltx.codepage := 1200; // Unicode
@@ -1719,12 +1716,12 @@ end;
  |                                                                      |
  | Get text - selected or otherwise                                     |
  *----------------------------------------------------------------------*)
-function TRichEdit2_3Provider.RawGetText(sel: boolean): UnicodeString;
+function TRichEdit2_3Provider.RawGetText(sel: Boolean): UnicodeString;
 var
-  editStream : TEditStream;
-  stream : TRichEditStream;
-  flags : DWORD;
-  st : string;
+  editStream: TEditStream;
+  stream: TRichEditStream;
+  flags: DWORD;
+  st: string;
 begin
   flags := 0;
   if sel then
@@ -1763,19 +1760,19 @@ end;
  | Set the text - Raw or otherwise                                      |
  *----------------------------------------------------------------------*)
 procedure TRichEdit2_3Provider.RawSetText(const st: UnicodeString;
-  sel: boolean);
+  sel: Boolean);
 var
-  editStream : TEditStream;
-  stream : TRichEditStream;
-  fc : TCharFormat;
-  tc : TCharRange;
-  flags : DWORD;
+  editStream: TEditStream;
+  stream: TRichEditStream;
+  fc: TCharFormat;
+  tc: TCharRange;
+  flags: DWORD;
 begin
   Owner.BeginUpdate;
   stream := TRichEditStream.Create(Owner);
   try
-    stream.fBuffer := PWideChar (st);
-    stream.fLen := Length (st);
+    stream.FBuffer := PWideChar (st);
+    stream.FLen := Length (st);
     editStream.dwCookie := DWORD (stream);
     editStream.dwError := 0;
     editStream.pfnCallback := @EditStreamICallback;
@@ -1809,10 +1806,10 @@ begin
       if fc.dwMask <> 0 then
         SendMessage (Owner.Handle, EM_SETCHARFORMAT, SCF_SELECTION, LongInt (@fc));
 
-      stream.fPos := 0;
+      stream.FPos := 0;
       SendMessage (Owner.Handle, EM_STREAMIN, flags, LongInt (@editStream));
 
-      stream.fChunkStart := stream.fChunkEnd;
+      stream.FChunkStart := stream.FChunkEnd;
       if stream.Truncate then
         break;
     end;
@@ -1854,10 +1851,10 @@ end;
  |                                                                      |
  | Make the streams chunk return the whole stream.                      |
  *----------------------------------------------------------------------*)
-procedure TCharFormatter.GetFormattedChars (stream : TRichEditStream; var fc : TCharFormat);
+procedure TCharFormatter.GetFormattedChars (stream: TRichEditStream; var fc: TCharFormat);
 begin
-  stream.fChunkStart := 0;
-  stream.fChunkEnd := stream.fLen;
+  stream.FChunkStart := 0;
+  stream.FChunkEnd := stream.FLen;
 end;
 
 function TCustomExRichEdit.ExecuteAction(Action: TBasicAction): Boolean;
@@ -1884,8 +1881,8 @@ end;
 
 procedure TCustomExRichEdit.WMKeyDown(var Message: TWMKeyDown);
 var
-  ShiftState : TShiftState;
-  swallow : boolean;
+  ShiftState: TShiftState;
+  swallow: Boolean;
 begin
 
   swallow := False;
@@ -1900,7 +1897,7 @@ begin
     // Rich Edit controls don't get a WM_PASTE when you press Shift-Insert,
     // so we have to trap the key sequence directly
 
-    if fRawPaste and ((message.CharCode = VK_INSERT) and (ssShift in ShiftState)) or
+    if FRawPaste and ((message.CharCode = VK_INSERT) and (ssShift in ShiftState)) or
                      ((message.CharCode = Ord ('v')) and (ssCtrl in ShiftState)) then
     begin
       PasteTextFromClipboard;
@@ -1916,24 +1913,24 @@ end;
 
 procedure TCustomExRichEdit.SetRightMargin(const Value: Integer);
 begin
-  if fRightMargin <> Value then
+  if FRightMargin <> Value then
   begin
-    fRightMargin := Value;
+    FRightMargin := Value;
     SetupRightMargin
   end
 end;
 
 procedure TCustomExRichEdit.SetupRightMargin;
 var
-  rm : Integer;
+  rm: Integer;
 begin
-  if fAveCharWidth <> 0 then
+  if FAveCharWidth <> 0 then
   begin
-    if (fRightMargin = 0) or not FixedFont then
+    if (FRightMargin = 0) or not FixedFont then
       rm := 0
     else
     begin
-      rm := ClientWidth - AveCharWidth * (fRightMargin + 1);
+      rm := ClientWidth - AveCharWidth * (FRightMargin + 1);
 
       if rm < 0 then
         rm := 0
@@ -1945,13 +1942,13 @@ end;
 
 procedure TCustomExRichEdit.WmGetText(var Message: TWMGetText);
 var
-  txt : string;
+  txt: string;
 begin
-  if fInGetText then
+  if FInGetText then
     inherited
   else
   begin
-    fInGetText := True;
+    FInGetText := True;
     try
       if HandleAllocated then
         txt := GetText
@@ -1961,7 +1958,7 @@ begin
       with Message do
         Result := StrLen(StrLCopy(PChar(Text), PChar(txt), TextMax - 1))
     finally
-      fInGetText := False
+      FInGetText := False
     end
   end
 end;
@@ -1976,34 +1973,34 @@ end;
 
 procedure TCustomExRichEdit.WmSetText(var Message: TWMSetText);
 var
-  txt : string;
+  txt: string;
 begin
-  if fINSetText then
+  if FInSetText then
     inherited
   else
   begin
-    fInSetText := True;
+    FInSetText := True;
     try
       txt := Message.Text;
       SetText (txt);
       Message.Result := 1
     finally
-      fInSetText := False
+      FInSetText := False
     end
   end
 end;
 
 function TCustomExRichEdit.GetCodePage: Integer;
 begin
-  if fCodePage = -1 then
+  if FCodePage = -1 then
     result := CharsetToCodePage (Font.Charset)
   else
-    result := fCodePage;
+    result := FCodePage;
 end;
 
 procedure TCustomExRichEdit.CMRecreateWnd(var Message: TMessage);
 var
-  ss, sl : Integer;
+  ss, sl: Integer;
 begin
   ss := selStart;
   sl := selLength;
@@ -2031,7 +2028,7 @@ end;
 
 function TCustomExRichEdit.GetCRLFTextLen: Integer;
 begin
-  result := fRichEditProvider.GetCRLFTextLen
+  result := FRichEditProvider.GetCRLFTextLen
 end;
 
 procedure TCustomExRichEdit.Print;
@@ -2089,19 +2086,19 @@ begin
   end
 end;
 
-function TCustomExRichEdit.GetUsesCRLF: boolean;
+function TCustomExRichEdit.GetUsesCRLF: Boolean;
 begin
-  result := fRichEditProvider.UsesCRLF
+  result := FRichEditProvider.UsesCRLF
 end;
 
-function TRichEdit2_3Provider.UsesCRLF: boolean;
+function TRichEdit2_3Provider.UsesCRLF: Boolean;
 begin
   result := False
 end;
 
-function AdjustForCRLF (ss : Integer; const txt : UnicodeString) : Integer;
+function AdjustForCRLF (ss: Integer; const txt: UnicodeString): Integer;
 var
-  i : Integer;
+  i: Integer;
 begin
   result := ss;
   for i := 0 to ss - 1 do
@@ -2109,9 +2106,9 @@ begin
      Dec (result)
 end;
 
-function UnAdjustForCRLF (ss : Integer; const txt : UnicodeString) : Integer;
+function UnAdjustForCRLF (ss: Integer; const txt: UnicodeString): Integer;
 var
-  i : Integer;
+  i: Integer;
 begin
   i := 0;
   while i < ss do
@@ -2126,7 +2123,7 @@ end;
 
 procedure TCustomExRichEdit.SetRawSelection(ss, se: Integer);
 var
-  sl : Integer;
+  sl: Integer;
 begin
   Dec (ss);
   if se = -1 then
@@ -2164,7 +2161,7 @@ end;
 
 function TCustomExRichEdit.GetIRichEditOLE: IRichEditOLE;
 begin
-  result := fRichEditProvider.GetIRichEditOLE
+  result := FRichEditProvider.GetIRichEditOLE
 end;
 
 function TCustomExRichEdit.GetLineCount: Integer;
@@ -2174,7 +2171,7 @@ end;
 
 procedure TCustomExRichEdit.PasteTextFromClipboard;
 begin
-  if fRawPaste then
+  if FRawPaste then
     if Clipboard.HasFormat(CF_UNICODETEXT) then
       SendMessage (Handle, EM_PASTESPECIAL, CF_UNICODETEXT, 0)
     else
@@ -2184,6 +2181,7 @@ begin
 end;
 
 initialization
+
 finalization
   if gRichEditModule <> 0 then
     FreeLibrary(gRichEditModule);

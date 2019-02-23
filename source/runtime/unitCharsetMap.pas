@@ -27,64 +27,64 @@ interface
 
 uses
   WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
-  MultiLanguage_TLB, WinAPI.RichEdit, System.Contnrs;
+  WinAPI.RichEdit, System.Contnrs, MultiLanguage_TLB;
 
 var
-  CP_USASCII : Integer = 0;
-  DefaultCodePage : Integer = 0;
+  CP_USASCII: Integer = 0;
+  DefaultCodePage: Integer = 0;
 
-function MIMECharsetNameToCodepage (const MIMECharsetName : string) : Integer;
-function CharsetNameToCodepage (const CharsetName : string) : Integer;
-function CodepageToMIMECharsetName (codepage : Integer) : string;
-function CodepageToCharsetName (codepage : Integer) : string;
-function CharsetToCodePage (FontCharset : TFontCharset) : Integer;
-function CodePageToCharset (codePage : Integer) : TFontCharset;
-function StringToAnsiString (const ws : String; codePage : Integer) : AnsiString;
-function AnsiStringToString (const st : AnsiString; codePage : Integer) : String;
-function AnsiStringToGDIAnsiString (const s : AnsiString; codePage : Integer) : AnsiString;
-function GDIAnsiStringToAnsiString (const s : AnsiString; codePage : Integer) : AnsiString;
-function URLSuffixToCodePage (urlSuffix : string) : Integer;
-procedure GetCharsetNames (sl : TStrings);
+function MIMECharsetNameToCodepage (const MIMECharsetName: string): Integer;
+function CharsetNameToCodepage (const CharsetName: string): Integer;
+function CodepageToMIMECharsetName (codepage: Integer): string;
+function CodepageToCharsetName (codepage: Integer): string;
+function CharsetToCodePage (FontCharset: TFontCharset): Integer;
+function CodePageToCharset (codePage: Integer): TFontCharset;
+function StringToAnsiString (const ws: String; codePage: Integer): AnsiString;
+function AnsiStringToString (const st: AnsiString; codePage: Integer): String;
+function AnsiStringToGDIAnsiString (const s: AnsiString; codePage: Integer): AnsiString;
+function GDIAnsiStringToAnsiString (const s: AnsiString; codePage: Integer): AnsiString;
+function URLSuffixToCodePage (urlSuffix: string): Integer;
+procedure GetCharsetNames (sl: TStrings);
 function TrimEx(const S: string): string;
-function IsWideCharAlpha (ch : WideChar) : boolean;
-function IsWideCharAlnum (ch : WideChar) : boolean;
-procedure FontToCharFormat(font: TFont; codePage : Integer; var Format: TCharFormatW);
-function StringToUTF8 (const ws : String) : AnsiString;
-function UTF8ToString (const st : AnsiString) : String;
+function IsWideCharAlpha (ch: WideChar): Boolean;
+function IsWideCharAlnum (ch: WideChar): Boolean;
+procedure FontToCharFormat(font: TFont; codePage: Integer; var Format: TCharFormatW);
+function StringToUTF8 (const ws: String): AnsiString;
+function UTF8ToString (const st: AnsiString): String;
 
 var
-  gIMultiLanguage : IMultiLanguage = Nil;
-  gMultilanguageLoaded : boolean = False;
-  gMultiLang : boolean = False;
+  gIMultiLanguage: IMultiLanguage = Nil;
+  gMultilanguageLoaded: Boolean = False;
+  gMultiLang: Boolean = False;
 
 type
   TCountryCodes = class;
   TCountryCode = class
   private
-    fCode : Integer;
-    fName : string;
-    fOwner : TCountryCodes;
+    FCode: Integer;
+    FName: string;
+    FOwner: TCountryCodes;
   protected
-    constructor CreateFromReg (AOwner : TCountryCodes; RootKey : HKEY; ACode : Integer);
+    constructor CreateFromReg (AOwner: TCountryCodes; RootKey: HKEY; ACode: Integer);
   public
-    constructor Create (AOwner : TCountryCodes; ACode : Integer; const AName : string);
+    constructor Create (AOwner: TCountryCodes; ACode: Integer; const AName: string);
 
-    property Code : Integer read fCode;
-    property Name : string read fName;
-    property Owner : TCountryCodes read fOwner;
+    property Code: Integer read FCode;
+    property Name: string read FName;
+    property Owner: TCountryCodes read FOwner;
   end;
 
   TCountryCodes = class (TObjectList)
   private
-    fPreferedList : TStrings;
+    FPreferedList: TStrings;
     function GetCountryCode(idx: Integer): TCountryCode;
   public
     constructor Create;
 
-    procedure SortByName (const PreferedList : string);
+    procedure SortByName (const PreferedList: string);
     procedure SortByCode;
 
-    property CountryCode [idx : Integer] : TCountryCode read GetCountryCode;
+    property CountryCode [idx: Integer]: TCountryCode read GetCountryCode;
   end;
 
 implementation
@@ -93,16 +93,16 @@ uses ActiveX, Registry;
 
 type
   TCharsetRec = record
-    Name : string;
-    URLSuffix : string;
-    CodePage : Integer;
-    CharSet : TFontCharSet;
-    MIMECharsetName : string;
-    CharsetName : string;
+    Name: string;
+    URLSuffix: string;
+    CodePage: Integer;
+    CharSet: TFontCharSet;
+    MIMECharsetName: string;
+    CharsetName: string;
   end;
 
 var
-  gCharsetMap : array [0..35] of TCharsetRec = (
+  gCharsetMap: array [0..35] of TCharsetRec = (
     (Name:'US ASCII';                      URLSuffix:'';    CodePage: 0; Charset:0;   MIMECharsetName:'';            CharsetName:'ANSI_CHARSET'       ),
     (Name:'US ASCII';                      URLSuffix:'';    CodePage: 0; Charset:0;   MIMECharsetName:'us-ascii';    CharsetName:'ANSI_CHARSET'       ),
     (Name:'Western Europe (ISO)';          URLSuffix:'';    CodePage:28591; Charset:0;   MIMECharsetName:'iso-8859-1';        CharsetName:'ANSI_CHARSET'       ),
@@ -141,7 +141,7 @@ var
     (Name:'Unicode (UTF-8)';               URLSuffix:'';    CodePage:65001; Charset:0;   MIMECharsetName:'utf-8';             CharsetName:'ANSI_CHARSET'     )
   );
 
-  CharsetMap : array of TCharsetRec;
+  CharsetMap: array of TCharsetRec;
 
 
 
@@ -149,11 +149,11 @@ procedure LoadMultilanguage;
 type
   PMIMECPInfo = ^tagMIMECPInfo;
 var
-  enum : IEnumCodepage;
-  p, info : PMIMECPInfo;
-  i, j, c, ct : DWORD;
-  found : boolean;
-  sz : Integer;
+  enum: IEnumCodepage;
+  p, info: PMIMECPInfo;
+  i, j, c, ct: DWORD;
+  found: Boolean;
+  sz: Integer;
 begin
   if (not gMultilanguageLoaded) or (giMultiLanguage = Nil) then
   begin
@@ -233,9 +233,9 @@ begin
   end
 end;
 
-function MIMECharsetNameToCodepage (const MIMECharsetName : string) : Integer;
+function MIMECharsetNameToCodepage (const MIMECharsetName: string): Integer;
 var
-  i : Integer;
+  i: Integer;
 begin
   LoadMultiLanguage;
 
@@ -262,9 +262,9 @@ begin
   end
 end;
 
-function CharsetNameToCodepage (const CharsetName : string) : Integer;
+function CharsetNameToCodepage (const CharsetName: string): Integer;
 var
-  i : Integer;
+  i: Integer;
 begin
   LoadMultiLanguage;
   result := CP_USASCII;
@@ -276,9 +276,9 @@ begin
     end
 end;
 
-function CodepageToMIMECharsetName (codepage : Integer) : string;
+function CodepageToMIMECharsetName (codepage: Integer): string;
 var
-  i : Integer;
+  i: Integer;
 begin
   LoadMultiLanguage;
   result := '';
@@ -291,9 +291,9 @@ begin
     end
 end;
 
-function CodepageToCharsetName (codepage : Integer) : string;
+function CodepageToCharsetName (codepage: Integer): string;
 var
-  i : Integer;
+  i: Integer;
 begin
   LoadMultiLanguage;
   result := '';
@@ -306,9 +306,9 @@ begin
     end
 end;
 
-function CharsetToCodePage (FontCharset : TFontCharset) : Integer;
+function CharsetToCodePage (FontCharset: TFontCharset): Integer;
 var
-  i : Integer;
+  i: Integer;
 begin
   LoadMultiLanguage;
   result := CP_USASCII;
@@ -320,9 +320,9 @@ begin
     end
 end;
 
-function CodePageToCharset (codePage : Integer) : TFontCharset;
+function CodePageToCharset (codePage: Integer): TFontCharset;
 var
-  i : Integer;
+  i: Integer;
 begin
   LoadMultiLanguage;
   result := 0;
@@ -335,10 +335,10 @@ begin
       end
 end;
 
-function StringToAnsiString (const ws : String; codePage : Integer) : AnsiString;
+function StringToAnsiString (const ws: String; codePage: Integer): AnsiString;
 var
-  dlen, len : DWORD;
-  mode : DWORD;
+  dlen, len: DWORD;
+  mode: DWORD;
 begin
   LoadMultiLanguage;
 
@@ -363,9 +363,9 @@ begin
     SetLength (result, dlen)
 end;
 
-function AnsiStringToString (const st : AnsiString; codePage : Integer) : String;
+function AnsiStringToString (const st: AnsiString; codePage: Integer): String;
 var
-  len, dlen, mode : DWORD;
+  len, dlen, mode: DWORD;
 begin
   LoadMultiLanguage;
   if codePage = -1 then
@@ -394,9 +394,9 @@ begin
   end
 end;
 
-function URLSuffixToCodePage (urlSuffix : string) : Integer;
+function URLSuffixToCodePage (urlSuffix: string): Integer;
 var
-  i : Integer;
+  i: Integer;
 begin
   LoadMultiLanguage;
   urlSuffix := LowerCase (urlSuffix);
@@ -410,10 +410,10 @@ begin
       end
 end;
 
-procedure GetCharsetNames (sl : TStrings);
+procedure GetCharsetNames (sl: TStrings);
 var
-  i : Integer;
-  lst : string;
+  i: Integer;
+  lst: string;
 begin
   LoadMultiLanguage;
   sl.Clear;
@@ -449,13 +449,13 @@ begin
   Result:= StrToIntDef(Buffer, GetACP);
 end;
 
-function AnsiStringToGDIAnsiString (const s : AnsiString; codePage : Integer) : AnsiString;
+function AnsiStringToGDIAnsiString (const s: AnsiString; codePage: Integer): AnsiString;
 var
-  cs : TFontCharset;
-  i : Integer;
-  destCP : Integer;
-  mode : DWORD;
-  len, dlen : DWORD;
+  cs: TFontCharset;
+  i: Integer;
+  destCP: Integer;
+  mode: DWORD;
+  len, dlen: DWORD;
 begin
   LoadMultiLanguage;
   cs := CodePageToCharset (codePage);
@@ -486,13 +486,13 @@ begin
   end
 end;
 
-function GDIAnsiStringToAnsiString (const s : AnsiString; codePage : Integer) : AnsiString;
+function GDIAnsiStringToAnsiString (const s: AnsiString; codePage: Integer): AnsiString;
 var
-  cs : TFontCharset;
-  i : Integer;
-  srcCP : Integer;
-  mode : DWORD;
-  len, dlen : DWORD;
+  cs: TFontCharset;
+  i: Integer;
+  srcCP: Integer;
+  mode: DWORD;
+  len, dlen: DWORD;
 begin
   LoadMultiLanguage;
   cs := CodePageToCharset (codePage);
@@ -523,9 +523,9 @@ begin
   end
 end;
 
-function IsWideCharAlpha (ch : WideChar) : boolean;
+function IsWideCharAlpha (ch: WideChar): Boolean;
 var
-  w : word;
+  w: word;
 begin
   w := Word (ch);
 
@@ -561,9 +561,9 @@ begin
     result := True;     // Can't be bothered to do any more - for the moment!
 end;
 
-function IsWideCharAlnum (ch : WideChar) : boolean;
+function IsWideCharAlnum (ch: WideChar): Boolean;
 var
-  w : word;
+  w: word;
 begin
   w := Word (ch);
   if (w >= $30) and (w <= $39) then
@@ -572,9 +572,9 @@ begin
     result := IsWideCharAlpha (ch)
 end;
 
-procedure FontToCharFormat(font: TFont; codePage : Integer; var Format: TCharFormatW);
+procedure FontToCharFormat(font: TFont; codePage: Integer; var Format: TCharFormatW);
 var
-  wFontName : WideString;
+  wFontName: WideString;
 begin
   FillChar (Format, SizeOf (Format), 0);
 
@@ -613,12 +613,12 @@ begin
   lstrcpynw (Format.szFaceName, PWideChar (wFontName),LF_FACESIZE - 1) ;
 end;
 
-function StringToUTF8 (const ws : String) : AnsiString;
+function StringToUTF8 (const ws: String): AnsiString;
 begin
   result := StringToAnsiString (ws, CP_UTF8);
 end;
 
-function UTF8TOString (const st : AnsiString) : String;
+function UTF8TOString (const st: AnsiString): String;
 begin
   result := AnsiStringToString (st, CP_UTF8);
 end;
@@ -627,9 +627,9 @@ end;
 
 constructor TCountryCodes.Create;
 var
-  reg : TRegistry;
-  sl : TStrings;
-  i : Integer;
+  reg: TRegistry;
+  sl: TStrings;
+  i: Integer;
 begin
   inherited Create (true);
 
@@ -655,18 +655,18 @@ begin
   result := TCountryCode (Items [idx]);
 end;
 
-function CompareItems (item1, item2 : pointer) : Integer;
+function CompareItems (item1, item2: pointer): Integer;
 var
-  c1, c2 : TCountryCode;
-  p1, p2 : Integer;
+  c1, c2: TCountryCode;
+  p1, p2: Integer;
 begin
   c1 := TCountryCode (item1);
   c2 := TCountryCode (item2);
 
-  if Assigned (c1.Owner.fPreferedList) then
+  if Assigned (c1.Owner.FPreferedList) then
   begin
-    p1 := c1.Owner.fPreferedList.IndexOf(IntToStr (c1.Code));
-    p2 := c1.Owner.fPreferedList.IndexOf(IntToStr (c2.Code));
+    p1 := c1.Owner.FPreferedList.IndexOf(IntToStr (c1.Code));
+    p2 := c1.Owner.FPreferedList.IndexOf(IntToStr (c2.Code));
 
     if p1 = -1 then
       if p2 = -1 then
@@ -683,9 +683,9 @@ begin
     result := CompareText (c1.Name, c2.Name);
 end;
 
-function CompareCodes (item1, item2 : pointer) : Integer;
+function CompareCodes (item1, item2: pointer): Integer;
 var
-  c1, c2 : TCountryCode;
+  c1, c2: TCountryCode;
 begin
   c1 := TCountryCode (item1);
   c2 := TCountryCode (item2);
@@ -702,30 +702,30 @@ begin
   try
     if PreferedList <> '' then
     begin
-      fPreferedList := TStringList.Create;
-      fPreferedList.CommaText := PreferedList;
+      FPreferedList := TStringList.Create;
+      FPreferedList.CommaText := PreferedList;
     end;
 
     inherited Sort (CompareItems);
   finally
-    FreeAndNil (fPreferedList);
+    FreeAndNil (FPreferedList);
   end
 end;
 
 { TCountryCode }
 
-constructor TCountryCode.Create(AOwner : TCountryCodes; ACode: Integer; const AName: string);
+constructor TCountryCode.Create(AOwner: TCountryCodes; ACode: Integer; const AName: string);
 begin
-  fOwner := AOwner;
-  fCode := ACode;
-  fName := AName;
+  FOwner := AOwner;
+  FCode := ACode;
+  FName := AName;
 end;
 
-constructor TCountryCode.CreateFromReg(AOwner : TCountryCodes; RootKey: HKEY; ACode: Integer);
+constructor TCountryCode.CreateFromReg(AOwner: TCountryCodes; RootKey: HKEY; ACode: Integer);
 var
-  reg : TRegistry;
-  st : string;
-  ok : boolean;
+  reg: TRegistry;
+  st: string;
+  ok: Boolean;
 begin
   reg := TRegistry.Create (KEY_READ);
   try
