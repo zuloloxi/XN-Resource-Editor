@@ -65,7 +65,7 @@ var
   g: TGifImage;
   rs: TResourceStream;
 begin
-  result := False;
+  Result := False;
   g := Nil;
   if FindResource (hInstance, PChar (resName), 'GIF') <> 0 then
   try
@@ -76,7 +76,7 @@ begin
         g := TGifImage.Create;
         g.LoadFromStream(rs);
         image.Picture.Assign(g);
-        result := True
+        Result := True
       end
     finally
       g.Free;
@@ -100,7 +100,7 @@ begin
   reg := TRegistry.Create (KEY_READ);
   try
     reg.RootKey := HKEY_LOCAL_MACHINE;
-    if reg.OpenKey (Format ('Software\Woozle\%s\CurrentVersion', [product]), False) then
+    if reg.OpenKey (Format('Software\Woozle\%s\CurrentVersion', [product]), False) then
       if reg.ValueExists ('RegisteredOwner') and reg.ValueExists ('RegisteredOrganization') then
       begin
         owner := reg.ReadString ('RegisteredOwner');
@@ -124,7 +124,7 @@ begin
       else
         product := 'Windows';
 
-      if reg.OpenKey (Format ('Software\Microsoft\%s\CurrentVersion', [product]), False) then
+      if reg.OpenKey (Format('Software\Microsoft\%s\CurrentVersion', [product]), False) then
       begin
         owner := reg.ReadString ('RegisteredOwner');
         organization := reg.ReadString ('RegisteredOrganization');
@@ -139,7 +139,7 @@ begin
       reg := TRegistry.Create (KEY_READ or KEY_WRITE);
       try
         reg.RootKey := HKEY_LOCAL_MACHINE;
-        if reg.OpenKey (Format ('Software\Woozle\%s\CurrentVersion', [product]), True) then
+        if reg.OpenKey (Format('Software\Woozle\%s\CurrentVersion', [product]), True) then
         begin
           reg.WriteString ('RegisteredOwner', owner);
           reg.WriteString ('RegisteredOrganization', organization)
@@ -183,7 +183,7 @@ begin
 
     TabSheet1.Caption := 'About ' + st;
 
-    st := st + Format (' Version %d.%d.%d.%d', [HiWord (info^.dwProductVersionMS), LoWord (info^.dwProductVersionMS), HiWord (info^.dwProductVersionLS), LoWord (info^.dwProductVersionLS)])
+    st := st + Format(' Version %d.%d.%d.%d', [HiWord (info^.dwProductVersionMS), LoWord (info^.dwProductVersionMS), HiWord (info^.dwProductVersionLS), LoWord (info^.dwProductVersionLS)])
   end;
 
   if FThanksTo = '' then
@@ -224,8 +224,8 @@ begin
   GetRegistrationInformation (Win32Platform = VER_PLATFORM_WIN32_NT, owner, organization);
   stLicense1.Caption := owner;
   stLicense2.Caption := organization;
-  stVersion.Caption := Format ('%s  (Build %d: %s)', [os, Win32BuildNumber, Win32CSDVersion]);
-  stMemAvail.Caption := Format ('Physical Memory Available to Windows: %10.0n KB', [memInfo.dwTotalPhys / 1024]);
+  stVersion.Caption := Format('%s  (Build %d: %s)', [os, Win32BuildNumber, Win32CSDVersion]);
+  stMemAvail.Caption := Format('Physical Memory Available to Windows: %10.0n KB', [memInfo.dwTotalPhys / 1024]);
   LoadGifResource (Application.Title+'1', icoProduct1);
 end;
 

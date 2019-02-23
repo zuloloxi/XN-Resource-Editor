@@ -11,12 +11,12 @@ type
 // file
   TIniFilePersistentOptions = class (TCustomPersistentOptions)
   private
-    FCustomFileName : string;
+    FCustomFileName: string;
   protected
-    function GetSettingsClass : TExSettingsClass; override;
-    procedure SettingsCreated (settings : TExSettings); override;
+    function GetSettingsClass: TExSettingsClass; override;
+    procedure SettingsCreated (settings: TExSettings); override;
   published
-    property FileName : string read fCustomFileName write fCustomFileName;
+    property FileName: string read fCustomFileName write fCustomFileName;
   end;
 
 implementation

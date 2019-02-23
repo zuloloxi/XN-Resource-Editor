@@ -23,81 +23,82 @@ unit unitSearchString;
 
 interface
 
-uses Windows, Classes, SysUtils, StrUtils, unitCharsetMap;
+uses
+  Windows, Classes, SysUtils, StrUtils, unitCharsetMap;
 
 type
   TStrArray = array of String;
   TStringSearcher = class
   protected
-    fCaseSensitive : boolean;
-    fSearchString : String;
-    fOrWords : TStrArray;
-    fNotWords : TStrArray;
-    fAndWords : TStrArray;
+    fCaseSensitive: Boolean;
+    fSearchString: String;
+    fOrWords: TStrArray;
+    fNotWords: TStrArray;
+    fAndWords: TStrArray;
 
-    nOrWords : Integer;
-    nAndWords : Integer;
-    nNotWords : Integer;
+    nOrWords: Integer;
+    nAndWords: Integer;
+    nNotWords: Integer;
 
   public
-    constructor Create (const ASearchString : String; ACaseSensitive : boolean);
+    constructor Create (const ASearchString: String; ACaseSensitive: Boolean);
 
-    function Matches (AString : String) : boolean;
-    procedure Parse (searchString : String); virtual; abstract;
+    function Matches (AString: String): Boolean;
+    procedure Parse (searchString: String); virtual; abstract;
   end;
 
   TGoogleLikeStringSearcher = class (TStringSearcher)
   public
-    procedure Parse (searchString : String); override;
+    procedure Parse (searchString: String); override;
   end;
 
-function ExtractString (const search : string; var s : string) : string;
-function SplitString (const search : string; var s : string; trimRemainder : boolean = true) : string; overload;
-function SplitString (const search : AnsiString; var s : AnsiString; trimRemainder : boolean = true) : AnsiString; overload;
-function SplitToken (var st : string) : string;
-function DelimPos (const delims : string; const st : string; out delim : char) : Integer;
-function DelimSplitString (const search : string; var s : string; out delim : char) : string;
-function SearchStringArray (arr : array of string; const st : string) : Integer;
-function StringArrayContains (arr : array of string; const st : string) : boolean;
-function WildContains (const a, b : String) : boolean;
-function SearchQuotedString (const st : string; const delims : string; quote : char = '"'; brk : char = #0):  Integer;
-function SearchRQuotedString (const st : string; const delims : string; quote : char = '"'; brk : char = #0):  Integer;
-function IsCharAlNum (ch : char) : boolean;
-function IsCharHex (ch : char) : boolean;
+function ExtractString(const search: string; var s: string): string;
+function SplitString(const search: string; var s: string; trimRemainder: Boolean = true): string; overload;
+function SplitString(const search: AnsiString; var s: AnsiString; trimRemainder: Boolean = true): AnsiString; overload;
+function SplitToken (var st: string): string;
+function DelimPos (const delims: string; const st: string; out delim: char): Integer;
+function DelimSplitString(const search: string; var s: string; out delim: char): string;
+function SearchStringArray (arr: array of string; const st: string): Integer;
+function StringArrayContains (arr: array of string; const st: string): Boolean;
+function WildContains (const a, b: String): Boolean;
+function SearchQuotedString(const st: string; const delims: string; quote: char = '"'; brk: char = #0):  Integer;
+function SearchRQuotedString(const st: string; const delims: string; quote: char = '"'; brk: char = #0):  Integer;
+function IsCharAlNum (ch: char): Boolean;
+function IsCharHex (ch: char): Boolean;
 
-function CompareAnsiText (const s1, s2 : AnsiString) : Integer;
-function SameAnsiText (const s1, s2 : AnsiString) : boolean;
+function CompareAnsiText(const s1, s2: AnsiString): Integer;
+function SameAnsiText(const s1, s2: AnsiString): Boolean;
 
 
 implementation
 
-function IsCharAlNum (ch : char) : boolean;
+function IsCharAlNum (ch: char): Boolean;
 begin
-  result := ((ch >= '0') and (ch <= '9')) or
+  Result := ((ch >= '0') and (ch <= '9')) or
             ((ch >= 'A') and (ch <= 'Z')) or
             ((ch >= 'a') and (ch <= 'z'))
 
 end;
 
-function IsCharHex (ch : char) : boolean;
+function IsCharHex (ch: char): Boolean;
 begin
-  result := ((ch >= '0') and (ch <= '9')) or
+  Result := ((ch >= '0') and (ch <= '9')) or
             ((ch >= 'A') and (ch <= 'F')) or
             ((ch >= 'a') and (ch <= 'f'))
 end;
 
 (*----------------------------------------------------------------------*
- | function ExtractString : string                                      |
+ | function ExtractString: string                                      |
  |                                                                      |
  | Search for a substring.  If the substring is found, return the       |
  | characters up to the substring, and set the soure string to the      |
  | characters after it.  If it was not found, return an empty string    |
  | and leave the source string unchanged.                               |
  *----------------------------------------------------------------------*)
-function ExtractString (const search : string; var s : string) : string;
+function ExtractString(const search: string; var s: string): string;
 var
-  p, l : Integer;
-  pc : PChar;
+  p, l: Integer;
+  pc: PChar;
 
 begin
   l := Length (search);
@@ -113,25 +114,25 @@ begin
     p := Pos (search, s);
   if p > 0 then
   begin
-    result := Trim (Copy (s, 1, p - 1));
+    Result := Trim (Copy (s, 1, p - 1));
     s := Trim (Copy (s, p + l, maxInt))
   end
   else
-    result := ''
+    Result := ''
 end;
 
 (*----------------------------------------------------------------------*
- | function SplitString : string                                        |
+ | function SplitString: string                                        |
  |                                                                      |
  | Search for a substring.  If the substring is found, return the       |
  | characters up to the substring, and set the soure string to the      |
  | characters after it.  If it was not found, return the entire source  |
  | string, and set the source string to an empty string                 |
  *----------------------------------------------------------------------*)
-function SplitString (const search : string; var s : string; trimRemainder : boolean = true) : string;
+function SplitString(const search: string; var s: string; trimRemainder: Boolean = true): string;
 var
-  p, l : Integer;
-  pc : PChar;
+  p, l: Integer;
+  pc: PChar;
 begin
   l := Length (search);
   if l = 1 then
@@ -146,7 +147,7 @@ begin
     p := Pos (search, s);
   if p > 0 then
   begin
-    result := Trim (Copy (s, 1, p - 1));
+    Result := Trim (Copy (s, 1, p - 1));
 
     s := Copy (s, p + l, maxInt);
     if trimRemainder then
@@ -154,7 +155,7 @@ begin
   end
   else
   begin
-    result := Trim (s);
+    Result := Trim (s);
     s := ''
   end
 end;
@@ -173,10 +174,10 @@ begin
   end;
 end;
 
-function SplitString (const search : AnsiString; var s : AnsiString; trimRemainder : boolean = true) : AnsiString;
+function SplitString(const search: AnsiString; var s: AnsiString; trimRemainder: Boolean = true): AnsiString;
 var
-  p, l : Integer;
-  pc : PAnsiChar;
+  p, l: Integer;
+  pc: PAnsiChar;
 begin
   l := Length (search);
   if l = 1 then
@@ -191,7 +192,7 @@ begin
     p := Pos (search, s);
   if p > 0 then
   begin
-    result := AnsiTrim (Copy (s, 1, p - 1));
+    Result := AnsiTrim (Copy (s, 1, p - 1));
 
     s := Copy (s, p + l, maxInt);
     if trimRemainder then
@@ -199,42 +200,42 @@ begin
   end
   else
   begin
-    result := AnsiTrim (s);
+    Result := AnsiTrim (s);
     s := ''
   end
 end;
 
-function SplitToken (var st : string) : string;
+function SplitToken (var st: string): string;
 var
-  p, p1 : Integer;
+  p, p1: Integer;
 begin
   p := Pos (' ', st);
   p1 := Pos (#9, st);
   if p = 0 then p := MaxInt;
   if p1 = 0 then p1 := MaxInt;
   if p < p1 then
-    result := SplitString (' ', st)
+    Result := SplitString(' ', st)
   else
-    result := SplitString (#9, st)
+    Result := SplitString(#9, st)
 end;
 
 
-function WildContains (const a, b : String) : boolean;
+function WildContains (const a, b: String): Boolean;
 var
-  p, offs, l, l1 : Integer;
+  p, offs, l, l1: Integer;
 begin
   l := Length (a);
   l1 := Length (b);
 
   if (l1 = 0) or (l = 0) then
   begin
-    result := False;
+    Result := False;
     Exit
   end;
 
   if b [l1] = '*' then
   begin
-    result := ContainsStr (a, Copy (b, 1, l1 - 1));
+    Result := ContainsStr (a, Copy (b, 1, l1 - 1));
     exit
   end;
 
@@ -260,24 +261,24 @@ begin
     end
   until (p <> 0) or (offs = 0);
 
-  result := p <> 0
+  Result := p <> 0
 end;
 
 { TStringSearcher }
 
-constructor TStringSearcher.Create(const ASearchString: String; ACaseSensitive : boolean);
+constructor TStringSearcher.Create(const ASearchString: String; ACaseSensitive: Boolean);
 begin
   fCaseSensitive := ACaseSensitive;
   fSearchString := ASearchString;
   Parse (ASearchString)
 end;
 
-function TStringSearcher.Matches(AString: String): boolean;
+function TStringSearcher.Matches(AString: String): Boolean;
 type
   TMatch = (mYes, mNo, mMaybe);
 var
-  i : Integer;
-  ok : TMatch;
+  i: Integer;
+  ok: TMatch;
 
 begin
   if not fCaseSensitive then
@@ -308,9 +309,9 @@ begin
       end;
 
   if ok = mMaybe then
-    result := (nAndWords > 0) or (nNotWords > 0)
+    Result := (nAndWords > 0) or (nNotWords > 0)
   else
-    result := ok = mYes
+    Result := ok = mYes
 end;
 
 { TGoogleLikeStringSearcher }
@@ -319,20 +320,20 @@ procedure TGoogleLikeStringSearcher.Parse(searchString: String);
 type
   tOP = (opAnd, opOr, opNot);
 var
-  l : Integer;
-  s1 : String;
-  op : tOp;
+  l: Integer;
+  s1: String;
+  op: tOp;
 
-  procedure AddToVarArray (var arr : TStrArray; const st : String; var n : Integer);
+  procedure AddToVarArray (var arr: TStrArray; const st: String; var n: Integer);
   begin
     if n = Length (arr) then
       SetLength (arr, n + 5);
     arr [n] := st;
-    Inc (n)
+    Inc(n)
   end;
 
 begin
-  if CompareText (fSearchString, searchString) = 0 then
+  if CompareText(fSearchString, searchString) = 0 then
     Exit;
   fSearchString := searchString;
   nAndWords := 0;
@@ -365,11 +366,11 @@ begin
     if searchString [1] = '"' then
     begin
       Delete (searchString, 1, 1);
-      s1 := SplitString ('"', searchString)
+      s1 := SplitString('"', searchString)
     end
     else
     begin
-      s1 := SplitString (' ', searchString);
+      s1 := SplitString(' ', searchString);
       if UpperCase (s1) = 'OR' then
       begin
         op := opOR;
@@ -380,9 +381,9 @@ begin
 
     if s1 <> '' then
       case op of
-        opAnd : AddToVarArray (fAndWords, s1, nAndWords);
-        opOr  : AddToVarArray (fOrWords, s1, nOrWords);
-        opNot : AddToVarArray (fNotWords, s1, nNotWords)
+        opAnd: AddToVarArray (fAndWords, s1, nAndWords);
+        opOr: AddToVarArray (fOrWords, s1, nOrWords);
+        opNot: AddToVarArray (fNotWords, s1, nNotWords)
       end;
 
     op := opAnd;
@@ -390,90 +391,90 @@ begin
   end
 end;
 
-function SearchStringArray (arr : array of string; const st : string) : Integer;
+function SearchStringArray (arr: array of string; const st: string): Integer;
 
-  function bsearch (s, e : Integer) : Integer;
+  function bsearch (s, e: Integer): Integer;
   var
-    m, c : Integer;
+    m, c: Integer;
   begin
     if s <= e then
     begin
       m := s + (e - s) div 2;
 
-      c := CompareText (st, arr [m]);
+      c := CompareText(st, arr [m]);
 
       if c = 0 then
-        result := m
+        Result := m
       else
         if c > 0 then
-          result := bsearch (m + 1, e)
+          Result := bsearch (m + 1, e)
         else
-          result := bsearch (s, m - 1)
+          Result := bsearch (s, m - 1)
     end
     else
-      result := -1
+      Result := -1
   end;
 
 begin
-  result := bsearch (Low (arr), High (arr))
+  Result := bsearch (Low (arr), High (arr))
 end;
 
-function StringArrayContains (arr : array of string; const st : string) : boolean;
+function StringArrayContains (arr: array of string; const st: string): Boolean;
 begin
-  result := SearchStringArray (arr, st) >= 0
+  Result := SearchStringArray (arr, st) >= 0
 end;
 
 
-function DelimPos (const delims : string; const st : string; out delim : char) : Integer;
+function DelimPos (const delims: string; const st: string; out delim: char): Integer;
 var
-  i, p : Integer;
+  i, p: Integer;
 begin
   if delims = '' then
   begin
-    result := 0;
+    Result := 0;
     exit
   end;
 
-  result := MaxInt;
+  Result := MaxInt;
   for i := 1 to Length (delims) do
   begin
     p := Pos (delims [i], st);
     if (p > 0) and (p < result) then
     begin
       delim := delims [i];
-      result := p
+      Result := p
     end
   end;
 
   if result = MaxInt then
-    result := 0
+    Result := 0
 end;
 
-function DelimSplitString (const search : string; var s : string; out delim : char) : string;
+function DelimSplitString(const search: string; var s: string; out delim: char): string;
 var
-  p : Integer;
+  p: Integer;
 begin
   p := DelimPos (search, s, delim);
   if p > 0 then
   begin
-    result := Trim (Copy (s, 1, p - 1));
+    Result := Trim (Copy (s, 1, p - 1));
     s := Trim (Copy (s, p + 1, maxInt))
   end
   else
   begin
-    result := Trim (s);
+    Result := Trim (s);
     s := ''
   end
 end;
 
-function SearchQuotedString (const st : string; const delims : string; quote : char; brk : char):  Integer;
+function SearchQuotedString(const st: string; const delims: string; quote: char; brk: char):  Integer;
 var
-  p : Integer;
-  c : char;
-  inQuote : boolean;
-  l : Integer;
+  p: Integer;
+  c: char;
+  inQuote: Boolean;
+  l: Integer;
 begin
-  result := 0;
+  Result := 0;
   l := Length (st);
   inQuote := False;
 
@@ -489,20 +490,20 @@ begin
       else
         if not InQuote and (Pos (c, delims) > 0) then
         begin
-          result := p;
+          Result := p;
           break
         end
   end
 end;
 
-function SearchRQuotedString (const st : string; const delims : string; quote : char; brk : char):  Integer;
+function SearchRQuotedString(const st: string; const delims: string; quote: char; brk: char):  Integer;
 var
-  p : Integer;
-  c : char;
-  inQuote : boolean;
-  l : Integer;
+  p: Integer;
+  c: char;
+  inQuote: Boolean;
+  l: Integer;
 begin
-  result := 0;
+  Result := 0;
   l := Length (st);
   inQuote := False;
 
@@ -517,19 +518,19 @@ begin
         InQuote := not InQuote
       else
         if not InQuote and (Pos (c, delims) > 0) then
-          result := p;
-  end
+          Result := p;
+  end;
 end;
 
-function CompareAnsiText (const s1, s2 : AnsiString) : Integer;
+function CompareAnsiText(const s1, s2: AnsiString): Integer;
 begin
-  result := CompareStringA (LOCALE_USER_DEFAULT, NORM_IGNORECASE, PAnsiChar(S1),
+  Result := CompareStringA (LOCALE_USER_DEFAULT, NORM_IGNORECASE, PAnsiChar(S1),
       Length(S1), PAnsiChar(S2), Length(S2)) - CSTR_EQUAL;
 end;
 
-function SameAnsiText (const s1, s2 : AnsiString) : boolean;
+function SameAnsiText(const s1, s2: AnsiString): Boolean;
 begin
-  result := CompareAnsiText (s1, s2) = 0
+  Result := CompareAnsiText(s1, s2) = 0
 end;
 
 

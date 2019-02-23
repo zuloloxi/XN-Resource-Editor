@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates RC Data resources in resources                          |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -127,9 +127,9 @@ type
     bit      meaning
     -----------------------------------------------------------------------------------------
     0      | main unit
-    1      | package unit (dpk source)
+    1      | package unit(dpk source)
     2      | $WEAKPACKAGEUNIT unit
-    3      | original containment of $WEAKPACKAGEUNIT (package into which it was compiled)
+    3      | original containment of $WEAKPACKAGEUNIt(package into which it was compiled)
     4      | implicitly imported
     5..7   | reserved
   }
@@ -153,15 +153,15 @@ end;
 
 class function TRCDataResourceDetails.GetBaseType: UnicodeString;
 begin
-  result := IntToStr (Integer (RT_RCDATA));
+  Result := IntToStr (Integer (RT_RCDATA));
 end;
 
 function TRCDataResourceDetails.GetData: TMemoryStream;
 begin
   if Delegate <> nil then
-    result := Delegate.Data
+    Result := Delegate.Data
   else
-    result := inherited;
+    Result := inherited;
 end;
 
 { TRCDataDescriptionResourceDetails }
@@ -181,7 +181,7 @@ end;
 class function TRCDataDescriptionResourceDetails.SupportsRCData(
   const AName: UnicodeString; Size: Integer; data: Pointer): Boolean;
 begin
-  Result := CompareText (AName, 'DESCRIPTION') = 0;
+  Result := CompareText(AName, 'DESCRIPTION') = 0;
 end;
 
 { TRCDataPackagesResourceDetails }
@@ -201,17 +201,17 @@ var
   pkg: PPkgName;
   unt: PUnitName;
 begin
-  if not Assigned (FRequiresList) then
+  if not Assigned(FRequiresList) then
   begin
     FRequiresList := TStringList.Create;
     FContainsList := TStringList.Create;
 
     p := Data.Memory;
     FFlags := PDWORD (p)^;
-    Inc (p, SizeOf (DWORD)); //  Flags
+    Inc(p, SizeOf (DWORD)); //  Flags
 
     Count := PInteger (p)^;
-    Inc (p, SizeOf (Integer));
+    Inc(p, SizeOf (Integer));
 
     for i := 0 to Count - 1 do
     begin
@@ -219,17 +219,17 @@ begin
 
 
       FRequiresList.Add (String (pkg^.Name));
-      Inc (p, 2 + lstrlena (pkg^.Name));
+      Inc(p, 2 + lstrlena (pkg^.Name));
     end;
 
     Count := PInteger (p)^;
-    Inc (p, SizeOf (Integer));
+    Inc(p, SizeOf (Integer));
 
     for i := 0 to Count - 1 do
     begin
       unt := PUnitName (p);
-      FContainsList.AddObject (String (unt^.Name), TObject (Integer (unt.Flags)));
-      Inc (p, 3 + lstrlena (unt^.Name));
+      FContainsList.AddObject(String (unt^.Name), TObject(Integer (unt.Flags)));
+      Inc(p, 3 + lstrlena (unt^.Name));
     end
   end
 end;
@@ -275,7 +275,7 @@ end;
 function TRCDataPackagesResourceDetails.GetEnvironment: TPackageEnvironment;
 begin
   DecodeData;
-  Result := TPackageEnvironment ((FFlags shr 26) and 3);
+  Result := TPackageEnvironment((FFlags shr 26) and 3);
 end;
 
 function TRCDataPackagesResourceDetails.GetModuleType: TModuleType;
@@ -311,7 +311,7 @@ end;
 class function TRCDataPackagesResourceDetails.SupportsRCData(
   const AName: UnicodeString; Size: Integer; data: Pointer): Boolean;
 begin
-  Result := CompareText (AName, 'PACKAGEINFO') = 0;
+  Result := CompareText(AName, 'PACKAGEINFO') = 0;
 end;
 
 { TRCDataFormResourceDetails }
@@ -335,7 +335,7 @@ begin
         if src.Read (ach, 1) <> 1 then
           break;
 
-        if not (ach in ['0'..'9']) then
+        if not(ach in ['0'..'9']) then
           break;
 
         token := token + ach
@@ -344,15 +344,15 @@ begin
       if token = '' then
         break;
 
-      token := UTF8Encode (WideChar (StrToInt (String (token))));
+      token := UTF8Encode (WideChar (StrToInt(String (token))));
       for i := 1 to Length (token) do
       begin
         result [outp] := token [i];
-        Inc (outp)
+        Inc(outp)
       end
     end;
     result [outp] := ach;
-    Inc (outp)
+    Inc(outp)
   end;
   SetLength (result, outp-1)
 end;
@@ -369,12 +369,12 @@ begin
   try
     data.Seek (0, soFromBeginning);
     off := sofUnknown;
-    ObjectBinaryToText (data, m, off);
+    ObjectBinaryToText(data, m, off);
     s := TStringList.Create;
     m.Seek(0, soFromBeginning);
     s.LoadFromStream(m);
     st := s.Text;
-    result := UTF8ToUnicodeString (AnsiString (st))
+    Result := UTF8ToUnicodeString (AnsiString (st))
   finally
     m.Free;
     s.Free
@@ -461,7 +461,7 @@ var
         raise EZDecompressionError.Create ('ZLib error');
 
       if inflate (zstream, Z_NO_FLUSH) >= 0 then
-        Inc (outSize, delta)
+        Inc(outSize, delta)
       else
         raise EZDecompressionError.Create ('ZLib error');
 
@@ -478,13 +478,13 @@ begin
   if inSize > 1024 then
     inSize := 1024;
 
-  result := False;
+  Result := False;
   try
     try
       outSize := 0;
       ZDecompressPartial (data, inSize, outBuffer, outSize);
       try
-        result := (PAnsiChar (outBuffer)^ = AnsiChar ('B')) and
+        Result := (PAnsiChar (outBuffer)^ = AnsiChar ('B')) and
                   ((PAnsiChar (outBuffer) + 1)^ = AnsiChar ('M'));
 
       finally
@@ -570,7 +570,7 @@ begin
 
   end;
 
-  result := FCompressedData
+  Result := FCompressedData;
 end;
 
 initialization

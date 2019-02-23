@@ -61,9 +61,9 @@ uses Windows, ActiveX, Classes, Graphics, OleServer, StdVCL, Variants;
 
 // *********************************************************************//
 // GUIDS declared in the TypeLibrary. Following prefixes are used:        
-//   Type Libraries     : LIBID_xxxx                                      
-//   CoClasses          : CLASS_xxxx                                      
-//   DISPInterfaces     : DIID_xxxx                                       
+//   Type Libraries : LIBID_xxxx                                      
+//   CoClasses      : CLASS_xxxx                                      
+//   DISPInterfaces : DIID_xxxx                                       
 //   Non-DISP interfaces: IID_xxxx                                        
 // *********************************************************************//
 const
@@ -2028,7 +2028,7 @@ type
                              const DomainPswd: WideString); safecall;
     procedure ReleaseConnection; safecall;
     procedure ConnectProject(const ProjectName: WideString; const UserName: WideString; 
-                             const Password: WideString); safecall;
+                             const PassWord: WideString); safecall;
     procedure DisconnectProject; safecall;
     function Get_ProjectsList: IList; safecall;
     function Get_Command: IDispatch; safecall;
@@ -2046,9 +2046,9 @@ type
     function Get_CommonSettings: IDispatch; safecall;
     function Get_UserSettings: IDispatch; safecall;
     function Get_HostGroupFactory: IDispatch; safecall;
-    procedure ChangePassword(const OldPassword: WideString; const NewPassword: WideString); safecall;
+    procedure ChangePassWord(const OldPassWord: WideString; const NewPassWord: WideString); safecall;
     function Get_UsersList: IList; safecall;
-    function Get_Password: WideString; safecall;
+    function Get_PassWord: WideString; safecall;
     function Get_ExtendedStorage: IDispatch; safecall;
     function Get_DirectoryPath(nType: Integer): WideString; safecall;
     function Get_ChangeFactory: IDispatch; safecall;
@@ -2072,9 +2072,9 @@ type
     procedure InitConnectionEx(const ServerName: WideString); safecall;
     function Get_ProjectsListEx(const DomainName: WideString): IList; safecall;
     procedure ConnectProjectEx(const DomainName: WideString; const ProjectName: WideString; 
-                               const UserName: WideString; const Password: WideString); safecall;
+                               const UserName: WideString; const PassWord: WideString); safecall;
     function Get_DomainsList: IList; safecall;
-    procedure ConnectToVCSAs(const UserName: WideString; const Password: WideString; 
+    procedure ConnectToVCSAs(const UserName: WideString; const PassWord: WideString; 
                              const CopyDesStep: WideString); safecall;
     procedure GetLicenses(LicensesType: Integer; var pVal: WideString); safecall;
     function Get_Analysis: IDispatch; safecall;
@@ -2085,7 +2085,7 @@ type
     function Get_AlertManager: IDispatch; safecall;
     function Get_AllowReconnect: WordBool; safecall;
     procedure Set_AllowReconnect(pVal: WordBool); safecall;
-    procedure SynchronizeFollowUps(const Password: WideString); safecall;
+    procedure SynchronizeFollowUps(const PassWord: WideString); safecall;
     function Get_KeepConnection: WordBool; safecall;
     procedure Set_KeepConnection(pVal: WordBool); safecall;
     function Get_IgnoreHtmlFormat: WordBool; safecall;
@@ -2121,7 +2121,7 @@ type
     property UserSettings: IDispatch read Get_UserSettings;
     property HostGroupFactory: IDispatch read Get_HostGroupFactory;
     property UsersList: IList read Get_UsersList;
-    property Password: WideString read Get_Password;
+    property PassWord: WideString read Get_PassWord;
     property ExtendedStorage: IDispatch read Get_ExtendedStorage;
     property DirectoryPath[nType: Integer]: WideString read Get_DirectoryPath;
     property ChangeFactory: IDispatch read Get_ChangeFactory;
@@ -2179,7 +2179,7 @@ type
                              const DomainPswd: WideString); dispid 13;
     procedure ReleaseConnection; dispid 14;
     procedure ConnectProject(const ProjectName: WideString; const UserName: WideString; 
-                             const Password: WideString); dispid 15;
+                             const PassWord: WideString); dispid 15;
     procedure DisconnectProject; dispid 16;
     property ProjectsList: IList readonly dispid 17;
     property Command: IDispatch readonly dispid 18;
@@ -2197,9 +2197,9 @@ type
     property CommonSettings: IDispatch readonly dispid 28;
     property UserSettings: IDispatch readonly dispid 29;
     property HostGroupFactory: IDispatch readonly dispid 30;
-    procedure ChangePassword(const OldPassword: WideString; const NewPassword: WideString); dispid 31;
+    procedure ChangePassWord(const OldPassWord: WideString; const NewPassWord: WideString); dispid 31;
     property UsersList: IList readonly dispid 32;
-    property Password: WideString readonly dispid 33;
+    property PassWord: WideString readonly dispid 33;
     property ExtendedStorage: IDispatch readonly dispid 34;
     property DirectoryPath[nType: Integer]: WideString readonly dispid 35;
     property ChangeFactory: IDispatch readonly dispid 36;
@@ -2222,9 +2222,9 @@ type
     procedure InitConnectionEx(const ServerName: WideString); dispid 52;
     property ProjectsListEx[const DomainName: WideString]: IList readonly dispid 53;
     procedure ConnectProjectEx(const DomainName: WideString; const ProjectName: WideString; 
-                               const UserName: WideString; const Password: WideString); dispid 54;
+                               const UserName: WideString; const PassWord: WideString); dispid 54;
     property DomainsList: IList readonly dispid 55;
-    procedure ConnectToVCSAs(const UserName: WideString; const Password: WideString; 
+    procedure ConnectToVCSAs(const UserName: WideString; const PassWord: WideString; 
                              const CopyDesStep: WideString); dispid 56;
     procedure GetLicenses(LicensesType: Integer; var pVal: WideString); dispid 57;
     property Analysis: IDispatch readonly dispid 58;
@@ -2234,7 +2234,7 @@ type
     property TestSetTreeManager: IDispatch readonly dispid 62;
     property AlertManager: IDispatch readonly dispid 63;
     property AllowReconnect: WordBool dispid 64;
-    procedure SynchronizeFollowUps(const Password: WideString); dispid 65;
+    procedure SynchronizeFollowUps(const PassWord: WideString); dispid 65;
     property KeepConnection: WordBool dispid 66;
     property IgnoreHtmlFormat: WordBool dispid 67;
     property ReportRole: WideString readonly dispid 68;
@@ -2258,7 +2258,7 @@ type
     function Get_AuditPropertyFactory: IDispatch; safecall;
     function Get_TSTestFactory: IDispatch; safecall;
     function Get_IsSearchSupported: WordBool; safecall;
-    procedure Login(const UserName: WideString; const Password: WideString); safecall;
+    procedure Login(const UserName: WideString; const PassWord: WideString); safecall;
     procedure Connect(const DomainName: WideString; const ProjectName: WideString); safecall;
     procedure Disconnect; safecall;
     procedure Logout; safecall;
@@ -2289,7 +2289,7 @@ type
     property AuditPropertyFactory: IDispatch readonly dispid 78;
     property TSTestFactory: IDispatch readonly dispid 79;
     property IsSearchSupported: WordBool readonly dispid 80;
-    procedure Login(const UserName: WideString; const Password: WideString); dispid 81;
+    procedure Login(const UserName: WideString; const PassWord: WideString); dispid 81;
     procedure Connect(const DomainName: WideString; const ProjectName: WideString); dispid 82;
     procedure Disconnect; dispid 83;
     procedure Logout; dispid 84;
@@ -2312,7 +2312,7 @@ type
                              const DomainPswd: WideString); dispid 13;
     procedure ReleaseConnection; dispid 14;
     procedure ConnectProject(const ProjectName: WideString; const UserName: WideString; 
-                             const Password: WideString); dispid 15;
+                             const PassWord: WideString); dispid 15;
     procedure DisconnectProject; dispid 16;
     property ProjectsList: IList readonly dispid 17;
     property Command: IDispatch readonly dispid 18;
@@ -2330,9 +2330,9 @@ type
     property CommonSettings: IDispatch readonly dispid 28;
     property UserSettings: IDispatch readonly dispid 29;
     property HostGroupFactory: IDispatch readonly dispid 30;
-    procedure ChangePassword(const OldPassword: WideString; const NewPassword: WideString); dispid 31;
+    procedure ChangePassWord(const OldPassWord: WideString; const NewPassWord: WideString); dispid 31;
     property UsersList: IList readonly dispid 32;
-    property Password: WideString readonly dispid 33;
+    property PassWord: WideString readonly dispid 33;
     property ExtendedStorage: IDispatch readonly dispid 34;
     property DirectoryPath[nType: Integer]: WideString readonly dispid 35;
     property ChangeFactory: IDispatch readonly dispid 36;
@@ -2355,9 +2355,9 @@ type
     procedure InitConnectionEx(const ServerName: WideString); dispid 52;
     property ProjectsListEx[const DomainName: WideString]: IList readonly dispid 53;
     procedure ConnectProjectEx(const DomainName: WideString; const ProjectName: WideString; 
-                               const UserName: WideString; const Password: WideString); dispid 54;
+                               const UserName: WideString; const PassWord: WideString); dispid 54;
     property DomainsList: IList readonly dispid 55;
-    procedure ConnectToVCSAs(const UserName: WideString; const Password: WideString; 
+    procedure ConnectToVCSAs(const UserName: WideString; const PassWord: WideString; 
                              const CopyDesStep: WideString); dispid 56;
     procedure GetLicenses(LicensesType: Integer; var pVal: WideString); dispid 57;
     property Analysis: IDispatch readonly dispid 58;
@@ -2367,7 +2367,7 @@ type
     property TestSetTreeManager: IDispatch readonly dispid 62;
     property AlertManager: IDispatch readonly dispid 63;
     property AllowReconnect: WordBool dispid 64;
-    procedure SynchronizeFollowUps(const Password: WideString); dispid 65;
+    procedure SynchronizeFollowUps(const PassWord: WideString); dispid 65;
     property KeepConnection: WordBool dispid 66;
     property IgnoreHtmlFormat: WordBool dispid 67;
     property ReportRole: WideString readonly dispid 68;
@@ -2453,7 +2453,7 @@ type
     property AuditPropertyFactory: IDispatch readonly dispid 78;
     property TSTestFactory: IDispatch readonly dispid 79;
     property IsSearchSupported: WordBool readonly dispid 80;
-    procedure Login(const UserName: WideString; const Password: WideString); dispid 81;
+    procedure Login(const UserName: WideString; const PassWord: WideString); dispid 81;
     procedure Connect(const DomainName: WideString; const ProjectName: WideString); dispid 82;
     procedure Disconnect; dispid 83;
     procedure Logout; dispid 84;
@@ -2476,7 +2476,7 @@ type
                              const DomainPswd: WideString); dispid 13;
     procedure ReleaseConnection; dispid 14;
     procedure ConnectProject(const ProjectName: WideString; const UserName: WideString; 
-                             const Password: WideString); dispid 15;
+                             const PassWord: WideString); dispid 15;
     procedure DisconnectProject; dispid 16;
     property ProjectsList: IList readonly dispid 17;
     property Command: IDispatch readonly dispid 18;
@@ -2494,9 +2494,9 @@ type
     property CommonSettings: IDispatch readonly dispid 28;
     property UserSettings: IDispatch readonly dispid 29;
     property HostGroupFactory: IDispatch readonly dispid 30;
-    procedure ChangePassword(const OldPassword: WideString; const NewPassword: WideString); dispid 31;
+    procedure ChangePassWord(const OldPassWord: WideString; const NewPassWord: WideString); dispid 31;
     property UsersList: IList readonly dispid 32;
-    property Password: WideString readonly dispid 33;
+    property PassWord: WideString readonly dispid 33;
     property ExtendedStorage: IDispatch readonly dispid 34;
     property DirectoryPath[nType: Integer]: WideString readonly dispid 35;
     property ChangeFactory: IDispatch readonly dispid 36;
@@ -2519,9 +2519,9 @@ type
     procedure InitConnectionEx(const ServerName: WideString); dispid 52;
     property ProjectsListEx[const DomainName: WideString]: IList readonly dispid 53;
     procedure ConnectProjectEx(const DomainName: WideString; const ProjectName: WideString; 
-                               const UserName: WideString; const Password: WideString); dispid 54;
+                               const UserName: WideString; const PassWord: WideString); dispid 54;
     property DomainsList: IList readonly dispid 55;
-    procedure ConnectToVCSAs(const UserName: WideString; const Password: WideString; 
+    procedure ConnectToVCSAs(const UserName: WideString; const PassWord: WideString; 
                              const CopyDesStep: WideString); dispid 56;
     procedure GetLicenses(LicensesType: Integer; var pVal: WideString); dispid 57;
     property Analysis: IDispatch readonly dispid 58;
@@ -2531,7 +2531,7 @@ type
     property TestSetTreeManager: IDispatch readonly dispid 62;
     property AlertManager: IDispatch readonly dispid 63;
     property AllowReconnect: WordBool dispid 64;
-    procedure SynchronizeFollowUps(const Password: WideString); dispid 65;
+    procedure SynchronizeFollowUps(const PassWord: WideString); dispid 65;
     property KeepConnection: WordBool dispid 66;
     property IgnoreHtmlFormat: WordBool dispid 67;
     property ReportRole: WideString readonly dispid 68;
@@ -2600,7 +2600,7 @@ type
     function OnConnectingServer(const Domain: WideString; const Server: WideString): WordBool; dispid 1;
     procedure OnConnectServer; dispid 2;
     function OnConnectingProject(const Project: WideString; const User: WideString; 
-                                 const Password: WideString): WordBool; dispid 3;
+                                 const PassWord: WideString): WordBool; dispid 3;
     procedure OnConnectProject; dispid 4;
     function OnDisconnectingServer: WordBool; dispid 5;
     procedure OnDisconnectServer; dispid 6;
@@ -6714,11 +6714,11 @@ type
     procedure Set_AdminUserName(const pVal: WideString); safecall;
     function Get_Domain: WideString; safecall;
     procedure Set_Domain(const pVal: WideString); safecall;
-    function Get_AdminUserPassword: WideString; safecall;
-    procedure Set_AdminUserPassword(const pVal: WideString); safecall;
+    function Get_AdminUserPassWord: WideString; safecall;
+    procedure Set_AdminUserPassWord(const pVal: WideString); safecall;
     property AdminUserName: WideString read Get_AdminUserName write Set_AdminUserName;
     property Domain: WideString read Get_Domain write Set_Domain;
-    property AdminUserPassword: WideString read Get_AdminUserPassword write Set_AdminUserPassword;
+    property AdminUserPassWord: WideString read Get_AdminUserPassWord write Set_AdminUserPassWord;
   end;
 
 // *********************************************************************//
@@ -6733,7 +6733,7 @@ type
     procedure RemoveDatabase(const DBName: WideString); dispid 2;
     property AdminUserName: WideString dispid 3;
     property Domain: WideString dispid 4;
-    property AdminUserPassword: WideString dispid 5;
+    property AdminUserPassWord: WideString dispid 5;
   end;
 
 // *********************************************************************//
@@ -7885,7 +7885,7 @@ type
     function Get_Deleted: WordBool; safecall;
     procedure Set_Deleted(pVal: WordBool); safecall;
     function GroupsList: IList; safecall;
-    procedure Set_Password(const Param1: WideString); safecall;
+    procedure Set_PassWord(const Param1: WideString); safecall;
     function Get_InGroup(GroupName: OleVariant): WordBool; safecall;
     procedure Set_InGroup(GroupName: OleVariant; pVal: WordBool); safecall;
     function Get_DomainAuthentication: WideString; safecall;
@@ -7898,7 +7898,7 @@ type
     property Updated: WordBool read Get_Updated write Set_Updated;
     property In_Group[GroupName: OleVariant]: WordBool read Get_In_Group write Set_In_Group;
     property Deleted: WordBool read Get_Deleted write Set_Deleted;
-    property Password: WideString write Set_Password;
+    property PassWord: WideString write Set_PassWord;
     property InGroup[GroupName: OleVariant]: WordBool read Get_InGroup write Set_InGroup;
     property DomainAuthentication: WideString read Get_DomainAuthentication write Set_DomainAuthentication;
   end;
@@ -7921,7 +7921,7 @@ type
     property In_Group[GroupName: OleVariant]: WordBool dispid 9;
     property Deleted: WordBool dispid 10;
     function GroupsList: IList; dispid 11;
-    property Password: WideString writeonly dispid 12;
+    property PassWord: WideString writeonly dispid 12;
     property InGroup[GroupName: OleVariant]: WordBool dispid 13;
     property DomainAuthentication: WideString dispid 14;
   end;

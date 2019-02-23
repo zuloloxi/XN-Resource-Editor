@@ -9,18 +9,18 @@ uses
 type
   TThemedScrollBox = class(TScrollBox)
   private
-    FUseTheme: boolean;
+    FUseTheme: Boolean;
     FTheme: HTHEME;
-    procedure DoWMNCPaint (DC: HDC);
-    procedure SetUseTheme(const Value: boolean);
-    procedure WMNCPaint (var msg: TwmNCPaint); message WM_NCPAINT;
+    procedure DoWMNCPaint(DC: HDC);
+    procedure SetUseTheme(const Value: Boolean);
+    procedure WMNCPaint(var msg: TwmNCPaint); message WM_NCPAINT;
     procedure WMThemeChanged(var Message: TMessage); message WM_THEMECHANGED;
   protected
     procedure CreateWnd; override;
   public
     constructor Create (AOwner: TComponent); override;
   published
-    property UseTheme: boolean read FUseTheme write SetUseTheme default True;
+    property UseTheme: Boolean read FUseTheme write SetUseTheme default True;
   end;
 
 implementation
@@ -50,14 +50,14 @@ end;
 procedure TThemedScrollBox.DoWMNCPaint(DC: HDC);
 // Unfortunately, the VCL does a bad job regarding non-client area painting in TWinControl to paint a window's bevel
 // which results often in heavy flickering. This method is a copy of TWinControl.WMNCPaintHandler adjusted to take
-// the passed update region into account (actually, this happens already in the WMNCPaint).
+// the passed update region into account(actually, this happens already in the WMNCPaint).
 // Since the advent of themes this method also draws the theme border.
 
 const
-  InnerStyles: array[TBevelCut] of Integer = (0, BDR_SUNKENINNER, BDR_RAISEDINNER, 0);
-  OuterStyles: array[TBevelCut] of Integer = (0, BDR_SUNKENOUTER, BDR_RAISEDOUTER, 0);
-  EdgeStyles: array[TBevelKind] of Integer = (0, 0, BF_SOFT, BF_FLAT);
-  Ctl3DStyles: array[Boolean] of Integer = (BF_MONO, 0);
+  InnerStyles: array [TBevelCut] of Integer = (0, BDR_SUNKENINNER, BDR_RAISEDINNER, 0);
+  OuterStyles: array [TBevelCut] of Integer = (0, BDR_SUNKENOUTER, BDR_RAISEDOUTER, 0);
+  EdgeStyles: array [TBevelKind] of Integer = (0, 0, BF_SOFT, BF_FLAT);
+  Ctl3DStyles: array [Boolean] of Integer = (BF_MONO, 0);
 
 var
   RC, RW: TRect;
@@ -131,9 +131,9 @@ begin
   end
 end;
 
-procedure TThemedScrollBox.SetUseTheme(const Value: boolean);
+procedure TThemedScrollBox.SetUseTheme(const Value: Boolean);
 begin
-  if value <> FUseTheme then
+  if Value <> FUseTheme then
   begin
     FUseTheme := Value;
     if IsWinXP then
@@ -144,7 +144,6 @@ end;
 procedure TThemedScrollBox.WMNCPaint(var msg: TwmNCPaint);
 var
   DC: HDC;
-
 begin
   // Don't use the inherited NC paint handler as it doesn't consider the current clipping region
   // leading so to annoying flicker.
@@ -153,11 +152,11 @@ begin
   // I have to live with that for the time being.
   DefaultHandler(Msg);
 
-  dc := GetWindowDC (Handle);
+  dc := GetWindowDC(Handle);
 
   if DC <> 0 then
   begin
-    DoWMNCPaint (DC);
+    DoWMNCPaint(DC);
     ReleaseDC(Handle, DC);
   end;
 
@@ -186,5 +185,5 @@ begin
 end;
 
 begin
-  InitializeGlobalStructures
+  InitializeGlobalStructures;
 end.

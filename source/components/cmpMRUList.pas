@@ -34,7 +34,7 @@ type
     FMRU: TStringList;
     FManufacturer: string;
     FCapacity: Integer;
-    FLoaded: boolean;
+    FLoaded: Boolean;
     FPopupMenu: TPopupMenu;
     FOnPopupMenuClick: TNotifyEvent;
     FAppSection: string;
@@ -89,15 +89,15 @@ begin
   LoadList;
   idx := 0;
   while idx < FMRU.Count do
-    if SameText (FMRU [idx], fileName) then
+    if SameText(FMRU [idx], fileName) then
       FMRU.Delete(idx)
     else
-      Inc (idx);
+      Inc(idx);
 
   while FMRU.Count >= Capacity do
     FMRU.Delete (FMRU.Count - 1);
 
-  FMRU.Insert (0, fileName);
+  FMRU.Insert(0, fileName);
   PopulateMenu
 end;
 
@@ -111,7 +111,7 @@ end;
 
 destructor TMRUList.Destroy;
 begin
-  if not (csDesigning in ComponentState) then
+  if not(csDesigning in ComponentState) then
     SaveList;
   FMRU.Free;
   inherited;
@@ -127,28 +127,28 @@ begin
     app := Application;
 
   if FAppSection <> '' then
-    result := Format ('SOFTWARE\%s\%s\%s', [Manufacturer, Application, FAppSection])
+    Result := Format('SOFTWARE\%s\%s\%s', [Manufacturer, Application, FAppSection])
   else
-    result := Format ('SOFTWARE\%s\%s\Recent Files', [Manufacturer, Application]);
+    Result := Format('SOFTWARE\%s\%s\Recent Files', [Manufacturer, Application]);
 end;
 
 function TMRUList.GetMRUDirectory: string;
 begin
-  result := ExtractFilePath (MRUFile)
+  Result := ExtractFilePath (MRUFile)
 end;
 
 function TMRUList.GetMRUFile: string;
 begin
   if strings.Count > 0 then
-    result := strings [0]
+    Result := strings [0]
   else
-    result := ''
+    Result := ''
 end;
 
 function TMRUList.GetStrings: TStrings;
 begin
   LoadList;
-  result := FMRU
+  Result := FMRU
 end;
 
 procedure TMRUList.LoadList;
@@ -185,7 +185,7 @@ var
   i: Integer;
   item: TMenuItem;
 begin
-  if not (csDesigning in ComponentState) then
+  if not(csDesigning in ComponentState) then
   begin
     if Assigned(FPopupMenu) then
     begin
@@ -222,13 +222,13 @@ begin
         if OpenKey (GetKeyName, True) then
         begin
           s := TStringList.Create;
-          TStringList (s).CaseSensitive := False;
+          TStringList(s).CaseSensitive := False;
 
           GetValueNames (s);
 
           for i := 0 to FMRU.Count - 1 do
           begin
-            vn := Format ('File %d', [i]);
+            vn := Format('File %d', [i]);
             WriteString (vn, FMRU [i]);
 
             idx := s.IndexOf (vn);

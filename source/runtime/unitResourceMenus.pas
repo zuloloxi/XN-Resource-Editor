@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates Menu resources in resources                             |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -17,15 +17,17 @@ unit unitResourceMenus;
 interface
 
 uses
-  WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs,
-  unitResourceDetails, Vcl.Menus;
+  WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs, Vcl.Menus,
+  unitResourceDetails;
 
 type
   TMenuResourceDetails = class (TResourceDetails)
   private
     FHelpID: Integer;                    // Extended menu's help ID
   protected
-    constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
+    constructor Create (AParent: TResourceModule; ALanguage: Integer;
+      const AName, AType: UnicodeString; ASize: Integer;
+      AData: Pointer); override;
 
   public
     destructor Destroy; override;
@@ -42,21 +44,21 @@ implementation
 
 type
   TMenuExTemplateHeader = packed record
-    wVersion: word;
-    wOffset: word;
+    wVersion: Word;
+    wOffset: Word;
     dwHelpId: DWORD;
   end;
   PMenuExTemplateHeader = ^TMenuExTemplateHeader;
 
   TMenuHeader = packed record
-    wVersion: word;
-    cbHeaderSize: word;
+    wVersion: Word;
+    cbHeaderSize: Word;
   end;
   PMenuHeader = ^TMenuHeader;
 
 (*
   TNormalMenuItem = packed record
-    resInfo: word;
+    resInfo: Word;
     menuText: array [0..10] of WideChar;
   end;
   PNormalMenuItem = ^TNormalMenuItem;
@@ -71,7 +73,7 @@ end;
 
 constructor TMenuResourceDetails.Create(AParent: TResourceModule;
   ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer;
-  AData: pointer);
+  AData: Pointer);
 begin
   inherited Create (AParent, ALanguage, AName, AType, ASize, AData);
 end;
@@ -83,7 +85,7 @@ end;
 
 class function TMenuResourceDetails.GetBaseType: UnicodeString;
 begin
-  result := IntToStr (Integer (RT_MENU));
+  Result := IntToStr (Integer (RT_MENU));
 end;
 
 procedure TMenuResourceDetails.GetItems(items: TMenuItem);
@@ -93,28 +95,28 @@ var
 
   procedure GetNormalItems (rootItem: TMenuItem);
   var
-    flags, id: word;
+    flags, id: Word;
     caption: UnicodeString;
     item: TMenuItem;
   begin
     repeat
       flags := PWord (p)^;
-      Inc (p, sizeof (word));
+      Inc(p, sizeof (Word));
       if (flags and MF_POPUP) <> 0 then
       begin
         caption := PWideChar (p);
-        Inc (p, (lstrlenW (PWideChar (p)) + 1) * sizeof (WideChar));
+        Inc(p, (lstrlenW (PWideChar (p)) + 1) * sizeof (WideChar));
         item := TMenuItem.Create (owner);
         GetNormalItems (item)
       end
       else
       begin
         id := PWord (p)^;
-        Inc (p, sizeof (word));
+        Inc(p, sizeof (Word));
         caption := PWideChar (p);
         if caption = '' then
           caption := '-';
-        Inc (p, (lstrlenW (PWideChar (p)) + 1) * sizeof (WideChar));
+        Inc(p, (lstrlenW (PWideChar (p)) + 1) * sizeof (WideChar));
         item := TMenuItem.Create (owner);
         if caption = '-' then
           item.Tag := -1
@@ -144,7 +146,7 @@ var
     tp: DWORD;
     state: DWORD;
     uID: UINT;
-    bResInfo: word;
+    bResInfo: Word;
     caption: UnicodeString;
     helpID: DWORD;
     item: TMenuItem;
@@ -152,29 +154,29 @@ var
   begin
     repeat
       tp := PDWORD (p)^;
-      Inc (p, sizeof (DWORD));
+      Inc(p, sizeof (DWORD));
       state := PDWORD (p)^;
-      Inc (p, sizeof (DWORD));
-      uID := PUINT (p)^;
-      Inc (p, sizeof (UINT));
+      Inc(p, sizeof (DWORD));
+      uID := PUINt(p)^;
+      Inc(p, sizeof (UINT));
       bResInfo := PWORD (p)^;
-      Inc (p, sizeof (word));
+      Inc(p, sizeof (Word));
 
       if (tp and MFT_SEPARATOR) = 0 then
       begin
         caption := PWideChar (p);
-        Inc (p, (lstrlenW (PWideChar (p)) + 1) * sizeof (WideChar));
+        Inc(p, (lstrlenW (PWideChar (p)) + 1) * sizeof (WideChar));
       end
       else
         caption := '-';
 
       while (Integer (p) mod 4) <> 0 do
-        Inc (p);
+        Inc(p);
 
       if (bResInfo and $01) <> 0 then
       begin
         helpID := PDWORD (p)^;
-        Inc (p, sizeof (PDWORD))
+        Inc(p, sizeof (PDWORD))
       end
       else
         helpID := 0;
@@ -207,7 +209,7 @@ begin
   case PMenuHeader (p)^.wVersion of
     0 :
       begin
-        Inc (p, Sizeof (TMenuHeader));
+        Inc(p, Sizeof (TMenuHeader));
         GetNormalItems (items);
       end;
 
@@ -215,9 +217,9 @@ begin
       begin
         if PMenuHeader (p)^.cbHeaderSize = 4 then
         begin
-          Inc (p, SizeOf (TMenuHeader));
+          Inc(p, SizeOf (TMenuHeader));
           FHelpID := PDWORD (p)^;
-          Inc (p, Sizeof (DWORD));
+          Inc(p, Sizeof (DWORD));
           GetExtendedItems (items);
         end
       end
@@ -239,19 +241,19 @@ begin
 //  Menus must have at least one item.  Set up first item.
 
   PDWORD (p)^ := MFT_STRING;    // dwType
-  Inc (p, sizeof (DWORD));
+  Inc(p, sizeof (DWORD));
 
   PDWORD (p)^ := MFS_ENABLED;   // dwState
-  Inc (p, sizeof (DWORD));
+  Inc(p, sizeof (DWORD));
 
-  PUINT (p)^ := 0;              // uId;
-  Inc (p, sizeof (UINT));
+  PUINt(p)^ := 0;              // uId;
+  Inc(p, sizeof (UINT));
 
-  PWORD (p)^ := $80;            // bResInfo (word for 32-bit OS)
-  Inc (p, sizeof (WORD));
+  PWORD (p)^ := $80;            // bResInfo (Word for 32-bit OS)
+  Inc(p, sizeof (WORD));
 
   PWideChar (p)^ := #0;         // szText
-  Inc (p, sizeof (WideChar));
+  Inc(p, sizeof (WideChar));
 
   PDWORD (p)^ := 0;             // dwHelpID
 end;
@@ -262,10 +264,10 @@ var
   offset: Integer;
   i: Integer;
 
-  procedure SaveOldStyleMenu (rootItem: TMenuItem; lastItem: boolean);
+  procedure SaveOldStyleMenu (rootItem: TMenuItem; lastItem: Boolean);
   var
-    flags: word;
-    id: word;
+    flags: Word;
+    id: Word;
     i: Integer;
     wCaption: UnicodeString;
     c: byte;
@@ -315,12 +317,12 @@ var
       SaveOldStyleMenu (rootItem.Items [i], i = rootItem.Count - 1)
   end;
 
-  procedure SaveNewStyleMenu (rootItem: TMenuItem; lastItem: boolean);
+  procedure SaveNewStyleMenu (rootItem: TMenuItem; lastItem: Boolean);
   var
     tp: DWORD;
     state: DWORD;
     uID: UINT;
-    bResInfo: word;
+    bResInfo: Word;
     wCaption: UnicodeString;
     helpID: DWORD;
     c: byte;
@@ -416,5 +418,3 @@ initialization
 finalization
   UnregisterResourceDetails (TMenuResourceDetails);
 end.
-
-

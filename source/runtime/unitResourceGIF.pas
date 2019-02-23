@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates GIF image resources in resources                        |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -30,10 +30,10 @@ type
     function GetPixelFormat: TPixelFormat; override;
     function GetWidth: Integer; override;
     procedure InitNew; override;
-    class function SupportsData (Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsData (Size: Integer; data: Pointer): Boolean; override;
   public
-    class function GetBaseType : UnicodeString; override;
-    procedure GetImage (picture : TPicture); override;
+    class function GetBaseType: UnicodeString; override;
+    procedure GetImage (picture: TPicture); override;
   end;
 
 
@@ -48,17 +48,17 @@ end;
 
 function TGifResourceDetails.GetHeight: Integer;
 begin
-  Result := PWORD (PByte (data) + 6 + SizeOf (Word))^;
+  Result := PWORD(PByte(Data) + 6 + SizeOf(Word))^;
 end;
 
 procedure TGifResourceDetails.GetImage(picture: TPicture);
 var
-  gif : TGIFImage;
+  gif: TGIFImage;
 begin
-  gif := TGifImage.Create;
-  picture.graphic := gif;
-  data.Seek (0, soFromBeginning);
-  TGifImage (picture.graphic).LoadFromStream (data);
+  Gif := TGifImage.Create;
+  Picture.Graphic := Gif;
+  Data.Seek (0, soFromBeginning);
+  TGifImage(Picture.Graphic).LoadFromStream (data);
 end;
 
 function TGifResourceDetails.GetPixelFormat: TPixelFormat;
@@ -68,13 +68,13 @@ end;
 
 function TGifResourceDetails.GetWidth: Integer;
 begin
-  result := PWORD (PByte (data) + 6)^;
+  Result := PWORD(PByte(data) + 6)^;
 end;
 
 procedure TGifResourceDetails.InitNew;
 var
-  img : TGIFImage;
-  bmp : TBitmap;
+  img: TGIFImage;
+  bmp: TBitmap;
 begin
   bmp := nil;
   img := TGIFImage.Create;
@@ -94,9 +94,9 @@ end;
 class function TGifResourceDetails.SupportsData(Size: Integer;
   data: Pointer): Boolean;
 var
-  p : PAnsiChar;
+  p: PAnsiChar;
 begin
-  p := PAnsiChar (data);
+  p := PAnsiChar(data);
 
   Result := (StrLIComp (p, 'GIF87', 5) = 0) or (StrLIComp (p, 'GIF89', 5) = 0);
 end;

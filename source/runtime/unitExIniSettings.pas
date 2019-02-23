@@ -23,40 +23,39 @@ unit unitExIniSettings;
 
 interface
 
-uses Classes, Sysutils, unitExSettings, unitExFileSettings, IniFiles;
+uses
+  Classes, Sysutils, IniFiles, unitExSettings, unitExFileSettings;
 
 type
+  //-----------------------------------------------------------------------
+  // TIniExSettings.
+  //
+  // Class to store application and other settings to INI files
+  TExIniSettings = class (TExFileSettings)
+  private
+    FIniFile: TCustomIniFile;
+    FAutoReadOnly: Boolean;
 
-//-----------------------------------------------------------------------
-// TIniExSettings.
-//
-// Class to store application and other settings to INI files
-TExIniSettings = class (TExFileSettings)
-private
-  fIniFile : TCustomIniFile;
-  fAutoReadOnly : boolean;
+    function FixSection: string;
+  protected
+    function IsOpen: Boolean; override;
+    function CheckIsOpen(readOnly, autoReadOnly: Boolean): TIsOpen; override;
+    procedure InternalSetStringValue (const valueName, value: string); override;
+  public
+    procedure Close; override;
+    function Open(readOnly: Boolean = False): Boolean; override;
 
-  function FixSection : string;
+    procedure DeleteValue(const valueName: string); override;
+    procedure DeleteSection(const sectionName: string); override;
 
-protected
-  function IsOpen : boolean; override;
-  function CheckIsOpen (readOnly, autoReadOnly : boolean) : TIsOpen; override;
-  procedure InternalSetStringValue (const valueName, value : string); override;
-public
-  procedure Close; override;
-  function Open (readOnly : boolean = false) : boolean; override;
+    function HasSection(const ASection: string): Boolean; override;
+    function HasValue(const AValue: string): Boolean; override;
+    procedure GetValueNames(names: TStrings); override;
+    procedure GetSectionNames(names: TStrings); override;
 
-  procedure DeleteValue (const valueName : string); override;
-  procedure DeleteSection (const sectionName : string); override;
-
-  function HasSection (const ASection : string) : boolean; override;
-  function HasValue (const AValue : string) : boolean; override;
-  procedure GetValueNames (names : TStrings); override;
-  procedure GetSectionNames (names : TStrings); override;
-
-  function GetStringValue  (const valueName : string; const deflt : string = '') : string; override;
-  function GetIntegerValue (const valueName : string; deflt : Integer = 0) : Integer; override;
-end;
+    function GetStringValue(const valueName: string; const deflt: string = ''): string; override;
+    function GetIntegerValue(const valueName: string; deflt: Integer = 0): Integer; override;
+  end;
 
 implementation
 
@@ -67,32 +66,32 @@ implementation
  |                                                                      |
  | Ensure that the file is open.                                        |
  *----------------------------------------------------------------------*)
-function TExIniSettings.CheckIsOpen (readOnly, autoReadOnly : boolean) : TIsOpen;
+function TExIniSettings.CheckIsOpen(readOnly, autoReadOnly: Boolean): TIsOpen;
 var
-  fn : string;
+  fn: string;
 begin
-  result := inherited CheckIsOpen (readOnly, autoReadOnly);
+  Result := inherited CheckIsOpen(readOnly, autoReadOnly);
 
-  case result of
+  case Result of
     woClosed :
       begin
         if Open (readOnly) then
         begin
-          result := woOpen;
+          Result := woOpen;
           fReadOnly := False
         end
         else
-          result := woClosed;
+          Result := woClosed;
       end;
 
     woReopen:
       begin
-        fAutoReadOnly := readOnly;
+        FAutoReadOnly := readOnly;
 
         fn := GetFileName ('.ini');
         if not readOnly then
           ForceDirectories (ExtractFilePath (fn));
-        result := woOpen;
+        Result := woOpen;
       end
   end
 end;
@@ -104,7 +103,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExIniSettings.Close;
 begin
-  FreeAndNil (fIniFile);
+  FreeAndNil(FIniFile);
 end;
 
 (*----------------------------------------------------------------------*
@@ -114,16 +113,16 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExIniSettings.DeleteSection(const sectionName: string);
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen(False, FAutoReadOnly);
 
-  fIniFile.EraseSection(FixSection);
+  FIniFile.EraseSection(FixSection);
 end;
 
 procedure TExIniSettings.DeleteValue(const valueName: string);
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen(False, FAutoReadOnly);
 
-  fIniFile.DeleteKey(FixSection, valueName);
+  FIniFile.DeleteKey(FixSection, valueName);
 end;
 
 (*----------------------------------------------------------------------*
@@ -133,9 +132,9 @@ end;
  *----------------------------------------------------------------------*)
 function TExIniSettings.FixSection: string;
 begin
-  result := Section;
-  if result = '' then
-    result := 'Default';
+  Result := Section;
+  if Result = '' then
+    Result := 'Default';
 end;
 
 (*----------------------------------------------------------------------*
@@ -146,15 +145,15 @@ end;
 function TExIniSettings.GetIntegerValue(const valueName: string;
   deflt: Integer): Integer;
 var
-  st : string;
+  st: string;
 begin
-  CheckIsOpen (true, fAutoReadOnly);
+  CheckIsOpen(true, FAutoReadOnly);
 
-  st := fIniFile.ReadString(FixSection, valueName, #1);
+  st := FIniFile.ReadString(FixSection, valueName, #1);
   if st = #1 then
-    result := deflt
+    Result := deflt
   else
-    if not TryStrToInt (st, result) then
+    if not TryStrToInt(st, Result) then
       raise EExSettings.Create('Integer value expected');
 end;
 
@@ -166,30 +165,30 @@ end;
 procedure TExIniSettings.GetSectionNames(names: TStrings);
 begin
   names.Clear;
-  if CheckIsOpen (true, fAutoReadOnly) = woOpen then
-    fIniFile.ReadSections(names);
+  if CheckIsOpen(true, FAutoReadOnly) = woOpen then
+    FIniFile.ReadSections(names);
 end;
 
 function TExIniSettings.GetStringValue(const valueName, deflt: string): string;
 begin
-  if CheckIsOpen (true, fAutoReadOnly) = woOpen then
-    result := fIniFile.ReadString(FixSection, valueName, deflt)
+  if CheckIsOpen(true, FAutoReadOnly) = woOpen then
+    Result := FIniFile.ReadString(FixSection, valueName, deflt)
   else
-    result := deflt;
+    Result := deflt;
 end;
 
 procedure TExIniSettings.GetValueNames(names: TStrings);
 begin
   names.Clear;
-  if CheckIsOpen (true, fAutoReadOnly) = woOpen then
-    fIniFile.ReadSection(FixSection, names);
+  if CheckIsOpen(true, FAutoReadOnly) = woOpen then
+    FIniFile.ReadSection(FixSection, names);
 end;
 
-function TExIniSettings.HasSection(const ASection: string): boolean;
+function TExIniSettings.HasSection(const ASection: string): Boolean;
 var
-  sec : string;
+  sec: string;
 begin
-  if CheckIsOpen (true, fAutoReadOnly) = woOpen then
+  if CheckIsOpen(true, FAutoReadOnly) = woOpen then
   begin
     if Section = '' then
       sec := ASection
@@ -197,20 +196,20 @@ begin
       sec := Section + '\' + ASection;
 
     if sec = '' then
-      result := True
+      Result := True
     else
-      result := fIniFile.SectionExists(sec)
+      Result := FIniFile.SectionExists(sec)
   end
   else
-    result := False
+    Result := False
 end;
 
-function TExIniSettings.HasValue(const AValue: string): boolean;
+function TExIniSettings.HasValue(const AValue: string): Boolean;
 begin
-  if CheckIsOpen (true, fAutoReadOnly) = woOpen then
-    result := fIniFile.ValueExists(FixSection, AValue)
+  if CheckIsOpen(true, FAutoReadOnly) = woOpen then
+    Result := FIniFile.ValueExists(FixSection, AValue)
   else
-    result := False
+    Result := False
 end;
 
 (*----------------------------------------------------------------------*
@@ -220,9 +219,9 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExIniSettings.InternalSetStringValue(const valueName, value: string);
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen(False, FAutoReadOnly);
 
-  fIniFile.WriteString(FixSection, valueName, value);
+  FIniFile.WriteString(FixSection, valueName, value);
 end;
 
 (*----------------------------------------------------------------------*
@@ -230,9 +229,9 @@ end;
  |                                                                      |
  | Return true if the object is Open                                    |
  *----------------------------------------------------------------------*)
-function TExIniSettings.IsOpen: boolean;
+function TExIniSettings.IsOpen: Boolean;
 begin
-  result := fIniFile <> Nil;
+  Result := FIniFile <> Nil;
 end;
 
 (*----------------------------------------------------------------------*
@@ -240,14 +239,14 @@ end;
  |                                                                      |
  | Open the Ini file.  Create it if it doesn't exist                    |
  *----------------------------------------------------------------------*)
-function TExIniSettings.Open(readOnly: boolean) : boolean;
+function TExIniSettings.Open(readOnly: Boolean): Boolean;
 var
-  fn : string;
+  fn: string;
 begin
   inherited Open (readOnly);
-  result := True;
+  Result := True;
   Close;
-  fAutoReadOnly := readOnly;
+  FAutoReadOnly := readOnly;
 
   fn := GetFileName ('.ini');
   if not readOnly then
@@ -255,12 +254,12 @@ begin
   else
     if not FileExists (fn) then
     begin
-      result := False;
+      Result := False;
       Exit;
     end;
-    
 
-  fIniFile := TIniFile.Create(fn);
+
+  FIniFile := TIniFile.Create(fn);
 end;
 
 end.

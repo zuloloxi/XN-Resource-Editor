@@ -38,7 +38,7 @@ function CharsetNameToCodepage (const CharsetName: string): Integer;
 function CodepageToMIMECharsetName (codepage: Integer): string;
 function CodepageToCharsetName (codepage: Integer): string;
 function CharsetToCodePage (FontCharset: TFontCharset): Integer;
-function CodePageToCharset (codePage: Integer): TFontCharset;
+function CodePageToCharset(codePage: Integer): TFontCharset;
 function StringToAnsiString (const ws: String; codePage: Integer): AnsiString;
 function AnsiStringToString (const st: AnsiString; codePage: Integer): String;
 function AnsiStringToGDIAnsiString (const s: AnsiString; codePage: Integer): AnsiString;
@@ -161,13 +161,13 @@ begin
     gIMultiLanguage := CoCMultiLanguage.Create;
     gMultiLang := False;
 
-    if Assigned (gIMultiLanguage) then
+    if Assigned(gIMultiLanguage) then
     begin
       gIMultiLanguage.EnumCodePages(MIMECONTF_MAILNEWS, enum);
       info := CoTaskMemAlloc (10* sizeof (tagMIMECPInfo));;
       try
         c := 2;
-        while SUCCEEDED (enum.Next (10, info^, ct)) and (ct <> 0) do
+        while SUCCEEDED (enum.Next(10, info^, ct)) and (ct <> 0) do
         begin
           SetLength (CharsetMap, c + ct);
           if c = 2 then
@@ -187,9 +187,9 @@ begin
             CharsetMap [i + c].CharSet  := p^.bGDICharset;
             CharsetMap [i + c].MIMECharsetName := PWideChar (@p^.wszWebCharset [0]);
             CharsetMap [i + c].CharsetName := '';
-            Inc (p);
+            Inc(p);
           end;
-          Inc (c, ct);
+          Inc(c, ct);
         end;
 
         for i := 0 to c - 1 do
@@ -239,23 +239,23 @@ var
 begin
   LoadMultiLanguage;
 
-  if CompareText (MIMECharsetName, 'us-ascii') = 0 then
-    result := CP_USASCII
+  if CompareText(MIMECharsetName, 'us-ascii') = 0 then
+    Result := CP_USASCII
   else
   begin
-    result := 0;
+    Result := 0;
     i := Pos ('-', MIMECharsetName);
     if i > 0 then
-      if CompareText (Copy (MIMECharsetName, 1, i - 1), 'windows') = 0 then
-        result := StrToIntDef (Copy (MIMECharsetName, i + 1, MaxInt), 1252);
+      if CompareText(Copy (MIMECharsetName, 1, i - 1), 'windows') = 0 then
+        Result := StrToIntDef (Copy (MIMECharsetName, i + 1, MaxInt), 1252);
 
     if result = 0 then
     begin
-      result := CP_USASCII;
+      Result := CP_USASCII;
       for i := Low (CharsetMap) to High (CharsetMap) do
-        if CompareText (CharsetMap [i].MIMECharsetName, MIMECharsetName) = 0 then
+        if CompareText(CharsetMap [i].MIMECharsetName, MIMECharsetName) = 0 then
         begin
-          result := CharsetMap [i].codepage;
+          Result := CharsetMap [i].codepage;
           break
         end
     end
@@ -267,11 +267,11 @@ var
   i: Integer;
 begin
   LoadMultiLanguage;
-  result := CP_USASCII;
+  Result := CP_USASCII;
   for i := Low (CharsetMap) to High (CharsetMap) do
-    if CompareText (CharsetMap [i].Name, CharsetName) = 0 then
+    if CompareText(CharsetMap [i].Name, CharsetName) = 0 then
     begin
-      result := CharsetMap [i].codepage;
+      Result := CharsetMap [i].codepage;
       break
     end
 end;
@@ -281,12 +281,12 @@ var
   i: Integer;
 begin
   LoadMultiLanguage;
-  result := '';
+  Result := '';
 
   for i := Low (CharsetMap) to High (CharsetMap) do
     if CharsetMap [i].Codepage = codepage then
     begin
-      result := CharsetMap [i].MIMECharsetName;
+      Result := CharsetMap [i].MIMECharsetName;
       break
     end
 end;
@@ -296,12 +296,12 @@ var
   i: Integer;
 begin
   LoadMultiLanguage;
-  result := '';
+  Result := '';
 
   for i := Low (CharsetMap) to High (CharsetMap) do
     if CharsetMap [i].Codepage = codepage then
     begin
-      result := CharsetMap [i].Name;
+      Result := CharsetMap [i].Name;
       break
     end
 end;
@@ -311,26 +311,26 @@ var
   i: Integer;
 begin
   LoadMultiLanguage;
-  result := CP_USASCII;
+  Result := CP_USASCII;
   for i := Low (CharsetMap) to High (CharsetMap) do
     if CharsetMap [i].CharSet = FontCharset then
     begin
-      result := CharsetMap [i].CodePage;
+      Result := CharsetMap [i].CodePage;
       break
     end
 end;
 
-function CodePageToCharset (codePage: Integer): TFontCharset;
+function CodePageToCharset(codePage: Integer): TFontCharset;
 var
   i: Integer;
 begin
   LoadMultiLanguage;
-  result := 0;
+  Result := 0;
   if codepage <> 65001 then
     for i := Low (CharsetMap) to High (CharsetMap) do
       if CharsetMap [i].Codepage = codepage then
       begin
-        result := CharsetMap [i].CharSet;
+        Result := CharsetMap [i].CharSet;
         break
       end
 end;
@@ -351,14 +351,14 @@ begin
   if gMultiLang and (codePage <> CP_ACP) then
   begin
     mode := 0;
-    if not SUCCEEDED (gIMultiLanguage.ConvertStringFromUnicode(mode, codepage, PWord (PWideChar (ws))^, len, PShortInt (PAnsiChar (result))^, dlen)) then
+    if not SUCCEEDED (gIMultiLanguage.ConvertStringFromUnicode(mode, codepage, PWord (PWideChar (ws))^, len, PShortInt(PAnsiChar (Result))^, dlen)) then
       dlen := 0
   end
   else
-    dlen := WideCharToMultiByte (codePage, 0, PWideChar (ws), len, PAnsiChar (result), len * 4, nil, nil);
+    dlen := WideCharToMultiByte (codePage, 0, PWideChar (ws), len, PAnsiChar (Result), len * 4, nil, nil);
 
   if dlen = 0 then
-    result := AnsiString (ws)
+    Result := AnsiString (ws)
   else
     SetLength (result, dlen)
 end;
@@ -371,7 +371,7 @@ begin
   if codePage = -1 then
     codePage := CP_USASCII;
   if st = '' then
-    result := ''
+    Result := ''
   else
   begin
     len := Length (st);
@@ -381,14 +381,14 @@ begin
     if gMultiLang and (codePage <> CP_ACP) then
     begin
       mode := 0;
-      if not SUCCEEDED (gIMultiLanguage.ConvertStringToUnicode(mode, codepage, PShortInt (PAnsiChar (st))^, len, PWord (PChar (result))^, dlen)) then
+      if not SUCCEEDED (gIMultiLanguage.ConvertStringToUnicode(mode, codepage, PShortInt(PAnsiChar (st))^, len, PWord (PChar (Result))^, dlen)) then
         dlen := 0;
     end
     else
-      dlen := MultiByteToWideChar (codepage, 0, PAnsiChar (st), len, PChar (result), len * 4);
+      dlen := MultiByteToWideChar (codepage, 0, PAnsiChar (st), len, PChar (Result), len * 4);
 
     if dlen = 0 then
-      result := String (st)
+      Result := String (st)
     else
       SetLength (result, dlen)
   end
@@ -400,12 +400,12 @@ var
 begin
   LoadMultiLanguage;
   urlSuffix := LowerCase (urlSuffix);
-  result := CP_USASCII;
+  Result := CP_USASCII;
   if urlSuffix <> '' then
     for i := Low (CharsetMap) to High (CharsetMap) do
       if CharsetMap [i].URLSuffix = urlSuffix then
       begin
-        result := CharsetMap [i].CodePage;
+        Result := CharsetMap [i].CodePage;
         break
       end
 end;
@@ -458,7 +458,7 @@ var
   len, dlen: DWORD;
 begin
   LoadMultiLanguage;
-  cs := CodePageToCharset (codePage);
+  cs := CodePageToCharset(codePage);
 
   destCP := -1;
   for i := Low (CharsetMap) to High (CharsetMap) do
@@ -469,18 +469,18 @@ begin
     end;
 
   if (destCP = -1) or (destCP = codePage) or (gIMultiLanguage.IsConvertible (codePage, destCP) <> S_OK) then
-    result := s
+    Result := s
   else
   begin
     mode := 0;
     len := Length (s);
     dlen := len * 4;
     SetLength (result, dlen);
-    if not SUCCEEDED (gIMultiLanguage.ConvertString (mode, codepage, destCP, PByte (PAnsiChar (s))^, len, PByte (PAnsiChar (result))^, dlen)) then
+    if not SUCCEEDED (gIMultiLanguage.ConvertString (mode, codepage, destCP, PByte (PAnsiChar (s))^, len, PByte (PAnsiChar (Result))^, dlen)) then
       dlen := 0;
 
     if dlen = 0 then
-      result := s
+      Result := s
     else
       SetLength (result, dlen)
   end
@@ -495,7 +495,7 @@ var
   len, dlen: DWORD;
 begin
   LoadMultiLanguage;
-  cs := CodePageToCharset (codePage);
+  cs := CodePageToCharset(codePage);
 
   srcCP := -1;
   for i := Low (CharsetMap) to High (CharsetMap) do
@@ -506,18 +506,18 @@ begin
     end;
 
   if (srcCP = -1) or (srcCP = codePage) or (gIMultiLanguage.IsConvertible (srcCP, codePage) <> S_OK) then
-    result := s
+    Result := s
   else
   begin
     mode := 0;
     len := Length (s);
     dlen := len * 4;
     SetLength (result, dlen);
-    if not SUCCEEDED (gIMultiLanguage.ConvertString (mode, srcCP, codepage, PByte (PAnsiChar (s))^, len, PByte (PAnsiChar (result))^, dlen)) then
+    if not SUCCEEDED (gIMultiLanguage.ConvertString (mode, srcCP, codepage, PByte (PAnsiChar (s))^, len, PByte (PAnsiChar (Result))^, dlen)) then
       dlen := 0;
 
     if dlen = 0 then
-      result := s
+      Result := s
     else
       SetLength (result, dlen)
   end
@@ -525,16 +525,16 @@ end;
 
 function IsWideCharAlpha (ch: WideChar): Boolean;
 var
-  w: word;
+  w: Word;
 begin
   w := Word (ch);
 
   if w < $80 then       // Ascii range
-    result := (w >=  $41) and (w <=  $5a) or
+    Result := (w >=  $41) and (w <=  $5a) or
               (w >=  $61) and (w <=  $7a)
   else
   if w < $250 then     // Latin & extensions
-    result := (w >=  $c0) and (w <=  $d6) or
+    Result := (w >=  $c0) and (w <=  $d6) or
               (w >=  $d8) and (w <=  $f6) or
               (w >=  $f7) and (w <=  $ff) or
               (w >= $100) and (w <= $17f) or
@@ -542,34 +542,34 @@ begin
               (w >= $1c4) and (w <= $233)
   else
   if w < $370 then  // IPA Extensions
-    result := (w >= $250) and (w <= $2ad)
+    Result := (w >= $250) and (w <= $2ad)
 
   else
   if w < $400 then // Greek & Coptic
-    result := (w >= $386) and (w < $3ff)
+    Result := (w >= $386) and (w < $3ff)
 
   else
   if w < $530 then      // Cryllic
-    result := (w >= $400) and (w <= $47f) or
+    Result := (w >= $400) and (w <= $47f) or
               (w >= $500) and (w <= $52f)
   else
   if w < $590 then      // Armenian
-    result := (w >= $531) and (w <= $556) or
+    Result := (w >= $531) and (w <= $556) or
               (w >= $561) and (w <= $587)
   else
 
-    result := True;     // Can't be bothered to do any more - for the moment!
+    Result := True;     // Can't be bothered to do any more - for the moment!
 end;
 
 function IsWideCharAlnum (ch: WideChar): Boolean;
 var
-  w: word;
+  w: Word;
 begin
   w := Word (ch);
   if (w >= $30) and (w <= $39) then
-    result := True
+    Result := True
   else
-    result := IsWideCharAlpha (ch)
+    Result := IsWideCharAlpha (ch)
 end;
 
 procedure FontToCharFormat(font: TFont; codePage: Integer; var Format: TCharFormatW);
@@ -601,7 +601,7 @@ begin
 
   Format.yHeight := Abs (Font.Size) * 20;
   Format.yOffset := 0;
-  Format.bCharSet := CodePageToCharset (codePage);
+  Format.bCharSet := CodePageToCharset(codePage);
 
   case Font.Pitch of
     fpVariable: Format.bPitchAndFamily := VARIABLE_PITCH;
@@ -615,12 +615,12 @@ end;
 
 function StringToUTF8 (const ws: String): AnsiString;
 begin
-  result := StringToAnsiString (ws, CP_UTF8);
+  Result := StringToAnsiString (ws, CP_UTF8);
 end;
 
 function UTF8TOString (const st: AnsiString): String;
 begin
-  result := AnsiStringToString (st, CP_UTF8);
+  Result := AnsiStringToString (st, CP_UTF8);
 end;
 
 { TCountryCodes }
@@ -642,7 +642,7 @@ begin
       sl := TStringList.Create;
       reg.GetKeyNames(sl);
       for i := 0 to sl.Count - 1 do
-        Add (TCountryCode.CreateFromReg (self, reg.CurrentKey, StrToInt (sl [i])));
+        Add (TCountryCode.CreateFromReg (self, reg.CurrentKey, StrToInt(sl [i])));
     end
   finally
     reg.Free;
@@ -652,7 +652,7 @@ end;
 
 function TCountryCodes.GetCountryCode(idx: Integer): TCountryCode;
 begin
-  result := TCountryCode (Items [idx]);
+  Result := TCountryCode (Items [idx]);
 end;
 
 function CompareItems (item1, item2: pointer): Integer;
@@ -663,24 +663,24 @@ begin
   c1 := TCountryCode (item1);
   c2 := TCountryCode (item2);
 
-  if Assigned (c1.Owner.FPreferedList) then
+  if Assigned(c1.Owner.FPreferedList) then
   begin
     p1 := c1.Owner.FPreferedList.IndexOf(IntToStr (c1.Code));
     p2 := c1.Owner.FPreferedList.IndexOf(IntToStr (c2.Code));
 
     if p1 = -1 then
       if p2 = -1 then
-        result := CompareText (c1.Name, c2.Name)
+        Result := CompareText(c1.Name, c2.Name)
       else
-        result := 1
+        Result := 1
     else
       if p2 = -1 then
-        result := -1
+        Result := -1
       else
-        result := p1 - p2
+        Result := p1 - p2
   end
   else
-    result := CompareText (c1.Name, c2.Name);
+    Result := CompareText(c1.Name, c2.Name);
 end;
 
 function CompareCodes (item1, item2: pointer): Integer;
@@ -689,12 +689,12 @@ var
 begin
   c1 := TCountryCode (item1);
   c2 := TCountryCode (item2);
-  result := c2.Code - c1.Code
+  Result := c2.Code - c1.Code
 end;
 
 procedure TCountryCodes.SortByCode;
 begin
-  Sort (CompareCodes);
+  Sort(CompareCodes);
 end;
 
 procedure TCountryCodes.SortByName(const PreferedList: string);
@@ -706,7 +706,7 @@ begin
       FPreferedList.CommaText := PreferedList;
     end;
 
-    inherited Sort (CompareItems);
+    inherited Sort(CompareItems);
   finally
     FreeAndNil (FPreferedList);
   end

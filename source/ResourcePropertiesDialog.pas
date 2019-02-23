@@ -40,8 +40,8 @@ var
   LanguageIndex: Integer;
   LanguageName: string;
 begin
-  UseInternationalFont (ntedName.Font);
-  if Assigned (ResourceDetails) then
+  UseInternationalFont(ntedName.Font);
+  if Assigned(ResourceDetails) then
   begin
     if resourceDetails is TStringResourceDetails then
       ntedName.Text := ResIdToStringsId (ResourceDetails.ResourceName)
@@ -55,7 +55,7 @@ begin
   for LanguageIndex := 0 to Languages.Count - 1 do
   begin
     cbLanguage.Items.Add (Languages.Name[LanguageIndex]);
-    if Assigned (ResourceDetails) and (ResourceDetails.ResourceLanguage <> 0) and (DWORD (ResourceDetails.ResourceLanguage) = Languages.LocaleID[LanguageIndex]) then
+    if Assigned(ResourceDetails) and (ResourceDetails.ResourceLanguage <> 0) and (DWORD (ResourceDetails.ResourceLanguage) = Languages.LocaleID[LanguageIndex]) then
       LanguageName := Languages.Name[LanguageIndex];
   end;
 

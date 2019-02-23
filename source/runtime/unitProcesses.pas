@@ -23,98 +23,97 @@ unit unitProcesses;
 
 interface
 
-uses Windows, Classes, SysUtils, psapi, tlhelp32, contnrs, DateUtils;
-
+uses
+  Windows, Classes, SysUtils, Contnrs, PsAPI, TlHelp32, DateUtils;
 
 type
+  TProcessSnapshot = class;
+  TProcess = class;
 
-TProcessSnapshot = class;
-TProcess = class;
+  TModule = class
+  private
+    FOwner: TProcess;
+    FFileName: string;
+    FhModule: THandle;
+    FVersionCache: string;
+    FFileDateTime: TDateTime;
+    FFileSize: DWORD;
+    FObjectTag: TObject;
+    function GetVersion: string;  // Module handle (in the context of the module's process)
+    procedure GetFileDetails;
+    function GetFileDateTime: TDateTime;
+    function GetFileSize: DWORD;
+    function GetFileName: string;
+  protected
+    constructor Create (AOwner: TProcess; fInitDetails: PModuleEntry32); overload;
+    constructor Create (AOwner: TProcess; hOwner, hModule: THandle); overload;
+  public
+    property FileName: string read GetFileName;
+    property Version: string read GetVersion;
+    property FileDateTime: TDateTime read GetFileDateTime;
+    property FileSize: DWORD read GetFileSize;
+    property ObjectTag: TObject read FObjectTag write FObjectTag;
+    property Owner: TProcess read FOwner;
+  end;
 
-TModule = class
-private
-  fOwner : TProcess;
-  fFileName : string;
-  fhModule : THandle;
-  fVersionCache : string;
-  fFileDateTime : TDateTime;
-  fFileSize : DWORD;
-  fObjectTag: TObject;
-  function GetVersion: string;  // Module handle (in the context of the module's process)
-  procedure GetFileDetails;
-  function GetFileDateTime: TDateTime;
-  function GetFileSize: DWORD;
-  function GetFileName: string;
-protected
-  constructor Create (AOwner : TProcess; fInitDetails : PModuleEntry32); overload;
-  constructor Create (AOwner : TProcess; hOwner, hModule : THandle); overload;
-public
-  property FileName : string read GetFileName;
-  property Version : string read GetVersion;
-  property FileDateTime : TDateTime read GetFileDateTime;
-  property FileSize : DWORD read GetFileSize;
-  property ObjectTag : TObject read fObjectTag write fObjectTag;
-  property Owner : TProcess read fOwner;
-end;
+  TProcess = class
+  private
+    FParentProcessID: DWORD;
+    FProcessID: DWORD;
+    FEXEName: string;
+    FBasePriority: Longint;
+    FModules: TObjectList;
+    FObjectTag: TObject;
+    FOwner: TProcessSnapshot;
 
-TProcess = class
-private
-  fParentProcessID: DWORD;
-  fProcessID: DWORD;
-  fEXEName: string;
-  fBasePriority : Longint;
-  fModules : TObjectList;
-  fObjectTag: TObject;
-  fOwner : TProcessSnapshot;
+    constructor Create (AOwner: TProcessSnapshot; fInitDetails: PProcessEntry32); overload;
+    constructor Create (AOwner: TProcessSnapshot; fPID: DWORD); overload;
+    function GetModule(idx: Integer): TModule;
+    function GetModuleCount: Integer;
+    function GetBaseModule: TModule;
+  public
+    destructor Destroy; override;
+    property ProcessID: DWORD read FProcessID;
+    property ParentProcessID: DWORD read FParentProcessID;
+    property EXEName: string read FEXEName;
+    property BasePriority: Longint read FBasePriority;
 
-  constructor Create (AOwner : TProcessSnapshot; fInitDetails : PProcessEntry32); overload;
-  constructor Create (AOwner : TProcessSnapshot; fPID : DWORD); overload;
-  function GetModule(idx: Integer): TModule;
-  function GetModuleCount: Integer;
-  function GetBaseModule: TModule;
-public
-  destructor Destroy; override;
-  property ProcessID : DWORD read fProcessID;
-  property ParentProcessID : DWORD read fParentProcessID;
-  property EXEName : string read fEXEName;
-  property BasePriority : Longint read fBasePriority;
+    property ModuleCount: Integer read GetModuleCount;
+    property Module [idx: Integer]: TModule read GetModule; default;
+    property BaseModule: TModule read GetBaseModule;
+    property ObjectTag: TObject read FObjectTag write FObjectTag;
+  end;
 
-  property ModuleCount : Integer read GetModuleCount;
-  property Module [idx : Integer] : TModule read GetModule; default;
-  property BaseModule : TModule read GetBaseModule;
-  property ObjectTag : TObject read fObjectTag write fObjectTag;
-end;
+  TPSSortColumn = (psPID, psParentPID, psBasePriority, psName, psDate, psSize, psVersion);
+  TPSSortDirection = (psAscending, psDescending);
+  TProcessEnumerator = (peAuto, peToolHelp, pePSAPI);
+  TProcessSnapshot = class (TComponent)
+  private
+    FProcesses: TObjectList;
+    FProcessEnumerator: TProcessEnumerator;
+    FSortColumn: TPSSortColumn;
+    FSortDirection: TPSSortDirection;
+    function GetProcess(idx: Integer): TProcess;
+    function GetProcessCount: Integer;
+    procedure SetProcessEnumerator(const Value: TProcessEnumerator);
+    procedure LoadEnumerator;
+  protected
+    procedure Loaded; override;
+  public
+    constructor Create (AOwner: TComponent); override;
+    destructor Destroy; override;
 
-TPSSortColumn = (psPID, psParentPID, psBasePriority, psName, psDate, psSize, psVersion);
-TPSSortDirection = (psAscending, psDescending);
-TProcessEnumerator = (peAuto, peToolHelp, pePSAPI);
-TProcessSnapshot = class (TComponent)
-private
-  fProcesses : TObjectList;
-  fProcessEnumerator: TProcessEnumerator;
-  fSortColumn : TPSSortColumn;
-  fSortDirection : TPSSortDirection;
-  function GetProcess(idx: Integer): TProcess;
-  function GetProcessCount: Integer;
-  procedure SetProcessEnumerator(const Value: TProcessEnumerator);
-  procedure LoadEnumerator;
-protected
-  procedure Loaded; override;
-public
-  constructor Create (AOwner : TComponent); override;
-  destructor Destroy; override;
+    procedure SortProcesses (column: TPSSortColumn; direction: TPSSortDirection);
+    procedure TakeSnapshot;
+    property ProcessCount: Integer read GetProcessCount;
+    property Process [idx: Integer]: TProcess read GetProcess; default;
+    property SortColumn: TPSSortColumn read FSortColumn;
+    property SortDirection: TPSSortDirection read FSortDirection;
+  published
+    property ProcessEnumerator: TProcessEnumerator read FProcessEnumerator write SetProcessEnumerator;
+  end;
 
-  procedure SortProcesses (column : TPSSortColumn; direction : TPSSortDirection);
-  procedure TakeSnapshot;
-  property ProcessCount : Integer read GetProcessCount;
-  property Process [idx : Integer] : TProcess read GetProcess; default;
-  property SortColumn : TPSSortColumn read fSortColumn;
-  property SortDirection : TPSSortDirection read fSortDirection;
-published
-  property ProcessEnumerator : TProcessEnumerator read fProcessEnumerator write SetProcessEnumerator;
-end;
-
-EProcessSnapshot = class (exception);
+  EProcessSnapshot = class (exception);
 
 procedure CheckToolHelp;
 procedure CheckPSAPI;
@@ -162,38 +161,38 @@ type  // Support for NtQueryInformationProcess
     MaxProcessInfoClass);
 
   TProcessBasicInformation = record
-    ExitStatus : Longint;
-    PebBaseAddress : Pointer;
-    AffinityMask : DWORD;
-    BasePriority : Longint;
-    UniqueProcessId : DWORD;
-    InheritedFromUniqueProcessId : DWORD;
+    ExitStatus: Longint;
+    PebBaseAddress: Pointer;
+    AffinityMask: DWORD;
+    BasePriority: Longint;
+    UniqueProcessId: DWORD;
+    InheritedFromUniqueProcessId: DWORD;
   end;
 
   TfnNtQueryInformationProcess = function (
-    Handle : THandle;
-    infoClass : TProcessInfoClass;
-    processInformation : Pointer;
-    processInformationLength : ULONG;
-    returnLength : PULONG
-  ) : DWORD; stdcall;
+    Handle: THandle;
+    infoClass: TProcessInfoClass;
+    processInformation: Pointer;
+    processInformationLength: ULONG;
+    returnLength: PULONG
+  ): DWORD; stdcall;
 
 var
-  gUsesToolHelp : boolean = False;
-  gUsesPSAPI : boolean = False;
-  gCheckedToolHelp : boolean = False;
-  gCheckedPSAPI : boolean = False;
-  gOldState : DWORD = $BadF00d;
-  NTQueryInformationProcess : TfnNTQueryInformationProcess;
+  gUsesToolHelp: Boolean = False;
+  gUsesPSAPI: Boolean = False;
+  gCheckedToolHelp: Boolean = False;
+  gCheckedPSAPI: Boolean = False;
+  gOldState: DWORD = $BadF00d;
+  NTQueryInformationProcess: TfnNTQueryInformationProcess;
 
-function EnableNTPrivilege (const privilege : string; state : Integer) : Integer;
+function EnableNTPrivilege (const privilege: string; state: Integer): Integer;
 var
-  hToken : THandle;
-  aluid : TLargeInteger;
-  cbPrevTP : DWORD;
-  tp, fPrevTP : PTokenPrivileges;
+  hToken: THandle;
+  aluid: TLargeInteger;
+  cbPrevTP: DWORD;
+  tp, fPrevTP: PTokenPrivileges;
 begin
-  result := 0;
+  Result := 0;
   if OpenProcessToken (GetCurrentProcess, TOKEN_ADJUST_PRIVILEGES or TOKEN_QUERY, hToken) then
   try
     LookupPrivilegeValue (Nil, PChar (privilege), aluid);
@@ -211,7 +210,7 @@ begin
       if not AdjustTokenPrivileges (hToken, False, tp^, cbPrevTP, fPrevTP^, cbPrevTP) then
         RaiseLastOSError;
 
-      result := fPrevTP^.Privileges [0].Attributes;
+      Result := fPrevTP^.Privileges [0].Attributes;
 
     finally
      FreeMem (fPrevTP);
@@ -222,49 +221,49 @@ begin
   end
 end;
 
-function GetFileVersion (const fileName : string) : string;
+function GetFileVersion (const fileName: string): string;
 var
-  size, zero : DWORD;
-  buffer, pBuffer: pointer;
-  info : PVSFixedFileInfo;
+  size, zero: DWORD;
+  Buffer, pBuffer: pointer;
+  info: PVSFixedFileInfo;
 begin
-  result := '';
+  Result := '';
   size := GetFileVersionInfoSize (PChar (FileName), zero);
   if size > 0 then
   begin
-    GetMem (buffer, size);
-    if not GetFileVersionInfo (PChar (FileName), zero, size, buffer) then
+    GetMem (Buffer, size);
+    if not GetFileVersionInfo (PChar (FileName), zero, size, Buffer) then
       RaiseLastOSError;
 
-    if not VerQueryValue (buffer, '\', pBuffer, size) then
+    if not VerQueryValue (Buffer, '\', pBuffer, size) then
       RaiseLastOSError;
 
     info := PVSFixedFileInfo (pBuffer);
 
-    result := Format ('%d.%d.%d.%d', [HiWord (info^.dwProductVersionMS), LoWord (info^.dwProductVersionMS), HiWord (info^.dwProductVersionLS), LoWord (info^.dwProductVersionLS)])
+    Result := Format('%d.%d.%d.%d', [HiWord (info^.dwProductVersionMS), LoWord (info^.dwProductVersionMS), HiWord (info^.dwProductVersionLS), LoWord (info^.dwProductVersionLS)])
   end
   else
-    result := '-'
+    Result := '-'
 end;
 
-function UsesToolHelp : boolean;
+function UsesToolHelp: Boolean;
 var
-  KernelHandle : THandle;
+  KernelHandle: THandle;
 begin
   if not gCheckedToolHelp then
   begin
     gCheckedToolHelp := True;
     KernelHandle := GetModuleHandle(kernel32);
-    gUsesToolHelp := Assigned (GetProcAddress(KernelHandle, 'CreateToolhelp32Snapshot'))
+    gUsesToolHelp := Assigned(GetProcAddress(KernelHandle, 'CreateToolhelp32Snapshot'))
   end;
 
-  result := gUsesToolHelp
+  Result := gUsesToolHelp
 end;
 
-function UsesPSAPI : boolean;
+function UsesPSAPI: Boolean;
 var
-  hPSAPI : THandle;
-  hNTDLL : THandle;
+  hPSAPI: THandle;
+  hNTDLL: THandle;
 begin
   if not gCheckedPSAPI then
   begin
@@ -279,13 +278,13 @@ begin
       if hNTDLL <> 0 then
       begin
         NTQueryInformationProcess := GetProcAddress (hNTDLL, 'ZwQueryInformationProcess');
-        if not Assigned (NTQueryInformationProcess) then
+        if not Assigned(NTQueryInformationProcess) then
           raise EProcessSnapshot.Create(rstCantSnapshot);
        end
 
     end
   end;
-  result := gUsesPSAPI
+  Result := gUsesPSAPI
 end;
 
 procedure CheckToolHelp;
@@ -305,95 +304,95 @@ end;
 constructor TProcess.Create(AOwner: TProcessSnapshot;
   fInitDetails: PProcessEntry32);
 var
-  hSnapshot : THandle;
-  moduleEntry : TModuleEntry32;
+  HandleSnapshot: THandle;
+  ModuleEntry: TModuleEntry32;
 begin
-  fOwner := AOwner;
+  FOwner := AOwner;
   CheckToolHelp;
-  fModules := TObjectList.Create;
+  FModules := TObjectList.Create;
 
-  fProcessID := fInitDetails^.th32ProcessID;
-  fParentProcessID := fInitDetails^.th32ParentProcessID;
-  fEXEName := fInitDetails^.szExeFile;
-  fBasePriority := fInitDetails^.pcPriClassBase;
+  FProcessID := fInitDetails^.th32ProcessID;
+  FParentProcessID := fInitDetails^.th32ParentProcessID;
+  FEXEName := fInitDetails^.szExeFile;
+  FBasePriority := fInitDetails^.pcPriClassBase;
 
-  if fParentProcessID <> 0 then
+  if FParentProcessID <> 0 then
   begin
-    hSnapshot := TlHelp32.CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, fProcessID);
-    if hSnapshot <> INVALID_HANDLE_VALUE then
+    HandleSnapshot := TlHelp32.CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, FProcessID);
+    if HandleSnapshot <> INVALID_HANDLE_VALUE then
     try
-      moduleEntry.dwSize := sizeof (moduleEntry);
+      ModuleEntry.dwSize := sizeof (ModuleEntry);
 
-      if Module32First (hSnapshot, moduleentry) then
+      if Module32First(HandleSnapshot, ModuleEntry) then
       begin
-        fEXEName := moduleEntry.szExePath;
+        FEXEName := ModuleEntry.szExePath;
         repeat
-          fModules.Add(TModule.Create(self, @moduleEntry))
-        until not Module32Next (hSnapshot, moduleEntry)
+          FModules.Add(TModule.Create(self, @ModuleEntry))
+        until not Module32Next(HandleSnapshot, ModuleEntry)
       end
     finally
-      Closehandle (hSnapshot)
+      Closehandle (HandleSnapshot)
     end
   end
 end;
 
 constructor TProcess.Create(AOwner: TProcessSnapshot; fPID: DWORD);
 var
-  hProcess : THandle;
-  processInfo : TProcessBasicInformation;
-  baseName : array [0..MAX_PATH] of char;
-  buffer, p : PHMODULE;
-  bufLen : DWORD;
-  i, modCount : Integer;
+  HandleProcess: THandle;
+  ProcessInfo: TProcessBasicInformation;
+  BaseName: array [0..MAX_PATH] of char;
+  Buffer, p: PHMODULE;
+  BufferLen: DWORD;
+  i, modCount: Integer;
 begin
-  fOwner := AOwner;
+  FOwner := AOwner;
   CheckPSAPI;
-  fModules := TObjectList.Create;
-  fProcessID := fPID;
+  FModules := TObjectList.Create;
+  FProcessID := fPID;
   if fPID = 0 then
-    fEXEName := rstIdle
+    FEXEName := rstIdle
   else
   begin
-    hProcess := OpenProcess (PROCESS_QUERY_INFORMATION or PROCESS_VM_READ, False, fPid);
-    if hProcess <> 0 then
+    HandleProcess := OpenProcess (PROCESS_QUERY_INFORMATION or PROCESS_VM_READ, False, fPid);
+    if HandleProcess <> 0 then
     try
-      buffer := Nil;
+      Buffer := Nil;
       try
-        ReallocMem (buffer, 1024*1024);
-        if not psapi.EnumProcessModules(hProcess, buffer, 1024*1024, bufLen) then bufLen := 0;
-        ReallocMem (buffer, bufLen);
-        modCount := bufLen div sizeof (PDWORD);
+        ReallocMem (Buffer, 1024*1024);
+        if not psapi.EnumProcessModules(HandleProcess, Buffer, 1024*1024, BufferLen) then BufferLen := 0;
+        ReallocMem (Buffer, BufferLen);
+        modCount := BufferLen div sizeof (PDWORD);
 
-        p := buffer;
+        p := Buffer;
         for i := 0 to modCount - 1 do
         begin
-          fModules.Add(TModule.Create(self, hProcess, p^));
-          Inc (p)
+          FModules.Add(TModule.Create(self, HandleProcess, p^));
+          Inc(p)
         end
       finally
-        ReallocMem (buffer, 0)
+        ReallocMem (Buffer, 0)
       end;
 
-      if psapi.GetModuleBaseName(hProcess, 0, baseName, sizeof (baseName)) > 0 then
-        fEXEName := baseName
+      if psapi.GetModuleBaseName(HandleProcess, 0, BaseName, sizeof (BaseName)) > 0 then
+        FEXEName := BaseName
       else
-        fEXEName := rstSystem;
+        FEXEName := rstSystem;
 
 
-      if NTQueryInformationProcess (hProcess, ProcessBasicInformation, @processInfo, SizeOf (processInfo), nil) = 0 then
+      if NTQueryInformationProcess (HandleProcess, ProcessBasicInformation, @ProcessInfo, SizeOf (ProcessInfo), nil) = 0 then
       begin
-        fParentProcessID := processInfo.InheritedFromUniqueProcessId;
-        fBasePriority := processInfo.BasePriority
+        FParentProcessID := ProcessInfo.InheritedFromUniqueProcessId;
+        FBasePriority := ProcessInfo.BasePriority
       end
     finally
-      CloseHandle (hProcess)
+      CloseHandle (HandleProcess)
     end
   end
 end;
 
 destructor TProcess.Destroy;
 begin
-  fModules.Free;
+  FModules.Free;
 
   inherited;
 end;
@@ -401,19 +400,19 @@ end;
 function TProcess.GetBaseModule: TModule;
 begin
   if ModuleCount > 0 then
-    result := Module [0]
+    Result := Module [0]
   else
-    result := Nil
+    Result := Nil
 end;
 
 function TProcess.GetModule(idx: Integer): TModule;
 begin
-  result := TModule (fModules [idx])
+  Result := TModule (FModules [idx])
 end;
 
 function TProcess.GetModuleCount: Integer;
 begin
-  result := fModules.Count
+  Result := FModules.Count
 end;
 
 { TProcessSnapshot }
@@ -421,27 +420,27 @@ end;
 constructor TProcessSnapshot.Create;
 begin
   inherited Create (Aowner);
-  fSortColumn := psPID;
-  fProcesses := TObjectList.Create;
-  if not (csDesigning in ComponentState) then
+  FSortColumn := psPID;
+  FProcesses := TObjectList.Create;
+  if not(csDesigning in ComponentState) then
     LoadEnumerator;
 end;
 
 destructor TProcessSnapshot.Destroy;
 begin
-  fProcesses.Free;
+  FProcesses.Free;
 
   inherited;
 end;
 
 function TProcessSnapshot.GetProcess(idx: Integer): TProcess;
 begin
-  result := TProcess (fProcesses [idx]);
+  Result := TProcess (FProcesses [idx]);
 end;
 
 function TProcessSnapshot.GetProcessCount: Integer;
 begin
-  result := fProcesses.Count
+  Result := FProcesses.Count
 end;
 
 procedure TProcessSnapshot.Loaded;
@@ -462,10 +461,13 @@ begin
   gCheckedPSAPI := False;
 
   case ProcessEnumerator of
-    peAuto: if not UsesPSAPI and not UsesToolHelp then
-              raise EProcessSnapshot.Create (rstCantSnapshot);
-    pePSAPI    : CheckPSAPI;
-    peToolHelp : CheckToolHelp;
+    peAuto: 
+      if not UsesPSAPI and not UsesToolHelp then
+        raise EProcessSnapshot.Create (rstCantSnapshot);
+    pePSAPI: 
+      CheckPSAPI;
+    peToolHelp: 
+      CheckToolHelp;
   end;
 
   TakeSnapshot;
@@ -474,155 +476,155 @@ end;
 procedure TProcessSnapshot.SetProcessEnumerator(
   const Value: TProcessEnumerator);
 begin
-  if Value <> fProcessEnumerator then
+  if Value <> FProcessEnumerator then
   begin
-    fProcessEnumerator := Value;
+    FProcessEnumerator := Value;
 
-    if not (csLoading in ComponentState) then
+    if not(csLoading in ComponentState) then
       LoadEnumerator;
   end
 end;
 
-function CompareProcesses (p1, p2 : Pointer) : Integer;
+function CompareProcesses (p1, p2: Pointer): Integer;
 var
-  pr1, pr2 : TProcess;
-  m1, m2 : TModule;
-  column : TPSSortColumn;
-  direction : TPSSortDirection;
+  pr1, pr2: TProcess;
+  m1, m2: TModule;
+  column: TPSSortColumn;
+  direction: TPSSortDirection;
 begin
   pr1 := TProcess (p1);
   pr2 := TProcess (p2);
   m1 := pr1.BaseModule;
   m2 := pr2.BaseModule;
 
-  column := pr1.fOwner.fSortColumn;
-  direction := pr1.fOwner.fSortDirection;
+  column := pr1.FOwner.FSortColumn;
+  direction := pr1.FOwner.FSortDirection;
 
-  result := 99;
+  Result := 99;
   if (column in [psDate, psSize]) and ((m1 = Nil) or (m2 = Nil)) then
   begin
     if m1 = Nil then
       if m2 = Nil then
-        result := 0
+        Result := 0
       else
-        result := -1
+        Result := -1
     else
       if m2 = Nil then
-        result := 1
+        Result := 1
   end;
 
 
   if result = 99 then
   case column of
-    psPID : result := pr1.ProcessID - pr2.ProcessID;
-    psParentPID : result := pr1.ParentProcessID - pr2.ParentProcessID;
-    psBasePriority : result := pr1.BasePriority - pr2.BasePriority;
-    psName : result := CompareText (pr1.EXEName, pr2.EXEName);
-    psDate : result := CompareDateTime (m1.FileDateTime, m2.FileDateTime);
-    psSize : result := m1.FileSize - m2.FileSize
+    psPID: Result := pr1.ProcessID - pr2.ProcessID;
+    psParentPID: Result := pr1.ParentProcessID - pr2.ParentProcessID;
+    psBasePriority: Result := pr1.BasePriority - pr2.BasePriority;
+    psName: Result := CompareText(pr1.EXEName, pr2.EXEName);
+    psDate: Result := CompareDateTime (m1.FileDateTime, m2.FileDateTime);
+    psSize: Result := m1.FileSize - m2.FileSize
     else
-      result := 0
+      Result := 0
   end;
 
   if direction = psDescending then
-    result := -result
+    Result := -result
 end;
 
-procedure TProcessSnapshot.SortProcesses (column : TPSSortColumn; direction : TPSSortDirection);
+procedure TProcessSnapshot.SortProcesses (column: TPSSortColumn; direction: TPSSortDirection);
 begin
-  fSortColumn := column;
-  fSortDirection := direction;
-  fProcesses.Sort(CompareProcesses);
+  FSortColumn := column;
+  FSortDirection := direction;
+  FProcesses.Sort(CompareProcesses);
 end;
 
 procedure TProcessSnapshot.TakeSnapshot;
 var
-  buffer, p : PDWORD;
-  bufLen : DWORD;
-  i, count : Integer;
-  hSnapshot : THandle;
-  processEntry : TProcessEntry32;
+  Buffer, p: PDWORD;
+  BufferLen: DWORD;
+  i, count: Integer;
+  HandleSnapshot: THandle;
+  processEntry: TProcessEntry32;
 begin
   if csDesigning in ComponentState then
     Exit;
 
-  fProcesses.Clear;
+  FProcesses.Clear;
   if gUsesToolhelp then
   begin
-    hSnapshot := TlHelp32.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if hSnapshot <> INVALID_HANDLE_VALUE then
+    HandleSnapshot := TlHelp32.CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if HandleSnapshot <> INVALID_HANDLE_VALUE then
     try
       processEntry.dwSize := sizeof (processEntry);
 
-      if Process32First (hSnapshot, processEntry) then
+      if Process32First(HandleSnapshot, processEntry) then
       repeat
-        fProcesses.Add(TProcess.Create(self, @processEntry))
-      until not Process32Next (hSnapshot, processEntry)
+        FProcesses.Add(TProcess.Create(self, @processEntry))
+      until not Process32Next(HandleSnapshot, processEntry)
     finally
-      Closehandle (hSnapshot)
+      Closehandle (HandleSnapshot)
     end
   end
   else
   begin
-    buffer := Nil;
+    Buffer := Nil;
     try
-      ReallocMem (buffer, 1024*1024);
-      if not EnumProcesses (buffer, 1024*1024, bufLen) then bufLen := 0;
-      ReallocMem (buffer, bufLen);
-      count := bufLen div sizeof (DWORD);
+      ReallocMem (Buffer, 1024*1024);
+      if not EnumProcesses (Buffer, 1024*1024, BufferLen) then BufferLen := 0;
+      ReallocMem (Buffer, BufferLen);
+      count := BufferLen div sizeof (DWORD);
 
-      p := buffer;
+      p := Buffer;
       for i := 0 to count - 1 do
       begin
-        fProcesses.Add(TProcess.Create(self, p^));
-        Inc (p)
+        FProcesses.Add(TProcess.Create(self, p^));
+        Inc(p)
       end
     finally
-      ReallocMem (buffer, 0)
+      ReallocMem (Buffer, 0)
     end
   end;
 
-  SortProcesses (fSortColumn, fSortDirection);
+  SortProcesses (FSortColumn, FSortDirection);
 end;
 
 { TModule }
 
 constructor TModule.Create(AOwner: TProcess; fInitDetails: PModuleEntry32);
 begin
-  fVersionCache := '~';
-  fOwner := AOwner;
-  fFileName := fInitDetails.szExePath;
-  fhModule := fInitDetails.hModule;
+  FVersionCache := '~';
+  FOwner := AOwner;
+  FFileName := fInitDetails.szExePath;
+  FhModule := fInitDetails.hModule;
 end;
 
 constructor TModule.Create(AOwner: TProcess; hOwner, hModule: THandle);
 var
-  szfileName : array [0..MAX_PATH] of char;
+  szfileName: array [0..MAX_PATH] of char;
 begin
-  fVersionCache := '~';
-  fOwner := AOwner;
-  fhModule := hModule;
+  FVersionCache := '~';
+  FOwner := AOwner;
+  FhModule := hModule;
   GetModuleFileNameEx (hOwner, hModule, szFileName, sizeof (szFileName));
-  fFileName := szFilename
+  FFileName := szFilename
 end;
 
 function TModule.GetFileDateTime: TDateTime;
 begin
   GetFileDetails;
-  result := fFileDateTime;
+  Result := FFileDateTime;
 end;
 
 procedure TModule.GetFileDetails;
 var
-  f : TSearchRec;
+  f: TSearchRec;
 begin
-  if fVersionCache = '~' then
+  if FVersionCache = '~' then
   begin
-    fVersionCache := GetFileVersion (FileName);
-    if FindFirst (FileName, faAnyFile, f) = 0 then
+    FVersionCache := GetFileVersion (FileName);
+    if FindFirst(FileName, faAnyFile, f) = 0 then
     try
-      fFileDateTime := FileDateToDateTime (f.Time);
-      fFileSize := f.Size
+      FFileDateTime := FileDateToDateTime (f.Time);
+      FFileSize := f.Size
     finally
       FindClose (f)
     end
@@ -631,9 +633,9 @@ end;
 
 function TModule.GetFileName: string;
 var
-  sysDir : string;
+  sysDir: string;
 begin
-  result := fFileName;
+  Result := FFileName;
   if Copy (result, 1, 4) = '\??\' then
     Delete (result, 1, 4);
 
@@ -642,20 +644,20 @@ begin
     SetLength (sysDir, MAX_PATH);
     GetWindowsDirectory (PChar (sysDir), MAX_PATH);
     sysDir := PChar (sysDir);
-    result := sysDir + Copy (result, 12, MaxInt)
+    Result := sysDir + Copy (result, 12, MaxInt)
   end
 end;
 
 function TModule.GetFileSize: DWORD;
 begin
   GetFileDetails;
-  result := fFileSize;
+  Result := FFileSize;
 end;
 
 function TModule.GetVersion: string;
 begin
   GetFileDetails;
-  result := fVersionCache;
+  Result := FVersionCache;
 end;
 
 initialization

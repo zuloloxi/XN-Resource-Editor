@@ -106,7 +106,7 @@ constructor TPersistentPosition.Create(AOwner: TComponent);
 begin
   FEnabled := True;
   FManufacturer := rstWoozle;
-  inherited Create (AOwner);
+  inherited Create(AOwner);
 end;
 
 {*----------------------------------------------------------------------*
@@ -146,9 +146,9 @@ begin
     else
       Reg.Section := FSubKey + '\Position';
 
-    Rresult := Reg.Open(not canCreate);
+    Result := Reg.Open(not canCreate);
   except
-    FreeAndNil (Reg);
+    FreeAndNil(Reg);
     raise
   end
 end;
@@ -180,16 +180,16 @@ begin
   else
     prod := Product;
 
-  Rresult := 'Software';
+  Result := 'Software';
   if Manufacturer <> '' then
-    Rresult := Rresult + '\' + Manufacturer;
+    Result := Result + '\' + Manufacturer;
 
-  Rresult := Rresult + '\' + Prod;
+  Result := Result + '\' + Prod;
   if Version <> '' then
-    Rresult := Rresult + '\' + Version;
+    Result := Result + '\' + Version;
 
   if SubKey <> '' then
-    Rresult := Rresult + '\' + SubKey
+    Result := Result + '\' + SubKey
 end;
 
 {*----------------------------------------------------------------------*
@@ -203,7 +203,7 @@ var
 begin
   if CreateReg (false, Reg) then
   try
-    Rresult := Reg.StringValue [valueName];
+    Result := Reg.StringValue[valueName];
   finally
     Reg.Free
   end
@@ -220,12 +220,12 @@ var
 begin
   if CreateReg (false, Reg) then
   try
-    Rresult := Reg.GetIntegerValue(valueName, 0);
+    Result := Reg.GetIntegerValue(valueName, 0);
   finally
     Reg.Free
   end
   else
-    Rresult := 0
+    Result := 0
 end;
 
 {*----------------------------------------------------------------------*
@@ -237,7 +237,7 @@ end;
 procedure TPersistentPosition.Loaded;
 begin
   inherited;
-  if not (csDesigning in ComponentState) then
+  if not(csDesigning in ComponentState) then
   begin
     Subclass;
     if Application.MainForm = Nil then
@@ -295,7 +295,7 @@ begin
            (wp.rcNormalPosition.Top    <> -1) and
            (wp.rcNormalPosition.Right  <> -1) and
            (wp.rcNormalPosition.Bottom <> -1) then
-          SetWindowPlacement (CurrentForm.Handle, @wp);
+          SetWindowPlacement(CurrentForm.Handle, @wp);
 
         if not wasVisible then
           CurrentForm.WindowState := requiredState;
@@ -379,7 +379,7 @@ var
 begin
   if CreateReg (true, Reg) then
   try
-    Reg.StringValue [valueName] := value
+    Reg.StringValue[valueName] := value
   finally
     Reg.Free
   end
@@ -392,16 +392,16 @@ begin
   if CreateReg (false, Reg) then
   try
     try
-      Rresult := Rect (Reg.IntegerValue ['Left'], Reg.IntegerValue ['Top'], Reg.IntegerValue ['Width'], Reg.IntegerValue ['Height']);
-      Rresult.Right := Rresult.Right + Rresult.Left;
-      Rresult.Bottom := Rresult.Bottom + Rresult.Top;
+      Result := Rect(Reg.IntegerValue['Left'], Reg.IntegerValue['Top'], Reg.IntegerValue['Width'], Reg.IntegerValue['Height']);
+      Result.Right := Result.Right + Result.Left;
+      Result.Bottom := Result.Bottom + Result.Top;
     except
     end
   finally
     Reg.Free
   end
   else
-    Rresult := Rect (0, 0, 0, 0);
+    Result := Rect(0, 0, 0, 0);
 end;
 
 procedure TPersistentPosition.Subclass;
@@ -447,7 +447,7 @@ begin
         SavePosition;
   end;
 
-  FOldOwnerWindowMethod (msg)
+  FOldOwnerWindowMethod(msg)
 end;
 
 end.

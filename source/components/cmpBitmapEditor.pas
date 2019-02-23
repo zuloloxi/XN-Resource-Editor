@@ -7,53 +7,49 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
 
 type
-  TDrawingTool = (dtNone, dtPencil, dtLine,
-                  dtFrameRect, dtFillRect, dtRect,
-                  dtFloodFill,
-                  dtFrameRoundRect, dtFillRoundRect, dtRoundRect,
-                  dtFrameEllipse, dtFillEllipse, dtEllipse,
-                  dtMagnifier,
-                  dtBrush,
-                  dtSelectRect,
-                  dtSelectArea,
-                  dtDropper, dtText, dtEraser, dtAirbrush,
-                  dtGradRectLR, dtGradRectTB, dtGradRectTLBR, dtGradRectBLTR);
+  TDrawingTool = (
+    dtNone, dtPencil, dtLine, dtFrameRect, dtFillRect, dtRect, dtFloodFill,
+    dtFrameRoundRect, dtFillRoundRect, dtRoundRect, dtFrameEllipse,
+    dtFillEllipse, dtEllipse, dtMagnifier, dtBrush, dtSelectRect, dtSelectArea,
+    dtDropper, dtText, dtEraser, dtAirbrush, dtGradRectLR, dtGradRectTB,
+    dtGradRectTLBR, dtGradRectBLTR
+  );
 
-  TOnGetText = procedure (sender : TObject; font : TFont; var txt : WideString) of object;
+  TOnGetText = procedure (sender: TObject; font: TFont; var txt: WideString) of object;
 
   TBitmapEditor = class(TCustomControl)
   private
-    fPicture: TPicture;
-    fMagnification: Integer;
-    fGridLines: Integer;
-    fBorderStyle: TBorderStyle;
-    fDrawingTool: TDrawingTool;
-    fLastDrawingTool: TDrawingTool;    // Reselect after using dropper
-    fDrawBrush: TBrush;
-    fDrawPen: TPen;
-    fEraser : TPen;
-    fDrawBmp : TBitmap;
-    fScratchBmp : TBitmap;
-    fSelectionBmp : TBitmap;
-    fPos : TPoint;
-    fOnChange: TNotifyEvent;
-    fTransparentColor : TColor;
-    fOnDrawToolChange: TNotifyEvent;
-    fCrossX, fCrossY : Integer;
-    fSelectionRect : TRect;
-    fLButtonIsDown : boolean;
-    fMouseCaptured : boolean;
-    fOnEndChange: TNotifyEvent;
-    fCallEndChange : boolean;
-    fOnSelectionRectChange: TNotifyEvent;
-    fClipboardPalette: HPALETTE;
-    fClipboardPixelFormat: TPixelFormat;
-    fOnGetText: TOnGetText;
-    fHotSpotX: Integer;
-    fHotSpotY: Integer;
+    FPicture: TPicture;
+    FMagnification: Integer;
+    FGridLines: Integer;
+    FBorderStyle: TBorderStyle;
+    FDrawingTool: TDrawingTool;
+    FLastDrawingTool: TDrawingTool;    // Reselect after using dropper
+    FDrawBrush: TBrush;
+    FDrawPen: TPen;
+    FEraser: TPen;
+    FDrawBmp: TBitmap;
+    FScratchBmp: TBitmap;
+    FSelectionBmp: TBitmap;
+    FPos: TPoint;
+    FOnChange: TNotifyEvent;
+    FTransparentColor: TColor;
+    FOnDrawToolChange: TNotifyEvent;
+    FCrossX, FCrossY: Integer;
+    FSelectionRect: TRect;
+    FLButtonIsDown: Boolean;
+    FMouseCaptured: Boolean;
+    FOnEndChange: TNotifyEvent;
+    FCallEndChange: Boolean;
+    FOnSelectionRectChange: TNotifyEvent;
+    FClipboardPalette: HPALETTE;
+    FClipboardPixelFormat: TPixelFormat;
+    FOnGetText: TOnGetText;
+    FHotSpotX: Integer;
+    FHotSpotY: Integer;
 
     procedure SetPicture(const Value: TPicture);
-    procedure PaintBitmap (bmp : TBitmap);
+    procedure PaintBitmap (bmp: TBitmap);
     procedure SetMagnification(const Value: Integer);
     procedure SizeToPicture;
     procedure SetGridLines(const Value: Integer);
@@ -61,32 +57,31 @@ type
     procedure SetDrawBrush(const Value: TBrush);
     procedure SetDrawingTool(const Value: TDrawingTool);
     procedure SetDrawPen(const Value: TPen);
-    procedure ChangeSelectionRect (const rect : TRect);
+    procedure ChangeSelectionRect(const rect: TRect);
     procedure RedrawBitmap;
     procedure Initialize;
     procedure SetTransparentColor(const Value: TColor);
     procedure DisplayCrossHairs;
-    function GetSelectionValid: boolean;
+    function GetSelectionValid: Boolean;
     procedure SetHotSpotX(const Value: Integer);
     procedure SetHotSpotY(const Value: Integer);
     procedure DrawHotSpot(canvas: TCanvas);
   protected
     procedure Paint; override;
-    procedure CreateParams (var params : TCreateParams ); override;
+    procedure CreateParams (var params: TCreateParams ); override;
     procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
     procedure MouseDown (Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure MouseUp (Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
   public
-    { Public declarations }
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
     procedure ZoomIn;
     procedure ZoomOut;
-    property DrawBmp : TBitmap read fDrawBmp;
-    property SelectionValid : boolean read GetSelectionValid;
-    property SelectionRect : TRect read fSelectionRect;
-    property ClipboardPalette : HPALETTE read fClipboardPalette write fClipboardPalette;
-    property ClipboardPixelFormat : TPixelFormat read fClipboardPixelFormat write fClipboardPixelFormat;
+    property DrawBmp: TBitmap read FDrawBmp;
+    property SelectionValid: Boolean read GetSelectionValid;
+    property SelectionRect: TRect read FSelectionRect;
+    property ClipboardPalette: HPALETTE read FClipboardPalette write FClipboardPalette;
+    property ClipboardPixelFormat: TPixelFormat read FClipboardPixelFormat write FClipboardPixelFormat;
     procedure SelectAll;
     procedure DeleteSelection;
     procedure CopySelection;
@@ -98,29 +93,28 @@ type
     procedure Rotate90;
     procedure Rotate270;
 
-    function GetDrawingChangeDescription : string;
+    function GetDrawingChangeDescription: string;
 
-    property HotSpotX : Integer read fHotSpotX write SetHotSpotX default -1;
-    property HotSpotY : Integer read fHotSpotY write SetHotSpotY default -1;
+    property HotSpotX: Integer read FHotSpotX write SetHotSpotX default -1;
+    property HotSpotY: Integer read FHotSpotY write SetHotSpotY default -1;
 
   published
-    { Published declarations }
-    property Picture : TPicture read fPicture write SetPicture;
-    property TransparentColor : TColor read fTransparentColor write SetTransparentColor default clTeal;
-    property Magnification : Integer read fMagnification write SetMagnification default 4;
-    property GridLines : Integer read fGridLines write SetGridLines default 4;
-    property BorderStyle : TBorderStyle read fBorderStyle write SetBorderStyle default bsSingle;
+    property Picture: TPicture read FPicture write SetPicture;
+    property TransparentColor: TColor read FTransparentColor write SetTransparentColor default clTeal;
+    property Magnification: Integer read FMagnification write SetMagnification default 4;
+    property GridLines: Integer read FGridLines write SetGridLines default 4;
+    property BorderStyle: TBorderStyle read FBorderStyle write SetBorderStyle default bsSingle;
     property DoubleBuffered;
     property PopupMenu;
     property TabStop;
-    property DrawingTool : TDrawingTool read fDrawingTool write SetDrawingTool;
-    property DrawPen : TPen read fDrawPen write SetDrawPen;
-    property DrawBrush : TBrush read fDrawBrush write SetDrawBrush;
-    property OnChange : TNotifyEvent read fOnChange write fOnChange;
-    property OnEndChange : TNotifyEvent read fOnEndChange write fOnEndChange;
-    property OnDrawToolChange : TNotifyEvent read fOnDrawToolChange write fOnDrawToolChange;
-    property OnSelectionRectChange : TNotifyEvent read fOnSelectionRectChange write fOnSelectionRectChange;
-    property OnGetText : TOnGetText read fOnGetText write fOnGetText;
+    property DrawingTool: TDrawingTool read FDrawingTool write SetDrawingTool;
+    property DrawPen: TPen read FDrawPen write SetDrawPen;
+    property DrawBrush: TBrush read FDrawBrush write SetDrawBrush;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+    property OnEndChange: TNotifyEvent read FOnEndChange write FOnEndChange;
+    property OnDrawToolChange: TNotifyEvent read FOnDrawToolChange write FOnDrawToolChange;
+    property OnSelectionRectChange: TNotifyEvent read FOnSelectionRectChange write FOnSelectionRectChange;
+    property OnGetText: TOnGetText read FOnGetText write FOnGetText;
   end;
 
 const
@@ -131,7 +125,7 @@ const
   crDropper = 5;
   crAirbrush = 6;
 
-  DrawingCursors : array [TDrawingTool] of TCursor =
+  DrawingCursors: array [TDrawingTool] of TCursor =
     (crArrow, crPencil, crCross, crCross, crCross, crCross, crPotOPaint, crCross, crCross, crCross, crCross, crCross, crCross,
      crMagnifier, crDotCross, crNone, crNone, crDropper, crIBeam, crCross, crAirbrush, crCross, crCross, crCross, crCross);
 
@@ -146,30 +140,30 @@ uses
 
 procedure TBitmapEditor.ChangeSelectionRect(const rect: TRect);
 var
-  oldValid : Boolean;
+  oldValid: Boolean;
 begin
   oldValid := SelectionValid;
 
-  if rect.Left <> -2 then fSelectionRect.Left := rect.Left;
-  if rect.Top <> -2 then fSelectionRect.Top := rect.Top;
-  if rect.Right <> -2 then fSelectionRect.Right := rect.Right;
-  if rect.Bottom <> -2 then fSelectionRect.Bottom := rect.Bottom;
+  if rect.Left <> -2 then FSelectionRect.Left := rect.Left;
+  if rect.Top <> -2 then FSelectionRect.Top := rect.Top;
+  if rect.Right <> -2 then FSelectionRect.Right := rect.Right;
+  if rect.Bottom <> -2 then FSelectionRect.Bottom := rect.Bottom;
 
   if SelectionValid or oldValid then
     Invalidate;
 
-  if Assigned (OnSelectionRectChange) then
+  if Assigned(OnSelectionRectChange) then
     OnSelectionRectChange (Self)
 end;
 
 procedure TBitmapEditor.CopySelection;
 var
-  b : TBitmap;
-  s : TMemoryStream;
-  AData : THandle;
-  p : PChar;
-  Size : Integer;
-  r : TRect;
+  b: TBitmap;
+  s: TMemoryStream;
+  AData: THandle;
+  p: PChar;
+  Size: Integer;
+  r: TRect;
 
 begin
   s := nil;
@@ -178,14 +172,14 @@ begin
     s := TMemoryStream.Create;
     b.PixelFormat := ClipboardPixelFormat;
     b.Palette := ClipboardPalette;
-    b.Width := fSelectionRect.Right - fSelectionRect.Left + 1;
-    b.Height := fSelectionRect.Bottom - fSelectionRect.Top + 1;
+    b.Width := FSelectionRect.Right - FSelectionRect.Left + 1;
+    b.Height := FSelectionRect.Bottom - FSelectionRect.Top + 1;
 
-    r := fSelectionRect;
-    Inc (r.Right);
-    Inc (r.Bottom);
+    r := FSelectionRect;
+    Inc(r.Right);
+    Inc(r.Bottom);
 
-    b.Canvas.CopyRect (rect (0, 0, b.Width, b.Height), DrawBmp.Canvas, r);
+    b.Canvas.CopyRect(rect(0, 0, b.Width, b.Height), DrawBmp.Canvas, r);
 
     b.SaveToStream (s);
     Size := s.Size - SizeOf (TBitmapFileHeader);
@@ -209,23 +203,23 @@ end;
 constructor TBitmapEditor.Create(AOwner: TComponent);
 begin
   inherited Create (AOwner);
-  fSelectionRect.Right := -1;
-  fSelectionRect.Bottom := -1;
-  fPicture := TPicture.Create;
-  fMagnification := 4;
-  fGridLines := 4;
-  fBorderStyle := bsSingle;
-  fDrawBrush := TBrush.Create;
-  fDrawPen := TPen.Create;
-  fEraser := TPen.Create;
-  fHotSpotX := -1;
-  fHotSpotY := -1;
+  FSelectionRect.Right := -1;
+  FSelectionRect.Bottom := -1;
+  FPicture := TPicture.Create;
+  FMagnification := 4;
+  FGridLines := 4;
+  FBorderStyle := bsSingle;
+  FDrawBrush := TBrush.Create;
+  FDrawPen := TPen.Create;
+  FEraser := TPen.Create;
+  FHotSpotX := -1;
+  FHotSpotY := -1;
 
-  fDrawBmp := TBitmap.Create;
+  FDrawBmp := TBitmap.Create;
 
-  fScratchBmp := TBitmap.Create;
-  fSelectionBmp := TBitmap.Create;
-  fTransparentColor := clTeal;
+  FScratchBmp := TBitmap.Create;
+  FSelectionBmp := TBitmap.Create;
+  FTransparentColor := clTeal;
   Screen.Cursors [crPencil] := LoadCursor (HInstance, 'CR_PENCIL');
   Screen.Cursors [crPotOPaint] := LoadCursor (HInstance, 'CR_POTOPAINT');
   Screen.Cursors [crMagnifier] := LoadCursor (HInstance, 'CR_MAGNIFIER');
@@ -252,11 +246,11 @@ end;
 
 procedure TBitmapEditor.DeleteSelection;
 var
-  hrgn : THandle;
-  Brush : TBrush;
+  hrgn: THandle;
+  Brush: TBrush;
 begin
   Brush := nil;
-  hrgn := CreateRectRgn (fSelectionRect.Left, fSelectionRect.Top, fSelectionRect.Right, fSelectionRect.Bottom);
+  hrgn := CreateRectRgn (FSelectionRect.Left, FSelectionRect.Top, FSelectionRect.Right, FSelectionRect.Bottom);
   if hrgn = 0 then
     RaiseLastOSError;
 
@@ -266,35 +260,35 @@ begin
     FillRgn (DrawBmp.Canvas.Handle, hrgn, Brush.Handle);
   finally
     Brush.Free;
-    DeleteObject (hrgn)
+    DeleteObject(hrgn)
   end;
   RedrawBitmap
 end;
 
 destructor TBitmapEditor.Destroy;
 begin
-  fPicture.Free;
-  fDrawPen.Free;
-  fDrawBrush.Free;
-  fDrawBmp.Free;
-  fScratchBmp.Free;
-  fSelectionBmp.Free;
-  fEraser.Free;
+  FPicture.Free;
+  FDrawPen.Free;
+  FDrawBrush.Free;
+  FDrawBmp.Free;
+  FScratchBmp.Free;
+  FSelectionBmp.Free;
+  FEraser.Free;
   inherited
 end;
 
 procedure TBitmapEditor.DisplayCrossHairs;
 var
-  pt : TPoint;
-  oldColor : TColor;
-  oldMode : TPenMode;
+  pt: TPoint;
+  oldColor: TColor;
+  oldMode: TPenMode;
 begin
   GetCursorPos (pt);
   MapWindowPoints (HWND_DESKTOP, handle, pt, 1);
   pt.x := pt.x div Magnification;
   pt.y := pt.y div Magnification;
 
-  if (pt.x <> fCrossX) or (pt.y <> fCrossY) then
+  if (pt.x <> FCrossX) or (pt.y <> FCrossY) then
   begin
     oldColor := Canvas.Pen.Color;
     oldMode := Canvas.Pen.Mode;
@@ -303,17 +297,17 @@ begin
     Canvas.Pen.Mode := pmNotXor;
 
     try
-      if pt.x <> fCrossX then
+      if pt.x <> FCrossX then
       begin
-        fCrossX := pt.x;
-        Canvas.MoveTo (fCrossX * Magnification + Magnification div 2, 0);
-        Canvas.LineTo (fCrossX * Magnification + Magnification div 2, ClientHeight)
+        FCrossX := pt.x;
+        Canvas.MoveTo (FCrossX * Magnification + Magnification div 2, 0);
+        Canvas.LineTo (FCrossX * Magnification + Magnification div 2, ClientHeight)
       end;
-      if pt.y <> fCrossY then
+      if pt.y <> FCrossY then
       begin
-        fCrossY := pt.y;
-        Canvas.MoveTo (0, fCrossY * Magnification + Magnification div 2);
-        Canvas.LineTo (ClientWidth, fCrossY * Magnification + Magnification div 2)
+        FCrossY := pt.y;
+        Canvas.MoveTo (0, FCrossY * Magnification + Magnification div 2);
+        Canvas.LineTo (ClientWidth, FCrossY * Magnification + Magnification div 2)
       end;
     finally
       Canvas.Pen.Color := oldColor;
@@ -344,7 +338,7 @@ resourcestring
   rstGradientRect   = 'gradient rectangle';
 
 const
-  DrawingToolDescription : array [TDrawingTool] of string = (
+  DrawingToolDescription: array [TDrawingTool] of string = (
     '', rstFreeDraw, rstLine,
     rstFrameRect, rstFillRect, rstRect,
     rstFloodFill,
@@ -355,25 +349,25 @@ const
     '', '', '', rstText, rstEraser, rstAirbrush,
     rstGradientRect, rstGradientRect, rstGradientRect, rstGradientRect);
 begin
-  result := DrawingToolDescription [DrawingTool]
+  Result := DrawingToolDescription [DrawingTool]
 end;
 
-function TBitmapEditor.GetSelectionValid: boolean;
+function TBitmapEditor.GetSelectionValid: Boolean;
 begin
-  result := (fSelectionRect.Right <> -1) and (fSelectionRect.Bottom <> -1);
+  Result := (FSelectionRect.Right <> -1) and (FSelectionRect.Bottom <> -1);
 end;
 
 procedure TBitmapEditor.Initialize;
 var
-  r : TRect;
+  r: TRect;
 begin
-  if Assigned (fPicture.Graphic) then
+  if Assigned(FPicture.Graphic) then
   begin
-    fDrawBmp.Assign (fPicture.Graphic);
-    if fPicture.Graphic is TGifImage then
-      fDrawBmp.Transparent := fPicture.Graphic.Transparent;
-    if fDrawBmp.Transparent then
-      fTransparentColor := fDrawBmp.TransparentColor
+    FDrawBmp.Assign (FPicture.Graphic);
+    if FPicture.Graphic is TGifImage then
+      FDrawBmp.Transparent := FPicture.Graphic.Transparent;
+    if FDrawBmp.Transparent then
+      FTransparentColor := FDrawBmp.TransparentColor
   end
   else
   begin
@@ -381,93 +375,93 @@ begin
     r.top := 0;
     r.right := 32;
     r.bottom := 32;
-    fDrawBmp.TransparentColor := TransparentColor;
-    fDrawBmp.Width := r.right;
-    fDrawBmp.Height := r.bottom;
-    fDrawBmp.Canvas.pen.Color := clWhite;
-    fDrawBmp.Canvas.FillRect (r)
+    FDrawBmp.TransparentColor := TransparentColor;
+    FDrawBmp.Width := r.right;
+    FDrawBmp.Height := r.bottom;
+    FDrawBmp.Canvas.pen.Color := clWhite;
+    FDrawBmp.Canvas.FillRect(r)
   end;
 
-  ChangeSelectionRect (rect (-1, -1, -1, -1));
+  ChangeSelectionRect(rect(-1, -1, -1, -1));
 
-  ClientWidth := fDrawBmp.Width * Magnification;
-  ClientHeight := fDrawBmp.Height * Magnification;
+  ClientWidth := FDrawBmp.Width * Magnification;
+  ClientHeight := FDrawBmp.Height * Magnification;
 
-  if fMouseCaptured then
+  if FMouseCaptured then
   begin
     ReleaseCapture;
-    fMouseCaptured := False
+    FMouseCaptured := False
   end
 end;
 
 procedure TBitmapEditor.MouseDown(Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
-  p : TPoint;
-  st : WideString;
+  p: TPoint;
+  st: WideString;
 begin
   SetFocus;
-  fCallEndChange := DrawingTool in [dtPencil..dtEllipse, dtBrush, dtText, dtEraser, dtAirbrush, dtGradRectLR, dtGradRectTB, dtGradRectTLBR, dtGradRectBLTR];
+  FCallEndChange := DrawingTool in [dtPencil..dtEllipse, dtBrush, dtText, dtEraser, dtAirbrush, dtGradRectLR, dtGradRectTB, dtGradRectTLBR, dtGradRectBLTR];
   p.x := x div magnification;
   p.y := y div magnification;
-  fScratchBmp.Assign (fDrawBmp);
+  FScratchBmp.Assign (FDrawBmp);
 
   if Button = mbLeft then
   begin
-    fLButtonIsDown := True;
-    fPos := p;
+    FLButtonIsDown := True;
+    FPos := p;
 
     case DrawingTool of
-      dtPencil, dtLine :
+      dtPencil, dtLine:
         begin
-          fDrawBmp.Canvas.Pixels [p.x, p.y] := fDrawPen.Color;
+          FDrawBmp.Canvas.Pixels [p.x, p.y] := FDrawPen.Color;
           RedrawBitmap
         end;
-      dtFloodFill :
+      dtFloodFill:
         begin
-          with fDrawBmp.Canvas do
+          with FDrawBmp.Canvas do
           begin
-            Brush := fDrawBrush;
+            Brush := FDrawBrush;
             FloodFill (p.x, p.y, Pixels [p.x, p.y], fsSurface);
           end;
           RedrawBitmap
         end;
-      dtMagnifier :
+      dtMagnifier:
         ZoomIn;
 
-      dtDropper :
+      dtDropper:
         begin
-          fDrawPen.Color := fDrawBmp.Canvas.Pixels [p.x, p.y];
-          DrawingTool := fLastDrawingTool;
+          FDrawPen.Color := FDrawBmp.Canvas.Pixels [p.x, p.y];
+          DrawingTool := FLastDrawingTool;
           ReleaseCapture;
-          if Assigned (fOnDrawToolChange) and not (csDestroying in ComponentState) then
+          if Assigned(FOnDrawToolChange) and not(csDestroying in ComponentState) then
             OnDrawToolChange (self);
         end;
 
       dtSelectRect,
-      dtSelectArea :
-          ChangeSelectionRect (rect (p.x, p.y, -1, -1));
-      dtEraser :
+      dtSelectArea:
+          ChangeSelectionRect(rect(p.x, p.y, -1, -1));
+      dtEraser:
         begin
-          fEraser.Color := TransparentColor;
-          fDrawBmp.Canvas.Pixels [p.x, p.y] := fEraser.Color;
+          FEraser.Color := TransparentColor;
+          FDrawBmp.Canvas.Pixels [p.x, p.y] := FEraser.Color;
           RedrawBitmap
         end;
-      dtText :
-        if Assigned (OnGetText) then
+      dtText:
+        if Assigned(OnGetText) then
         begin
-          fDrawBmp.Canvas.Font.Color := fDrawPen.Color;
-          OnGetText (self, fDrawBmp.Canvas.Font, st);
+          FDrawBmp.Canvas.Font.Color := FDrawPen.Color;
+          OnGetText(self, FDrawBmp.Canvas.Font, st);
           if st <> '' then
           begin
-            SetBkMode (fDrawBmp.Canvas.Handle, TRANSPARENT);
-            ExtTextOutW (fDrawBmp.Canvas.Handle, p.x, p.y, 0, Nil, PWideChar (st), Length (st), Nil); 
+            SetBkMode (FDrawBmp.Canvas.Handle, TRANSPARENT);
+            ExtTextOutW (FDrawBmp.Canvas.Handle, p.x, p.y, 0, Nil, PWideChar (st), Length (st), Nil);
             RedrawBitmap;
-            if fCallEndChange then
+            if FCallEndChange then
             begin
-              fCallEndChange := False;
+              FCallEndChange := False;
               Picture.Graphic.Assign (drawBmp);
-              if Assigned (OnEndChange) then
+              if Assigned(OnEndChange) then
                 OnEndChange (self)
             end
           end
@@ -477,13 +471,13 @@ begin
   else
     if Button = mbRight then
       case DrawingTool of
-        dtMagnifier : ZoomOut;
-        dtDropper :
+        dtMagnifier: ZoomOut;
+        dtDropper:
           begin
-            fDrawBrush.Color := fDrawBmp.Canvas.Pixels [p.x, p.y];
-            DrawingTool := fLastDrawingTool;
+            FDrawBrush.Color := FDrawBmp.Canvas.Pixels [p.x, p.y];
+            DrawingTool := FLastDrawingTool;
             ReleaseCapture;
-            if Assigned (fOnDrawToolChange) and not (csDestroying in ComponentState) then
+            if Assigned(FOnDrawToolChange) and not(csDestroying in ComponentState) then
               OnDrawToolChange (self);
           end
         end
@@ -492,66 +486,66 @@ end;
 
 procedure TBitmapEditor.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
-  p : TPoint;
-  hrgn : THandle;
-  r : TRect;
-  inRect : Boolean;
-  gradType : TGradientShapeRectType;
+  p: TPoint;
+  hrgn: THandle;
+  r: TRect;
+  inRect: Boolean;
+  gradType: TGradientShapeRectType;
 begin
   p.x := x;
   p.y := y;
-  ScreenToClient (p);
+  ScreenToClient(p);
   if Parent is TScrollingWinControl then
   begin
     r := Parent.ClientRect;
     MapWindowPoints (Parent.Handle, handle, r, 2);
-    IntersectRect (r, r, ClientRect)
+    IntersectRect(r, r, ClientRect)
   end
   else
     r := ClientRect;
 
-  inRect := PtInRect (r, p);
+  inRect := PtInRect(r, p);
   if inRect  or (ssLeft in Shift) then
   begin
     p.x := p.x div magnification;
     p.y := p.y div magnification;
-    if inRect and not fMouseCaptured then
+    if inRect and not FMouseCaptured then
     begin
       SetCapture (handle);
-      fMouseCaptured := True
+      FMouseCaptured := True
     end;
 
     if not InRect and (DrawingTool in [dtSelectRect, dtSelectArea]) then
     begin
       if p.x >= drawBmp.Width then p.x := drawBmp.Width - 1;
       if p.y >= drawBmp.Height then p.y := drawBmp.Height - 1;
-      ChangeSelectionRect (rect (-2, -2, p.x, p.y));
+      ChangeSelectionRect(rect(-2, -2, p.x, p.y));
     end
     else
     begin
-      if (p.x <> fPos.x) or (p.y <> fPos.y) then
+      if (p.x <> FPos.x) or (p.y <> FPos.y) then
         if FLButtonIsDown then
         begin
           case DrawingTool of
             dtPencil :
-              with fDrawBmp.Canvas do
+              with FDrawBmp.Canvas do
                 begin
-                  Pen := fDrawPen;
-                  MoveTo (fPos.x, fPos.y);
+                  Pen := FDrawPen;
+                  MoveTo (FPos.x, FPos.y);
                   LineTo (p.x, p.y);
-                  Pixels [p.x, p.y] := fDrawPen.Color;
-                  fPos := p;
+                  Pixels [p.x, p.y] := FDrawPen.Color;
+                  FPos := p;
                 end;
 
             dtLine :
               begin
-                fDrawBmp.Assign (fScratchBmp);
-                with fDrawBmp.Canvas do
+                FDrawBmp.Assign (FScratchBmp);
+                with FDrawBmp.Canvas do
                 begin
-                  Pen := fDrawPen;
-                  MoveTo (fPos.x, fPos.y);
+                  Pen := FDrawPen;
+                  MoveTo (FPos.x, FPos.y);
                   LineTo (p.x, p.y);
-                  Pixels [p.x, p.y] := fDrawPen.Color;
+                  Pixels [p.x, p.y] := FDrawPen.Color;
                 end
               end;
             dtFrameRect, dtFillRect, dtRect,
@@ -559,16 +553,19 @@ begin
             dtFrameRoundRect, dtFillRoundRect, dtRoundRect,
             dtGradRectLR, dtGradRectTB, dtGradRectTLBR, dtGradRectBLTR :
               begin
-                fDrawBmp.Assign (fScratchBmp);
+                FDrawBmp.Assign (FScratchBmp);
                 case DrawingTool of
-                  dtFrameRect, dtFillRect, dtRect                : hrgn := CreateRectRgn (fPos.x, fPos.y, p.x + 1, p.y + 1);
-                  dtFrameEllipse, dtFillEllipse, dtEllipse       : hrgn := CreateEllipticRgn (fPos.x, fPos.y, p.x + 1, p.y + 1);
-                  dtFrameRoundRect, dtFillRoundRect, dtRoundRect : hrgn := CreateRoundRectRgn (fPos.x, fPos.y, p.x + 1, p.y + 1, 5, 5);
+                  dtFrameRect, dtFillRect, dtRect: 
+                    hrgn := CreateRectRgn (FPos.x, FPos.y, p.x + 1, p.y + 1);
+                  dtFrameEllipse, dtFillEllipse, dtEllipse: 
+                    hrgn := CreateEllipticRgn (FPos.x, FPos.y, p.x + 1, p.y + 1);
+                  dtFrameRoundRect, dtFillRoundRect, dtRoundRect: 
+                    hrgn := CreateRoundRectRgn (FPos.x, FPos.y, p.x + 1, p.y + 1, 5, 5);
                   else
                     hrgn := 0;
                 end;
                 if hrgn <> 0 then
-                  with fDrawBmp.Canvas do
+                  with FDrawBmp.Canvas do
                   try
                     case DrawingTool of
                       dtRect,
@@ -594,39 +591,39 @@ begin
                         end
                     end
                   finally
-                    DeleteObject (hrgn)
+                    DeleteObject(hrgn)
                   end
                 else
                   case DrawingTool of
                     dtGradRectLR, dtGradRectTB, dtGradRectTLBR, dtGradRectBLTR :
                       begin
                         case DrawingTool of
-                          dtGradRectLR : gradType := gsrLR;
-                          dtGradRectTB : gradType := gsrTB;
-                          dtGradRectTLBR : gradType := gsrTLBR;
-                          dtGradRectBLTR : gradType := gsrBLTR;
+                          dtGradRectLR: gradType := gsrLR;
+                          dtGradRectTB: gradType := gsrTB;
+                          dtGradRectTLBR: gradType := gsrTLBR;
+                          dtGradRectBLTR: gradType := gsrBLTR;
                           else
                             gradType := gsrLR
                         end;
-                        GradientRect (fDrawBmp.Canvas.Handle, gradType, fPos.x, fPos.y, p.x + 1, p.y + 1, DrawPen.Color, DrawBrush.Color);
+                        GradientRect(FDrawBmp.Canvas.Handle, gradType, FPos.x, FPos.y, p.x + 1, p.y + 1, DrawPen.Color, DrawBrush.Color);
                       end
                   end
               end;
             dtSelectRect,
             dtSelectArea :
-              ChangeSelectionRect (rect (-2, -2, p.x, p.y));
+              ChangeSelectionRect(rect(-2, -2, p.x, p.y));
             dtEraser :
-              with fDrawBmp.Canvas do
+              with FDrawBmp.Canvas do
               begin
-                Pen := fEraser;
-                MoveTo (fPos.x, fPos.y);
+                Pen := FEraser;
+                MoveTo (FPos.x, FPos.y);
                 LineTo (p.x, p.y);
-                Pixels [p.x, p.y] := fEraser.Color;
-                fPos := p;
+                Pixels [p.x, p.y] := FEraser.Color;
+                FPos := p;
               end;
           end;
 
-          if not (DrawingTool in [dtSelectRect, dtSelectArea]) then
+          if not(DrawingTool in [dtSelectRect, dtSelectArea]) then
             RedrawBitmap
           else
             Invalidate
@@ -639,7 +636,7 @@ begin
   else
   begin  // Pt not in rect, and not LButtonDown
     ReleaseCapture;
-    fMouseCaptured := False;
+    FMouseCaptured := False;
     Invalidate
   end
 end;
@@ -647,55 +644,55 @@ end;
 procedure TBitmapEditor.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
-  p : TPoint;
+  p: TPoint;
 begin
   if button = mbLeft then
-    fLButtonIsDown := False;
+    FLButtonIsDown := False;
 
   p.x := x;
   p.y := y;
-  ScreenToClient (p);
+  ScreenToClient(p);
 
-  if PtInRect (ClientRect, p) then
+  if PtInRect(ClientRect, p) then
   begin
     SetCapture (handle);
-    fMouseCaptured := True
+    FMouseCaptured := True
   end;
 
-  if fCallEndChange then
+  if FCallEndChange then
   begin
-    fCallEndChange := False;
+    FCallEndChange := False;
     Picture.Graphic.Assign (drawBmp);
-    if Assigned (OnEndChange) then
+    if Assigned(OnEndChange) then
       OnEndChange (self)
   end
 end;
 
-procedure TBitmapEditor.DrawHotSpot(canvas : TCanvas);
+procedure TBitmapEditor.DrawHotSpot(canvas: TCanvas);
 var
-  hsx, hsy : Integer;
+  hsx, hsy: Integer;
 begin
-  if (fHotSpotX <> -1) and (fHotSpotY <> -1) then
+  if (FHotSpotX <> -1) and (FHotSpotY <> -1) then
   begin
-    hsx := fHotSpotX * Magnification;
-    hsy := fHotSpotY * Magnification;
+    hsx := FHotSpotX * Magnification;
+    hsy := FHotSpotY * Magnification;
     if Magnification = 1 then
       Canvas.Pixels [hsx, hsy] := clLime
     else
     begin
       Canvas.Brush.Color := clLime;
-      Canvas.FillRect (Rect (hsx, hsy, hsx+Magnification-1, hsy + Magnification-1))
+      Canvas.FillRect(Rect(hsx, hsy, hsx+Magnification-1, hsy + Magnification-1))
     end
   end
 end;
 
 procedure TBitmapEditor.Paint;
 var
-  x : Integer;
-  r : TRect;
-  pts : array [0..4] of TPoint;
+  x: Integer;
+  r: TRect;
+  pts: array [0..4] of TPoint;
 begin
-  PaintBitmap (fDrawbmp);
+  PaintBitmap (FDrawBmp);
 
   if GridLines <= Magnification then
   begin
@@ -704,7 +701,7 @@ begin
     begin
       Canvas.MoveTo (x, 0);
       Canvas.LineTo (x, Height);
-      Inc (x, Magnification)
+      Inc(x, Magnification)
     end;
 
     x := Magnification - 1;
@@ -712,15 +709,15 @@ begin
     begin
       Canvas.MoveTo (0, x);
       Canvas.LineTo (Width, x);
-      Inc (x, Magnification)
+      Inc(x, Magnification)
     end
   end;
 
-  fCrossX := -1;
-  fCrossY := -1;
+  FCrossX := -1;
+  FCrossY := -1;
 
   if SelectionValid then
-    with fSelectionRect do
+    with FSelectionRect do
     begin
       r.left := left * Magnification + Magnification div 2;
       r.top := top * Magnification + Magnification div 2;
@@ -742,31 +739,31 @@ begin
       Canvas.Pen.Mode := pmCopy;
     end;
 
-  if fMouseCaptured and (Cursor = crNone) and not fLButtonIsDown then
+  if FMouseCaptured and (Cursor = crNone) and not FLButtonIsDown then
     DisplayCrossHairs;
 
-  DrawHotspot (Canvas);
+  DrawHotspot(Canvas);
 end;
 
-procedure TBitmapEditor.PaintBitmap (bmp : TBitmap);
+procedure TBitmapEditor.PaintBitmap (bmp: TBitmap);
 begin
   if bmp.Transparent then
   begin
     Canvas.Brush.Color := TransparentColor;
-    Canvas.FillRect (ClientRect);
+    Canvas.FillRect(ClientRect);
   end;
   Canvas.StretchDraw (ClientRect, bmp);
 end;
 
 procedure TBitmapEditor.PasteSelection;
 var
-  b : TBitmap;
-  s : TMemoryStream;
-  f : TBitmapFileHeader;
-  Data : THandle;
-  p : PChar;
-  Size : Integer;
-  r : TRect;
+  b: TBitmap;
+  s: TMemoryStream;
+  f: TBitmapFileHeader;
+  Data: THandle;
+  p: PChar;
+  Size: Integer;
+  r: TRect;
 begin
   s := nil;
   b := TBitmap.Create;
@@ -792,17 +789,17 @@ begin
     s.Seek (0, soFromBeginning);
     b.LoadFromStream (s);
 
-    b.Palette := fClipboardPalette;
-    b.PixelFormat := fClipboardPixelFormat;
+    b.Palette := FClipboardPalette;
+    b.PixelFormat := FClipboardPixelFormat;
 
-    r := fSelectionRect;
-    Inc (r.Right);
-    Inc (r.Bottom);
+    r := FSelectionRect;
+    Inc(r.Right);
+    Inc(r.Bottom);
 
-    fDrawBmp.Canvas.StretchDraw (r, b);
+    FDrawBmp.Canvas.StretchDraw (r, b);
     Invalidate;
     Picture.Graphic.Assign (drawBmp);
-    if Assigned (OnEndChange) then
+    if Assigned(OnEndChange) then
       OnEndChange (self)
   finally
     b.Free;
@@ -819,17 +816,17 @@ end;
 procedure TBitmapEditor.RedrawBitmap;
 begin
   Invalidate;
-  if not (csDestroying in ComponentState) and Assigned (OnChange) then
+  if not(csDestroying in ComponentState) and Assigned(OnChange) then
     OnChange (self);
 end;
 
 procedure TBitmapEditor.Rotate180;
 var
-  destRect, srcRect : TRect;
+  destRect, srcRect: TRect;
 begin
-  with fDrawBmp do
+  with FDrawBmp do
   begin
-    srcRect := Rect (0, 0, Width, Height);
+    srcRect := Rect(0, 0, Width, Height);
 
       // Should technically be Width-1, Height-1,
       // But work round a bug in CopyRect...
@@ -839,7 +836,7 @@ begin
     destRect.Top := srcRect.Bottom;
     destRect.Right := 0;
     destRect.Bottom := 0;
-    Canvas.CopyRect (destRect, Canvas, srcRect);
+    Canvas.CopyRect(destRect, Canvas, srcRect);
     RedrawBitmap
   end
 
@@ -847,102 +844,102 @@ end;
 
 procedure TBitmapEditor.Rotate270;
 var
-  newBmp : TBitmap;
+  newBmp: TBitmap;
 begin
-  fDrawBmp.PixelFormat := pf24Bit;
-  newBmp := RotateBitmap270 (fDrawBmp);
-  fDrawBmp.Free;
+  FDrawBmp.PixelFormat := pf24Bit;
+  newBmp := RotateBitmap270 (FDrawBmp);
+  FDrawBmp.Free;
 
   newBmp.PixelFormat := pfDevice;
-  fDrawBmp := NewBmp;
-  ClientWidth := fDrawBmp.Width * Magnification;
-  ClientHeight := fDrawBmp.Height * Magnification;
+  FDrawBmp := NewBmp;
+  ClientWidth := FDrawBmp.Width * Magnification;
+  ClientHeight := FDrawBmp.Height * Magnification;
   RedrawBitmap
 end;
 
 procedure TBitmapEditor.Rotate90;
 var
-  newBmp : TBitmap;
+  newBmp: TBitmap;
 begin
-  fDrawBmp.PixelFormat := pf24Bit;
-  newBmp := RotateBitmap90 (fDrawBmp);
-  fDrawBmp.Free;
+  FDrawBmp.PixelFormat := pf24Bit;
+  newBmp := RotateBitmap90 (FDrawBmp);
+  FDrawBmp.Free;
 
   newBmp.PixelFormat := pfDevice;
-  fDrawBmp := NewBmp;
-  ClientWidth := fDrawBmp.Width * Magnification;
-  ClientHeight := fDrawBmp.Height * Magnification;
+  FDrawBmp := NewBmp;
+  ClientWidth := FDrawBmp.Width * Magnification;
+  ClientHeight := FDrawBmp.Height * Magnification;
   RedrawBitmap
 end;
 
 procedure TBitmapEditor.SelectAll;
 begin
-  ChangeSelectionRect (rect (0, 0,drawBmp.Width - 1, drawBmp.Height - 1));
+  ChangeSelectionRect(rect(0, 0,drawBmp.Width - 1, drawBmp.Height - 1));
 end;
 
 procedure TBitmapEditor.SetBorderStyle(const Value: TBorderStyle);
 begin
-  if fBorderStyle <> value then
+  if FBorderStyle <> value then
   begin
-    fBorderStyle := Value;
+    FBorderStyle := Value;
     RecreateWnd
   end
 end;
 
 procedure TBitmapEditor.SetDrawBrush(const Value: TBrush);
 begin
-  fDrawBrush.Assign (value)
+  FDrawBrush.Assign (value)
 end;
 
 procedure TBitmapEditor.SetDrawingTool(const Value: TDrawingTool);
 begin
-  if value <> fDrawingTool then
+  if value <> FDrawingTool then
   begin
-    fLastDrawingTool := fDrawingTool;
-    fDrawingTool := Value;
-    Cursor := drawingCursors [fDrawingTool];
+    FLastDrawingTool := FDrawingTool;
+    FDrawingTool := Value;
+    Cursor := drawingCursors [FDrawingTool];
     if SelectionValid then
-      ChangeSelectionRect (rect (-1, -1, -1, -1));
+      ChangeSelectionRect(rect(-1, -1, -1, -1));
   end
 end;
 
 procedure TBitmapEditor.SetDrawPen(const Value: TPen);
 begin
-  fDrawPen.Assign (value)
+  FDrawPen.Assign (value)
 end;
 
 procedure TBitmapEditor.SetGridLines(const Value: Integer);
 begin
-  if fGridLines <> value then
+  if FGridLines <> value then
   begin
-    fGridLines := Value;
+    FGridLines := Value;
     Invalidate
   end
 end;
 
-procedure TBitmapEditor.SetHotSpotX(const Value : Integer);
+procedure TBitmapEditor.SetHotSpotX(const Value: Integer);
 begin
-  if Value <> fHotSpotX then
+  if Value <> FHotSpotX then
   begin
-    fHotSpotX := Value;
+    FHotSpotX := Value;
     Invalidate
   end
 end;
 
-procedure TBitmapEditor.SetHotSpotY(const Value : Integer);
+procedure TBitmapEditor.SetHotSpotY(const Value: Integer);
 begin
-  if Value <> fHotSpotY then
+  if Value <> FHotSpotY then
   begin
-    fHotSpotY := Value;
+    FHotSpotY := Value;
     Invalidate
   end
 end;
 
 procedure TBitmapEditor.SetMagnification(const Value: Integer);
 begin
-  if fMagnification <> value then
+  if FMagnification <> value then
   begin
-    fMagnification := Value;
+    FMagnification := Value;
     SizeToPicture;
     Invalidate
   end
@@ -950,18 +947,18 @@ end;
 
 procedure TBitmapEditor.SetPicture(const Value: TPicture);
 begin
-  fPicture.Assign (Value);
+  FPicture.Assign (Value);
   if Value.Graphic is TGifImage then
-    fPicture.Graphic.Transparent := Value.Graphic.Transparent;
+    FPicture.Graphic.Transparent := Value.Graphic.Transparent;
   
   PictureChanged;
 end;
 
 procedure TBitmapEditor.SetTransparentColor(const Value: TColor);
 begin
-  if (value <> ftransparentColor) then
+  if (value <> FTransparentColor) then
   begin
-    fTransparentColor := value;
+    FTransparentColor := value;
     Initialize;
     Invalidate;
   end
@@ -969,21 +966,21 @@ end;
 
 procedure TBitmapEditor.SizeToPicture;
 begin
-  if Assigned (fDrawBmp) and (fDrawBmp.Width > 0) then
+  if Assigned(FDrawBmp) and (FDrawBmp.Width > 0) then
   begin
-    ClientWidth := fDrawBmp.Width * Magnification;
-    ClientHeight := fDrawBmp.Height * Magnification
+    ClientWidth := FDrawBmp.Width * Magnification;
+    ClientHeight := FDrawBmp.Height * Magnification
   end
   else
-  if fPicture.Width = 0 then
+  if FPicture.Width = 0 then
   begin
     ClientWidth := 32 * Magnification;
     ClientHeight := 32 * Magnification
   end
   else
   begin
-    ClientWidth := fPicture.Width * Magnification;
-    ClientHeight := fPicture.Height * Magnification
+    ClientWidth := FPicture.Width * Magnification;
+    ClientHeight := FPicture.Height * Magnification
   end
 end;
 

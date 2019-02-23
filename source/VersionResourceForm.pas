@@ -113,7 +113,7 @@ const
 function VersionToString(version: TULargeInteger): string;
 begin
   with _ULARGE_INTEGER(version) do
-    Result := Format ('%d.%d.%d.%d', [HiWord (HighPart), LoWord (HighPart), HiWord (LowPart), LoWord (LowPart)]);
+    Result := Format('%d.%d.%d.%d', [HiWord (HighPart), LoWord (HighPart), HiWord (LowPart), LoWord (LowPart)]);
 end;
 
 (*----------------------------------------------------------------------------*
@@ -143,25 +143,25 @@ begin
   ok := False;
   if p > 0 then
   begin
-    hh := StrToInt (Copy (s, 1, p - 1));
+    hh := StrToInt(Copy (s, 1, p - 1));
     s := Copy (s, p + 1, MaxInt);
     p := Pos ('.', s);
     if p > 0 then
     begin
-      h := StrToInt (Copy (s, 1, p - 1));
+      h := StrToInt(Copy (s, 1, p - 1));
       s := Copy (s, p + 1, MaxInt);
       p := Pos ('.', s);
       if p > 0 then
       begin
-        l := StrToInt (Copy (s, 1, p - 1));
-        ll := StrToInt (Copy (s, p + 1, MaxInt));
+        l := StrToInt(Copy (s, 1, p - 1));
+        ll := StrToInt(Copy (s, p + 1, MaxInt));
         ok := True;
       end
     end
   end;
 
   if not ok then
-    raise exception.Create (rstVersionFormatError);
+    raise Exception.Create(rstVersionFormatError);
 
   _ULARGE_INTEGER(Result).HighPart := 65536 * hh + h;
   _ULARGE_INTEGER(Result).LowPart := 65536 * l + ll;
@@ -293,7 +293,7 @@ procedure TfmVersionResource.actStringDeleteStringExecute(Sender: TObject);
 var
   n: Integer;
 begin
-  if Assigned (lvVersionStrings.Selected) then
+  if Assigned(lvVersionStrings.Selected) then
   begin
     AddUndoEntry (rstDeleteString);
     n := lvVersionStrings.Selected.Index;
@@ -323,14 +323,14 @@ procedure TfmVersionResource.actStringModifyStringExecute(Sender: TObject);
 var
   idx: Integer;
 begin
-  if Assigned (lvVersionStrings.Selected) then
+  if Assigned(lvVersionStrings.Selected) then
   begin
     FSelectedItem := lvVersionStrings.Selected;
     idx := FDetails.IndexOf(FSelectedItem.Caption);
     if idx > -1 then
     begin
       mmoMessage.Width := lvVersionStrings.Width - 2;
-      mmoMessage.Top := lvVersionStrings.Selected.DisplayRect (drLabel).Bottom + 1;
+      mmoMessage.Top := lvVersionStrings.Selected.DisplayRect(drLabel).Bottom + 1;
       mmoMessage.Left := lvVersionStrings.Left + 1;
       mmoMessage.Text := FDetails.Key [idx].Value;
       mmoMessage.Visible := True;
@@ -353,15 +353,15 @@ begin
   if mmoMessage.CanUndo or FAdding then
   begin
     if FAdding then
-      AddUndoEntry (rstAddString)
+      AddUndoEntry(rstAddString)
     else
-      AddUndoEntry (rstChangeString);
+      AddUndoEntry(rstChangeString);
 
                                 // Update the resource
-    FDetails.SetKeyValue (FSelectedItem.Caption, mmoMessage.Text);
+    FDetails.SetKeyValue(FSelectedItem.Caption, mmoMessage.Text);
 
                                 // Update the list view
-    FSelectedItem.SubItems [0] := StringToCString (mmoMessage.Text)
+    FSelectedItem.SubItems[0] := StringToCString (mmoMessage.Text)
   end;
   FAdding := False;
 end;
@@ -389,7 +389,7 @@ end;
 procedure TfmVersionResource.actStringModifyStringNameExecute(
   Sender: TObject);
 begin
-  if Assigned (lvVersionStrings.Selected) then
+  if Assigned(lvVersionStrings.Selected) then
     lvVersionStrings.Selected.EditCaption
 end;
 
@@ -410,7 +410,7 @@ procedure TfmVersionResource.lvVersionStringsDblClick(Sender: TObject);
 var
   p: TPoint;
 begin
-  if Assigned (lvVersionStrings.Selected) then
+  if Assigned(lvVersionStrings.Selected) then
   begin
     p := Mouse.CursorPos;
     MapWindowPoints (HWND_DESKTOP, lvVersionStrings.Handle, p, 1);
@@ -433,7 +433,7 @@ procedure TfmVersionResource.UpdateActions;
 var
   sel: Boolean;
 begin
-  sel := Assigned (lvVersionStrings.Selected) and lvVersionStrings.Focused;
+  sel := Assigned(lvVersionStrings.Selected) and lvVersionStrings.Focused;
   actStringDeleteString.Enabled := sel;
   actStringModifyString.Enabled := sel;
   actStringModifyStringName.Enabled := sel
@@ -471,12 +471,12 @@ var
 begin
   m := 1;
   repeat
-    Result := Format (rstNewString, [m]);
+    Result := Format(rstNewString, [m]);
 
     if lvVersionStrings.FindCaption (0, Result, False, True, False) = nil then
       break;
 
-    Inc (m)
+    Inc(m)
   until m = 0
 end;
 

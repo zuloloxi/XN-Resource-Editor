@@ -86,7 +86,7 @@ end;
 
 procedure TPropertyPageProgramSettingsData.Apply;
 begin
-  SetInternationalFont (FInternationalFontName, FInternationalFontHeight);
+  SetInternationalFont(FInternationalFontName, FInternationalFontHeight);
   gProperties.ParserType := FParserType;
 end;
 

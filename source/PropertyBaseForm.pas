@@ -52,8 +52,13 @@ type
     function GetChild(idx: Integer): TPropertyPageDetails;
     function GetChildCount: Integer;
   public
-    constructor Create (AOwner: TfmPropertyBase; APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyword: string; AParam: Integer = 0);
+    constructor Create(AOwner: TfmPropertyBase;
+      APropertyPageClass: TPropertyPageClass;
+      AParent: TPropertyPageDetails;
+      const ACaption, AHelpText, AHelpKeyWord: string;
+      AParam: Integer = 0);
     destructor Destroy; override;
+
     property PropertyPageClass: TPropertyPageClass read FPropertyPageClass;
 
     property Sibling: TPropertyPageDetails read FSibling;
@@ -108,7 +113,7 @@ type
     FSelectedPage: TfmPropertyPage;
     FOrigHelpType: THelpType;
     FOrigHelpContext: Integer;
-    FOrigHelpKeyword: string;
+    FOrigHelpKeyWord: string;
 
     procedure DoGetLargestConstraints (Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
     procedure DoSavePropertyPageSettings (Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
@@ -117,25 +122,25 @@ type
     procedure DoCheckDataMatches (Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 
 
-    function GetNodePropertyPageDetails (node: PVirtualNode): TPropertyPageDetails;
-    procedure SetNodePropertyPageDetails (node: PVirtualNode; Details: TPropertyPageDetails);
+    function GetNodePropertyPageDetails(node: PVirtualNode): TPropertyPageDetails;
+    procedure SetNodePropertyPageDetails(node: PVirtualNode; Details: TPropertyPageDetails);
     procedure SelectPage (Details: TPropertyPageDetails);
     procedure SaveSettings;
     procedure CancelChanges;
-    function FindSameData (formClass: TPropertyPageClass): TPropertyPageData;
-    function FindDetailsWithData (data: TPropertyPageData): TPropertyPageDetails;
+    function FindSameData(formClass: TPropertyPageClass): TPropertyPageData;
+    function FindDetailsWithData(data: TPropertyPageData): TPropertyPageDetails;
     procedure WmUpdateSplitter (var msg: TMessage); message WM_UPDATESPLITTER;
 
   protected
   public
-    constructor Create (AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    function AddPropertyPageDetails (APropertyPageClass: TPropertyPageClass;
+    function AddPropertyPageDetails(APropertyPageClass: TPropertyPageClass;
       AParent: TPropertyPageDetails; const ACaption: string = '';
-      const AHelpText: string = ''; const AHelpKeyword: string = '';
+      const AHelpText: string = ''; const AHelpKeyWord: string = '';
       AParam: Integer = 0): TPropertyPageDetails;
-    function ForEachPropertyPageDetails (proc: TPropertyPageDetailsProc; Param: Pointer): TPropertyPageDetails;
+    function ForEachPropertyPageDetails(proc: TPropertyPageDetailsProc; Param: Pointer): TPropertyPageDetails;
   end;
 
 //----------------------------------------------------------------------
@@ -211,12 +216,12 @@ end;
  | The function returns the TPropertyPageDetails class for the Page     |
  *----------------------------------------------------------------------*}
 function TfmPropertyBase.AddPropertyPageDetails(
-  APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails; const ACaption: string; const AHelpText, AHelpKeyword: string; AParam: Integer): TPropertyPageDetails;
+  APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails; const ACaption: string; const AHelpText, AHelpKeyWord: string; AParam: Integer): TPropertyPageDetails;
 var
   Details: TPropertyPageDetails;
   PropPageDetails: ^TPropertyPageDetails;
 begin
-  Details := TPropertyPageDetails.Create(self, APropertyPageClass, AParent, ACaption, AHelpText, AHelpKeyword, AParam);
+  Details := TPropertyPageDetails.Create(self, APropertyPageClass, AParent, ACaption, AHelpText, AHelpKeyWord, AParam);
   if AParent = Nil then
   begin
     FPropertyPageDetails.Add(Details);
@@ -246,7 +251,7 @@ end;
 
 procedure TfmPropertyBase.CancelChanges;
 begin
-  ForEachPropertyPageDetails (DoCancelPropertyPageSettings, nil);
+  ForEachPropertyPageDetails(DoCancelPropertyPageSettings, nil);
 end;
 
 {*----------------------------------------------------------------------*
@@ -256,7 +261,7 @@ end;
  *----------------------------------------------------------------------*}
 constructor TfmPropertyBase.Create(AOwner: TComponent);
 begin
-  inherited Create (AOwner);
+  inherited Create(AOwner);
   FPropertyPageDetails := TObjectList.Create;
   FPropertyPageDetails.OwnsObjects := True;
 end;
@@ -277,8 +282,8 @@ end;
 procedure TfmPropertyBase.DoCancelPropertyPageSettings(
   Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 begin
-  if Assigned (Page.FData) then
-                // nb.  FData.Initialized won't be set (and its data won't be
+  if Assigned(Page.FData) then
+                // nb.  FData.Initialized won't be set(and its data won't be
                 //      valid unless a Page has been selected.
     if Page.FData.Initialized then
       Page.FData.Cancel
@@ -320,7 +325,7 @@ procedure TfmPropertyBase.DoGetLargestConstraints(Details: TPropertyPageDetails;
 var
   PropPageDetails: PPoint;
 begin
-  PropPageDetails := PPoint (Param);
+  PropPageDetails := PPoint(Param);
 
   PropPageDetails.X := Max (Details.FData.MinX, PropPageDetails.X);
   PropPageDetails.Y := Max (Details.FData.MinY, PropPageDetails.Y)
@@ -334,8 +339,8 @@ end;
 procedure TfmPropertyBase.DoSavePropertyPageSettings(
   Page: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 begin
-  if Assigned (Page.FData) then
-                // nb.  FData.Initialized won't be set (and its data won't be
+  if Assigned(Page.FData) then
+                // nb.  FData.Initialized won't be set(and its data won't be
                 //      valid unless a Page has been selected.
     if Page.FData.Initialized then
       Page.FData.Apply
@@ -349,7 +354,7 @@ end;
 function TfmPropertyBase.FindDetailsWithData(
   data: TPropertyPageData): TPropertyPageDetails;
 begin
-  Result := ForEachPropertyPageDetails (DoCheckDataMatches, data);
+  Result := ForEachPropertyPageDetails(DoCheckDataMatches, data);
 end;
 
 {*----------------------------------------------------------------------*
@@ -362,8 +367,8 @@ function TfmPropertyBase.FindSameData(
 var
   Details: TPropertyPageDetails;
 begin
-  Details := ForEachPropertyPageDetails (DoCheckFormClassMatches, formClass);
-  if Assigned (Details) then
+  Details := ForEachPropertyPageDetails(DoCheckFormClassMatches, formClass);
+  if Assigned(Details) then
     Result := Details.FData
   else
     Result := Nil
@@ -391,7 +396,7 @@ var
 
   procedure DoForEach (Details: TPropertyPageDetails);
   begin
-    if Assigned (Details) then
+    if Assigned(Details) then
     begin
       rv := Details;
       proc (Details, Param, cont);
@@ -405,7 +410,7 @@ begin
   cont := True;
   for i := 0 to FPropertyPageDetails.Count - 1 do
   begin
-    DoForEach (TPropertyPageDetails (FPropertyPageDetails [i]));
+    DoForEach (TPropertyPageDetails(FPropertyPageDetails [i]));
     if not cont then
       break
   end;
@@ -424,17 +429,17 @@ procedure TfmPropertyBase.FormShow(Sender: TObject);
 var
   n: PVirtualNode;
 begin
-  FDetailsConstraints := Point (0, 0);
+  FDetailsConstraints := Point(0, 0);
   FOrigHelpType := HelpType;
   FOrigHelpContext := HelpContext;
-  FOrigHelpKeyword := HelpKeyword;
+  FOrigHelpKeyWord := HelpKeyWord;
 
-  HelpKeyword := '';
+  HelpKeyWord := '';
   HelpContext := 0;
   HelpType := htContext;
 
   // Get the largest constraints
-  ForEachPropertyPageDetails (DoGetLargestConstraints, @FDetailsConstraints);
+  ForEachPropertyPageDetails(DoGetLargestConstraints, @FDetailsConstraints);
   FUseConstraints := (FDetailsConstraints.X <> 0) and (FDetailsConstraints.Y <> 0);
 
   if FUseConstraints then
@@ -447,12 +452,12 @@ begin
   if n <> Nil then
   begin
     vstSections.FocusedNode := n;
-    vstSections.Selected [n] := True
+    vstSections.Selected[n] := True
   end;
 
   vstSections.FullExpand;
 
-  PostMessage (Handle, WM_UPDATESPLITTER, 0, 0);
+  PostMessage(Handle, WM_UPDATESPLITTER, 0, 0);
 end;
 
 {*----------------------------------------------------------------------*
@@ -467,8 +472,8 @@ var
 begin
   obj := vstSections.GetNodeData(node);
 
-  if Assigned (obj) then
-    Result := TPropertyPageDetails (obj^)
+  if Assigned(obj) then
+    Result := TPropertyPageDetails(obj^)
   else
     Result := Nil
 end;
@@ -482,7 +487,7 @@ end;
  *----------------------------------------------------------------------*}
 procedure TfmPropertyBase.SaveSettings;
 begin
-  ForEachPropertyPageDetails (DoSavePropertyPageSettings, nil);
+  ForEachPropertyPageDetails(DoSavePropertyPageSettings, nil);
 end;
 
 type
@@ -501,22 +506,22 @@ var
   newPage: Boolean;
 begin
   // (try to) provent flickering!
-  SendMessage (pnlOptions.Handle, WM_SETREDRAW, 0, 0);
+  SendMessage(pnlOptions.Handle, WM_SETREDRAW, 0, 0);
   try
     // Free the old form (if there was one)
     if pnlOptions.ControlCount > 1 then
     begin
-      Page := pnlOptions.Controls [1] as TfmPropertyPage;
+      Page := pnlOptions.Controls[1] as TfmPropertyPage;
 
-      if Assigned (Details) and (Page.ClassType <> Details.FPropertyPageClass) then
-        FreeAndNil (Page);
+      if Assigned(Details) and (Page.ClassType <> Details.FPropertyPageClass) then
+        FreeAndNil(Page);
     end
     else
       Page := Nil;
 
-    if Assigned (Details) then
+    if Assigned(Details) then
     begin
-      if not Assigned (Page) then
+      if not Assigned(Page) then
       begin
         // Create new form of the correct class.
         Page := Details.FPropertyPageClass.Create(self);
@@ -544,7 +549,7 @@ begin
 
     FSelectedPage := Page;
   finally
-    SendMessage (pnlOptions.Handle, WM_SETREDRAW, 1, 0);
+    SendMessage(pnlOptions.Handle, WM_SETREDRAW, 1, 0);
     RedrawWindow(pnlOptions.Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
   end
 end;
@@ -560,7 +565,7 @@ var
 begin
   obj := vstSections.GetNodeData(node);
 
-  if Assigned (obj) then
+  if Assigned(obj) then
     obj^ := Details
 end;
 
@@ -573,7 +578,7 @@ end;
 procedure TfmPropertyBase.vstSectionsFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
-  SelectPage (GetNodePropertyPageDetails (Node));
+  SelectPage (GetNodePropertyPageDetails(Node));
 end;
 
 {*----------------------------------------------------------------------*
@@ -587,7 +592,7 @@ procedure TfmPropertyBase.vstSectionsGetText(Sender: TBaseVirtualTree;
 var
   d: TPropertyPageDetails;
 begin
-  d := GetNodePropertyPageDetails (Node);
+  d := GetNodePropertyPageDetails(Node);
   CellText := d.FData.Caption
 end;
 
@@ -602,8 +607,8 @@ procedure TfmPropertyBase.vstSectionsInitChildren(Sender: TBaseVirtualTree;
 var
   Details: TPropertyPageDetails;
 begin
-  Details := GetNodePropertyPageDetails (Node);
-  if Assigned (Details) then
+  Details := GetNodePropertyPageDetails(Node);
+  if Assigned(Details) then
     ChildCount := Details.ChildCount
   else
     ChildCount := 0
@@ -622,13 +627,13 @@ var
   Details, parentDetails: TPropertyPageDetails;
 begin
   if ParentNode = Nil then
-    Details := TPropertyPageDetails (FPropertyPageDetails [Node.Index])
+    Details := TPropertyPageDetails(FPropertyPageDetails [Node.Index])
   else
   begin
-    parentDetails := GetNodePropertyPageDetails (ParentNode);
+    parentDetails := GetNodePropertyPageDetails(ParentNode);
     Details := parentDetails.Child [node.Index]
   end;
-  SetNodePropertyPageDetails (node, Details);
+  SetNodePropertyPageDetails(node, Details);
   if Details.ChildCount > 0 then
     InitialStates := InitialStates + [ivsHasChildren];
 end;
@@ -638,19 +643,19 @@ end;
 {*----------------------------------------------------------------------*
  | constructor TPropertyPageDetails.Create                              |
  |                                                                      |
- | Create a TPropetryPageDetails (tree node class) and create it's data |
+ | Create a TPropetryPageDetails(tree node class) and create it's data |
  | class.  Don't initialize the data class (until its page is displayed)|
  | - but fill in its MinX, MaxX, Caption and HelpText properties        |
  *----------------------------------------------------------------------*}
 constructor TPropertyPageDetails.Create(AOwner: TfmPropertyBase; APropertyPageClass: TPropertyPageClass;
-  AParent: TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyword: string; AParam: Integer);
+  AParent: TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyWord: string; AParam: Integer);
 var
   dataClass: TPropertyPageDataClass;
   tempPropertyPage: TfmPropertyPage;
   tempData: TPropertyPageData;
   caption: string;
   helpText: string;
-  helpKeyword: string;
+  helpKeyWord: string;
   minX, minY: Integer;
 begin
   FPropertyPageClass := APropertyPageClass;
@@ -664,9 +669,9 @@ begin
   // instance for this class, use it's constraints & caption details.
 
     dataClass := FPropertyPageClass.GetDataClass;
-    tempData := AOwner.FindSameData (FPropertyPageClass);
+    tempData := AOwner.FindSameData(FPropertyPageClass);
 
-    if Assigned (tempData) then
+    if Assigned(tempData) then
 
     begin       // We've already created data for this form class
                 // so use its settings
@@ -681,10 +686,10 @@ begin
       else
         helpText := tempData.HelpText;
 
-      if AHelpKeyword <> '' then
-        helpKeyword := AHelpKeyword
+      if AHelpKeyWord <> '' then
+        helpKeyWord := AHelpKeyWord
       else
-        helpKeyword := tempData.HelpKeyword;
+        helpKeyWord := tempData.HelpKeyWord;
 
       minX := tempData.MinX;
       minY := tempData.MinY
@@ -703,7 +708,7 @@ begin
       else
         caption := ACaption;
 
-      helpKeyword := AHelpKeyword;
+      helpKeyWord := AHelpKeyWord;
 
       if AHelpText <> '' then
         helpText := AHelpText
@@ -715,7 +720,7 @@ begin
     end;
 
                 // Create the data class.
-    FData := dataClass.Create (caption, helpText, helpKeyword, minX, minY, AParam);
+    FData := dataClass.Create(caption, helpText, helpKeyWord, minX, minY, AParam);
   finally
     tempPropertyPage.Free
   end
@@ -747,7 +752,7 @@ begin
   while (Result <> Nil) and (idx > 0) do
   begin
     Result := Result.Sibling;
-    Dec (idx)
+    Dec(idx)
   end
 end;
 
@@ -764,7 +769,7 @@ begin
   PropPageDetails := FChild;
   while PropPageDetails <> Nil do
   begin
-    Inc (Result);
+    Inc(Result);
     PropPageDetails := PropPageDetails.Sibling
   end
 end;
@@ -801,7 +806,7 @@ end;
 procedure TfmPropertyBase.btnApplyClick(Sender: TObject);
 begin
   SaveSettings;
-  PostMessage (Application.MainForm.Handle,  WM_PROPERTIES_CHANGED, 0, 0);
+  PostMessage(Application.MainForm.Handle,  WM_PROPERTIES_CHANGED, 0, 0);
 end;
 
 procedure TfmPropertyBase.ExpandAll1Click(Sender: TObject);
@@ -822,12 +827,12 @@ begin
   kw := '';
   co := 0;
 
-  if Assigned (FSelectedPage) then
-    if (FSelectedPage.HelpType = htKeyword) and (FSelectedPage.HelpKeyword <> '') then
+  if Assigned(FSelectedPage) then
+    if (FSelectedPage.HelpType = htKeyWord) and (FSelectedPage.HelpKeyWord <> '') then
     begin
-      kw := FSelectedPage.HelpKeyword;
+      kw := FSelectedPage.HelpKeyWord;
       if kw = '' then
-        kw := FSelectedPage.AltKeyword
+        kw := FSelectedPage.AltKeyWord
     end
     else
       if (FSelectedPage.HelpType = htContext ) then
@@ -837,11 +842,11 @@ begin
     if FOrigHelpType = htContext then
       co := FOrigHelpContext
     else
-      kw := FOrigHelpKeyword;
+      kw := FOrigHelpKeyWord;
 
 
   if kw <> '' then
-    Application.HelpKeyword(kw)
+    Application.HelpKeyWord(kw)
   else
     if co <> 0 then
       Application.HelpContext(co)

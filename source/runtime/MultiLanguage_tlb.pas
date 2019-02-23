@@ -25,9 +25,9 @@ unit MultiLanguage_TLB;
 // Errors:
 //   Hint: Symbol 'type' renamed to 'type_'
 //   Hint: Symbol 'type' renamed to 'type_'
-//   Error creating palette bitmap of (TCMLangString) : Server C:\Windows\system32\mlang.dll contains no icons
-//   Error creating palette bitmap of (TCMLangConvertCharset) : Server C:\Windows\system32\mlang.dll contains no icons
-//   Error creating palette bitmap of (TCMultiLanguage) : Server C:\Windows\system32\mlang.dll contains no icons
+//   Error creating palette bitmap of (TCMLangString): Server C:\Windows\system32\mlang.dll contains no icons
+//   Error creating palette bitmap of (TCMLangConvertCharset): Server C:\Windows\system32\mlang.dll contains no icons
+//   Error creating palette bitmap of (TCMultiLanguage): Server C:\Windows\system32\mlang.dll contains no icons
 // ************************************************************************ //
 // *************************************************************************//
 // NOTE:                                                                      
@@ -52,9 +52,9 @@ uses
 
 // *********************************************************************//
 // GUIDS declared in the TypeLibrary. Following prefixes are used:        
-//   Type Libraries     : LIBID_xxxx                                      
-//   CoClasses          : CLASS_xxxx                                      
-//   DISPInterfaces     : DIID_xxxx                                       
+//   Type Libraries: LIBID_xxxx                                      
+//   CoClasses: CLASS_xxxx                                      
+//   DISPInterfaces : DIID_xxxx                                       
 //   Non-DISP interfaces: IID_xxxx                                        
 // *********************************************************************//
 const
@@ -629,12 +629,12 @@ type
 
 // *********************************************************************//
 // OLE Server Proxy class declaration
-// Server Object    : TCMLangString
-// Help String      : MLangString Class
+// Server Object: TCMLangString
+// Help String: MLangString Class
 // Default Interface: IMLangString
-// Def. Intf. DISP? : No
+// Def. Intf. DISP?: No
 // Event   Interface: 
-// TypeFlags        : (2) CanCreate
+// TypeFlags: (2) CanCreate
 // *********************************************************************//
 {$IFDEF LIVE_SERVER_AT_DESIGN_TIME}
   TCMLangStringProperties= class;
@@ -672,7 +672,7 @@ type
 {$IFDEF LIVE_SERVER_AT_DESIGN_TIME}
 // *********************************************************************//
 // OLE Server Properties Proxy Class
-// Server Object    : TCMLangString
+// Server Object: TCMLangString
 // (This object is used by the IDE's Property Inspector to allow editing
 //  of the properties of this server)
 // *********************************************************************//
@@ -704,12 +704,12 @@ type
 
 // *********************************************************************//
 // OLE Server Proxy class declaration
-// Server Object    : TCMLangConvertCharset
-// Help String      : 
+// Server Object: TCMLangConvertCharset
+// Help String  : 
 // Default Interface: IMLangConvertCharset
-// Def. Intf. DISP? : No
+// Def. Intf. DISP?: No
 // Event   Interface: 
-// TypeFlags        : (2) CanCreate
+// TypeFlags    : (2) CanCreate
 // *********************************************************************//
 {$IFDEF LIVE_SERVER_AT_DESIGN_TIME}
   TCMLangConvertCharsetProperties= class;
@@ -750,7 +750,7 @@ type
 {$IFDEF LIVE_SERVER_AT_DESIGN_TIME}
 // *********************************************************************//
 // OLE Server Properties Proxy Class
-// Server Object    : TCMLangConvertCharset
+// Server Object: TCMLangConvertCharset
 // (This object is used by the IDE's Property Inspector to allow editing
 //  of the properties of this server)
 // *********************************************************************//
@@ -782,12 +782,12 @@ type
 
 // *********************************************************************//
 // OLE Server Proxy class declaration
-// Server Object    : TCMultiLanguage
-// Help String      : 
+// Server Object: TCMultiLanguage
+// Help String  : 
 // Default Interface: IMultiLanguage
-// Def. Intf. DISP? : No
+// Def. Intf. DISP?: No
 // Event   Interface: 
-// TypeFlags        : (2) CanCreate
+// TypeFlags    : (2) CanCreate
 // *********************************************************************//
 {$IFDEF LIVE_SERVER_AT_DESIGN_TIME}
   TCMultiLanguageProperties= class;
@@ -841,7 +841,7 @@ type
 {$IFDEF LIVE_SERVER_AT_DESIGN_TIME}
 // *********************************************************************//
 // OLE Server Properties Proxy Class
-// Server Object    : TCMultiLanguage
+// Server Object: TCMultiLanguage
 // (This object is used by the IDE's Property Inspector to allow editing
 //  of the properties of this server)
 // *********************************************************************//
@@ -1199,54 +1199,62 @@ begin
   Result := DefaultInterface.GetNumberOfCodePageInfo(pcCodePage);
 end;
 
-function TCMultiLanguage.GetCodePageInfo(uiCodePage: SYSUINT; out pCodePageInfo: tagMIMECPINFO): HResult;
+function TCMultiLanguage.GetCodePageInfo(uiCodePage: SYSUINT;
+  out pCodePageInfo: tagMIMECPINFO): HResult;
 begin
   Result := DefaultInterface.GetCodePageInfo(uiCodePage, pCodePageInfo);
 end;
 
-function TCMultiLanguage.GetFamilyCodePage(uiCodePage: SYSUINT; out puiFamilyCodePage: SYSUINT): HResult;
+function TCMultiLanguage.GetFamilyCodePage(uiCodePage: SYSUINT;
+  out puiFamilyCodePage: SYSUINT): HResult;
 begin
   Result := DefaultInterface.GetFamilyCodePage(uiCodePage, puiFamilyCodePage);
 end;
 
-function TCMultiLanguage.EnumCodePages(grfFlags: LongWord; out ppEnumCodePage: IEnumCodePage): HResult;
+function TCMultiLanguage.EnumCodePages(grfFlags: LongWord;
+  out ppEnumCodePage: IEnumCodePage): HResult;
 begin
   Result := DefaultInterface.EnumCodePages(grfFlags, ppEnumCodePage);
 end;
 
-function TCMultiLanguage.GetCharsetInfo(const Charset: WideString; out pCharsetInfo: tagMIMECSETINFO): HResult;
+function TCMultiLanguage.GetCharsetInfo(const Charset: WideString;
+  out pCharsetInfo: tagMIMECSETINFO): HResult;
 begin
   Result := DefaultInterface.GetCharsetInfo(Charset, pCharsetInfo);
 end;
 
-function TCMultiLanguage.IsConvertible(dwSrcEncoding: LongWord; dwDstEncoding: LongWord): HResult;
+function TCMultiLanguage.IsConvertible(dwSrcEncoding: LongWord;
+  dwDstEncoding: LongWord): HResult;
 begin
   Result := DefaultInterface.IsConvertible(dwSrcEncoding, dwDstEncoding);
 end;
 
-function TCMultiLanguage.ConvertString(var pdwMode: LongWord; dwSrcEncoding: LongWord; 
-                                       dwDstEncoding: LongWord; var pSrcStr: Byte; 
-                                       var pcSrcSize: SYSUINT; var pDstStr: Byte; 
-                                       var pcDstSize: SYSUINT): HResult;
+function TCMultiLanguage.ConvertString(
+  var pdwMode: LongWord; dwSrcEncoding: LongWord;
+  dwDstEncoding: LongWord; var pSrcStr: Byte;
+  var pcSrcSize: SYSUINT; var pDstStr: Byte;
+  var pcDstSize: SYSUINT): HResult;
 begin
-  Result := DefaultInterface.ConvertString(pdwMode, dwSrcEncoding, dwDstEncoding, pSrcStr, 
-                                           pcSrcSize, pDstStr, pcDstSize);
+  Result := DefaultInterface.ConvertString(pdwMode, dwSrcEncoding,
+    dwDstEncoding, pSrcStr, pcSrcSize, pDstStr, pcDstSize);
 end;
 
-function TCMultiLanguage.ConvertStringToUnicode(var pdwMode: LongWord; dwEncoding: LongWord; 
-                                                var pSrcStr: Shortint; var pcSrcSize: SYSUINT; 
-                                                var pDstStr: Word; var pcDstSize: SYSUINT): HResult;
+function TCMultiLanguage.ConvertStringToUnicode(
+  var pdwMode: LongWord; dwEncoding: LongWord;
+  var pSrcStr: Shortint; var pcSrcSize: SYSUINT;
+  var pDstStr: Word; var pcDstSize: SYSUINT): HResult;
 begin
-  Result := DefaultInterface.ConvertStringToUnicode(pdwMode, dwEncoding, pSrcStr, pcSrcSize, 
-                                                    pDstStr, pcDstSize);
+  Result := DefaultInterface.ConvertStringToUnicode(pdwMode, dwEncoding,
+    pSrcStr, pcSrcSize, pDstStr, pcDstSize);
 end;
 
-function TCMultiLanguage.ConvertStringFromUnicode(var pdwMode: LongWord; dwEncoding: LongWord; 
-                                                  var pSrcStr: Word; var pcSrcSize: SYSUINT; 
-                                                  var pDstStr: Shortint; var pcDstSize: SYSUINT): HResult;
+function TCMultiLanguage.ConvertStringFromUnicode(
+  var pdwMode: LongWord; dwEncoding: LongWord;
+  var pSrcStr: Word; var pcSrcSize: SYSUINT;
+  var pDstStr: Shortint; var pcDstSize: SYSUINT): HResult;
 begin
-  Result := DefaultInterface.ConvertStringFromUnicode(pdwMode, dwEncoding, pSrcStr, pcSrcSize, 
-                                                      pDstStr, pcDstSize);
+  Result := DefaultInterface.ConvertStringFromUnicode(pdwMode, dwEncoding,
+    pSrcStr, pcSrcSize, pDstStr, pcDstSize);
 end;
 
 function TCMultiLanguage.ConvertStringReset: HResult;
@@ -1254,12 +1262,14 @@ begin
   Result := DefaultInterface.ConvertStringReset;
 end;
 
-function TCMultiLanguage.GetRfc1766FromLcid(locale: LongWord; out pbstrRfc1766: WideString): HResult;
+function TCMultiLanguage.GetRfc1766FromLcid(locale: LongWord;
+  out pbstrRfc1766: WideString): HResult;
 begin
   Result := DefaultInterface.GetRfc1766FromLcid(locale, pbstrRfc1766);
 end;
 
-function TCMultiLanguage.GetLcidFromRfc1766(out plocale: LongWord; const bstrRfc1766: WideString): HResult;
+function TCMultiLanguage.GetLcidFromRfc1766(out plocale: LongWord;
+  const bstrRfc1766: WideString): HResult;
 begin
   Result := DefaultInterface.GetLcidFromRfc1766(plocale, bstrRfc1766);
 end;
@@ -1269,17 +1279,19 @@ begin
   Result := DefaultInterface.EnumRfc1766(ppEnumRfc1766);
 end;
 
-function TCMultiLanguage.GetRfc1766Info(locale: LongWord; out pRfc1766Info: tagRFC1766INFO): HResult;
+function TCMultiLanguage.GetRfc1766Info(locale: LongWord;
+  out pRfc1766Info: tagRFC1766INFO): HResult;
 begin
   Result := DefaultInterface.GetRfc1766Info(locale, pRfc1766Info);
 end;
 
-function TCMultiLanguage.CreateConvertCharset(uiSrcCodePage: SYSUINT; uiDstCodePage: SYSUINT; 
-                                              dwProperty: LongWord; 
-                                              out ppMLangConvertCharset: IMLangConvertCharset): HResult;
+function TCMultiLanguage.CreateConvertCharset(uiSrcCodePage: SYSUINT;
+  uiDstCodePage: SYSUINT;
+  dwProperty: LongWord;
+  out ppMLangConvertCharset: IMLangConvertCharset): HResult;
 begin
-  Result := DefaultInterface.CreateConvertCharset(uiSrcCodePage, uiDstCodePage, dwProperty, 
-                                                  ppMLangConvertCharset);
+  Result := DefaultInterface.CreateConvertCharset(uiSrcCodePage,
+    uiDstCodePage, dwProperty, ppMLangConvertCharset);
 end;
 
 {$IFDEF LIVE_SERVER_AT_DESIGN_TIME}

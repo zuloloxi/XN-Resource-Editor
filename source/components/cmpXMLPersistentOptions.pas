@@ -29,7 +29,7 @@ uses
 
 function TXMLPersistentOptions.GetSettingsClass: TExSettingsClass;
 begin
-  result := TExXMLSettings;
+  Result := TExXMLSettings;
 end;
 
 procedure TXMLPersistentOptions.SettingsCreated(Settings: TExSettings);

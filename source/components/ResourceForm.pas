@@ -232,10 +232,10 @@ begin
   if ResourceDetails.Tag <> 0 then
   begin
     Details := TUndoDetails(resourceDetails.Tag);
-    result := Details.FRedoStack.Count > 0
+    Result := Details.FRedoStack.Count > 0
   end
   else
-    result := False
+    Result := False
 end;
 
 (*----------------------------------------------------------------------*
@@ -256,10 +256,10 @@ begin
   if ResourceDetails.Tag <> 0 then
   begin
     Details := TUndoDetails(resourceDetails.Tag);
-    result := Details.FUndoStack.Count > 0
+    Result := Details.FUndoStack.Count > 0
   end
   else
-    result := False
+    Result := False
 end;
 
 (*----------------------------------------------------------------------*
@@ -284,7 +284,7 @@ var
   Details: TUndoDetails;
   Entry: TUndoEntry;
 begin
-  result := '';
+  Result := '';
   if ResourceDetails.Tag <> 0 then
   begin
     Details := TUndoDetails(resourceDetails.Tag);
@@ -293,7 +293,7 @@ begin
       Entry := TUndoEntry(Details.FRedoStack.Peek);
 
       if Assigned(Entry) then
-        result := Entry.FDetails
+        Result := Entry.FDetails
     end
   end
 end;
@@ -306,7 +306,7 @@ end;
  *----------------------------------------------------------------------*)
 function TfmResource.GetResourceDetails: TResourceDetails;
 begin
-  result := Obj as TResourceDetails
+  Result := Obj as TResourceDetails
 end;
 
 (*----------------------------------------------------------------------*
@@ -320,7 +320,7 @@ var
   Details: TUndoDetails;
   Entry: TUndoEntry;
 begin
-  result := '';
+  Result := '';
   if ResourceDetails.Tag <> 0 then
   begin
     Details := TUndoDetails(resourceDetails.Tag);
@@ -329,7 +329,7 @@ begin
       Entry := TUndoEntry(Details.FUndoStack.Peek);
 
       if Assigned(Entry) then
-        result := Entry.FDetails
+        Result := Entry.FDetails
     end
   end
 end;

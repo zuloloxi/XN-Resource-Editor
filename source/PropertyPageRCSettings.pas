@@ -80,7 +80,7 @@ begin
       begin
         rbCompilerIncludePath.Checked := True;
         node := GetNodeForPackage (FData.FIncludePathPackageName);
-        if Assigned (node) then
+        if Assigned(node) then
           node.CheckState := csCheckedNormal
       end;
 
@@ -125,7 +125,7 @@ function TfmPropertyPageRCSettings.GetNodePackage(
 var
   data: PObject;
 begin
-  data := PObject (vstIncludePackages.GetNodeData(node));
+  data := PObject(vstIncludePackages.GetNodeData(node));
   Result := TIncludePathPackage (data^);
 end;
 
@@ -133,9 +133,9 @@ function TfmPropertyPageRCSettings.GetNodeForPackage(
   const packageName: string): PVirtualNode;
 begin
   Result := vstIncludePackages.GetFirst;
-  while Assigned (Result) do
+  while Assigned(Result) do
   begin
-    if SameText (GetNodePackage (Result).Name, packageName) then
+    if SameText(GetNodePackage (Result).Name, packageName) then
       break
     else
       Result := vstIncludePackages.GetNext(Result)
@@ -191,7 +191,7 @@ procedure TfmPropertyPageRCSettings.vstIncludePackagesInitNode(
 var
   data: PObject;
 begin
-  data := PObject (vstIncludePackages.GetNodeData(node));
+  data := PObject(vstIncludePackages.GetNodeData(node));
   data^ := FIncludePathPackages.Package [node^.Index];
   Node^.CheckType := ctRadioButton ;
 end;
@@ -203,7 +203,7 @@ var
   Package: TIncludePathPackage;
 begin
   Package := GetNodePackage(node);
-  if Assigned (Package) then
+  if Assigned(Package) then
     CellText := Package.Name
 end;
 
@@ -227,10 +227,10 @@ begin
   CompilerPath := rbCompilerIncludePath.Checked;
 
   p := vstIncludePackages.GetFirst;
-  while Assigned (p) do
+  while Assigned(p) do
   begin
     Package := GetNodePackage(p);
-    if CompilerPath and SameText (Package.Name, FData.FIncludePathPackageName) then
+    if CompilerPath and SameText(Package.Name, FData.FIncludePathPackageName) then
       p.CheckState := csCheckedNormal
     else
       p.CheckState := csUncheckedNormal;

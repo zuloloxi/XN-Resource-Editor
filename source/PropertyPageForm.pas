@@ -11,7 +11,7 @@ type
   private
     FCaption: string;
     FHelpText: string;
-    FHelpKeyword: string;
+    FHelpKeyWord: string;
     FParam: Integer;
     FMinX: Integer;
     FMinY: Integer;
@@ -23,7 +23,8 @@ type
     function GetCaption: string; virtual;
     function GetHelpText: string; virtual;
   public
-    constructor Create (const ACaption, AHelpText, AHelpKeyword: string; AMinCX, AMinCY: Integer; AParam: Integer = 0);
+    constructor Create(const ACaption, AHelpText, AHelpKeyWord: string;
+      AMinCX, AMinCY: Integer; AParam: Integer = 0);
 
     procedure Apply; virtual;
     procedure Cancel; virtual;
@@ -31,7 +32,7 @@ type
     property Caption: string read GetCaption;
     property Initialized: Boolean read FInitialized write FInitialized;
     property HelpText: string read GetHelpText;
-    property HelpKeyword: string read FHelpKeyword;
+    property HelpKeyWord: string read FHelpKeyWord;
 
     property MinX: Integer read FMinX;
     property MinY: Integer read FMinY;
@@ -44,7 +45,7 @@ type
     Bevel1: TBevel;
     stSectionDetails: TLabel;
   private
-    FAltKeyword: string;
+    FAltKeyWord: string;
   protected
     FPopulating: Boolean;
   public
@@ -52,7 +53,7 @@ type
     procedure PopulateControls (AData: TPropertyPageData); virtual;
 
     property Populating: Boolean read FPopulating write FPopulating;
-    property AltKeyword: string read FAltKeyword;
+    property AltKeyWord: string read FAltKeyWord;
   end;
 
   TPropertyPageClass = class of TfmPropertyPage;
@@ -71,7 +72,7 @@ begin
     AData.FInitialized := True
   end;
   stSectionDetails.Caption := AData.HelpText;
-  FAltKeyword := AData.HelpKeyword;
+  FAltKeyWord := AData.HelpKeyWord;
 end;
 
 { TPropertyPageData }
@@ -86,12 +87,12 @@ begin
 // Stub
 end;
 
-constructor TPropertyPageData.Create(const ACaption, AHelpText, AHelpKeyword: string; AMinCX, AMinCY: Integer;
+constructor TPropertyPageData.Create(const ACaption, AHelpText, AHelpKeyWord: string; AMinCX, AMinCY: Integer;
   AParam: Integer);
 begin
   FCaption := ACaption;
   FHelpText := AHelpText;
-  FHelpKeyword := AHelpKeyword;
+  FHelpKeyWord := AHelpKeyWord;
   FParam := AParam;
   FMinX := AMinCX;
   FMinY := AMinCY;

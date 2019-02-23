@@ -133,7 +133,7 @@ type
     FSpecialButtonDisabledImageIndex: Integer;
     FSpecialButtonImageIndex: Integer;
     FSpecialButtonHotImageIndex: Integer;
-    procedure WmPaint (var Message: TWMPaint); message WM_PAINT;
+    procedure WmPaint(var Message: TWMPaint); message WM_PAINT;
     procedure WMSize(var Message: TWMSize); message WM_SIZE;
     procedure RecalcScrollbars;
     procedure SetNameColWidth(const Value: Integer);
@@ -141,15 +141,15 @@ type
     procedure SetSelectedPropertyNo(Value: Integer);
     procedure SetPropertyEdit;
 
-    procedure DoOnPropertyEditExit (Sender: TObject);
+    procedure DoOnPropertyEditExit(Sender: TObject);
     procedure DoOnPropertyEditKeyDown (Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure DoOnPropertyEditDblClick (Sender: TObject);
     procedure DoOnPropertyEditSpecialButtonClick (Sender: TObject);
     procedure PropertyChanged;
-    procedure WmInit (var Msg: TMessage); message WM_INIT;
+    procedure WmInit(var Msg: TMessage); message WM_INIT;
 
     function GetPropertyEditText: string;
-    procedure SetPropertyEditText (const Value: string);
+    procedure SetPropertyEditText(const Value: string);
 
     property PropertyEditText: string read GetPropertyEditText write SetPropertyEditText;
     procedure SetActualValueColWidth(const Value: Integer);
@@ -422,7 +422,7 @@ begin
 
 
   case saveKey of
-    VK_UP  : if SelectedPropertyNo > 0 then
+    VK_UP: if SelectedPropertyNo > 0 then
                   SelectedPropertyNo := SelectedPropertyNo - 1;
 
     VK_DOWN: if SelectedPropertyNo < FProperties.Count - 1 then
@@ -431,7 +431,7 @@ begin
     else
     begin
       if Assigned(OnBeginPropertyEdit) then
-        OnBeginPropertyEdit (Self, nil);
+        OnBeginPropertyEdit(Self, nil);
       key := saveKey;
     end;
   end;
@@ -474,7 +474,7 @@ var
 begin
   Result := nil;
   for i := 0 to FProperties.Count - 1 do
-    if CompareText (FProperties [i].PropertyName, propName) = 0 then
+    if CompareText(FProperties [i].PropertyName, propName) = 0 then
     begin
       Result := FProperties [i];
       break
@@ -491,7 +491,7 @@ end;
 function TPropertyListBox.GetPropertyEditText: string;
 begin
   if FPropertyEdit is TCustomEdit then
-    Result := TCustomEdit (FPropertyEdit).Text
+    Result := TCustomEdit(FPropertyEdit).Text
   else
     if FPropertyEdit is TComboBox then
       Result := TComboBox (FPropertyEdit).Text;
@@ -545,7 +545,7 @@ begin
   r.Left := NameColWidth - 1;
   r.Right := r.Left + 3;
 
-  if PtInRect (r, pt) then      // Clicked on divider
+  if PtInRect(r, pt) then      // Clicked on divider
   begin
     FChangingWidth := True;
     SetCapture (Handle);
@@ -560,7 +560,7 @@ begin
     r.Left := NameColWidth + 4 + ActualValueColWidth - 1;
     r.Right := r.Left + 3;
 
-    if PtInRect (r, pt) then
+    if PtInRect(r, pt) then
     begin
       FChangingActualValueWidth := True;
       SetCapture (Handle);
@@ -573,7 +573,7 @@ begin
                         // Clicked on the name or value.
   offset := VertScrollBar.Position;
 
-  Inc (y, Offset);
+  Inc(y, Offset);
 
   sel := y div FLineHeight;   // Select the correct property
 
@@ -612,14 +612,14 @@ begin
   r := ClientRect;            // Otherwise just ensure that the correct cursor
   r.Left := NameColWidth - 1; // is being displayed.
   r.Right := r.Left + 3;
-  if PtInRect (r, pt) then
+  if PtInRect(r, pt) then
     Cursor := crHSplit
   else
   begin
     r := ClientRect;
     r.Left := NameColWidth + 4 + ActualValueColWidth - 1;
     r.Right := r.Left + 3;
-    if ptINRect (r, pt) then
+    if ptINRect(r, pt) then
       Cursor := crHSplit
     else
       Cursor := crDefault
@@ -697,7 +697,7 @@ begin
             Canvas.Font.Color := clGrayText
           else
             Canvas.Font.Color := oldFontColor;
-          Canvas.TextRect (r, indent, y - offset + 2, Prop.PropertyName);
+          Canvas.TextRect(r, indent, y - offset + 2, Prop.PropertyName);
 
           if ActualValueColWidth > 0 then
           begin
@@ -707,7 +707,7 @@ begin
           else
             x := NameColWidth + Indent;
 
-          Canvas.TextOut (x, y - offset, Prop.ValueAsStr);
+          Canvas.TextOut(x, y - offset, Prop.ValueAsStr);
         finally
           Canvas.Font.Color := oldFontColor
         end;
@@ -715,16 +715,16 @@ begin
         if i = SelectedPropertyNo then
           Frame3d (Canvas, r, clBtnShadow, clBtnHighlight, 1);
 
-        Inc (i)
+        Inc(i)
       end;
       Canvas.Pen.Color := clBtnShadow;
       Canvas.MoveTo (0, y - offset);
       Canvas.LineTo (ClientWidth, y - offset);
     end
     else
-      Inc (i);
+      Inc(i);
 
-    Inc (y, FLineHeight);
+    Inc(y, FLineHeight);
   end;
 
   r := ClientRect;
@@ -778,7 +778,7 @@ begin
 
   Invalidate;
 
-  if Assigned(OnPropertyChanged) and not (csDestroying in ComponentState) then
+  if Assigned(OnPropertyChanged) and not(csDestroying in ComponentState) then
     OnPropertyChanged(Self)
 end;
 
@@ -790,7 +790,7 @@ end;
 procedure TPropertyListBox.RecalcScrollbars;
 begin
   Canvas.Font := Font;
-  FLineHeight := Canvas.TextHeight ('M') + 4;
+  FLineHeight := Canvas.TextHeight('M') + 4;
   VertScrollBar.Range := FLineHeight * FProperties.Count;
   VertScrollBar.Increment := FLineHeight
 end;
@@ -907,14 +907,14 @@ begin
     if Prop.PropertyType = ptSpecial then
     begin
       FPropertyEdit := TButtonedEdit.Create(Self);
-      TButtonedEdit (FPropertyEdit).RightButton.Visible := True;
-      TButtonedEdit (FPropertyEdit).ReadOnly := True;
-      TButtonedEdit (FPropertyEdit).OnRightButtonClick := DoOnPropertyEditSpecialButtonClick;
-      TButtonedEdit (FPropertyEdit).Images := SpecialButtonImages;
-      TButtonedEdit (FPropertyEdit).RightButton.ImageIndex := SpecialButtonImageIndex;
-      TButtonedEdit (FPropertyEdit).RightButton.HotImageIndex := SpecialButtonHotImageIndex;
-      TButtonedEdit (FPropertyEdit).RightButton.DisabledImageIndex := SpecialButtonDisabledImageIndex;
-      TButtonedEdit (FPropertyEdit).RightButton.PressedImageIndex := SpecialButtonPressedImageIndex;
+      TButtonedEdit(FPropertyEdit).RightButton.Visible := True;
+      TButtonedEdit(FPropertyEdit).ReadOnly := True;
+      TButtonedEdit(FPropertyEdit).OnRightButtonClick := DoOnPropertyEditSpecialButtonClick;
+      TButtonedEdit(FPropertyEdit).Images := SpecialButtonImages;
+      TButtonedEdit(FPropertyEdit).RightButton.ImageIndex := SpecialButtonImageIndex;
+      TButtonedEdit(FPropertyEdit).RightButton.HotImageIndex := SpecialButtonHotImageIndex;
+      TButtonedEdit(FPropertyEdit).RightButton.DisabledImageIndex := SpecialButtonDisabledImageIndex;
+      TButtonedEdit(FPropertyEdit).RightButton.PressedImageIndex := SpecialButtonPressedImageIndex;
     end
     else
       FPropertyEdit := TEdit.Create(Self);
@@ -992,13 +992,13 @@ begin
     if Value > FSelectedPropertyNo then         // Skip disabled properties
     begin
       while (Value < Properties.Count) and not Properties [Value].Enabled do
-        Inc (Value);
+        Inc(Value);
 
       if Value = Properties.Count then Value := -1
     end
     else
       while (Value >= 0) and not Properties [Value].Enabled do
-        Dec (Value)
+        Dec(Value)
   end;
 
   if value <> FSelectedPropertyNo then
@@ -1009,7 +1009,7 @@ begin
     begin
       if FSelectedPropertyNo <> -1 then         // Remove old property editor
       begin
-        DoOnPropertyEditExit (FPropertyEdit);
+        DoOnPropertyEditExit(FPropertyEdit);
         SetFocus
       end;
 
@@ -1072,7 +1072,7 @@ begin
     Parent.RecalcScrollBars;
     Parent.Invalidate;
 
-    if not (csLoading in Parent.Owner.ComponentState) then
+    if not(csLoading in Parent.Owner.ComponentState) then
       Parent.SetPropertyEdit
   end
 end;
@@ -1121,7 +1121,7 @@ procedure TPropertyListProperty.AssignTo(Dest: TPersistent);
 var
   dst: TPropertyListProperty;
 begin
-  if not (Dest is TPropertyListProperty) then
+  if not(Dest is TPropertyListProperty) then
     inherited
   else
   begin
@@ -1158,7 +1158,7 @@ begin
   case PropertyType of
     ptInteger: FPropertyValue := FPropertyValue - 1;
     ptBoolean: FPropertyValue := not FPropertyValue;
-    ptEnum   : if FPropertyValue = 0 then
+    ptEnum: if FPropertyValue = 0 then
                   FPropertyValue := FEnumValues.Count - 1 else
                 FPropertyValue := FPropertyValue - 1
   end;
@@ -1252,7 +1252,7 @@ begin
   case PropertyType of
     ptInteger: FPropertyValue := FPropertyValue + 1;
     ptBoolean: FPropertyValue := not FPropertyValue;
-    ptEnum   : if FPropertyValue = FEnumValues.Count - 1 then
+    ptEnum: if FPropertyValue = FEnumValues.Count - 1 then
                   FPropertyValue := 0
                 else
                   FPropertyValue := FPropertyValue + 1;
@@ -1268,7 +1268,7 @@ begin
   if (PropertyType = ptEnum) and (VarType (Value) = varString) then
   begin
     for i := 0 to EnumValues.Count - 1 do
-      if CompareText (EnumValues [i], Value) = 0 then
+      if CompareText(EnumValues [i], Value) = 0 then
       begin
         Value := i;
         break
@@ -1376,7 +1376,7 @@ begin
   if (PropertyType = ptEnum) and ((VarType (Value) = varString) or (VarType (Value) = varUString)) then
   begin
     for i := 0 to EnumValues.Count - 1 do
-      if CompareText (EnumValues [i], Value) = 0 then
+      if CompareText(EnumValues [i], Value) = 0 then
       begin
         Value := i;
         break

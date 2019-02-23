@@ -11,9 +11,9 @@ type
   private
     FImageIndex: Integer;
     FImages: TImageList;
-    FMouseInControl : Boolean;
-    FFontColor : TColor;
-    FFontStyles : TFontStyles;
+    FMouseInControl: Boolean;
+    FFontColor: TColor;
+    FFontStyles: TFontStyles;
     FInPlace: Boolean;
     FLink: string;
     FAutoLink: Boolean;
@@ -21,7 +21,7 @@ type
     FSelectedFont: TFont;
     FSelectedFontColor: TColor;
     FSelectedFontStyles: TFontStyles;
-    FSelected : boolean;
+    FSelected: Boolean;
     FOnEndCapture: TNotifyEvent;
     FOnPainted: TNotifyEvent;
     procedure CMTextChanged(var Message: TMessage); message CM_TEXTCHANGED;
@@ -38,7 +38,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure Click; override;
-    property ParentObj : IUnknown read FParentObj write FParentObj;
+    property ParentObj: IUnknown read FParentObj write FParentObj;
     property Canvas;
 
   published
@@ -48,19 +48,19 @@ type
     property Caption;
     property Color;
     property Font;
-    property Images : TImageList read FImages write SetImages;
-    property ImageIndex : Integer read FImageIndex write SetImageIndex;
+    property Images: TImageList read FImages write SetImages;
+    property ImageIndex: Integer read FImageIndex write SetImageIndex;
     property ParentColor;
     property ParentFont;
-    property SelectedFontColor : TColor read FSelectedFontColor write FSelectedFontColor;
-    property SelectedFontStyles : TFontStyles read FSelectedFontStyles write FSelectedFontStyles;
-    property Transparent : Boolean read GetTransparent write SetTransparent default False;
+    property SelectedFontColor: TColor read FSelectedFontColor write FSelectedFontColor;
+    property SelectedFontStyles: TFontStyles read FSelectedFontStyles write FSelectedFontStyles;
+    property Transparent: Boolean read GetTransparent write SetTransparent default False;
     property Visible;
-    property Link : string read FLink write FLink;
-    property AutoLink : Boolean read FAutoLink write FAutoLink;
-    property InPlace : Boolean read FInPlace write FInPlace;
-    property OnEndCapture : TNotifyEvent read FOnEndCapture write FOnEndCapture;
-    property OnPainted : TNotifyEvent read FOnPainted write FOnPainted;
+    property Link: string read FLink write FLink;
+    property AutoLink: Boolean read FAutoLink write FAutoLink;
+    property InPlace: Boolean read FInPlace write FInPlace;
+    property OnEndCapture: TNotifyEvent read FOnEndCapture write FOnEndCapture;
+    property OnPainted: TNotifyEvent read FOnPainted write FOnPainted;
   end;
 
 implementation
@@ -72,14 +72,14 @@ uses
 
 procedure THyperlinkButton.Click;
 var
-  ext, url : string;
-  Done : Boolean;
-  f : system.Text;
-  cmd, param : string;
-  pp : PChar;
-  p : Integer;
-  inQuote : boolean;
-  ch : char;
+  ext, url: string;
+  Done: Boolean;
+  f: system.Text;
+  cmd, param: string;
+  pp: PChar;
+  p: Integer;
+  inQuote: Boolean;
+  ch: char;
 begin
   inherited;
 
@@ -90,14 +90,14 @@ begin
     if FInPlace then
     begin
       param := AnsiDequotedStr (Link, '"');
-      ext := ExtractFileExt (param);
+      ext := ExtractFileExt(param);
 
-      if (CompareText (ext, '.URL') = 0) or (CompareText (ext, '.HTML') = 0) or (CompareText (ext, '.HTM') = 0) then
+      if (CompareText(ext, '.URL') = 0) or (CompareText(ext, '.HTML') = 0) or (CompareText(ext, '.HTM') = 0) then
       begin
-        if CompareText (ext, '.URL') = 0 then
+        if CompareText(ext, '.URL') = 0 then
         begin
           AssignFile (f, param);
-          Reset (f);
+          Reset(f);
           try
             ReadLn (f, url)
           finally
@@ -129,7 +129,7 @@ begin
           if ch = ' ' then
             if not InQuote then
               break;
-        Inc (p)
+        Inc(p)
       end;
       if p > Length (link) then
         p := 0;
@@ -153,7 +153,7 @@ end;
 
 procedure THyperlinkButton.CMMouseEnter(var Message: TMessage);
 begin
-  if not (csDesigning in ComponentState) and not FSelected then
+  if not(csDesigning in ComponentState) and not FSelected then
   begin
     FSelected := True;
 
@@ -167,7 +167,7 @@ end;
 
 procedure THyperlinkButton.CMMouseLeave(var Message: TMessage);
 begin
-  if not (csDesigning in ComponentState) then
+  if not(csDesigning in ComponentState) then
   begin
     FSelected := False;
     Font.Color := FFontColor;
@@ -192,7 +192,7 @@ end;
 
 function THyperlinkButton.GetTransparent: Boolean;
 begin
-  Result := not (csOpaque in ControlStyle);
+  Result := not(csOpaque in ControlStyle);
 end;
 
 procedure THyperlinkButton.MouseMove(Shift: TShiftState; X, Y: Integer);
@@ -238,7 +238,7 @@ begin
     DrawText(Handle, PChar(Caption), -1, Rect, Flags);
   end;
 
-  If Assigned(OnPainted) and not (csDestroying in ComponentState) then
+  If Assigned(OnPainted) and not(csDestroying in ComponentState) then
     OnPainted(Self);
 end;
 
@@ -275,10 +275,10 @@ procedure THyperlinkButton.UpdateTracking;
 var
   P: TPoint;
 begin
-  if Enabled and not (csDesigning in ComponentState) then
+  if Enabled and not(csDesigning in ComponentState) then
   begin
     GetCursorPos(P);
-    FMouseInControl := not (FindDragTarget(P, True) = Self);
+    FMouseInControl := not(FindDragTarget(P, True) = Self);
     if FMouseInControl then
     begin
       Perform(CM_MOUSELEAVE, 0, 0);

@@ -105,16 +105,16 @@ begin
   if Orientation = ruHorizontal then
   begin
     repeat
-      Inc (Offset, sm);
+      Inc(Offset, sm);
       if FDialogBox <> 0 then
       begin
-        r := Rect (0, 0, Offset, 10);
-        MapDialogRect (FDialogBox, r);
+        r := Rect(0, 0, Offset, 10);
+        MapDialogRect(FDialogBox, r);
         x := r.Right
       end
       else
         x := Offset;
-      Inc (t);
+      Inc(t);
       if x < w then
       begin
         Canvas.MoveTo (x, y);
@@ -131,17 +131,17 @@ begin
   else
   begin
     repeat
-      Inc (Offset, sm);
+      Inc(Offset, sm);
       if FDialogBox <> 0 then
       begin
-        r := Rect (0, 0, 10, Offset);
-        MapDialogRect (FDialogBox, r);
+        r := Rect(0, 0, 10, Offset);
+        MapDialogRect(FDialogBox, r);
         y := r.Bottom
       end
       else
         y := Offset;
         
-      Inc (t);
+      Inc(t);
       if y < h then
       begin
         Canvas.MoveTo (x, y);

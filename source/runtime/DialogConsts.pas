@@ -21,8 +21,8 @@ type
   end;
 
   TDlgTemplateEx = packed record
-    dlgVer: word;
-    signature: word;
+    dlgVer: Word;
+    signature: Word;
     helpID: DWORD;
     exStyle: DWORD;
     style: DWORD;
@@ -110,7 +110,7 @@ begin
 
   if Result.isID then
   begin
-    Result.id := StrToInt (st);
+    Result.id := StrToInt(st);
     if Result.id > $ffff then
       Result.isID := False
   end;

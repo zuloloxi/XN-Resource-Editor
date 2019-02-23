@@ -43,7 +43,7 @@ end;
 
 procedure TfmRCDataDescriptionResource.UpdateFonts;
 begin
-  UseInternationalFont (ntedDescription.Font);
+  UseInternationalFont(ntedDescription.Font);
 end;
 
 procedure TfmRCDataDescriptionResource.SaveResource (const undoDetails: string);

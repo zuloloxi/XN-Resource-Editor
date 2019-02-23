@@ -2,7 +2,8 @@ unit unitDisassembler;
 
 interface
 
-uses Windows, Classes, SysUtils, unitPEFile;
+uses
+  Windows, Classes, SysUtils, unitPEFile;
 
 type
 Ti386OpType = (
@@ -793,49 +794,49 @@ var
   function GetByte: byte;
   begin
     checkLen (sizeof (byte));
-    result := FP^;
-    Inc (FP, sizeof (byte));
-    Dec (fLeft, sizeof (byte))
+    Result := FP^;
+    Inc(FP, sizeof (byte));
+    Dec(fLeft, sizeof (byte))
   end;
 
-  function GetWord: word;
+  function GetWord: Word;
   begin
-    checkLen (sizeof (word));
-    result := PWord (FP)^;
-    Inc (FP, sizeof (word));
-    Dec (fLeft, sizeof (word))
+    checkLen (sizeof (Word));
+    Result := PWord (FP)^;
+    Inc(FP, sizeof (Word));
+    Dec(fLeft, sizeof (Word))
   end;
 
   function GetDWord: DWord;
   begin
     checkLen (sizeof (DWord));
-    result := PDWord (FP)^;
-    Inc (FP, sizeof (DWord));
-    Dec (fLeft, sizeof (DWord))
+    Result := PDWord (FP)^;
+    Inc(FP, sizeof (DWord));
+    Dec(fLeft, sizeof (DWord))
   end;
 
   function GetWordOrDWORD: DWord;
   begin
     if FOpSize = os16 then
-      result := GetWord
+      Result := GetWord
     else
-      result := GetDWORD
+      Result := GetDWORD
   end;
 
 
   function FormatByte (b: byte; const prefix, suffix: string): string;
   begin
-    result := prefix  + IntToHex (b, 2 * sizeof (byte)) + suffix;
+    Result := prefix  + IntToHex (b, 2 * sizeof (byte)) + suffix;
   end;
 
   function FormatDWORD (d: DWORD; const prefix, suffix: string): string;
   begin
-    result := prefix  + IntToHex (d, 2 * sizeof (DWORD)) + suffix;
+    Result := prefix  + IntToHex (d, 2 * sizeof (DWORD)) + suffix;
   end;
 
-  function FormatWord (w: word; const prefix, suffix: string): string;
+  function FormatWord (w: Word; const prefix, suffix: string): string;
   begin
-    result := prefix  + IntToHex (w, 2 * sizeof (WORD)) + suffix;
+    Result := prefix  + IntToHex (w, 2 * sizeof (WORD)) + suffix;
   end;
 
   // method :: 0 = r8, 1 = r16, 2 = r32, 3 = mm
@@ -850,16 +851,16 @@ var
 
     if md <> 4 then
     begin
-      result := string (gRegisters  [regType, md]);
-      result := result + '+' + string (gRegisters [r32, idx]);
+      Result := string (gRegisters  [regType, md]);
+      Result := result + '+' + string (gRegisters [r32, idx]);
       case ss of
-        1: result := result + '*2';
-        2: result := result + '*4';
-        3: result := result + '*8';
+        1: Result := result + '*2';
+        2: Result := result + '*4';
+        3: Result := result + '*8';
       end
     end
     else
-      result := string (gRegisters  [regType, idx]);
+      Result := string (gRegisters  [regType, idx]);
   end;
 
   function ptrType (reg: TRegType): string;
@@ -867,11 +868,11 @@ var
     if FOpSize = os16 then
       reg := r16;
 
-    result := '';
+    Result := '';
     case reg of
-      r8: result := 'byte ptr ';
-      r16: result := 'word ptr ';
-      r32: result := 'dword ptr '
+      r8: Result := 'byte ptr ';
+      r16: Result := 'Word ptr ';
+      r32: Result := 'dWord ptr '
     end
   end;
 
@@ -885,14 +886,14 @@ var
 
     function SegMod: string;
     begin
-      result := '';
+      Result := '';
       case FSeg of
         srDS:;
-        srES: result := 'es:';
-        srCS: result := 'cs:';
-        srSS: result := 'ss:';
-        srFS: result := 'fs:';
-        srGS: result := 'gs:';
+        srES: Result := 'es:';
+        srCS: Result := 'cs:';
+        srSS: Result := 'ss:';
+        srFS: Result := 'fs:';
+        srGS: Result := 'gs:';
       end;
     end;
 
@@ -900,25 +901,25 @@ var
    _rm := Operand and 7;
    _mod := Operand shr 6;
    reg := Operand shr 3 and 7;
-   result := '';
+   Result := '';
 
    if hasReg then
-     result := string (gRegisters [rt, reg] + ',');
+     Result := string (gRegisters [rt, reg] + ',');
 
    case _mod of
      0: case _rm of
            4: // [--][--]
              begin
                sib := GetByte;
-               result := result+ '[' + SegMod + DecodeSib (sib, r32) + (* '+' + gRegisters [r32,reg] + *) ']'
+               Result := result+ '[' + SegMod + DecodeSib (sib, r32) + (* '+' + gRegisters [r32,reg] + *) ']'
              end;
            5 :
              begin
                dw := GetDWORD;
-               result := FormatDWORD (dw, ptrType (rt) + '[',']');
+               Result := FormatDWORD (dw, ptrType (rt) + '[',']');
              end
            else
-             result := result + '[' + SegMod + string (gRegisters [r32,_rm]) + ']';
+             Result := result + '[' + SegMod + string (gRegisters [r32,_rm]) + ']';
          end;
 
      1 :
@@ -927,15 +928,15 @@ var
            4: // disp8 [--][--]
              begin
                sib := GetByte;
-               result := result+ 'dword ptr [' + SegMod + DecodeSib (sib, r32) + '+' + IntToHex (GetByte, 2) + ']'
+               Result := result+ 'dWord ptr [' + SegMod + DecodeSib (sib, r32) + '+' + IntToHex (GetByte, 2) + ']'
              end;
            else
              begin
                sib := GetByte;
                if sib = 0 then
-                 result := result + '[' + SegMod + string (gRegisters [r32, _rm]) + ']'
+                 Result := result + '[' + SegMod + string (gRegisters [r32, _rm]) + ']'
                else
-                 result := result + '[' + SegMod + string (gRegisters [r32, _rm]) + '+' + IntToHex (sib, 2) + ']';
+                 Result := result + '[' + SegMod + string (gRegisters [r32, _rm]) + '+' + IntToHex (sib, 2) + ']';
              end
          end
        end;
@@ -946,12 +947,12 @@ var
            4: // disp32 [--][--]
              begin
                sib := GetByte;
-               result := result+ 'dword ptr [' + DecodeSib (sib, r32) + '+' + IntToHex (GetDWORD, 8) + ']'
+               Result := result+ 'dWord ptr [' + DecodeSib (sib, r32) + '+' + IntToHex (GetDWORD, 8) + ']'
              end;
            else
              begin
                dw := GetDWORD;
-               result := result + '[' + string (gRegisters [r32, _rm]) + '+' + IntToHex (dw, 8) + ']';
+               Result := result + '[' + string (gRegisters [r32, _rm]) + '+' + IntToHex (dw, 8) + ']';
              end
          end
        end;
@@ -959,8 +960,8 @@ var
      3 :
        begin
          if hasReg then
-           result := string (gRegisters [rt, reg]) + ',';
-         result := result + string (gRegisters [rt, _rm])
+           Result := string (gRegisters [rt, reg]) + ',';
+         Result := result + string (gRegisters [rt, _rm])
        end;
    end
   end;
@@ -969,73 +970,73 @@ var
   begin
     if not alreadyHasOperand then
       Operand := GetByte;
-    result := Operand;
+    Result := Operand;
   end;
 
 begin
-  result := '';
+  Result := '';
   case Optype of
     None: ;
     EbGb:
       begin
         EmitMODRM (GetOperand, r8, false);
-        result := result + ',' + string (gRegisters [r8, (Operand shr 3) and 7]);
+        Result := result + ',' + string (gRegisters [r8, (Operand shr 3) and 7]);
       end;
 
     EvGv:
       begin
         EmitMODRM (GetOperand, r32, false);
-        result := result + ',' + string (gRegisters [r32, (Operand shr 3) and 7]);
+        Result := result + ',' + string (gRegisters [r32, (Operand shr 3) and 7]);
       end;
     GbEb:
       begin
         EmitMODRM (GetOperand, r8, true);
-//        result := gRegisters [r8, (Operand shr 3) and 7] + ',' + result;
+//        Result := gRegisters [r8, (Operand shr 3) and 7] + ',' + result;
       end;
     GvEv:
       begin
         EmitMODRM (GetOperand, r32, true);
-//          result := gRegisters [r32, (Operand shr 3) and 7] + ',' + result;
+//          Result := gRegisters [r32, (Operand shr 3) and 7] + ',' + result;
       end;
     GvEb :
       begin
         EmitMODRM (GetOperand, r8, true);
-//          result := gRegisters [r32, (Operand shr 3) and 7] + ',' + result;
+//          Result := gRegisters [r32, (Operand shr 3) and 7] + ',' + result;
       end;
 
     Eblb:
       begin
         EmitMODRM (GetOperand, r8, false);
-        result := result + ',' + IntToHex (GetByte, 2);
+        Result := result + ',' + IntToHex (GetByte, 2);
       end;
     Eblv:
       begin
         EmitMODRM (GetOperand, r32, false);
-        result := result + ',' + IntToHex (GetByte, 2);
+        Result := result + ',' + IntToHex (GetByte, 2);
       end;
     Evlv:
       begin
         EmitMODRM (GetOperand, r32, false);
-        result := result + ',' + IntToHex (GetWordOrDWORD, 8);
+        Result := result + ',' + IntToHex (GetWordOrDWORD, 8);
       end;
 
-    AlLb: result := FormatByte (GetByte, 'AL, ', '');
-    eAXlv: result := FormatDWORD (GetDWORD, 'EAX, ', '');
-    ES: result := 'ES';
-    CS: result := 'CS';
-    DS: result := 'DS';
-    SS: result := 'SS';
+    AlLb: Result := FormatByte (GetByte, 'AL, ', '');
+    eAXlv: Result := FormatDWORD (GetDWORD, 'EAX, ', '');
+    ES: Result := 'ES';
+    CS: Result := 'CS';
+    DS: Result := 'DS';
+    SS: Result := 'SS';
     eAX..eDI :
-      result := string (gRegisters [r32, Integer (Optype) - Integer (eAX)]);
+      Result := string (gRegisters [r32, Integer (Optype) - Integer (eAX)]);
     PUSHAD: ;
     POPAD: ;
     GvMa: ;
     EwGw: ;
-    FS: result := 'FS';
-    GS: result := 'GS';
-    lv: result := FormatDWORD (GetDWORD, '', '');
+    FS: Result := 'FS';
+    GS: Result := 'GS';
+    lv: Result := FormatDWORD (GetDWORD, '', '');
     GvEvlv: ;
-    lb: result := FormatByte (GetByte, '', '');
+    lb: Result := FormatByte (GetByte, '', '');
     GvEvlb: ;
     YbDX: ;
     YvDX: ;
@@ -1048,21 +1049,21 @@ begin
     Ev: EmitMODRM (GetOperand, r32, false);
     Eb: EmitMODRM (GetOperand, r8, false);
 
-    eAXCX: result := 'EAX, ECX';
-    eAXDX: result := 'EAX, EDX';
-    eAXBX: result := 'EAX, EBX';
-    eAXSP: result := 'EAX, ESP';
-    eAXBP: result := 'EAX, EBP';
-    eAXSI: result := 'EAX, ESI';
-    eAXDI: result := 'EAX, EDI';
+    eAXCX: Result := 'EAX, ECX';
+    eAXDX: Result := 'EAX, EDX';
+    eAXBX: Result := 'EAX, EBX';
+    eAXSP: Result := 'EAX, ESP';
+    eAXBP: Result := 'EAX, EBP';
+    eAXSI: Result := 'EAX, ESI';
+    eAXDI: Result := 'EAX, EDI';
     Ap :;
     Fv :;   // arg to pushf/popf - = none
 
-    AlOb: result := 'al, dword ptr [' + IntToHex (GetDWORD, 8) + ']';
-    eAXOv: result := 'eax, dword ptr [' + IntToHex (GetDWORD, 8) + ']';
+    AlOb: Result := 'al, dWord ptr [' + IntToHex (GetDWORD, 8) + ']';
+    eAXOv: Result := 'eax, dWord ptr [' + IntToHex (GetDWORD, 8) + ']';
 
-    ObAL: result := '[' + IntToHex (GetDWORD, 8) + '], al';
-    OvEAX:  result := '[' + IntToHex (GetDWORD, 8) + '], eax';
+    ObAL: Result := '[' + IntToHex (GetDWORD, 8) + '], al';
+    OvEAX:  Result := '[' + IntToHex (GetDWORD, 8) + '], eax';
 
     XbYb:; // arg to MOVSB
     XwYw:; // arg to MOVSW
@@ -1073,32 +1074,32 @@ begin
     AlYb,  //        CMPSB
     eAXYv, //        CMPSW
 
-    mal: result := FormatByte (GetByte, 'AL, ', '');
-    mcl: result := FormatByte (GetByte, 'CL, ', '');
-    mdl: result := FormatByte (GetByte, 'DL, ', '');
-    mbl: result := FormatByte (GetByte, 'BL, ', '');
-    mah: result := FormatByte (GetByte, 'AH, ', '');
-    mch: result := FormatByte (GetByte, 'CH, ', '');
-    mdh: result := FormatByte (GetByte, 'DH, ', '');
-    mbh: result := FormatByte (GetByte, 'BH, ', '');
+    mal: Result := FormatByte (GetByte, 'AL, ', '');
+    mcl: Result := FormatByte (GetByte, 'CL, ', '');
+    mdl: Result := FormatByte (GetByte, 'DL, ', '');
+    mbl: Result := FormatByte (GetByte, 'BL, ', '');
+    mah: Result := FormatByte (GetByte, 'AH, ', '');
+    mch: Result := FormatByte (GetByte, 'CH, ', '');
+    mdh: Result := FormatByte (GetByte, 'DH, ', '');
+    mbh: Result := FormatByte (GetByte, 'BH, ', '');
 
-    meax: result := FormatDWORD (GetDWORD, 'EAX, ', '');
-    mecx: result := FormatDWORD (GetDWORD, 'ECX, ', '');
-    medx: result := FormatDWORD (GetDWORD, 'EDX, ', '');
-    mebx: result := FormatDWORD (GetDWORD, 'EBX, ', '');
-    mesp: result := FormatDWORD (GetDWORD, 'ESP, ', '');
-    mebp: result := FormatDWORD (GetDWORD, 'EBP, ', '');
-    mesi: result := FormatDWORD (GetDWORD, 'ESI, ', '');
-    medi: result := FormatDWORD (GetDWORD, 'EDI, ', '');
+    meax: Result := FormatDWORD (GetDWORD, 'EAX, ', '');
+    mecx: Result := FormatDWORD (GetDWORD, 'ECX, ', '');
+    medx: Result := FormatDWORD (GetDWORD, 'EDX, ', '');
+    mebx: Result := FormatDWORD (GetDWORD, 'EBX, ', '');
+    mesp: Result := FormatDWORD (GetDWORD, 'ESP, ', '');
+    mebp: Result := FormatDWORD (GetDWORD, 'EBP, ', '');
+    mesi: Result := FormatDWORD (GetDWORD, 'ESI, ', '');
+    medi: Result := FormatDWORD (GetDWORD, 'EDI, ', '');
 
-    lw: result := FormatWord (GetWord, '', '');
+    lw: Result := FormatWord (GetWord, '', '');
     GvMp :;
     LwLb :;
 
     jb :
       begin
-        i := ShortInt (GetByte);
-        result := IntToHex (Integer (FP) - Integer (FMem) + i, 2);
+        i := ShortInt(GetByte);
+        Result := IntToHex (Integer (FP) - Integer (FMem) + i, 2);
 
       end;
 
@@ -1109,11 +1110,11 @@ begin
     jv :
       begin
         i := Integer (GetDWORD);
-        result := IntToHex (Integer (FP) - Integer (FMem) + i, 2);
+        Result := IntToHex (Integer (FP) - Integer (FMem) + i, 2);
       end;
-    aldx: result := 'al, dx';
-    dxal: result := 'dx, al';
-    dxeax: result := 'dx, eax';
+    aldx: Result := 'al, dx';
+    dxal: Result := 'dx, al';
+    dxeax: Result := 'dx, eax';
     GvEw:;
 
     RdCd,
@@ -1151,8 +1152,8 @@ begin
     raise Exception.Create('End of data');
 
   b := FP^;
-  Inc (FP);
-  Dec (fLeft);
+  Inc(FP);
+  Dec(fLeft);
 
   b1 := b shr 3 and 7;
   b := b and $c7;
@@ -1190,7 +1191,7 @@ begin
         raise Exception.Create ('Unsupported relocation type');
     end;
 
-    Inc (p);
+    Inc(p);
   end
 end;
 
@@ -1214,8 +1215,8 @@ begin
     raise Exception.Create('End of data');
 
   b := FP^;
-  Inc (FP);
-  Dec (fLeft);
+  Inc(FP);
+  Dec(fLeft);
 
   b1 := b shr 3 and 7;
   b := b and $c7;
@@ -1244,10 +1245,10 @@ begin
     if nb = 0 then
       break;
 
-    op := Format ('%8.8d'#9'%-8.8s'#9'%s'#13#10, [Base, op, param]);
+    op := Format('%8.8d'#9'%-8.8s'#9'%s'#13#10, [Base, op, param]);
     s.Write(op [1], Length (op) * sizeof (char));
 
-    Inc (Base, nb);
+    Inc(Base, nb);
   end
 end;
 
@@ -1264,11 +1265,11 @@ label
 begin
   try
     FP := FMem;
-    Inc (FP, Base);
+    Inc(FP, Base);
     baseP := FP;
 
     fLeft := FLen;
-    Dec (fLeft, Base);
+    Dec(fLeft, Base);
 
     FSeg := srDS;
     FOpSize := os32;
@@ -1279,8 +1280,8 @@ begin
       case opcode.Optype of
         i2Byte :
           begin
-            Inc (FP);
-            Dec (fLeft);
+            Inc(FP);
+            Dec(fLeft);
             opcode := g2Bytei386OpCodes [FP^]
           end;
         iES,
@@ -1298,8 +1299,8 @@ begin
               iFS: FSeg := srFS;
               iGS: FSeg := srGS;
             end;
-            Inc (FP);
-            Dec (fLeft);
+            Inc(FP);
+            Dec(fLeft);
             goto 1;
           end;
 
@@ -1309,15 +1310,15 @@ begin
             case opcode.Optype of
               oSize: FOpSize := os16
             end;
-            Inc (FP);
-            Dec (fLeft);
+            Inc(FP);
+            Dec(fLeft);
             goto 1;
           end;
 
       end;
 
-      Inc (FP);
-      Dec (fLeft);
+      Inc(FP);
+      Dec(fLeft);
 
       with opcode do
       begin
@@ -1337,12 +1338,12 @@ begin
 
       op := ost;
       param := optxt;
-      result := Integer (FP) - Integer (baseP);
+      Result := Integer (FP) - Integer (baseP);
     end
     else
-      result := 0;
+      Result := 0;
   except
-    result := 0
+    Result := 0
   end;
 end;
 
@@ -1354,8 +1355,8 @@ begin
     raise Exception.Create('End of data');
 
   b := FP^;
-  Inc (FP);
-  Dec (fLeft);
+  Inc(FP);
+  Dec(fLeft);
 
   b := b and $c7;
 
@@ -1378,11 +1379,11 @@ label
 begin
   try
     FP := FMem;
-    Inc (FP, Base);
+    Inc(FP, Base);
     baseP := FP;
 
     fLeft := FLen;
-    Dec (fLeft, Base);
+    Dec(fLeft, Base);
 
     FSeg := srDS;
     FOpSize := os32;
@@ -1394,8 +1395,8 @@ begin
       case opcode.Optype of
         i2Byte :
           begin
-            Inc (FP);
-            Dec (fLeft);
+            Inc(FP);
+            Dec(fLeft);
             opcode := g2Bytei386OpCodes [FP^]
           end;
 
@@ -1414,8 +1415,8 @@ begin
               iFS: FSeg := srFS;
               iGS: FSeg := srGS;
             end;
-            Inc (FP);
-            Dec (fLeft);
+            Inc(FP);
+            Dec(fLeft);
             goto 1;
           end;
 
@@ -1425,16 +1426,16 @@ begin
             case opcode.Optype of
               oSize: FOpSize := os16
             end;
-            Inc (FP);
-            Dec (fLeft);
+            Inc(FP);
+            Dec(fLeft);
             goto 1;
           end;
 
 
       end;
 
-      Inc (FP);
-      Dec (fLeft);
+      Inc(FP);
+      Dec(fLeft);
 
       with opcode do
       begin
@@ -1449,12 +1450,12 @@ begin
           DecodeOp (Optype, false, 0);
       end;
 
-      result := Integer (FP) - Integer (baseP);
+      Result := Integer (FP) - Integer (baseP);
     end
     else
-      result := 0;
+      Result := 0;
   except
-    result := 0
+    Result := 0
   end;
 end;
 
@@ -1472,9 +1473,9 @@ begin
       break;
 
     p := FMem;
-    Inc (p, Base);
+    Inc(p, Base);
     lineMap.Add(p);
-    Inc (Base, nb)
+    Inc(Base, nb)
   end
 end;
 

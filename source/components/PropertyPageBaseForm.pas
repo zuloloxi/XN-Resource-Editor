@@ -8,10 +8,6 @@ uses
 
 type
   TfmPropertyPage = class(TForm)
-  private
-    { Private declarations }
-  public
-    { Public declarations }
   end;
 
 var

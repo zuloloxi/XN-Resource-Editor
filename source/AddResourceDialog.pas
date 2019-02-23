@@ -56,15 +56,15 @@ begin
   for i := Low (AddableItems) to High (AddableItems) do
     with ListView1.Items.Add do
     begin
-      Caption := GetTypeName (AddableItems [i].GetBaseType);
-      ImageIndex := GetTypeImage (AddableItems [i].GetBaseType);
+      Caption := GetTypeName (AddableItems[i].GetBaseType);
+      ImageIndex := GetTypeImage (AddableItems[i].GetBaseType);
     end
 end;
 
 procedure TdlgAddResource.btnOKClick(Sender: TObject);
 begin
-  if Assigned (ListView1.Selected) then
-    FResourceDetailsClass := AddableItems [ListView1.Selected.Index]
+  if Assigned(ListView1.Selected) then
+    FResourceDetailsClass := AddableItems[ListView1.Selected.Index]
   else
     FResourceDetailsClass := Nil
 end;

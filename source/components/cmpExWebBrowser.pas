@@ -7,28 +7,28 @@ uses
   Vcl.Controls, Vcl.OleCtrls, SHDocVw, WinAPI.ActiveX, Vcl.Forms, WinAPI.URLMon;
 
 const
-  CGID_DocHostCommandHandler : TGuid = '{f38bc242-b950-11d1-8918-00c04fc2c836}';
+  CGID_DocHostCommandHandler: TGuid = '{f38bc242-b950-11d1-8918-00c04fc2c836}';
 
-  CONTEXT_MENU_DEFAULT        =0;
-  CONTEXT_MENU_IMAGE          =1;
-  CONTEXT_MENU_CONTROL        =2;
-  CONTEXT_MENU_TABLE          =3;
-  CONTEXT_MENU_TEXTSELECT     =4;
-  CONTEXT_MENU_ANCHOR         =5;
-  CONTEXT_MENU_UNKNOWN        =6;
-  CONTEXT_MENU_IMGDYNSRC      =7;
-  CONTEXT_MENU_IMGART         =8;
-  CONTEXT_MENU_DEBUG          =9;
-  CONTEXT_MENU_VSCROLL        =10;
-  CONTEXT_MENU_HSCROLL        =11;
+  CONTEXT_MENU_DEFAULT    = 0;
+  CONTEXT_MENU_IMAGE      = 1;
+  CONTEXT_MENU_CONTROL    = 2;
+  CONTEXT_MENU_TABLE      = 3;
+  CONTEXT_MENU_TEXTSELECT = 4;
+  CONTEXT_MENU_ANCHOR     = 5;
+  CONTEXT_MENU_UNKNOWN    = 6;
+  CONTEXT_MENU_IMGDYNSRC  = 7;
+  CONTEXT_MENU_IMGART     = 8;
+  CONTEXT_MENU_DEBUG      = 9;
+  CONTEXT_MENU_VSCROLL    = 10;
+  CONTEXT_MENU_HSCROLL    = 11;
 
 type
   TDocHostUIInfo = record
-    cbSize : ULONG;
-    dwFlags : DWORD;
-    dwDoubleClick : DWORD;
-    pchHostCss : polestr;
-    pchHostNS : polestr;
+    cbSize: ULONG;
+    dwFlags: DWORD;
+    dwDoubleClick: DWORD;
+    pchHostCss: polestr;
+    pchHostNS: polestr;
   end;
   pDocHostUIInfo = ^TDocHostUIInfo;
 
@@ -53,61 +53,61 @@ type
 
   IDocHostShowUI = interface(IUnknown)
     ['{c4d244b0-d43e-11cf-893b-00aa00bdce1a}']
-    function ShowMessage (hwnd : HWND; lpstrText : POLESTR; lpstrCaption : POLESTR; dwType : DWORD; lpstrHelpFile : POLESTR; dwHelpContext : DWORD; out Result : LRESULT) : HRESULT; stdcall;
-    function ShowHelp (hwnd : HWND; pszHelpFile : POLESTR; uCommand : UINT; dwData : DWORD; ptMouse : TPoint; out ppDispatchObjectHit : IDispatch) : HRESULT; stdcall;
+    function ShowMessage (hwnd: HWND; lpstrText: POLESTR; lpstrCaption: POLESTR; dwType: DWORD; lpstrHelpFile: POLESTR; dwHelpContext: DWORD; out Result: LRESULT): HRESULT; stdcall;
+    function ShowHelp (hwnd: HWND; pszHelpFile: POLESTR; uCommand: UINT; dwData: DWORD; ptMouse: TPoint; out ppDispatchObjectHit: IDispatch): HRESULT; stdcall;
   end;
 
   ICustomDoc = interface (IUnknown)
   ['{3050f3f0-98b5-11cf-bb82-00aa00bdce0b}']
-    function SetUIHandler (const pUIHandler : IDocHostUIHandler) : HRESULT; stdcall;
+    function SetUIHandler (const pUIHandler: IDocHostUIHandler): HRESULT; stdcall;
   end;
 
   TExWebBrowser = class;
 
   TUIProperties = class (TPersistent)
   private
-    FOwner : TExWebBrowser;
+    FOwner: TExWebBrowser;
 
-    FEnableContextMenu: boolean;
-    FEnableScrollBars: boolean;
-    FFlatScrollBars: boolean;
-    FHas3DBorder: boolean;
-    FOpenLinksInNewWindow: boolean;
-    FEnableScripting: boolean;
-    FShowImages: boolean;
-    FShowActiveX: boolean;
-    FEnableDownloadActiveX: boolean;
-    FEnableJava: boolean;
+    FEnableContextMenu: Boolean;
+    FEnableScrollBars: Boolean;
+    FFlatScrollBars: Boolean;
+    FHas3DBorder: Boolean;
+    FOpenLinksInNewWindow: Boolean;
+    FEnableScripting: Boolean;
+    FShowImages: Boolean;
+    FShowActiveX: Boolean;
+    FEnableDownloadActiveX: Boolean;
+    FEnableJava: Boolean;
   public
-    constructor Create (AOwner : TExWebBrowser);
+    constructor Create (AOwner: TExWebBrowser);
   published
-    property EnableContextMenu : boolean read FEnableContextMenu write FEnableContextMenu;
-    property EnableScrollBars : boolean read FEnableScrollBars write FEnableScrollBars;
-    property FlatScrollBars : boolean read FFlatScrollBars write FFlatScrollBars;
-    property Has3DBorder : boolean read FHas3DBorder write FHas3DBorder;
-    property OpenLinksInNewWindow : boolean read FOpenLinksInNewWindow write FOpenLinksInNewWindow;
+    property EnableContextMenu: Boolean read FEnableContextMenu write FEnableContextMenu;
+    property EnableScrollBars: Boolean read FEnableScrollBars write FEnableScrollBars;
+    property FlatScrollBars: Boolean read FFlatScrollBars write FFlatScrollBars;
+    property Has3DBorder: Boolean read FHas3DBorder write FHas3DBorder;
+    property OpenLinksInNewWindow: Boolean read FOpenLinksInNewWindow write FOpenLinksInNewWindow;
 
-    property EnableScripting : boolean read FEnableScripting write FEnableScripting;
-    property EnableJava : boolean read FEnableJava write FEnableJava;
-    property EnableDownloadActiveX : boolean read FEnableDownloadActiveX write FEnableDownloadActiveX;
+    property EnableScripting: Boolean read FEnableScripting write FEnableScripting;
+    property EnableJava: Boolean read FEnableJava write FEnableJava;
+    property EnableDownloadActiveX: Boolean read FEnableDownloadActiveX write FEnableDownloadActiveX;
 
-    property ShowImages : boolean read FShowImages write FShowImages default True;
-    property ShowActiveX : boolean read FShowActiveX write FShowActiveX default True;
+    property ShowImages: Boolean read FShowImages write FShowImages default True;
+    property ShowActiveX: Boolean read FShowActiveX write FShowActiveX default True;
   end;
 
   TExWebBrowser = class(TWebBrowser, IDocHostUIHandler, IDocHostShowUI, IDispatch, IOleCommandTarget)
   private
-    FUIProperties : TUIProperties;
-    FURL : string;
+    FUIProperties: TUIProperties;
+    FURL: string;
     FExtMenuItem: TMenuItem;
     FOwnedObject: TObject;
-//    FInternetSession : IInternetSession;
+//    FInternetSession: IInternetSession;
     { IDispatch }
     function IDispatch.Invoke = Invoke;
     function Invoke(DispID: Integer; const IID: TGUID; LocaleID: Integer; Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult; stdcall;
 
-    function ShowMessage (hwnd : HWND; lpstrText : POLESTR; lpstrCaption : POLESTR; dwType : DWORD; lpstrHelpFile : POLESTR; dwHelpContext : DWORD; out reslt : LRESULT) : HRESULT; stdcall;
-    function ShowHelp (hwnd : HWND; pszHelpFile : POLESTR; uCommand : UINT; dwData : DWORD; ptMouse : TPoint; out ppDispatchObjectHit : IDispatch) : HRESULT; stdcall;
+    function ShowMessage (hwnd: HWND; lpstrText: POLESTR; lpstrCaption: POLESTR; dwType: DWORD; lpstrHelpFile: POLESTR; dwHelpContext: DWORD; out reslt: LRESULT): HRESULT; stdcall;
+    function ShowHelp (hwnd: HWND; pszHelpFile: POLESTR; uCommand: UINT; dwData: DWORD; ptMouse: TPoint; out ppDispatchObjectHit: IDispatch): HRESULT; stdcall;
 
     {IOleCommandTarget}
     function QueryStatus(CmdGroup: PGUID; cCmds: Cardinal;
@@ -136,16 +136,16 @@ type
   protected
     procedure Loaded; override;
   public
-    constructor Create (AOwner : TComponent); override;
+    constructor Create (AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure LoadFromString (const st : string);
-    procedure LoadFromStream (s : TStream; takeOwnership : boolean = false);
+    procedure LoadFromString (const st: string);
+    procedure LoadFromStream (s: TStream; takeOwnership: Boolean = false);
 
-    property OwnedObject : TObject read FOwnedObject write FOwnedObject;
+    property OwnedObject: TObject read FOwnedObject write FOwnedObject;
   published
-    property UIProperties : TUIProperties read FUIProperties write FUIProperties;
-    property URL : string read GetURL write SetURL;
+    property UIProperties: TUIProperties read FUIProperties write FUIProperties;
+    property URL: string read GetURL write SetURL;
   end;
 
 implementation
@@ -174,7 +174,7 @@ const
 
 constructor TExWebBrowser.Create(AOwner: TComponent);
 ///var
-//  Factory : IClassFactory;
+//  Factory: IClassFactory;
 begin
   inherited Create (AOwner);
   FExtMenuItem := TMenuItem.Create(Self);
@@ -212,17 +212,17 @@ function TExWebBrowser.Exec(CmdGroup: PGUID; nCmdID, nCmdexecopt: DWORD;
   const vaIn: OleVariant; var vaOut: OleVariant): HResult;
 var
 (*
-  pDoc : IHTMLDocument2;
-  pWindow : IHTMLWindow2;
-  pEventObj : IHTMLEventObj;
-  rgwszNames : array [0..4] of PWideChar;
-  rgDispIDs : array [0..4] of TDispID;
-  rgvaEventInfo : array [0..4] of OleVariant;
-  params : DISPPARAMS;
-  fContinueRunningScripts : boolean;
-  i : Integer;
+  pDoc: IHTMLDocument2;
+  pWindow: IHTMLWindow2;
+  pEventObj: IHTMLEventObj;
+  rgwszNames: array [0..4] of PWideChar;
+  rgDispIDs: array [0..4] of TDispID;
+  rgvaEventInfo: array [0..4] of OleVariant;
+  params: DISPPARAMS;
+  fContinueRunningScripts: Boolean;
+  i: Integer;
 *)
-  vIn, vOut : PVariantArg;
+  vIn, vOut: PVariantArg;
 begin
   Result := S_OK;
 
@@ -382,8 +382,8 @@ function TExWebBrowser.Invoke(DispID: Integer; const IID: TGUID;
   DLCTL_DOWNLOADONLY        = $00000800;
 
 var
-  ort : HRESULT;
-  dlc : Integer;
+  ort: HRESULT;
+  dlc: Integer;
 begin
   Result := inherited Invoke (DispID, IID, LocaleID, Flags, Params, VarResult, ExcepInfo, ArgErr);
   if (Flags and DISPATCH_PROPERTYGET <> 0) and (VarResult <> nil) then
@@ -393,7 +393,7 @@ begin
     case DispID of
 (*
       DISPID_AMBIENT_USERMODE:
-        PVariant(VarResult)^ := True; // not (csDesigning in ComponentState);
+        PVariant(VarResult)^ := True; // not(csDesigning in ComponentState);
 *)
 
       DISPID_AMBIENT_DLCONTROL:
@@ -429,18 +429,18 @@ procedure TExWebBrowser.Loaded;
 begin
   inherited;
 
-  if not (csDesigning in ComponentState) then
+  if not(csDesigning in ComponentState) then
     if FURL = '' then
       Navigate ('about:blank')
     else
       Navigate (FURL);
 end;
 
-procedure TExWebBrowser.LoadFromStream(s: TStream; takeOwnership: boolean);
+procedure TExWebBrowser.LoadFromStream(s: TStream; takeOwnership: Boolean);
 var
-  ownership : TStreamOwnership;
-  persistStreamInit : IPersistStreamInit;
-  adapter : TStreamAdapter;
+  ownership: TStreamOwnership;
+  persistStreamInit: IPersistStreamInit;
+  adapter: TStreamAdapter;
 
 begin
   if Document = Nil then
@@ -503,12 +503,12 @@ function TExWebBrowser.ShowContextMenu(const dwID: DWORD;
   const pdispReserved: IDispatch): HRESULT;
 type
   TPOMData = record
-    id : DWORD;
-    disp : IDispatch;
+    id: DWORD;
+    disp: IDispatch;
   end;
 
 var
-  pomData : TPOMData;
+  pomData: TPOMData;
 
 begin
   if UIProperties.EnableContextMenu then
@@ -552,7 +552,7 @@ end;
 function TExWebBrowser.TranslateAccelerator(const lpMsg: PMSG;
   const pguidCmdGroup: PGUID; const nCmdID: DWORD): HRESULT;
 var
-  vk : Integer;
+  vk: Integer;
 begin
   Result := S_OK;
   if not Assigned(lpMsg) or (lpMsg^.message <> WM_KEYDOWN) then

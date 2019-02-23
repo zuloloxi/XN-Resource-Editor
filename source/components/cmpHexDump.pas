@@ -432,7 +432,7 @@ var
   st: AnsiString;
 begin
   if Focused then
-    HideCaret (handle);
+    HideCaret(handle);
   try
     inherited Paint;
     Canvas.Brush.Color := Self.Color;
@@ -483,7 +483,7 @@ begin
     end;
   finally
     if Focused then
-      ShowCaret (handle)
+      ShowCaret(handle)
   end
 end;
 
@@ -649,15 +649,15 @@ end;
 procedure THexDump.WMSetFocus(var Message: TWMSetFocus);
 begin
   inherited;
-  CreateCaret (handle, 0, 1, FItemHeight);
+  CreateCaret(handle, 0, 1, FItemHeight);
   SetCaretPos;
-  ShowCaret (Handle)
+  ShowCaret(Handle)
 end;
 
 procedure THexDump.WMKillFocus(var Message: TWMKillFocus);
 begin
   inherited;
-  HideCaret (Handle);
+  HideCaret(Handle);
   DestroyCaret
 end;
 
@@ -671,7 +671,7 @@ begin
     while (V >= FBytesPerLine) and (CurrentLine < FLineCount - 1) do
     begin
       CurrentLine := CurrentLine + 1;
-      Dec (V, FBytesPerLine)
+      Dec(V, FBytesPerLine)
     end;
 
     if V >= FBytesPerLine then
@@ -683,7 +683,7 @@ begin
     while (V < 0) and (CurrentLine > 0) do
     begin
       CurrentLine := CurrentLine - 1;
-      Inc (V, FBytesPerLine)
+      Inc(V, FBytesPerLine)
     end;
 
     if V < 0 then
@@ -710,7 +710,7 @@ begin
     begin
       x := (FItemWidth) * 3 * CurrentLinePos + FAddressWidth;
       if FLowNibble then
-        Inc (x, FItemWidth - 1)
+        Inc(x, FItemWidth - 1)
     end;
     WinAPI.Windows.SetCaretPos (x, y)
   end
@@ -765,7 +765,7 @@ begin
       begin
         Data := Byte (PByte (Address) [Offset]);
         changes := True;
-        B := StrToInt ('$' + ch);
+        B := StrToInt('$' + ch);
         if LowNibble then
           ch := Char (Data and $f0 + B)
         else

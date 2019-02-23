@@ -23,29 +23,30 @@ unit unitExFileSettings;
 
 interface
 
-uses Windows, Sysutils, unitExSettings;
+uses
+  Windows, SysUtils, unitExSettings;
 
 type
-
-//-----------------------------------------------------------------------
-// TExFileSettings.
-//
-// Base class for derived classes that store application and other settings
-// in files - ini files, XML files, etc.
-TExFileSettings = class (TExSettings)
-private
-  fCustomPath: string;
-  procedure SetCustomPath(const Value: string);
-protected
-  function GetFileName(const ext: string): string;
-public
-  constructor CreateChild (AParent : TExSettings; const ASection : string); override;
-  property CustomPath : string read fCustomPath write SetCustomPath;
-end;
+  //-----------------------------------------------------------------------
+  // TExFileSettings.
+  //
+  // Base class for derived classes that store application and other settings
+  // in files - ini files, XML files, etc.
+  TExFileSettings = class (TExSettings)
+  private
+    FCustomPath: string;
+    procedure SetCustomPath(const Value: string);
+  protected
+    function GetFileName(const ext: string): string;
+  public
+    constructor CreateChild (AParent: TExSettings; const ASection: string); override;
+    property CustomPath: string read FCustomPath write SetCustomPath;
+  end;
 
 implementation
 
-uses ShFolder;
+uses
+  ShFolder;
 
 (*----------------------------------------------------------------------*
  | procedure TExFileSettings.GetFileName                                |
@@ -65,35 +66,35 @@ begin
   CustomPath := TExFileSettings (AParent).CustomPath
 end;
 
-function TExFileSettings.GetFileName(const ext : string) : string;
+function TExFileSettings.GetFileName(const ext: string): string;
 var
-  path : string;
+  path: string;
 begin
   if Application = '' then
     Raise EExSettings.Create('Must specify an application');
 
-  if fCustomPath <> '' then
-    result := fCustomPath
+  if FCustomPath <> '' then
+    Result := FCustomPath
   else
   begin
     SetLength (path, MAX_PATH);
     if (SettingsType = stMachine) or not SUCCEEDED (SHGetFolderPath(0, CSIDL_LOCAL_APPDATA, 0, 0, PChar (path)))  then
-      result := ExtractFilePath (ParamStr (0))
+      Result := ExtractFilePath (ParamStr (0))
     else
     begin
-      result := PChar (path);
-      result := result + '\';
+      Result := PChar (path);
+      Result := result + '\';
 
       if Manufacturer <> '' then
-        result := result + Manufacturer + '\';
+        Result := result + Manufacturer + '\';
 
       if Application <> '' then
-        result := result + Application + '\';
+        Result := result + Application + '\';
 
       if version <> '' then
-        result := result + Version + '\';
+        Result := result + Version + '\';
 
-      result := result + Application + ext;
+      Result := result + Application + ext;
     end
   end
 end;
@@ -105,10 +106,10 @@ end;
  *---------------------------------------------------------------------*)
 procedure TExFileSettings.SetCustomPath(const Value: string);
 begin
-  if Value <> fCustomPath then
+  if Value <> FCustomPath then
   begin
     Close;
-    fCustomPath := Value
+    FCustomPath := Value
   end
 end;
 

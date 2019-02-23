@@ -42,11 +42,11 @@ type
 
   TNewsCharFormatter = class (TCharFormatter)
   private
-    FIsFormatted: boolean;
-    FEOL: boolean;
-    FInSignature: boolean;
-    FInHighlight: boolean;
-    FStrictSigSeparator: boolean;
+    FIsFormatted: Boolean;
+    FEOL: Boolean;
+    FInSignature: Boolean;
+    FInHighlight: Boolean;
+    FStrictSigSeparator: Boolean;
   public
     constructor Create;
     procedure Reset; override;
@@ -63,15 +63,15 @@ type
     FFormatter: TCharFormatter;
     FHeaderFont: TFont;
     FSignatureFont: TFont;
-    FRawText: boolean;
+    FRawText: Boolean;
     FTruncateFrom: WideString;
-    FStrictSigSeparator: boolean;
+    FStrictSigSeparator: Boolean;
     procedure SetLevel1QuoteFont(const Value: TFont);
     procedure SetLevel2QuoteFont(const Value: TFont);
     procedure SetLevel3QuoteFont(const Value: TFont);
     procedure SetHeaderFont(const Value: TFont);
     procedure SetSignatureFont(const Value: TFont);
-    procedure SetRawText(const Value: boolean);
+    procedure SetRawText(const Value: Boolean);
   protected
     function GetCharFormatter: TCharFormatter; override;
   public
@@ -79,14 +79,14 @@ type
     destructor Destroy; override;
 
     property TruncateFrom: WideString read FTruncateFrom write FTruncateFrom;
-    property StrictSigSeparator: boolean read FStrictSigSeparator write FStrictSigSeparator;
+    property StrictSigSeparator: Boolean read FStrictSigSeparator write FStrictSigSeparator;
   published
     property HeaderFont: TFont read FHeaderFont write SetHeaderFont;
     property Level1QuoteFont: TFont read FLevel1QuoteFont write SetLevel1QuoteFont;
     property Level2QuoteFont: TFont read FLevel2QuoteFont write SetLevel2QuoteFont;
     property Level3QuoteFont: TFont read FLevel3QuoteFont write SetLevel3QuoteFont;
     property SignatureFont: TFont read FSignatureFont write SetSignatureFont;
-    property RawText: boolean read FRawText write SetRawText;
+    property RawText: Boolean read FRawText write SetRawText;
   end;
 
 implementation
@@ -155,7 +155,7 @@ begin
      FFormatter := TNewsCharFormatter.Create;
      TNewsCharFormatter (FFormatter).FStrictSigSeparator := StrictSigSeparator
    end;
- result := FFormatter;
+ Result := FFormatter;
 end;
 
 (*----------------------------------------------------------------------*
@@ -203,7 +203,7 @@ end;
  |                                                                      |
  | Set method for the RawText property                                  |
  *----------------------------------------------------------------------*)
-procedure TNewsRichEdit.SetRawText(const Value: boolean);
+procedure TNewsRichEdit.SetRawText(const Value: Boolean);
 begin
   if FRawText <> Value then
   begin
@@ -245,20 +245,20 @@ var
   c, pc: WideChar;
   p, p1: PWideChar;
   i, n, n1: DWORD;
-  sol, trc: boolean;
+  sol, trc: Boolean;
   own: TNewsRichEdit;
   quoteLevel: Integer;
   hl: TFontStyles;
 
 begin
-  own := TNewsRichEdit (stream.Owner);
+  own := TNewsRichEdit(stream.Owner);
   trc := own.TruncateFrom <> '';
   with stream do
   begin
     i := ChunkStart;
     if ChunkStart >= Len then Exit;
     p := Buffer;
-    Inc (p, ChunkStart);
+    Inc(p, ChunkStart);
     sol := False;
 
     if FEOL then        // When we finished last time, we were at the end of
@@ -274,11 +274,11 @@ begin
                                 // the terminating indicators
       while (p^ = '*') or (p^ = '/') or (p^ = '_') do
       begin
-        Inc (p);
-        Inc (i);
+        Inc(p);
+        Inc(i);
         ChunkStart := ChunkStart + 1;
       end;
-      fc.dwEffects := fc.dwEffects and not (CFE_BOLD or CFE_ITALIC or CFE_UNDERLINE or CFE_LINK);
+      fc.dwEffects := fc.dwEffects and not(CFE_BOLD or CFE_ITALIC or CFE_UNDERLINE or CFE_LINK);
     end;
 
     pc := #13;
@@ -295,8 +295,8 @@ begin
         begin
           Owner.FontToCharFormat(own.FHeaderFont, fc);
           FIsFormatted := True;
-          Inc (p);
-          Inc (i);
+          Inc(p);
+          Inc(i);
           sol := False;
           stream.ChunkStart := stream.ChunkStart + 1;
           continue
@@ -306,9 +306,9 @@ begin
         p1 := p;
         while (p1^ = '>') or (p1^ = '|') do
         begin
-          Inc (quoteLevel);
-          Inc (p1);
-          if p1^ = ' ' then Inc (p1)
+          Inc(quoteLevel);
+          Inc(p1);
+          if p1^ = ' ' then Inc(p1)
         end;
 
         if quoteLevel > 0 then
@@ -332,13 +332,13 @@ begin
         if p^ = '-' then        // Detect signature indicator.  Allow a line
         begin                   // containing '-- ' or '--'
           p1 := p;
-          Inc (p1);
+          Inc(p1);
           if p1^ = '-' then
           begin
-            Inc (p1);
+            Inc(p1);
             if (p1^ = ' ') or not FStrictSigSeparator then
             begin
-              if p1^ = ' ' then Inc (p1);
+              if p1^ = ' ' then Inc(p1);
               if p1^ = #13 then
               begin
                 if i <> ChunkStart then
@@ -352,7 +352,7 @@ begin
       end;
 
       if sol and trc and FInSignature then
-        if WideSameText (Copy (p, 1, Length (own.TruncateFrom)), own.TruncateFrom) then
+        if WideSameText(Copy (p, 1, Length (own.TruncateFrom)), own.TruncateFrom) then
         begin
           stream.Truncate := True;
           break;
@@ -363,12 +363,12 @@ begin
       begin
         FEOL := True;
         sol := True;
-        Inc (p);
-        Inc (i);
+        Inc(p);
+        Inc(i);
         if p^ = #10 then
         begin
-          Inc (i);
-          Inc (p)
+          Inc(i);
+          Inc(p)
         end;                    // If it's formatted then output this line
         if FIsFormatted then
           break
@@ -391,7 +391,7 @@ begin
                                 // Group all potential indicator chars together.
         while (c = '*') or (c = '/') or (c = '_') do
         begin
-          Inc (n);
+          Inc(n);
           if c = '*' then
             hl := hl + [fsBold]
           else
@@ -400,33 +400,33 @@ begin
             else
               if c = '_' then
                 hl := hl + [fsUnderline];
-          Inc (p1);
+          Inc(p1);
           c := p1^
         end;
 
-                                // Skip word after indicator chars
+                                // Skip Word after indicator chars
         n1 := 0;
         while IsWideCharAlNum (p1^) or (p1^ = '''') do
         begin
-          Inc (n1);
-          Inc (p1)
+          Inc(n1);
+          Inc(p1)
         end;
 
                                 // Did we have whitespace, indicator chars, alpha chars, indicator chars ???
         if (p1^ = '*') or (p1^ = '/') or (p1^ = '_') then
         begin
           repeat
-            Inc (p1)
-          until not ((p1^ = '*') or (p1^ = '/') or (p1^ = '_'));
+            Inc(p1)
+          until not((p1^ = '*') or (p1^ = '/') or (p1^ = '_'));
 
-                                // It looks like a highlighted word - but be careful we're not
+                                // It looks like a highlighted Word - but be careful we're not
                                 // in the middle of a URL or filename!
-          if not IsWideCharAlNum (p1^) and not (AnsiChar (p1^) in ['@', '#', '£', '''', '"', '&']) then
+          if not IsWideCharAlNum (p1^) and not(AnsiChar (p1^) in ['@', '#', '£', '''', '"', '&']) then
           begin
             if i <> ChunkStart then
               break
             else
-            begin               // We're in a highlighted word.  Skip the indicator chars
+            begin               // We're in a highlighted Word.  Skip the indicator chars
               ChunkStart := ChunkStart + n;
               ChunkEnd := ChunkStart + n1;
 
@@ -457,8 +457,8 @@ begin
       end;
 
       pc := c;
-      Inc (p);
-      Inc (i)
+      Inc(p);
+      Inc(i)
     end; // End while
 
     ChunkEnd := i

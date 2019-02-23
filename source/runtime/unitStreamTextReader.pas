@@ -29,129 +29,129 @@ unit unitStreamTextReader;
 
 interface
 
-uses Windows, Classes, SysUtils;
+uses
+  Windows, Classes, SysUtils;
 
 type
+  EStreamTextIO = class (Exception);
 
-EStreamTextIO = class (Exception);
+  TCircularBuffer = class
+  private
+    FBuffer: TBytes;
 
-TCircularBuffer = class
-private
-  fBuffer : TBytes;
+    FWritePos, FReadPos: Integer;
+    FU32W: Word;
 
-  fWritePos, fReadPos : Integer;
-  fu32w : word;
+    function ReadUTF8 (b: byte; var ch: char): Boolean;
+    function ReadUTF7 (b: byte; var ch: char): Boolean;
 
-  function ReadUTF8 (b : byte; var ch : char) : boolean;
-  function ReadUTF7 (b : byte; var ch : char) : boolean;
+    function GetAvailableBytes: Integer;
+  public
+    procedure Write (data: TBytes; l: Integer = -1);
+    function ReadByte (var b: byte): Boolean;
+    function ReadChar (var ch: char; encoding: TEncoding): Boolean;
 
-  function GetAvailableBytes: Integer;
-public
-  procedure Write (data : TBytes; l : Integer = -1);
-  function ReadByte (var b : byte) : boolean;
-  function ReadChar (var ch : char; encoding : TEncoding) : boolean;
-
-  property AvailableBytes : Integer read GetAvailableBytes;
-end;
+    property AvailableBytes: Integer read GetAvailableBytes;
+  end;
 
 
-TStreamTextIO = class
-private
-  fStream : TStream;
-  fEncoding : TEncoding;
-  fReadData : TBytes;
-  fReadBuffer : TCircularBuffer;
-public
-  constructor Create (AStream : TStream; AEncoding : TEncoding = nil);
-  destructor Destroy; override;
-  procedure WriteLn (const st : string);
-  function ReadLn (var st : string) : boolean;
-end;
+  TStreamTextIO = class
+  private
+    FStream: TStream;
+    FEncoding: TEncoding;
+    FReadData: TBytes;
+    FReadBuffer: TCircularBuffer;
+  public
+    constructor Create (AStream: TStream; AEncoding: TEncoding = nil);
+    destructor Destroy; override;
+    procedure WriteLn (const st: string);
+    function ReadLn (var st: string): Boolean;
+  end;
 
 implementation
 
 
 { TStreamTextIO }
 
-constructor TStreamTextIO.Create(AStream: TStream; AEncoding : TEncoding = nil);
+constructor TStreamTextIO.Create(AStream: TStream; AEncoding: TEncoding = nil);
 begin
   if AEncoding = Nil then
-    fEncoding := TEncoding.ASCII
+    FEncoding := TEncoding.ASCII
   else
-    fEncoding := AEncoding;
+    FEncoding := AEncoding;
 
-  fStream := AStream
+  FStream := AStream
 end;
 
 destructor TStreamTextIO.Destroy;
 begin
-  fReadBuffer.Free;
+  FReadBuffer.Free;
 
   inherited;
 end;
 
 var
-  c : Integer = 0;
+  c: Integer = 0;
 
-function TStreamTextIO.ReadLn(var st: string): boolean;
+function TStreamTextIO.ReadLn(var st: string): Boolean;
 var
-  bts : TBytes;
-  enc : TEncoding;
-  l, p : Integer;
-  ch : char;
-  s : string;
-  w : word;
+  bts: TBytes;
+  enc: TEncoding;
+  l, p: Integer;
+  ch: char;
+  s: string;
+  w: Word;
 begin
-  if fReadBuffer = Nil then
-    fReadBuffer := TCircularBuffer.Create;
+  if FReadBuffer = Nil then
+    FReadBuffer := TCircularBuffer.Create;
 
-  SetLength (fReadData, 4096);
+  SetLength (FReadData, 4096);
 
   SetLength (s, 4096);
   p := 0;
 
   repeat
-    if not fReadBuffer.ReadChar (ch, fEncoding) then
+    if not FReadBuffer.ReadChar (ch, FEncoding) then
     begin
-      Inc (c);
+      Inc(c);
 
-      if fStream.Position = 0 then
+      if FStream.Position = 0 then
       begin
-        if fStream.Size < 4 then
-          SetLength (bts, fStream.Size)
+        if FStream.Size < 4 then
+          SetLength (bts, FStream.Size)
         else
           SetLength (bts, 4);
 
-        fStream.Read(bts [0], Length (bts));
+        FStream.Read(bts [0], Length (bts));
 
         enc := Nil;
-        fStream.Position := TEncoding.GetBufferEncoding (bts, enc);
+        FStream.Position := TEncoding.GetBufferEncoding (bts, enc);
 
-        if fStream.Position <> 0 then
-          fEncoding := enc;
+        if FStream.Position <> 0 then
+          FEncoding := enc;
       end;
 
-      l := fStream.Read(fReadData [0], Length (fReadData));
+      l := FStream.Read(FReadData [0], Length (FReadData));
 
       if l = 0 then
-        Exit (False);
+        Exit(False);
 
-      fReadBuffer.Write(fReadData, l);
+      FReadBuffer.Write(FReadData, l);
     end
     else
     begin
-      w := word (ch);
+      w := Word (ch);
 
       case w of
-        13 : continue;
-        10 : break;
-        12 : break;
-        $85 : break;
-        $2028 : break;
-        $2029 : break;
+        13: continue;
+        10: break;
+        12: break;
+        $85: break;
+        $2028: break;
+        $2029: break;
       end;
 
-      Inc (p);
+      Inc(p);
       if p = Length (s) then
         SetLength (s, Length (s) + 4096);
 
@@ -160,67 +160,67 @@ begin
   until false;
 
   st := Copy (s, 1, p);
-  result := true
+  Result := true
 end;
 
 procedure TStreamTextIO.WriteLn(const st: string);
 var
-  bts : TBytes;
-  l : Integer;
+  bts: TBytes;
+  l: Integer;
 begin
-  if fStream.Position = 0 then
+  if FStream.Position = 0 then
   begin
-    bts := fEncoding.GetPreamble;
+    bts := FEncoding.GetPreamble;
     l := Length (bts);
     if l <> 0 then
-      fStream.Write (bts [0], l);
+      FStream.Write (bts [0], l);
   end;
 
-  bts := fEncoding.GetBytes(st + #13#10);
-  fStream.Write(bts [0], Length (bts));
+  bts := FEncoding.GetBytes(st + #13#10);
+  FStream.Write(bts [0], Length (bts));
 end;
 
 { TCircularBuffer }
 
-function TCircularBuffer.GetAvailableBytes : Integer;
+function TCircularBuffer.GetAvailableBytes: Integer;
 begin
-  if fReadPos <= fWritePos then
-    result := fWritePos - fReadPos
+  if FReadPos <= FWritePos then
+    Result := FWritePos - FReadPos
   else
-    result := Length (fBuffer) - fReadPos + fWritePos;
+    Result := Length (FBuffer) - FReadPos + FWritePos;
 end;
 
-function TCircularBuffer.ReadByte(var b: byte): boolean;
+function TCircularBuffer.ReadByte(var b: byte): Boolean;
 begin
-  result := AvailableBytes > 0;
-  if result then
+  Result := AvailableBytes > 0;
+  if Result then
   begin
-    if fReadPos = Length (fBuffer) then
-      fReadPos := 0;
-    b := fBuffer [fReadPos];
-    Inc (fReadPos);
+    if FReadPos = Length (FBuffer) then
+      FReadPos := 0;
+    b := FBuffer [FReadPos];
+    Inc(FReadPos);
   end
 end;
 
-function TCircularBuffer.ReadChar(var ch: char; encoding: TEncoding): boolean;
+function TCircularBuffer.ReadChar(var ch: char; encoding: TEncoding): Boolean;
 var
-  b, b1 : byte;
-  sp : Integer;
+  b, b1: byte;
+  sp: Integer;
 begin
-  if fu32w <>0 then
+  if FU32W <>0 then
   begin
-    ch := Char (fu32w);
-    fu32w := 0;
-    exit (true);
+    ch := Char (FU32W);
+    FU32W := 0;
+    exit(true);
   end;
 
-  sp := fReadPos;
-  result := ReadByte (b);
+  sp := FReadPos;
+  Result := ReadByte (b);
 
   try
-    if (not result) or encoding.IsSingleByte then
+    if (not Result) or encoding.IsSingleByte then
     begin
-      if result then
+      if Result then
         ch := char (b);
       Exit;
     end;
@@ -228,7 +228,7 @@ begin
     if encoding = TEncoding.UTF8 then
     begin
       if (b and $80) <> 0 then
-        result := ReadUTF8 (b, ch)
+        Result := ReadUTF8 (b, ch)
       else
         if b = 0 then
           ch := #$fffd
@@ -238,43 +238,42 @@ begin
     else
     if encoding = TEncoding.UTF7 then
     begin
-      if (b in [$21..$7e]) and not (AnsiChar (b) in ['~', '\', '+']) then
-        result := ReadUTF7 (b, ch)
+      if (b in [$21..$7e]) and not(AnsiChar (b) in ['~', '\', '+']) then
+        Result := ReadUTF7 (b, ch)
     end
     else
     if encoding = TEncoding.Unicode then
     begin
-      result := ReadByte (b1);
-      if result then
+      Result := ReadByte (b1);
+      if Result then
         ch := char (MakeWord (b, b1))
     end
     else
     if encoding = TEncoding.BigEndianUnicode then
     begin
-      result := ReadByte (b1);
-      if result then
+      Result := ReadByte (b1);
+      if Result then
         ch := char (MakeWord (b1, b))
     end
     else
       raise EStreamTextIO.Create ('Non-standard encoding type not supported');
   finally
-    if not result then
-      fReadPos := sp
+    if not Result then
+      FReadPos := sp
   end
 end;
 
-function TCircularBuffer.ReadUTF7(b: byte; var ch: char): boolean;
+function TCircularBuffer.ReadUTF7(b: byte; var ch: char): Boolean;
 begin
   ch := Char (b);
-  result := True;
-
+  Result := True;
 end;
 
-function TCircularBuffer.ReadUTF8(b: byte; var ch: char): boolean;
+function TCircularBuffer.ReadUTF8(b: byte; var ch: char): Boolean;
 var
-  b1, b2, b3 : byte;
-  w : word;
-  u : DWORD;
+  b1, b2, b3: byte;
+  w: Word;
+  u: DWORD;
 begin
   try
     if (b and $c0) <> $c0 then
@@ -282,8 +281,8 @@ begin
 
     if (b and $e0) = $c0 then  // 2 char encoding - 5 bytes from b and 6 from b1
     begin
-      result := ReadByte (b1);
-      if result then
+      Result := ReadByte (b1);
+      if Result then
       begin
         if (b1 and $c0) <> $80 then
           raise EStreamTextIO.Create ('Invalid UTF8');
@@ -299,9 +298,9 @@ begin
     else
     if (b and $f0) = $e0 then  // 3 char encoding - 4 bytes from b, 6 from b1 & 6 from b2
     begin
-      result := ReadByte (b1) and ReadByte (b2);
+      Result := ReadByte (b1) and ReadByte (b2);
 
-      if result then
+      if Result then
       begin
         if ((b1 and $c0) <> $80) or ((b2 and $c0) <> $80) then
           raise EStreamTextIO.Create ('Invalid UTF8');
@@ -317,9 +316,9 @@ begin
     else
     if (b and $0f) = 0 then
     begin                       // 4 char encoding - 3 bytes from b, 6 from b1, b2 & b3
-      result := ReadByte (b1) and ReadByte (b2) and ReadByte (b3);
+      Result := ReadByte (b1) and ReadByte (b2) and ReadByte (b3);
 
-      if result then
+      if Result then
       begin
         if ((b1 and $c0) <> $80) or ((b2 and $c0) <> $80)or ((b3 and $c0) <> $80) then
           raise EStreamTextIO.Create ('Invalid UTF8');
@@ -329,11 +328,11 @@ begin
         if (u < $10000) then
           raise EStreamTextIO.Create ('Invalid UTF8');  // Safety check
 
-        // Character doesn't fit in a single 2 byte word, so convert it to
-        // 2 UTF16 words.
+        // Character doesn't fit in a single 2 byte Word, so convert it to
+        // 2 UTF16 Words.
 
         ch :=  Char (u div $400 + $D800);
-        fu32w := u mod $400 + $DC00;
+        FU32W := u mod $400 + $DC00;
       end
     end
     else
@@ -343,21 +342,21 @@ begin
     // Invalid UTF8.  Skip bytes until we hit a byte that looks like the
     // start of the next character
     repeat
-      result := ReadByte (b)
-    until (not result) or ((b and $80) = 0) or ((b and $c0) = $c0);
+      Result := ReadByte (b)
+    until (not Result) or ((b and $80) = 0) or ((b and $c0) = $c0);
 
-    if result then
+    if Result then
     begin
       ch := #$fffd;         // Return the
-      fu32w := b
+      FU32W := b
     end
   end
 end;
 
-procedure TCircularBuffer.Write(data: TBytes; l : Integer);
+procedure TCircularBuffer.Write(data: TBytes; l: Integer);
 var
-  spaceAvail, newSpaceLen, dataLen, datap : Integer;
-  wrapped : boolean;
+  spaceAvail, newSpaceLen, dataLen, datap: Integer;
+  wrapped: Boolean;
 begin
   wrapped := False;
   if l <> -1 then
@@ -365,55 +364,55 @@ begin
   else
     dataLen := Length (data);
 
-  if fWritePos = Length (fBuffer) then
+  if FWritePos = Length (FBuffer) then
   begin
-    fWritePos := 0;
+    FWritePos := 0;
     wrapped := True
   end;
 
-  if fReadPos > fWritePos then
-    spaceAvail := fReadPos - fWritePos
+  if FReadPos > FWritePos then
+    spaceAvail := FReadPos - FWritePos
   else
-    spaceAvail := Length (fBuffer) - fWritePos + fReadPos;
+    spaceAvail := Length (FBuffer) - FWritePos + FReadPos;
 
   if spaceAvail < dataLen then
   begin
     newSpaceLen := dataLen - spaceAvail;
     newSpaceLen := ((newSpaceLen + 4095) div 4096) * 4096;
 
-    SetLength (fBuffer, Length (fBuffer) + newSpaceLen);
+    SetLength (FBuffer, Length (FBuffer) + newSpaceLen);
 
-    if fReadPos > fWritePos then
+    if FReadPos > FWritePos then
     begin
-      Move (fBuffer [fReadPos], fBuffer [fReadPos + newSpaceLen], newSpaceLen-fReadPos);
-      Inc (fReadPos, newSpaceLen)
+      Move (FBuffer [FReadPos], FBuffer [FReadPos + newSpaceLen], newSpaceLen-FReadPos);
+      Inc(FReadPos, newSpaceLen)
     end
   end;
 
   datap := 0;
-  if wrapped and (fReadPos = Length (fBuffer)) then
-    fReadPos := 0;
+  if wrapped and (FReadPos = Length (FBuffer)) then
+    FReadPos := 0;
 
-  if fReadPos > fWritePos then
-    spaceAvail := fReadPos - fWritePos
+  if FReadPos > FWritePos then
+    spaceAvail := FReadPos - FWritePos
   else
-    spaceAvail := Length (fBuffer) - fWritePos;
+    spaceAvail := Length (FBuffer) - FWritePos;
 
   if spaceAvail < dataLen then
   begin
     if spaceAvail = 0 then
-      fReadPos := 0
+      FReadPos := 0
     else
-      Move (data [datap], fBuffer [fWritePos], spaceAvail);
-    fWritePos := 0;
-    Inc (datap, spaceAvail);
-    Dec (dataLen, spaceAvail)
+      Move (data [datap], FBuffer [FWritePos], spaceAvail);
+    FWritePos := 0;
+    Inc(datap, spaceAvail);
+    Dec(dataLen, spaceAvail)
   end;
 
   if dataLen > 0 then
   begin
-    Move (data [datap], fBuffer [fWritePos], dataLen);
-    Inc (fWritePos, dataLen)
+    Move (data [datap], FBuffer [FWritePos], dataLen);
+    Inc(FWritePos, dataLen)
   end
 end;
 

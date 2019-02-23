@@ -5,14 +5,14 @@ interface
 uses
   WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics, Vcl.Forms,
   Vcl.OleCtrls, System.Win.ComObj, WinAPI.ActiveX, WinAPI.ShellAPI,
-  WinAPI.ShlObj, SHDocVw, cmpMessageDisplay, MSHTML;
+  WinAPI.ShlObj, SHDocVw, MSHTML, cmpMessageDisplay;
 
-type                                                     
+type
   THTMLStringsDisplayObjectLink = class (TWinControlObjectLink)
   private
     FOrigObj: TStrings;
-    FRendering: boolean;
-    FNavigating: boolean;
+    FRendering: Boolean;
+    FNavigating: Boolean;
     FXanaLink: string;
     procedure DoOnDocumentComplete (Sender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
@@ -24,11 +24,11 @@ type
     procedure RecalcHeight;
     procedure LoadFromString (const st: string);
   protected
-    class function DisplaysObject (obj: TObject): Boolean; override;
+    class function DisplaysObject(obj: TObject): Boolean; override;
     procedure SetHeight(const Value: Integer); override;
     procedure SetWidth(const Value: Integer); override;
     procedure SetObj (const Value: TObject); override;
-    function GetBusy: boolean; override;
+    function GetBusy: Boolean; override;
   public
     constructor Create (AOwner: TMessageDisplay; AObj: TObject; codepage: Integer); override;
     destructor Destroy; override;
@@ -170,7 +170,7 @@ begin
   Cancel := not Ctrl.UIProperties.OpenLinksInNewWindow
 end;
 
-function THTMLStringsDisplayObjectLink.GetBusy: boolean;
+function THTMLStringsDisplayObjectLink.GetBusy: Boolean;
 var
   b: TExWebBrowser;
 begin
@@ -264,7 +264,7 @@ begin
         begin
           Sleep (100);
           if b.ReadyState = READYSTATE_INTERACTIVE then
-            Inc (n);
+            Inc(n);
 //          Application.ProcessMessages;
           if n > 2 then
             break;

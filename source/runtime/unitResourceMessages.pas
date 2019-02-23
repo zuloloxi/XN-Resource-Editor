@@ -26,7 +26,7 @@ type
     FST: UnicodeString;
   public
     constructor Create (const ASt: UnicodeString; AId: Integer);
-    function IsUnicode: boolean;
+    function IsUnicode: Boolean;
 
     property Id: Integer read FId write FId;
     property St: UnicodeString read FST write FST;
@@ -40,7 +40,7 @@ type
   TTextResourceDetails = class (TResourceDetails)
   private
     FStrings: TObjectList;
-    FUpdating: boolean;
+    FUpdating: Boolean;
     function GetCount: Integer;
     procedure GetStrings;
     function GetString(idx: Integer): UnicodeString;
@@ -56,13 +56,12 @@ type
     procedure BeginUpdate;
     procedure EndUpdate;
     procedure Delete (idx: Integer);
-    procedure Sort (sortType: TTextResourceSort = trString);
+    procedure Sort(sortType: TTextResourceSort = trString);
     function IndexOfID (id: Integer): Integer;
 
     property Count: Integer read GetCount;
     property Strings [idx: Integer]: UnicodeString read GetString write SetString; default;
     property Ids [idx: Integer]: Integer read GetId write SetId;
-
   end;
 
   //-------------------------------------------------------------------------
@@ -121,12 +120,12 @@ type
 
 function ResIdToStringsId (const resourceName: UnicodeString): UnicodeString;
 begin
-  Result := IntToStr ((StrToInt (resourceName) - 1) * 16)
+  Result := IntToStr ((StrToInt(resourceName) - 1) * 16)
 end;
 
 function StringsIdToResId (const stringsId: UnicodeString): UnicodeString;
 begin
-  Result := IntToStr (StrToInt (stringsId) div 16 + 1)
+  Result := IntToStr (StrToInt(stringsId) div 16 + 1)
 end;
 
 { TStringResourceDetails }
@@ -147,10 +146,10 @@ begin
 
   while Cnt < 16 do
   begin
-    id := (StrToInt (ResourceName) - 1) * 16 + cnt;
+    id := (StrToInt(ResourceName) - 1) * 16 + cnt;
     st := ResourceWideCharToWideStr (p);
     FStrings.Add (TStringInfo.Create (st, id));
-    Inc (Cnt);
+    Inc(Cnt);
   end
 end;
 
@@ -168,7 +167,7 @@ begin
                                 // wide strings.
   n := 16 * sizeof (WideChar);
   for i := 0 to Count - 1 do
-    Inc (n, (Length (Strings [i])) * sizeof (WideChar));
+    Inc(n, (Length (Strings [i])) * sizeof (WideChar));
 
   Data.Size := n;
   p := PWideChar (data.Memory);
@@ -200,7 +199,7 @@ var
 begin
   inherited;
 
-  lid := (StrToInt (Value) - 1) * 16;
+  lid := (StrToInt(Value) - 1) * 16;
 
   for i := 0 to Count - 1 do
     with TStringInfo (FStrings [i]) do
@@ -224,7 +223,7 @@ begin
   begin
     id := block^.LowID;
     p := data.memory;
-    Inc (p, block^.EntryOffset);              // 'p' points to the block's messages
+    Inc(p, block^.EntryOffset);              // 'p' points to the block's messages
 
     entry := PMessageResourceEntry (p);
     while id <= Integer (block^.HighID) do
@@ -239,9 +238,9 @@ begin
         FStrings.Add (TStringInfo.Create (String (PAnsiChar (@entry^.st [0])), id));
 
       entry := PMessageResourceEntry (PByte (entry) + entry^.Len);
-      Inc (id)
+      Inc(id)
     end;
-    Inc (block)
+    Inc(block)
   end
 end;
 
@@ -251,7 +250,7 @@ var
   block: PMessageResourceBlock;
   offset: DWORD;
   st: AnsiString;
-  uniCode: word;
+  uniCode: Word;
 begin
   dataSize := sizeof (DWORD);   // sizeof initial NumberOfBlocks DWORD;
   lastId := -2;
@@ -262,8 +261,8 @@ begin
     uniCode := Ord (TStringInfo (FStrings [i]).IsUnicode);
     if id <> lastId + 1 then
     begin
-      Inc (blockCount);
-      Inc (dataSize, SizeOf (TMessageResourceBlock));
+      Inc(blockCount);
+      Inc(dataSize, SizeOf (TMessageResourceBlock));
     end;
 
     lastId := id;
@@ -274,11 +273,11 @@ begin
                                         // Len is now length of string in
                                         // bytes -including nul terminator.
 
-    Inc (Len, 2 * sizeof (WORD));       // Add sizeof Flags & Len
+    Inc(Len, 2 * sizeof (WORD));       // Add sizeof Flags & Len
 
     Len := (Len + 3) div 4 * 4;         // DWORD align
 
-    Inc (dataSize, Len)
+    Inc(dataSize, Len)
   end;
 
   data.Size := dataSize;
@@ -297,10 +296,10 @@ begin
       if lastId <> -2 then
         block^.HighID := lastId;
       block := PMessageResourceBlock (PByte (data.Memory) + sizeof (Integer));
-      Inc (block, blockCount);
+      Inc(block, blockCount);
       block^.LowID := id;
       block^.EntryOffset := offset;
-      Inc (blockCount)
+      Inc(blockCount)
     end;
 
     lastId := id;
@@ -310,11 +309,11 @@ begin
 
     Len := (Len + 3) div 4 * 4;
 
-    PWORD (PByte (data.Memory) + offset)^ := 2 * sizeof (word) + Len;
-    Inc (offset, sizeof (WORD));
+    PWORD (PByte (data.Memory) + offset)^ := 2 * sizeof (Word) + Len;
+    Inc(offset, sizeof (WORD));
 
     PWORD (PByte (data.Memory) + offset)^ := uniCode;
-    Inc (offset, sizeof (WORD));
+    Inc(offset, sizeof (WORD));
 
     ZeroMemory (PByte (data.Memory) + offset, Len);
     if uniCode = 0 then
@@ -324,7 +323,7 @@ begin
     end
     else
       lstrcpyw (PWideChar (PByte (data.Memory) + offset), PWideChar (Strings [i]));
-    Inc (offset, Len)
+    Inc(offset, Len)
   end;
   if lastId <> -2 then
     block^.HighID := lastId;
@@ -402,7 +401,7 @@ end;
 
 procedure TTextResourceDetails.GetStrings;
 begin
-  if not Assigned (FStrings) then
+  if not Assigned(FStrings) then
   begin
     FStrings := TObjectList.Create;
     DecodeStrings
@@ -414,7 +413,7 @@ var
   i: Integer;
 begin
   Result := -1;
-  if Assigned (FStrings) then
+  if Assigned(FStrings) then
     for i := 0 to FStrings.Count - 1 do
       if TStringInfo (FStrings [i]).FId = id then
       begin
@@ -446,12 +445,12 @@ end;
 
 function CompareStringInfo (p1, p2: Pointer): Integer;
 begin
-  Result := WideCompareText (TStringInfo (p1).FST, TStringInfo (p2).FST)
+  Result := WideCompareText(TStringInfo (p1).FST, TStringInfo (p2).FST)
 end;
 
 function ReverseCompareStringInfo (p1, p2: Pointer): Integer;
 begin
-  Result := -WideCompareText (TStringInfo (p1).FST, TStringInfo (p2).FST)
+  Result := -WideCompareText(TStringInfo (p1).FST, TStringInfo (p2).FST)
 end;
 
 function CompareIDS (p1, p2: Pointer): Integer;
@@ -464,13 +463,13 @@ begin
   Result := TStringInfo (p2).FId - TStringInfo (p1).FId
 end;
 
-procedure TTextResourceDetails.Sort (sortType: TTextResourceSort);
+procedure TTextResourceDetails.Sort(sortType: TTextResourceSort);
 begin
   case sortType of
-    trString       : FStrings.Sort(CompareStringInfo);
-    trID           : FStrings.Sort(CompareIDS);
+    trString   : FStrings.Sort(CompareStringInfo);
+    trID       : FStrings.Sort(CompareIDS);
     trReverseString: FStrings.Sort(ReverseCompareStringInfo);
-    trReverseID    : FStrings.Sort(ReverseCompareIDS)
+    trReverseID: FStrings.Sort(ReverseCompareIDS)
   end
 end;
 
@@ -482,7 +481,7 @@ begin
   FId := AId;
 end;
 
-function TStringInfo.IsUnicode: boolean;
+function TStringInfo.IsUnicode: Boolean;
 begin
   Result := WideCharToMultiByte (CP_UTF8, 0, PWideChar (FST), -1, Nil, 0, Nil, Nil) <> Length (FST) + 1;
 end;

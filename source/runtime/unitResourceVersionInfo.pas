@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates Version Info resources in resources                     |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -16,7 +16,8 @@ unit unitResourceVersionInfo;
 
 interface
 
-uses Windows, Classes, SysUtils, Contnrs, unitResourceDetails;
+uses
+  Windows, Classes, SysUtils, Contnrs, unitResourceDetails;
 
 type
   TFileFlags = (ffDebug, ffInfoInferred, ffPatched, ffPreRelease,
@@ -56,7 +57,7 @@ type
     constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
     procedure InitNew; override;
   public
-    constructor CreateNew (AParent: TResourceModule; ALanguage: Integer; const AName: UnicodeString); override;
+    constructor CreateNew(AParent: TResourceModule; ALanguage: Integer; const AName: UnicodeString); override;
     destructor Destroy; override;
     class function GetBaseType: UnicodeString; override;
     procedure ChangeData (newData: TMemoryStream); override;
@@ -88,6 +89,23 @@ resourcestring
 
 { TVersionInfoResourceDetails }
 
+constructor TVersionInfoResourceDetails.CreateNew(AParent: TResourceModule;
+  ALanguage: Integer; const AName: UnicodeString);
+begin
+  FChildStrings := TObjectList.Create;
+  FTranslations := TList.Create;
+
+  inherited;
+end;
+
+destructor TVersionInfoResourceDetails.Destroy;
+begin
+  FChildStrings.Free;
+  FTranslations.Free;
+
+  inherited;
+end;
+
 procedure TVersionInfoResourceDetails.ChangeData(newData: TMemoryStream);
 begin
   inherited;
@@ -109,8 +127,8 @@ begin
       UpdateData
     end
     else
-      SetKeyValue (ANewKey, '')
-  end
+      SetKeyValue (ANewKey, '');
+  end;
 end;
 
 constructor TVersionInfoResourceDetails.Create(AParent: TResourceModule;
@@ -122,26 +140,10 @@ begin
   inherited Create (AParent, ALanguage, AName, AType, ASize, AData);
 end;
 
-constructor TVersionInfoResourceDetails.CreateNew(AParent: TResourceModule;
-  ALanguage: Integer; const AName: UnicodeString);
-begin
-  FChildStrings := TObjectList.Create;
-  FTranslations := TList.Create;
-  inherited;
-
-end;
-
 procedure TVersionInfoResourceDetails.DeleteKey(idx: Integer);
 begin
   FChildStrings.Delete (idx);
-  UpdateData
-end;
-
-destructor TVersionInfoResourceDetails.Destroy;
-begin
-  FChildStrings.Free;
-  FTranslations.Free;
-  inherited;
+  UpdateData;
 end;
 
 procedure TVersionInfoResourceDetails.ExportToStream(strm: TStream);
@@ -159,10 +161,10 @@ var
       strm.Write (zeros, 4 - (strm.Position mod 4))
   end;
 
-  procedure SaveVersionHeader (strm: TStream; wLength, wValueLength, wType: word; const wKey: UnicodeString; const value);
+  procedure SaveVersionHeader (strm: TStream; wLength, wValueLength, wType: Word; const wKey: UnicodeString; const value);
   var
-    valueLen: word;
-    keyLen: word;
+    valueLen: Word;
+    keyLen: Word;
   begin
     strm.Write (wLength, sizeof (wLength));
 
@@ -266,7 +268,7 @@ end;
 
 class function TVersionInfoResourceDetails.GetBaseType: UnicodeString;
 begin
-  result := IntToStr (Integer (RT_VERSION));
+  Result := IntToStr (Integer (RT_VERSION));
 end;
 
 function TVersionInfoResourceDetails.GetFileFlags: TVersionFileFlags;
@@ -274,57 +276,57 @@ var
   flags: Integer;
 begin
   GetFixedFileInfo;
-  result := [];
+  Result := [];
   flags := FFixedInfo^.dwFileFlags and FFixedInfo^.dwFileFlagsMask;
 
-  if (flags and VS_FF_DEBUG)        <> 0 then result := result + [ffDebug];
-  if (flags and VS_FF_INFOINFERRED) <> 0 then result := result + [ffInfoInferred];
-  if (flags and VS_FF_PATCHED)      <> 0 then result := result + [ffPatched];
-  if (flags and VS_FF_PRERELEASE)   <> 0 then result := result + [ffPreRelease];
-  if (flags and VS_FF_PRIVATEBUILD) <> 0 then result := result + [ffPrivateBuild];
-  if (flags and VS_FF_SPECIALBUILD) <> 0 then result := result + [ffSpecialBuild];
+  if (flags and VS_FF_DEBUG)        <> 0 then Result := result + [ffDebug];
+  if (flags and VS_FF_INFOINFERRED) <> 0 then Result := result + [ffInfoInferred];
+  if (flags and VS_FF_PATCHED)      <> 0 then Result := result + [ffPatched];
+  if (flags and VS_FF_PRERELEASE)   <> 0 then Result := result + [ffPreRelease];
+  if (flags and VS_FF_PRIVATEBUILD) <> 0 then Result := result + [ffPrivateBuild];
+  if (flags and VS_FF_SPECIALBUILD) <> 0 then Result := result + [ffSpecialBuild];
 end;
 
 function TVersionInfoResourceDetails.GetFileVersion: TULargeInteger;
 begin
   GetFixedFileInfo;
-  _ULARGE_INTEGER(result).LowPart := FFixedInfo^.dwFileVersionLS;
-  _ULARGE_INTEGER(result).HighPart := FFixedInfo^.dwFileVersionMS;
+  _ULARGE_INTEGER(Result).LowPart := FFixedInfo^.dwFileVersionLS;
+  _ULARGE_INTEGER(Result).HighPart := FFixedInfo^.dwFileVersionMS;
 end;
 
 procedure TVersionInfoResourceDetails.GetFixedFileInfo;
 var
   p: PByte;
-  t, wLength, wValueLength, wType: word;
+  t, wLength, wValueLength, wType: Word;
   key: UnicodeString;
 
-  varwLength, varwValueLength, varwType: word;
+  varwLength, varwValueLength, varwType: Word;
   varKey: UnicodeString;
 
-  function GetVersionHeader (var p: PByte; var wLength, wValueLength, wType: word; var wKey: UnicodeString): Integer;
+  function GetVersionHeader (var p: PByte; var wLength, wValueLength, wType: Word; var wKey: UnicodeString): Integer;
   var
     baseP: PByte;
     szKey: PWideChar;
   begin
     baseP := p;
     wLength := PWord (p)^;
-    Inc (p, sizeof (word));
+    Inc(p, sizeof (Word));
     wValueLength := PWord (p)^;
-    Inc (p, sizeof (word));
+    Inc(p, sizeof (Word));
     wType := PWord (p)^;
-    Inc (p, sizeof (word));
+    Inc(p, sizeof (Word));
     szKey := PWideChar (p);
-    Inc (p, (lstrlenw (szKey) + 1) * sizeof (WideChar));
+    Inc(p, (lstrlenw (szKey) + 1) * sizeof (WideChar));
     while Integer (p) mod 4 <> 0 do
-      Inc (p);
-    result := p - baseP;
+      Inc(p);
+    Result := p - baseP;
     wKey := szKey;
   end;
 
-  procedure GetStringChildren (var base: PByte; len: word);
+  procedure GetStringChildren (var base: PByte; len: Word);
   var
     p, strBase: PByte;
-    t, wLength, wValueLength, wType, wStrLength, wStrValueLength, wStrType: word;
+    t, wLength, wValueLength, wType, wStrLength, wStrValueLength, wStrType: Word;
     key, value: UnicodeString;
     langID, codePage: Integer;
 
@@ -333,10 +335,10 @@ var
     while (p - base) < len do
     begin
       t := GetVersionHeader (p, wLength, wValueLength, wType, key);
-      Dec (wLength, t);
+      Dec(wLength, t);
 
-      langID := StrToInt ('$' + Copy (key, 1, 4));
-      codePage := StrToInt ('$' + Copy (key, 5, 4));
+      langID := StrToInt('$' + Copy (key, 1, 4));
+      codePage := StrToInt('$' + Copy (key, 5, 4));
 
       strBase := p;
       FChildStrings.Clear;
@@ -345,15 +347,15 @@ var
       while (p - strBase) < wLength do
       begin
         t := GetVersionHeader (p, wStrLength, wStrValueLength, wStrType, key);
-        Dec (wStrLength, t);
+        Dec(wStrLength, t);
 
         if wStrValueLength = 0 then
           value := ''
         else
           value := PWideChar (p);
-        Inc (p, wStrLength);
+        Inc(p, wStrLength);
         while Integer (p) mod 4 <> 0 do
-          Inc (p);
+          Inc(p);
 
         if codePage = 0 then
           codePage := self.codePage;
@@ -363,10 +365,10 @@ var
     base := p
   end;
 
-  procedure GetVarChildren (var base: PByte; len: word);
+  procedure GetVarChildren (var base: PByte; len: Word);
   var
     p, strBase: PByte;
-    t, wLength, wValueLength, wType: word;
+    t, wLength, wValueLength, wType: Word;
     key: UnicodeString;
     v: DWORD;
   begin
@@ -374,7 +376,7 @@ var
     while (p - base) < len do
     begin
       t := GetVersionHeader (p, wLength, wValueLength, wType, key);
-      Dec (wLength, t);
+      Dec(wLength, t);
 
       strBase := p;
       FTranslations.Clear;
@@ -382,7 +384,7 @@ var
       while (p - strBase) < wLength do
       begin
         v := PDWORD (p)^;
-        Inc (p, sizeof (DWORD));
+        Inc(p, sizeof (DWORD));
         FTranslations.Add (pointer (v));
       end
     end;
@@ -403,9 +405,9 @@ begin
     if FFixedInfo^.dwSignature <> $feef04bd then
       raise Exception.Create (rstInvalidVersionInfoResource);
 
-    Inc (p, wValueLength);
+    Inc(p, wValueLength);
     while Integer (p) mod 4 <> 0 do
-      Inc (p);
+      Inc(p);
   end
   else
     FFixedInfo := Nil;
@@ -413,7 +415,7 @@ begin
   while wLength > (Integer (p) - Integer (data.memory)) do
   begin
     t := GetVersionHeader (p, varwLength, varwValueLength, varwType, varKey);
-    Dec (varwLength, t);
+    Dec(varwLength, t);
 
     if varKey = 'StringFileInfo' then
       GetStringChildren (p, varwLength)
@@ -429,20 +431,20 @@ function TVersionInfoResourceDetails.GetKey(
   idx: Integer): TVersionStringValue;
 begin
   GetFixedFileInfo;
-  result := TVersionStringValue (FChildStrings [idx])
+  Result := TVersionStringValue (FChildStrings [idx])
 end;
 
 function TVersionInfoResourceDetails.GetKeyCount: Integer;
 begin
   GetFixedFileInfo;
-  result := FChildStrings.Count
+  Result := FChildStrings.Count
 end;
 
 function TVersionInfoResourceDetails.GetProductVersion: TULargeInteger;
 begin
   GetFixedFileInfo;
-  _ULARGE_INTEGER(result).LowPart := FFixedInfo^.dwProductVersionLS;
-  _ULARGE_INTEGER(result).HighPart := FFixedInfo^.dwProductVersionMS
+  _ULARGE_INTEGER(Result).LowPart := FFixedInfo^.dwProductVersionLS;
+  _ULARGE_INTEGER(Result).HighPart := FFixedInfo^.dwProductVersionMS
 end;
 
 function TVersionInfoResourceDetails.IndexOf(
@@ -451,13 +453,13 @@ var
   i: Integer;
   k: TVersionStringValue;
 begin
-  result := -1;
+  Result := -1;
   for i := 0 to KeyCount - 1 do
   begin
     k := Key [i];
-    if CompareText (k.KeyName, AKeyName) = 0 then
+    if CompareText(k.KeyName, AKeyName) = 0 then
     begin
-      result := i;
+      Result := i;
       break
     end
   end
@@ -465,7 +467,7 @@ end;
 
 procedure TVersionInfoResourceDetails.InitNew;
 var
-  w, l: word;
+  w, l: Word;
   fixedInfo: TVSFixedFileInfo;
   ws: UnicodeString;
 begin
@@ -569,7 +571,7 @@ begin
     end
   end;
 
-  result := idx;
+  Result := idx;
   UpdateData
 end;
 

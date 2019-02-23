@@ -153,7 +153,7 @@ begin
   if Value <> FPreferredCountryCodes then
   begin
     FPreferredCountryCodes := Value;
-    if not (csDesigning in ComponentState) then
+    if not(csDesigning in ComponentState) then
       RecreateWnd;
   end
 end;

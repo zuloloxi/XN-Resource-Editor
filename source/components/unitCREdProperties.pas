@@ -121,7 +121,7 @@ begin
   begin
     FValues [i] := Properties [i].Value;
     if FValues [i].tp = ptLString then
-      FLStrings [FValues [i].strIdx] := Properties [i].defltStr
+      FLStrings [FValues [i].strIdx] := Properties [i].defltStr;
   end;
 
   Load;
@@ -147,9 +147,12 @@ end;
 function TPEResourceExplorerProperties.GetIncludePath: string;
 begin
   case IncludePathType of
-    includePathPackage: Result := GetIncludePathForPackage (IncludePathPackageName);
-    includePathEnv: Result := GetEnvironmentVariable ('Include');
-    includePathCustom: Result := CustomIncludePath;
+    includePathPackage:
+      Result := GetIncludePathForPackage (IncludePathPackageName);
+    includePathEnv:
+      Result := GetEnvironmentVariable ('Include');
+    includePathCustom:
+      Result := CustomIncludePath;
     else
       Result := '';
   end;
@@ -190,9 +193,9 @@ begin
               ptLString: FLStrings [FValues [i].strIdx] := reg.ReadString (Properties [i].Name);
             end
       finally
-        EndUpdate
-      end
-    end
+        EndUpdate;
+      end;
+    end;
   finally
     reg.Free;
   end;
@@ -212,7 +215,7 @@ begin
   if FUpdating then
   begin
     FNeedsSave := True;
-    Exit
+    Exit;
   end;
 
   reg := TRegistry.Create (KEY_READ or KEY_WRITE);
@@ -241,7 +244,7 @@ begin
     FValues [idx].boolVal := Value;
     Save;
     Notify;
-  end
+  end;
 end;
 
 procedure TPEResourceExplorerProperties.SetIncludePath(const Value: string);
@@ -249,8 +252,8 @@ begin
   if (IncludePathType <> includePathCustom) or (Value <> CustomIncludePath) then
   begin
     IncludePathType := includePathCustom;
-    CustomIncludePath := Value
-  end
+    CustomIncludePath := Value;
+  end;
 end;
 
 procedure TPEResourceExplorerProperties.SetIntPropertyValue(idx: TPropertyEnum;
@@ -261,7 +264,7 @@ begin
     FValues [idx].intVal := Value;
     Save;
     Notify;
-  end
+  end;
 end;
 
 procedure TPEResourceExplorerProperties.SetLStringPropertyValue (const Idx: TPropertyEnum;

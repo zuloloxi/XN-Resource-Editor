@@ -74,10 +74,10 @@ resourcestring
 
 { TfmAcceleratorResource }
 
-function AcceleratorToText (const Accel: TAccelerator): string;
+function AcceleratorToText(const Accel: TAccelerator): string;
 begin
   if (Accel.Flags and FVIRTKEY) <> 0 then
-    Result := ShortcutToText (Accel.Code)
+    Result := ShortcutToText(Accel.Code)
   else
     if Accel.Code < 32 then
       Result := 'Ctrl+' + char (Accel.Code + Ord ('@'))
@@ -104,8 +104,8 @@ begin
   Ok := False;
   if not virtKey then
   begin
-    Temp := TextToShortcut (st);
-    Key := Temp and not (scAlt or scShift or scCtrl);
+    Temp := TextToShortcut(st);
+    Key := Temp and not(scAlt or scShift or scCtrl);
     if (Key >= $30) and (Key <= $39) or
        (Key >= $41) and (Key <= $5A) then
     begin
@@ -124,7 +124,7 @@ begin
 
   if not Ok then
   begin
-    Code := TextToShortcut (st);
+    Code := TextToShortcut(st);
     Flags := FVIRTKEY;
     if (Code and scAlt) <> 0 then
       Flags := Flags or FALT;
@@ -132,7 +132,7 @@ begin
       Flags := Flags or FSHIFT;
     if (Code and scCtrl) <> 0 then
       Flags := Flags or FCONTROL;
-    Code := Code and not (scAlt or scShift or scCtrl);
+    Code := Code and not(scAlt or scShift or scCtrl);
   end
 end;
 
@@ -154,13 +154,13 @@ begin
       Accel := FDetails.Accelerator [i];
       with lvAccelerator.Items.Add do
       begin
-        Caption := IntToStr (Accel.id);
-        SubItems.Add(AcceleratorToText (Accel));
+        Caption := IntToStr(Accel.id);
+        SubItems.Add(AcceleratorToText(Accel));
         if (Accel.Flags and FVIRTKEY) <> 0 then
           SubItems.Add(rstVirtKey)
         else
           SubItems.Add(rstCharCode);
-//        SubItems.Add(IntToStr (Accel.Flags))
+//        SubItems.Add(IntToStr(Accel.Flags))
       end
     end
   finally
@@ -179,11 +179,11 @@ begin
   actAccelDelete.ShortCut := actAccelDelete.Tag;    // Restore 'Delete' shortcut
   if s <> item.Caption then
   try
-    newID := StrToInt (s);
+    newID := StrToInt(s);
 
     for i := 0 to FDetails.Count - 1 do
       if FDetails.Accelerator [i].id = newid then
-        raise Exception.Create (rstDuplicateMessageID);
+        raise Exception.Create(rstDuplicateMessageID);
 
     item.Caption := s;          // need to do this so 'SaveResource' picks it up...
     SaveResource (rstChangeID);
@@ -210,8 +210,8 @@ begin
     item.Caption := '1'
   else
   begin
-    newId :=StrToInt (lvAccelerator.Items [lvAccelerator.Items.Count - 2].Caption);
-    item.Caption := IntToStr (newId + 1)
+    newId :=StrToInt(lvAccelerator.Items[lvAccelerator.Items.Count - 2].Caption);
+    item.Caption := IntToStr(newId + 1)
   end;
 
   item.SubItems.Add ('');
@@ -227,15 +227,15 @@ procedure TfmAcceleratorResource.actAccelModifyExecute(Sender: TObject);
 var
   t: Integer;
 begin
-  if Assigned (lvAccelerator.Selected) then
+  if Assigned(lvAccelerator.Selected) then
   begin
     cbKey.Width := lvAccelerator.Columns [1].Width - 2;
     cbKey.Left := lvAccelerator.Columns [0].Width + 2;
-    t := lvAccelerator.Selected.DisplayRect (drLabel).Top - 3;
+    t := lvAccelerator.Selected.DisplayRect(drLabel).Top - 3;
     if t < 0 then
       t := 0;
     cbKey.Top := t;
-    cbKey.Text := lvAccelerator.Selected.SubItems [0];
+    cbKey.Text := lvAccelerator.Selected.SubItems[0];
     cbKey.Visible := True;
     cbKey.SetFocus
   end
@@ -251,11 +251,11 @@ begin
   adding := FAdding;
   FAdding := False;
   cbKey.Visible := False;
-  with lvAccelerator do if Assigned (Selected) then
+  with lvAccelerator do if Assigned(Selected) then
   begin
     if FKeyChanged or FAdding then  // ie.  If it's changed
     begin
-      selected.SubItems [0] := cbKey.Text;
+      selected.SubItems[0] := cbKey.Text;
 
       if adding then
         st := rstAddAccelerator
@@ -277,16 +277,16 @@ begin
   AddUndoEntry (undoDetails);
   for i := 0 to lvAccelerator.Items.Count - 1 do
   begin
-    item := lvAccelerator.Items [i];
-    id := StrToInt (item.Caption);
-    virtKey := item.SubItems [1] = rstVirtKey;
-    TextToAccelerator (item.SubItems [0], virtKey, Code, Flags);
+    item := lvAccelerator.Items[i];
+    id := StrToInt(item.Caption);
+    virtKey := item.SubItems[1] = rstVirtKey;
+    TextToAccelerator (item.SubItems[0], virtKey, Code, Flags);
 
     if not virtKey and ((Flags and FVIRTKEY) <> 0) then
-      item.SubItems [1] := rstVirtKey;
+      item.SubItems[1] := rstVirtKey;
 
     if i < FDetails.Count then
-      FDetails.SetAccelDetails (i, Flags, Code, id)
+      FDetails.SetAccelDetails(i, Flags, Code, id)
     else
       FDetails.Add(Flags, Code, id)
   end;
@@ -300,7 +300,7 @@ procedure TfmAcceleratorResource.lvAcceleratorDblClick(Sender: TObject);
 var
   p: TPoint;
 begin
-  if Assigned (lvAccelerator.Selected) then
+  if Assigned(lvAccelerator.Selected) then
   begin
     p := Mouse.CursorPos;
     MapWindowPoints (HWND_DESKTOP, lvAccelerator.Handle, p, 1);
@@ -375,7 +375,7 @@ end;
 
 procedure TfmAcceleratorResource.actAccelChangeIDExecute(Sender: TObject);
 begin
-  if Assigned (lvAccelerator.Selected) then
+  if Assigned(lvAccelerator.Selected) then
   begin
     FAllowEdit := true;
     lvAccelerator.Selected.EditCaption
@@ -386,15 +386,15 @@ procedure TfmAcceleratorResource.actAccelChangeFlagsExecute(Sender: TObject);
 var
   t: Integer;
 begin
-  if Assigned (lvAccelerator.Selected) then
+  if Assigned(lvAccelerator.Selected) then
   begin
     cbType.Width := lvAccelerator.Columns [2].Width - 2;
     cbType.Left := lvAccelerator.Columns [0].Width + lvAccelerator.Columns [1].Width + 2;
-    t := lvAccelerator.Selected.DisplayRect (drLabel).Top - 3;
+    t := lvAccelerator.Selected.DisplayRect(drLabel).Top - 3;
     if t < 0 then
       t := 0;
     cbType.Top := t;
-    cbType.Text := lvAccelerator.Selected.SubItems [1];
+    cbType.Text := lvAccelerator.Selected.SubItems[1];
     cbType.Visible := True;
     cbType.SetFocus
   end
@@ -408,11 +408,11 @@ end;
 procedure TfmAcceleratorResource.cbTypeExit(Sender: TObject);
 begin
   cbType.Visible := False;
-  with lvAccelerator do if Assigned (Selected) then
+  with lvAccelerator do if Assigned(Selected) then
   begin
     if FKeyChanged then  // ie.  If it's changed
     begin
-      selected.SubItems [1] := cbType.Text;
+      selected.SubItems[1] := cbType.Text;
 
       SaveResource (rstChangeAcceleratorType);
     end
@@ -424,19 +424,19 @@ procedure TfmAcceleratorResource.actAccelDeleteExecute(Sender: TObject);
 var
   idx: Integer;
 begin
-  if Assigned (lvAccelerator.Selected) then
+  if Assigned(lvAccelerator.Selected) then
   begin
     idx := lvAccelerator.Selected.Index;
     lvAccelerator.Selected.Free;
 
                                 // Select next string
     if idx < lvAccelerator.Items.Count then
-      lvAccelerator.Selected := lvAccelerator.Items [idx]
+      lvAccelerator.Selected := lvAccelerator.Items[idx]
     else
     begin
-      Dec (idx);
+      Dec(idx);
       if idx >= 0 then
-        lvAccelerator.Selected := lvAccelerator.Items [idx]
+        lvAccelerator.Selected := lvAccelerator.Items[idx]
     end;
 
    SaveResource (rstDeleteAccelerator)

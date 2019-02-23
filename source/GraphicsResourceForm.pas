@@ -131,7 +131,7 @@ type
     FPCWidth: Integer;
     FDetails: TGraphicsResourceDetails;
 
-    procedure SetPaletteForPixelFormat (reset: Boolean);
+    procedure SetPaletteForPixelFormat(reset: Boolean);
   protected
     procedure SetObject(const Value: TObject); override;
     function GetMenuItem: TMenuItem; override;
@@ -162,15 +162,15 @@ uses
 {$R *.DFM}
 
 resourcestring
-  rstPaletteChange = 'change palette';          // 'Undo' descriptions
-  rstRotate270     = 'rotate 90° anticlockwise';
-  rstRotate90      = 'rotate 90° clockwise';
-  rstRotate180     = 'rotate 180°';
-  rstResizeImage   = 'resize image';
-  rstFormatChange  = 'change resolution';
-  rstPasteImage    = 'paste image';
-  rstWidthChanged  = 'width change';
-  rstHeightChanged = 'height change';
+  rstPaletteChange      = 'change palette';          // 'Undo' descriptions
+  rstRotate270          = 'rotate 90° anticlockwise';
+  rstRotate90           = 'rotate 90° clockwise';
+  rstRotate180          = 'rotate 180°';
+  rstResizeImage        = 'resize image';
+  rstFormatChange       = 'change resolution';
+  rstPasteImage         = 'paste image';
+  rstWidthChanged       = 'width change';
+  rstHeightChanged      = 'height change';
   rstPixelFormatChanged = 'pixel format change';
 
   rstWidth = 'Width';
@@ -196,7 +196,7 @@ begin
     end
   end
   else
-    Result := unitExIcon.GetPixelFormat (graphic)
+    Result := unitExIcon.GetPixelFormat(graphic)
 end;
 
 (*----------------------------------------------------------------------*
@@ -220,7 +220,7 @@ begin
       b.Width := newWidth;
       b.Height := newHeight;
       b.PixelFormat := pf24Bit;
-      b.Canvas.StretchDraw(Rect (0, 0, newWidth, newHeight), p.Graphic);
+      b.Canvas.StretchDraw(Rect(0, 0, newWidth, newHeight), p.Graphic);
       p.Graphic.Assign(b)
     finally
       b.Free
@@ -273,7 +273,7 @@ begin
 
   sbThumbnail.Cursor := crDefault;
 
-  if transp then     // Set the 'Transparent' Color panel
+  if transp then                                // Set the 'Transparent' Color panel
   begin
     pnlTransparent.Color := BitmapEditor1.TransparentColor;
     pnlTransparent.Visible := True
@@ -300,7 +300,7 @@ begin
     begin
       Tag := taPixelFormat;
 
-      case GetPixelFormat (Image1.Picture.Graphic) of
+      case GetPixelFormat(Image1.Picture.Graphic) of
         pf1Bit: PropertyValue := 0;
         pf4Bit: PropertyValue := 1;
         pf8Bit: PropertyValue := 2;
@@ -312,7 +312,7 @@ begin
     end
   end;
 
-  SetPaletteForPixelFormat (newImage)
+  SetPaletteForPixelFormat(newImage)
 end;
 
 (*----------------------------------------------------------------------*
@@ -445,18 +445,19 @@ begin
   ColorDialog1.Color := BitmapEditor1.DrawPen.Color;
   If ColorDialog1.Execute then
   begin
-                        // Adjust the palette in the colour selector
-
+    // Adjust the palette in the colour selector
     ColorSelector1.SetSelectedPaletteColor (ColorDialog1.Color);
 
-                        // Change the thumbnail palette...
+    // Change the thumbnail palette...
     Image1.Picture.Graphic.Palette := ColorSelector1.Palette;
-                        // Reload the editor to show the changed thumbnail
+
+    // Reload the editor to show the changed thumbnail
     BitmapEditor1.Picture := Image1.Picture;
-                        // Update the resource
+
+    // Update the resource
     SaveResource (rstPaletteChange);
 
-                        // Update the pen
+    // Update the pen
     BitmapEditor1.DrawPen.Color := ColorSelector1.GetSelectedPaletteColor;
     shpFore.Brush.Color := ColorSelector1.GetSelectedPaletteColor;
 
@@ -607,7 +608,7 @@ begin
   end;
 
   colorCount := 0;
-  if GetObject (pal, sizeof (colorCount), @colorCount) = 0 then
+  if GetObject(pal, sizeof (colorCount), @colorCount) = 0 then
     RaiseLastOSError;
 
   if ColorCount = 0 then
@@ -655,99 +656,99 @@ begin
   newPf := pfDevice;
 
   case prop.Tag of
-    taWidth: if Image1.Picture.Graphic.Width <> prop.PropertyValue then
-              begin
-                change := rstWidthChanged;
-                ResizePicture (Image1.Picture, prop.PropertyValue, Image1.Picture.Graphic.Height);
-              end;
+    taWidth:
+      if Image1.Picture.Graphic.Width <> prop.PropertyValue then
+      begin
+        change := rstWidthChanged;
+        ResizePicture (Image1.Picture, prop.PropertyValue, Image1.Picture.Graphic.Height);
+      end;
 
-    taHeight: if Image1.Picture.Graphic.Height <> prop.PropertyValue then
-               begin
-                 change := rstHeightChanged;
-                 ResizePicture (Image1.Picture, Image1.Picture.Graphic.Width, prop.PropertyValue);
-               end;
+    taHeight:
+      if Image1.Picture.Graphic.Height <> prop.PropertyValue then
+      begin
+        change := rstHeightChanged;
+        ResizePicture (Image1.Picture, Image1.Picture.Graphic.Width, prop.PropertyValue);
+      end;
 
     taPixelFormat :
-               begin
-                 oldPf := GetPixelFormat (Image1.Picture.Graphic);
-                 case prop.PropertyValue of
-                   0: newPf := pf1Bit;
-                   1: newPf := pf4Bit;
-                   2: newPf := pf8Bit;
-                   3: newPf := pf24Bit;
-                   4: newPf := pf32Bit;
-                 end;
-                 if oldPf <> newPf then
-                 begin
-                   change := rstPixelFormatChanged;
+      begin
+        oldPf := GetPixelFormat(Image1.Picture.Graphic);
+        case prop.PropertyValue of
+          0: newPf := pf1Bit;
+          1: newPf := pf4Bit;
+          2: newPf := pf8Bit;
+          3: newPf := pf24Bit;
+          4: newPf := pf32Bit;
+        end;
+        if oldPf <> newPf then
+        begin
+          change := rstPixelFormatChanged;
 
-                   if Image1.Picture.Graphic is TBitmap then
-                   begin
-                     bmp := TBitmap (Image1.Picture.Graphic);
+          if Image1.Picture.Graphic is TBitmap then
+          begin
+            bmp := TBitmap (Image1.Picture.Graphic);
 
-                     if newPf in [pf1Bit..pf8Bit] then
-                     begin
-                       b1 := Nil;
-                       b2 := Nil;
-                       try
-                         if (newPf = pf8Bit) and (oldPf > pf8Bit) and not bmp.Empty then
-                         begin
-                           b1:= ReduceColors (bmp, rmQuantizeWindows, dmFloydSteinberg, GetPixelFormatBitCount (newPf), 0);
-                         end
-                         else
-                         begin
-                           // ReduceColors always returns a pf8Bit bitmap...
-                           b1 := TBitmap.Create;
-                           b1.PixelFormat := newPF;
-                           case newPF of
-                             pf1Bit: b1.Palette := SystemPalette2;
-                             pf4Bit: b1.Palette := SystemPalette16;
-                             pf8Bit: b1.Palette := CopyPalette (SystemPalette256); // unitExIcon.WebPalette
-                           end;
+            if newPf in [pf1Bit..pf8Bit] then
+            begin
+              b1 := Nil;
+              b2 := Nil;
+              try
+                if (newPf = pf8Bit) and (oldPf > pf8Bit) and not bmp.Empty then
+                   b1:= ReduceColors (bmp, rmQuantizeWindows, dmFloydSteinberg, GetPixelFormatBitCount(newPf), 0)
+                else
+                begin
+                  // ReduceColors always returns a pf8Bit bitmap...
+                  b1 := TBitmap.Create;
+                  b1.PixelFormat := newPF;
+                  case newPF of
+                    pf1Bit: b1.Palette := SystemPalette2;
+                    pf4Bit: b1.Palette := SystemPalette16;
+                    pf8Bit: b1.Palette := CopyPalette (SystemPalette256); // unitExIcon.WebPalette
+                  end;
 
-                           b1.Width := bmp.Width;
-                           b1.Height := bmp.Height;
-                           b1.Canvas.Draw(0, 0, bmp);
-                         end;
-                         Image1.Picture.Graphic := b1;
-                         bmp := TBitmap (Image1.Picture.Graphic);
-                       finally
-                         b1.Free;
-                         b2.Free
-                       end
-                     end
-                     else
-                       bmp.PixelFormat := newPf;
+                  b1.Width := bmp.Width;
+                  b1.Height := bmp.Height;
+                  b1.Canvas.Draw(0, 0, bmp);
+                end;
+                Image1.Picture.Graphic := b1;
+                bmp := TBitmap (Image1.Picture.Graphic);
+              finally
+                b1.Free;
+                b2.Free
+              end
+            end
+            else
+              bmp.PixelFormat := newPf;
 
-                     bmp.IgnorePalette := newPf > pf8Bit;
-                   end
-                   else
-                     if Image1.Picture.Graphic is TExIconCursor then
-                       if newPf in [pf24Bit, pf32Bit] then
-                         TExIconCursor (Image1.Picture.Graphic).PixelFormat := newPf
-                       else
-                       begin
-                         pal := 0;
-                         bmp := nil;
-                         l := TList.Create;
-                         try
-                           bmp := TBitmap.Create;
-                           bmp.Assign(Image1.Picture.Graphic);
-                           l.Add (bmp);
-                           l.Add (CreatePaletteBitmap (newPF));
-                           pal := CreateOptimizedPaletteFromManyBitmaps (l, GetPixelFormatNumColors (newPf), GetPixelFormatBitCount (newPF), False);
-                           TExIconCursor (Image1.Picture.Graphic).Palette := pal;
-                         finally
-                           l.Free;
-                           bmp.Free;
-                           if pal <> 0 then
-                             DeleteObject (pal)
-                         end
-                       end
-                 end;
+            bmp.IgnorePalette := newPf > pf8Bit;
+          end
+          else
+            if Image1.Picture.Graphic is TExIconCursor then
+              if newPf in [pf24Bit, pf32Bit] then
+                TExIconCursor (Image1.Picture.Graphic).PixelFormat := newPf
+              else
+              begin
+                pal := 0;
+                bmp := nil;
+                l := TList.Create;
+                try
+                  bmp := TBitmap.Create;
+                  bmp.Assign(Image1.Picture.Graphic);
+                  l.Add (bmp);
+                  l.Add (CreatePaletteBitmap (newPF));
+                  pal := CreateOptimizedPaletteFromManyBitmaps (l, GetPixelFormatNumColors (newPf), GetPixelFormatBitCount(newPF), False);
+                  TExIconCursor (Image1.Picture.Graphic).Palette := pal;
+                finally
+                  l.Free;
+                  bmp.Free;
+                  if pal <> 0 then
+                    DeleteObject(pal)
+                end
+              end
+        end;
 
-                 SetPaletteForPixelFormat (newPf < oldPf);
-               end
+        SetPaletteForPixelFormat(newPf < oldPf);
+      end
   end;
 
   if change <> '' then
@@ -774,7 +775,7 @@ var
 begin
   fc := clWhite;
   bc := clBlack;
-  pf := GetPixelFormat (Image1.Picture.Graphic);
+  pf := GetPixelFormat(Image1.Picture.Graphic);
   if pf in [pf1Bit..pf8Bit] then
   begin
     ColorSelector1.Palette := Image1.Picture.Graphic.Palette;
@@ -823,7 +824,7 @@ end;
 
 function TfmGraphicsResource.GetCanPaste: Boolean;
 begin
-  Result := Clipboard.HasFormat (CF_METAFILEPICT) or Clipboard.HasFormat (CF_BITMAP) or Clipboard.HasFormat (CF_PICTURE)
+  Result := Clipboard.HasFormat(CF_METAFILEPICT) or Clipboard.HasFormat(CF_BITMAP) or Clipboard.HasFormat(CF_PICTURE)
 end;
 
 function TfmGraphicsResource.GetCanSelectAll: Boolean;
@@ -910,11 +911,11 @@ var
 begin
   if BitmapEditor1.SelectionValid then
     with BitmapEditor1.SelectionRect do
-      Msg := Format ('%d,%d %dx%d', [Left, Top, Right - Left + 1, Bottom - Top + 1])
+      Msg := Format('%d,%d %dx%d', [Left, Top, Right - Left + 1, Bottom - Top + 1])
   else
     Msg := '';
 
-  SendMessage (Application.MainForm.Handle, WM_STATUSBAR, 0, Integer (PChar (Msg)))
+  SendMessage(Application.MainForm.Handle, WM_STATUSBAR, 0, Integer(PChar (Msg)))
 end;
 
 procedure TfmGraphicsResource.PopupMenu1Popup(Sender: TObject);
@@ -935,7 +936,7 @@ begin
     else
       tp := -1;
 
-  SendMessage (Application.MainForm.Handle, WM_ADDIMAGERESOURCE, tp, 0);
+  SendMessage(Application.MainForm.Handle, WM_ADDIMAGERESOURCE, tp, 0);
 end;
 
 procedure TfmGraphicsResource.UpdateActions;
@@ -953,7 +954,7 @@ begin
     PopupMenu1.AutoPopup := False
   else
     if PopupMenu1.AutoPopup = False then
-      if not (ssRight in KeyboardStateToShiftState) then
+      if not(ssRight in KeyboardStateToShiftState) then
         PopupMenu1.AutoPopup := True
 end;
 

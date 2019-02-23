@@ -29,35 +29,35 @@ uses
   System.Contnrs, unitResFile, unitResourceDetails, DialogConsts;
 
 type
+  //---------------------------------------------------------------------------
+  // RC Module
+  TRCModule = class (TResourceList)
+  private
+    FFileName: string;
+    FIncludePath: string;
+  public
+    constructor Create;
 
-//---------------------------------------------------------------------------
-// RC Module
-TRCModule = class (TResourceList)
-private
-  fFileName : string;
-  fIncludePath: string;
+    procedure SaveToStream (stream: TStream); override;
+    procedure LoadFromFile (const FileName: string); override;
+    procedure LoadFromStream (stream: TStream); override;
 
-public
-  constructor Create;
-
-  procedure SaveToStream (stream : TStream); override;
-  procedure LoadFromFile (const FileName : string); override;
-  procedure LoadFromStream (stream : TStream); override;
-
-  property IncludePath : string read fIncludePath write fIncludePath;
-end;
+    property IncludePath: string read FIncludePath write FIncludePath;
+  end;
 
 implementation
 
-uses unitStreamTextReader, unitSearchString, unitParser, unitResourceGraphics, unitCExpression,
-     unitResourceToolbar, unitResourceDialogs, unitResourceMessages, unitResourceAccelerator,
-     unitResourceVersionInfo, unitResourceMenus;
+uses
+  unitStreamTextReader, unitSearchString, unitParser, unitResourceGraphics,
+  unitCExpression, unitResourceToolbar, unitResourceDialogs,
+  unitResourceMessages, unitResourceAccelerator, unitResourceVersionInfo,
+  unitResourceMenus;
 
 const
   BS_PUSHBOX = 10;      // Missing from windows.pas.  Obsolete?
 
 //---------------------------------------------------------------
-// Keyword IDs
+// KeyWord IDs
 
   kwLanguage        = 1;
   kwIcon            = 2;
@@ -118,59 +118,59 @@ const
   kwComboBox        = 168;
 
 type
-  kwKeywordRange    = 0..255;
-  TSupportedKeywords = set of kwKeywordRange;
+  kwKeyWordRange    = 0..255;
+  TSupportedKeyWords = set of kwKeyWordRange;
 
 const
 //---------------------------------------------------------------------------
-// Keywords supported for each resource type
-  DialogOptionKeywords       : TSupportedKeywords = [kwCaption, kwCharacteristics, kwClass, kwExStyle, kwFont, kwLanguage, kwMenu, kwStyle, kwVersion];
-  AcceleratorsOptionKeywords : TSupportedKeywords = [kwCharacteristics, kwLanguage, kwVersion];
-  MenuOptionKeywords         : TSupportedKeywords = [kwCharacteristics, kwLanguage, kwVersion];
-  RCDataOptionKeywords       : TSupportedKeywords = [kwCharacteristics, kwLanguage, kwVersion];
-  StringtableOptionKeywords  : TSupportedKeywords = [kwCharacteristics, kwLanguage, kwVersion];
+// KeyWords supported for each resource type
+  DialogOptionKeyWords   : TSupportedKeyWords = [kwCaption, kwCharacteristics, kwClass, kwExStyle, kwFont, kwLanguage, kwMenu, kwStyle, kwVersion];
+  AcceleratorsOptionKeyWords: TSupportedKeyWords = [kwCharacteristics, kwLanguage, kwVersion];
+  MenuOptionKeyWords     : TSupportedKeyWords = [kwCharacteristics, kwLanguage, kwVersion];
+  RCDataOptionKeyWords   : TSupportedKeyWords = [kwCharacteristics, kwLanguage, kwVersion];
+  StringtableOptionKeyWords: TSupportedKeyWords = [kwCharacteristics, kwLanguage, kwVersion];
 
 type
-  TKeywordProc = procedure of object;
+  TKeyWordProc = procedure of object;
 
 //----------------------------------------------------------------------------
-  TKeywordDetails = class       // Per keyword details - used to populate fKeywords object list
-    kw : Integer;               // The Keyword ID
-    proc : TKeywordProc;        // Handler method
-    constructor Create (AKeyword : Integer; AProc : TKeywordProc);
+  TKeyWordDetails = class       // Per keyWord details - used to populate FKeyWords object list
+    kw: Integer;               // The KeyWord ID
+    proc: TKeyWordProc;        // Handler method
+    constructor Create (AKeyWord: Integer; AProc: TKeyWordProc);
   end;
 
   TRCParser = class;
 
   TResourceOptions = class      // Options - populated by CreateResourceOptions
   private
-    fParser : TRCParser;
-    fSupportedKeywords : TSupportedKeywords;
-    fCharacteristics: DWORD;
-    fCaption: string;
-    fClass: TSzOrID;
-    fFontSize: DWORD;
-    fExStyle: DWORD;
-    fStyle: DWORD;
-    fVersion: DWORD;
-    fLanguage: Integer;
-    fFontFace: string;
-    fMenuId: TSzOrID;
-    fFontWeight : Integer;
-    fFontItalic : Integer;
-    fFontCharset : Integer;
+    FParser: TRCParser;
+    FSupportedKeyWords: TSupportedKeyWords;
+    FCharacteristics: DWORD;
+    FCaption: string;
+    FClass: TSzOrID;
+    FFontSize: DWORD;
+    FExStyle: DWORD;
+    FStyle: DWORD;
+    FVersion: DWORD;
+    FLanguage: Integer;
+    FFontFace: string;
+    FMenuId: TSzOrID;
+    FFontWeight: Integer;
+    FFontItalic: Integer;
+    FFontCharset: Integer;
   public
-    constructor Create (Parser : TRCParser; SupportedKeywords : TSupportedKeywords);
-    property Caption : string read fCaption;
-    property Characteristics : DWORD read fCharacteristics;
-    property _Class : TSzOrID read fClass;
-    property ExStyle : DWORD read fExStyle;
-    property FontSize : DWORD read fFontSize;
-    property FontFace : string read fFontFace;
-    property Language : Integer read fLanguage;
-    property MenuId : TSzOrID read fMenuId;
-    property Style : DWORD read fStyle;
-    property Version : DWORD read fVersion;
+    constructor Create (Parser: TRCParser; SupportedKeyWords: TSupportedKeyWords);
+    property Caption: string read FCaption;
+    property Characteristics: DWORD read FCharacteristics;
+    property _Class: TSzOrID read FClass;
+    property ExStyle: DWORD read FExStyle;
+    property FontSize: DWORD read FFontSize;
+    property FontFace: string read FFontFace;
+    property Language: Integer read FLanguage;
+    property MenuId: TSzOrID read FMenuId;
+    property Style: DWORD read FStyle;
+    property Version: DWORD read FVersion;
   end;
 
   TControlParamsOption = (cpHasText, cpNeedsCXCY, cpNeedsStyle);
@@ -181,13 +181,13 @@ type
 // '#' directives
   TRCParser = class (TCPreProcessor)
   private
-    fName : TValue;
-    fEOF : boolean;
+    FName: TValue;
+    FEOF: Boolean;
 
-    fLangId : Integer;
+    FLangId: Integer;
 
-    fParent : TResourceModule;
-    fKeywords : TStringList;
+    FParent: TResourceModule;
+    FKeyWords: TStringList;
 
     procedure DoLanguage;
     procedure DoIcon;
@@ -202,101 +202,101 @@ type
     procedure DoVersionInfo;
     procedure DoStringTable;
     procedure SkipYeOldeMemoryAttributes;
-    function Keyword (const st : string) : TKeywordDetails;
-    function KeyID : Integer;    // Returns keyword ID of current token - or -1
-    function CreateResourceOptions (SupportedKeywords : TSupportedKeywords; var validKeywords : TSupportedKeywords) : TResourceOptions;
-    function NextExpression (var v : TValue) : boolean;
-    function NextIntegerExpression : Integer;
+    function KeyWord (const st: string): TKeyWordDetails;
+    function KeyID: Integer;    // Returns keyWord ID of current token - or -1
+    function CreateResourceOptions (SupportedKeyWords: TSupportedKeyWords; var validKeyWords: TSupportedKeyWords): TResourceOptions;
+    function NextExpression (var v: TValue): Boolean;
+    function NextIntegerExpression: Integer;
 
-    function GetControlParams (ex : boolean; var text : TSzOrID; var id : DWORD; var x, y, cx, cy : Integer; var style, exStyle, helpId : DWORD; options : TControlParamsOptions) : boolean;
+    function GetControlParams (ex: Boolean; var text: TSzOrID; var id: DWORD; var x, y, cx, cy: Integer; var style, exStyle, helpId: DWORD; options: TControlParamsOptions): Boolean;
   public
-    constructor Create (stream : TStream; AParent : TResourceModule);
+    constructor Create (stream: TStream; AParent: TResourceModule);
     destructor Destroy; override;
     procedure Parse; override;
   end;
 
 type
   TkwRec = record
-    kw : string;
-    id : Integer;
-    pr : pointer;
-    resID : PChar;
+    kw: string;
+    id: Integer;
+    pr: pointer;
+    resID: PChar;
   end;
 
 const
-  NoKeywords = 52;
+  NoKeyWords = 52;
 
 var
-  KeywordTable : array [0..NoKeywords - 1] of TkwRec = (
+  KeyWordTable: array [0..NoKeyWords - 1] of TkwRec = (
 
   // Resource types
 
-    (kw : 'LANGUAGE';        id : kwLanguage;        pr : @TRCParser.DoLanguage),
-    (kw : 'ICON';            id : kwIcon;            pr : @TRCParser.DoIcon;    resId : RT_GROUP_ICON) ,
-    (kw : 'DIALOG';          id : kwDialog;          pr : @TRCParser.DoDialog;  resId : RT_DIALOG),
-    (kw : 'MENU';            id : kwMenu;            pr : @TRCParser.DoMenu;    resId : RT_MENU),
-    (kw : 'BITMAP';          id : kwBitmap;          pr : @TRCParser.DoBitmap;  resId : RT_BITMAP),
-    (kw : 'CURSOR';          id : kwCursor;          pr : @TRCParser.DoCursor;  resId : RT_GROUP_CURSOR),
-    (kw : 'TOOLBAR';         id : kwToolbar;         pr : @TRCParser.DoToolbar; resId : RT_TOOLBAR),
-    (kw : 'DIALOGEX';        id : kwDialogEx;        pr : @TRCParser.DoDialogEx),
-    (kw : 'MESSAGETABLE';    id : kwMessageTable;    pr : @TRCParser.DoMessageTable; resId : RT_MESSAGETABLE),
-    (kw : 'ACCELERATORS';    id : kwAccelerators;    pr : @TRCParser.DoAccelerators; resId : RT_ACCELERATOR),
-    (kw : 'STRINGTABLE';     id : kwStringTable;     pr : @TRCParser.DoStringTable;  resId : RT_STRING),
-    (kw : 'VERSIONINFO';     id : kwVersionInfo;     pr : @TRCParser.DoVersionInfo;  resId : RT_VERSION),
+    (kw: 'LANGUAGE';        id: kwLanguage;        pr: @TRCParser.DoLanguage),
+    (kw: 'ICON';            id: kwIcon;            pr: @TRCParser.DoIcon;    resId: RT_GROUP_ICON) ,
+    (kw: 'DIALOG';          id: kwDialog;          pr: @TRCParser.DoDialog;  resId: RT_DIALOG),
+    (kw: 'MENU';            id: kwMenu;            pr: @TRCParser.DoMenu;    resId: RT_MENU),
+    (kw: 'BITMAP';          id: kwBitmap;          pr: @TRCParser.DoBitmap;  resId: RT_BITMAP),
+    (kw: 'CURSOR';          id: kwCursor;          pr: @TRCParser.DoCursor;  resId: RT_GROUP_CURSOR),
+    (kw: 'TOOLBAR';         id: kwToolbar;         pr: @TRCParser.DoToolbar; resId: RT_TOOLBAR),
+    (kw: 'DIALOGEX';        id: kwDialogEx;        pr: @TRCParser.DoDialogEx),
+    (kw: 'MESSAGETABLE';    id: kwMessageTable;    pr: @TRCParser.DoMessageTable; resId: RT_MESSAGETABLE),
+    (kw: 'ACCELERATORS';    id: kwAccelerators;    pr: @TRCParser.DoAccelerators; resId: RT_ACCELERATOR),
+    (kw: 'STRINGTABLE';     id: kwStringTable;     pr: @TRCParser.DoStringTable;  resId: RT_STRING),
+    (kw: 'VERSIONINFO';     id: kwVersionInfo;     pr: @TRCParser.DoVersionInfo;  resId: RT_VERSION),
 
 
   // Resource options
-    (kw : 'CAPTION';         id : kwCaption;         pr : Nil),
-    (kw : 'CHARACTERISTICS'; id : kwCharacteristics; pr : nil),
-    (kw : 'CLASS';           id : kwClass;           pr : Nil),
-    (kw : 'EXSTYLE';         id : kwExStyle;         pr : Nil),
-    (kw : 'FONT';            id : kwFont;            pr : Nil),
-    (kw : 'STYLE';           id : kwStyle;           pr : Nil),
-    (kw : 'VERSION';         id : kwVersion;         pr : Nil),
+    (kw: 'CAPTION';         id: kwCaption;         pr: nil),
+    (kw: 'CHARACTERISTICS'; id: kwCharacteristics; pr: nil),
+    (kw: 'CLASS';           id: kwClass;           pr: nil),
+    (kw: 'EXSTYLE';         id: kwExStyle;         pr: nil),
+    (kw: 'FONT';            id: kwFont;            pr: nil),
+    (kw: 'STYLE';           id: kwStyle;           pr: nil),
+    (kw: 'VERSION';         id: kwVersion;         pr: nil),
 
     // Obsolete resource memory modifiers
-    (kw : 'DISCARDABLE';     id : kwDiscardable;     pr : Nil),
-    (kw : 'LOADONCALL';      id : kwLoadOnCall;      pr : Nil),
-    (kw : 'MOVEABLE';        id : kwMoveable;        pr : Nil),
-    (kw : 'PRELOAD';         id : kwPreload;         pr : Nil),
-    (kw : 'PURE';            id : kwPure;            pr : Nil),
+    (kw: 'DISCARDABLE';     id: kwDiscardable;     pr: nil),
+    (kw: 'LOADONCALL';      id: kwLoadOnCall;      pr: nil),
+    (kw: 'MOVEABLE';        id: kwMoveable;        pr: nil),
+    (kw: 'PRELOAD';         id: kwPreload;         pr: nil),
+    (kw: 'PURE';            id: kwPure;            pr: nil),
 
-    // Accelerator keywords
-    (kw : 'VIRTKEY';         id : kwVirtkey;         pr : Nil),
-    (kw : 'ASCII';           id : kwAscii;           pr : Nil),
-    (kw : 'NOINVERT';        id : kwNoInvert;        pr : Nil),
-    (kw : 'ALT';             id : kwAlt;             pr : Nil),
-    (kw : 'SHIFT';           id : kwShift;           pr : Nil),
-//  nb.  The CONTROL keyword is used for accelerators and also
+    // Accelerator keyWords
+    (kw: 'VIRTKEY';         id: kwVirtkey;         pr: nil),
+    (kw: 'ASCII';           id: kwAscii;           pr: nil),
+    (kw: 'NOINVERT';        id: kwNoInvert;        pr: nil),
+    (kw: 'ALT';             id: kwAlt;             pr: nil),
+    (kw: 'SHIFT';           id: kwShift;           pr: nil),
+//  nb.  The CONTROL keyWord is used for accelerators and also
 //       custom controls.  It is defined below
 
-    (kw : 'POPUP';           id : kwPopup;           pr : Nil),
-    (kw : 'MENUITEM';        id : kwMenuItem;        pr : Nil),
+    (kw: 'POPUP';           id: kwPopup;           pr: nil),
+    (kw: 'MENUITEM';        id: kwMenuItem;        pr: nil),
 
-    (kw : 'BEGIN';           id : kwBegin;           pr : Nil),
-    (kw : 'END';             id : kwEnd;             pr : Nil),
+    (kw: 'BEGIN';           id: kwBegin;           pr: nil),
+    (kw: 'END';             id: kwEnd;             pr: nil),
 
 // Control identifiers
-    (kw : 'BUTTON';          id : kwButton;          pr : Nil),
-    (kw : 'SEPARATOR';       id : kwSeparator;       pr : Nil),
-    (kw : 'LTEXT';           id : kwLText;           pr : Nil),
-    (kw : 'DEFPUSHBUTTON';   id : kwDefPushButton;   pr : Nil),
-    (kw : 'CONTROL';         id : kwControl;         pr : Nil),
-    (kw : 'EDITTEXT';        id : kwEditText;        pr : Nil),
-    (kw : 'PUSHBUTTON';      id : kwPushButton;      pr : Nil),
+    (kw: 'BUTTON';          id: kwButton;          pr: nil),
+    (kw: 'SEPARATOR';       id: kwSeparator;       pr: nil),
+    (kw: 'LTEXT';           id: kwLText;           pr: nil),
+    (kw: 'DEFPUSHBUTTON';   id: kwDefPushButton;   pr: nil),
+    (kw: 'CONTROL';         id: kwControl;         pr: nil),
+    (kw: 'EDITTEXT';        id: kwEditText;        pr: nil),
+    (kw: 'PUSHBUTTON';      id: kwPushButton;      pr: nil),
 
-    (kw : 'AUTO3STATE';      id : kwAuto3State;      pr : Nil),
-    (kw : 'AUTOCHECKBOX';    id : kwAutoCheckBox;    pr : Nil),
-    (kw : 'AUTORADIOBUTTON'; id : kwAutoRadioButton; pr : Nil),
-    (kw : 'CHECKBOX';        id : kwCheckBox;        pr : Nil),
-    (kw : 'STATE3';          id : kwState3;          pr : Nil),
-    (kw : 'RADIOBUTTON';     id : kwRadioButton;     pr : Nil),
-    (kw : 'CTEXT';           id : kwCText;           pr : Nil),
-    (kw : 'RTEXT';           id : kwRText;           pr : Nil),
-    (kw : 'GROUPBOX';        id : kwGroupBox;        pr : Nil),
-    (kw : 'PUSHBOX';         id : kwPushBox;         pr : Nil),
-    (kw : 'LISTBOX';         id : kwListBox;         pr : Nil),
-    (kw : 'COMBOBOX';        id : kwComboBox;        pr : Nil)
+    (kw: 'AUTO3STATE';      id: kwAuto3State;      pr: nil),
+    (kw: 'AUTOCHECKBOX';    id: kwAutoCheckBox;    pr: nil),
+    (kw: 'AUTORADIOBUTTON'; id: kwAutoRadioButton; pr: nil),
+    (kw: 'CHECKBOX';        id: kwCheckBox;        pr: nil),
+    (kw: 'STATE3';          id: kwState3;          pr: nil),
+    (kw: 'RADIOBUTTON';     id: kwRadioButton;     pr: nil),
+    (kw: 'CTEXT';           id: kwCText;           pr: nil),
+    (kw: 'RTEXT';           id: kwRText;           pr: nil),
+    (kw: 'GROUPBOX';        id: kwGroupBox;        pr: nil),
+    (kw: 'PUSHBOX';         id: kwPushBox;         pr: nil),
+    (kw: 'LISTBOX';         id: kwListBox;         pr: nil),
+    (kw: 'COMBOBOX';        id: kwComboBox;        pr: nil)
   );
 
 {*----------------------------------------------------------------------*
@@ -304,11 +304,11 @@ var
  |                                                                      |
  | Returns a LANGID from primary and sub language constituents          |
  *----------------------------------------------------------------------*}
-function MakeLangId (pri, sec : word) : Integer;
+function MakeLangId (pri, sec: Word): Integer;
 begin
   if (pri > 0) and (sec = 0) then
     sec := 1;
-  result := (pri and $3ff) or (sec shl 10)
+  Result := (pri and $3ff) or (sec shl 10)
 end;
 
 {*----------------------------------------------------------------------*
@@ -317,13 +317,13 @@ end;
  | Returns a string representation of a value returned by the C         |
  | pre-processor's expressions evaluator.                               |
  *----------------------------------------------------------------------*}
-function ValToStr (val : TValue) : string;
+function ValToStr (val: TValue): string;
 begin
   if val.tp = vInteger then
-    result := IntToStr (val.iVal)
+    Result := IntToStr (val.iVal)
   else
     if val.tp = vString then
-      result := val.sVal
+      Result := val.sVal
     else
       raise EParser.Create('Integer or string expected');
 end;
@@ -334,18 +334,18 @@ end;
  | Returns a resource SzOrID identifier from a value returned by the    |
  | C evaluator                                                          |
  *----------------------------------------------------------------------*}
-function ValToSzOrID (val : TValue) : TSzOrId;
+function ValToSzOrID (val: TValue): TSzOrId;
 begin
   if val.tp = vInteger then
   begin
-    result.isID := True;
-    result.id := val.iVal
+    Result.isID := True;
+    Result.id := val.iVal
   end
   else
     if val.tp = vString then
     begin
-      result.isID := False;
-      result.sz := val.sVal
+      Result.isID := False;
+      Result.sz := val.sVal
     end
     else
       raise EParser.Create('Type mismatch');
@@ -363,12 +363,12 @@ end;
 constructor TRCModule.Create;
 begin
   inherited;
-  fIncludePath := GetEnvironmentVariable ('include');
+  FIncludePath := GetEnvironmentVariable ('include');
 end;
 
 procedure TRCModule.LoadFromFile(const FileName: string);
 begin
-  fFileName := FileName;
+  FFileName := FileName;
   inherited;
 end;
 
@@ -382,10 +382,10 @@ end;
  *----------------------------------------------------------------------*}
 procedure TRCModule.LoadFromStream(stream: TStream);
 var
-  parser : TRCParser;
+  parser: TRCParser;
 begin
   parser := TRCParser.Create(stream, self);
-  parser.PathName := ExtractFilePath (fFileName);
+  parser.PathName := ExtractFilePath (FFileName);
 
   // Add identifiers so that MSVC resource script load correctly
   parser.AddIdentifier('RC_INVOKED', '');
@@ -419,33 +419,33 @@ end;
  *----------------------------------------------------------------------*}
 constructor TRCParser.Create(stream: TStream; AParent: TResourceModule);
 type
-  t = record case boolean of
-    true  : (p : TKeywordProc);
-    false : (pt, slf : Pointer);
+  t = record case Boolean of
+    true: (p: TKeyWordProc);
+    false: (pt, slf: Pointer);
   end;
 var
-  i : Integer;
-  tt : t;
+  i: Integer;
+  tt: t;
 
 begin
-  fParent := AParent;
-  fLangId := SysLocale.DefaultLCID;  // Check - maybe should be US LCID
+  FParent := AParent;
+  FLangId := SysLocale.DefaultLCID;  // Check - maybe should be US LCID
   inherited Create (stream);
 
-  fKeywords := TStringList.Create;
-  fKeywords.CaseSensitive := false;
-                                        // Populate the fKeywords object list
-                                        // from the KeywordTable
-  for i := 0 to NoKeywords - 1 do
-    with KeywordTable [i] do
+  FKeyWords := TStringList.Create;
+  FKeyWords.CaseSensitive := false;
+                                        // Populate the FKeyWords object list
+                                        // from the KeyWordTable
+  for i := 0 to NoKeyWords - 1 do
+    with KeyWordTable [i] do
     begin
       tt.pt := pr;
       tt.slf := self;                   // Fixup the 'self' pointer in the
                                         // methood call
-      fKeywords.AddObject(kw, TKeywordDetails.Create(id, tt.p));
+      FKeyWords.AddObject(kw, TKeyWordDetails.Create(id, tt.p));
     end;
 
-  fKeywords.Sorted := True;
+  FKeyWords.Sorted := True;
 end;
 
 {*----------------------------------------------------------------------*
@@ -453,99 +453,99 @@ end;
  |                                                                      |
  | Create a TResourceOptions class, and populate it from the resource   |
  | options for the particular resource type.  Return the options        |
- | keywords actually found, so that the rest of the supported keywords  |
+ | keyWords actually found, so that the rest of the supported keyWords  |
  | can be filled with default values.                                   |
  |                                                                      |
  | Parameters:                                                          |
- |   SupportedKeywords: TSupportedKeywords      Keywords supported by   |
+ |   SupportedKeyWords: TSupportedKeyWords      KeyWords supported by   |
  |                                              the resource type       |
  |                                                                      |
- |   var validKeywords : TSupportedKeywords     Keywords actually found |
+ |   var validKeyWords: TSupportedKeyWords     KeyWords actually found |
  |                                              in the RC stream        |
  |                                                                      |
  | The function creates and returns the TResourceOptions class.         |
  *----------------------------------------------------------------------*}
 function TRCParser.CreateResourceOptions(
-  SupportedKeywords: TSupportedKeywords; var validKeywords : TSupportedKeywords): TResourceOptions;
+  SupportedKeyWords: TSupportedKeyWords; var validKeyWords: TSupportedKeyWords): TResourceOptions;
 var
-  kw : Integer;
-  v : TValue;
-  pri, sec : word;
-  hasToken : boolean;
+  kw: Integer;
+  v: TValue;
+  pri, sec: Word;
+  hasToken: Boolean;
 begin
-  validKeywords := [];
-  if KeyID in SupportedKeywords then
+  validKeyWords := [];
+  if KeyID in SupportedKeyWords then
   begin
-    result := TResourceOptions.Create(self, SupportedKeywords);
-    result.fLanguage := fLangId;
-    validKeywords := [kwLanguage];
+    Result := TResourceOptions.Create(self, SupportedKeyWords);
+    Result.FLanguage := FLangId;
+    validKeyWords := [kwLanguage];
 
     repeat
       kw := KeyID;
-                        // Finish when we find a keyword that's not
+                        // Finish when we find a keyWord that's not
                         // in the supported list.  If everything is going OK
                         // this will be the first token that makes up the
                         // actual resource data.
 
-      if not (kw in SupportedKeywords) then break;
+      if not(kw in SupportedKeyWords) then break;
 
       hasToken := False;
       case kw of
-        kwCaption : begin       // Parse a CAPTION statement followed by
+        kwCaption: begin       // Parse a CAPTION statement followed by
                                 // "captiontext" in double quotes.
-                      result.fCaption := NextString;
-                      Include (validKeywords, kwCaption)
+                      Result.FCaption := NextString;
+                      Include (validKeyWords, kwCaption)
                     end;
 
-        kwCharacteristics :     // Parse a CHARACTERISTICS statement followed
+        kwCharacteristics:     // Parse a CHARACTERISTICS statement followed
                                 // by a DWORD value.  Which is irrelevant
                     begin
-                      result.fCharacteristics := NextInteger;
-                      Include (validKeywords, kwCharacteristics)
+                      Result.FCharacteristics := NextInteger;
+                      Include (validKeyWords, kwCharacteristics)
                     end;
 
-        kwStyle   : begin       // Parse a STYLE statement followed by a DWORD
+        kwStyle: begin       // Parse a STYLE statement followed by a DWORD
                                 // expression containing a window style
 
                       NextExpression (v);
                       hasToken := True;
                       if v.tp = vInteger then
-                        result.fStyle := v.iVal
+                        Result.FStyle := v.iVal
                       else
                         raise Exception.Create ('Integer expected in STYLE');
-                      Include (validKeywords, kwStyle);
+                      Include (validKeyWords, kwStyle);
                     end;
 
-        kwExStyle : begin       // Parse an EXSTYLE statement followed by a DWORD
+        kwExStyle: begin       // Parse an EXSTYLE statement followed by a DWORD
                                 // expressions containing a window Ex Style
 
                       NextExpression (v);
                       hasToken := True;
                       if v.tp = vInteger then
-                        result.fExStyle := v.iVal
+                        Result.FExStyle := v.iVal
                       else
                         raise Exception.Create ('Integer expected in EXSTYLE');
-                      Include (validKeywords, kwExStyle);
+                      Include (validKeyWords, kwExStyle);
                     end;
 
-        kwFont    : begin       // Parse a FONT statement followed by the
+        kwFont: begin       // Parse a FONT statement followed by the
                                 // fontsize DWORD and string font name.  If this
                                 // occurs in an EXDIALOG, this is followed by the
                                 // Weight, Italic and CharSet values
-                      result.fFontSize := NextInteger;
+                      Result.FFontSize := NextInteger;
                       NextChar (',');
-                      result.fFontFace := NextString;
+                      Result.FFontFace := NextString;
                       GetToken;
                       hasToken := True;
                       if (TokenType = ttChar) and (TokenChar = ',') then
                       begin
-                        result.fFontWeight := NextIntegerExpression;
+                        Result.FFontWeight := NextIntegerExpression;
                         ExpectChar (',');
-                        result.fFontItalic := NextIntegerExpression;
+                        Result.FFontItalic := NextIntegerExpression;
                         ExpectChar (',');
-                        result.fFontCharset := NextIntegerExpression;
+                        Result.FFontCharset := NextIntegerExpression;
                       end;
-                      Include (validKeywords, kwFont);
+                      Include (validKeyWords, kwFont);
                     end;
 
         kwLanguage :begin       // Parse a LANGUAGE statement followed by the
@@ -553,39 +553,39 @@ begin
                       pri := NextInteger;
                       NextChar (',');
                       sec := NextInteger;
-                      result.fLanguage := MakeLangID (pri, sec);
+                      Result.FLanguage := MakeLangID (pri, sec);
                     end;
 
-        kwMenu     : begin      // Parse a MENU stetement.  Not to be confused
+        kwMenu : begin      // Parse a MENU stetement.  Not to be confused
                                 // with a menu resource type identifier - this
                                 // option may appear in DIALOG and DIALOGEX resources.
-                                // The keyword 'MENU' is followed by the menu SZ or ID
+                                // The keyWord 'MENU' is followed by the menu SZ or ID
 
                        GetToken;
-                       result.fMenuId := ValToSzOrID (ResolveToken);
-                       Include (validKeywords, kwMenu);
+                       Result.FMenuId := ValToSzOrID (ResolveToken);
+                       Include (validKeyWords, kwMenu);
                      end;
 
-        kwClass    : begin      // Parse a CLASS statement followed by an Sz or ID
+        kwClass: begin      // Parse a CLASS statement followed by an Sz or ID
                                 // window (dialog) class identifier.
                        GetToken;
-                       result.fClass := ValToSzOrID (ResolveToken);
-                       Include (validKeywords, kwClass);
+                       Result.FClass := ValToSzOrID (ResolveToken);
+                       Include (validKeyWords, kwClass);
                      end;
 
-        kwVersion  : begin      // VERSION statement followed by an ignored
+        kwVersion: begin      // VERSION statement followed by an ignored
                                 // version DWORD.  Not to be confused with a
                                 // VERSIONINFO resource type
-                       result.fVersion := NextInteger;
-                       Include (validKeywords, kwVersion)
+                       Result.FVersion := NextInteger;
+                       Include (validKeyWords, kwVersion)
                      end
       end;
       if not hasToken then
-        fEOF := not GetToken;
-    until fEOF
+        FEOF := not GetToken;
+    until FEOF
   end
   else
-    result := Nil;
+    Result := nil;
 end;
 
 {*----------------------------------------------------------------------*
@@ -593,11 +593,11 @@ end;
  *----------------------------------------------------------------------*}
 destructor TRCParser.Destroy;
 var
-  i : Integer;
+  i: Integer;
 begin
-  for i := fKeywords.Count - 1 downto 0 do
-    fKeywords.Objects [i].Free;
-  fKeywords.Free;
+  for i := FKeyWords.Count - 1 downto 0 do
+    FKeyWords.Objects [i].Free;
+  FKeyWords.Free;
 
   inherited;
 end;
@@ -612,24 +612,24 @@ end;
  *----------------------------------------------------------------------*)
 procedure TRCParser.DoAccelerators;
 var
-  ac : TAcceleratorResourceDetails;
-  v : TValue;
-  vk : Integer;
-  flags : Integer;
-  l, id : Integer;
-  options : TResourceOptions;
-  validKeywords : TSupportedKeywords;
+  ac: TAcceleratorResourceDetails;
+  v: TValue;
+  vk: Integer;
+  flags: Integer;
+  l, id: Integer;
+  options: TResourceOptions;
+  validKeyWords: TSupportedKeyWords;
 
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
 
-  options := CreateResourceOptions (AcceleratorsOptionKeywords, validKeywords);
+  options := CreateResourceOptions (AcceleratorsOptionKeyWords, validKeyWords);
   try
-   if Assigned (options) then
-      ac := TAcceleratorResourceDetails.CreateNew(fParent, options.Language, ValToStr (fName))
+   if Assigned(options) then
+      ac := TAcceleratorResourceDetails.CreateNew(FParent, options.Language, ValToStr (FName))
     else
-      ac := TAcceleratorResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
+      ac := TAcceleratorResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
 
     if KeyID = kwBegin then
     while NextExpression (v) do // First expression contains the virtual key
@@ -671,11 +671,11 @@ begin
         GetToken;
 
         case KeyID of
-          kwVirtKey  : flags := flags or FVIRTKEY;
-          kwNoInvert : flags := flags or FNOINVERT;
-          kwShift    : flags := flags or FSHIFT;
-          kwAlt      : flags := flags or FALT;
-          kwControl  : flags := flags or FCONTROL;
+          kwVirtKey: flags := flags or FVIRTKEY;
+          kwNoInvert: flags := flags or FNOINVERT;
+          kwShift: flags := flags or FSHIFT;
+          kwAlt  : flags := flags or FALT;
+          kwControl: flags := flags or FCONTROL;
         end;
       end;
 
@@ -698,15 +698,15 @@ end;
  *----------------------------------------------------------------------*}
 procedure TRCParser.DoBitmap;
 var
-  fFileName : string;
-  bmp : TBitmapResourceDetails;
+  FFileName: string;
+  bmp: TBitmapResourceDetails;
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
-  fFileName := ExpectString ('File name expected');
+  FFileName := ExpectString ('File name expected');
 
-  bmp := TBitmapResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
-  bmp.LoadImage(PathName + fFileName);
+  bmp := TBitmapResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
+  bmp.LoadImage(PathName + FFileName);
   GetToken;
 end;
 
@@ -719,14 +719,14 @@ end;
  *----------------------------------------------------------------------*}
 procedure TRCParser.DoCursor;
 var
-  fFileName : string;
-  cur : TIconCursorGroupResourceDetails;
+  FFileName: string;
+  cur: TIconCursorGroupResourceDetails;
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
-  fFileName := ExpectString ('File name expected');
-  cur := TCursorGroupResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
-  cur.LoadImage(PathName + fFileName);
+  FFileName := ExpectString ('File name expected');
+  cur := TCursorGroupResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
+  cur.LoadImage(PathName + FFileName);
   GetToken;
 end;
 
@@ -742,16 +742,16 @@ end;
  *----------------------------------------------------------------------*)
 procedure TRCParser.DoDialog;
 var
-  x, y, cx, cy, ctlCount : Integer;
-  id, style, exstyle, fontSize, dummy : DWORD;
-  options : TResourceOptions;
-  dlg : TDialogResourceDetails;
-  validKeywords : TSupportedKeywords;
-  p : PDlgTemplate;
-  menu, cls, title : TSzOrID;
-  faceName : string;
-  v : TValue;
-  controlOptions : TControlParamsOptions;
+  x, y, cx, cy, ctlCount: Integer;
+  id, style, exstyle, fontSize, dummy: DWORD;
+  options: TResourceOptions;
+  dlg: TDialogResourceDetails;
+  validKeyWords: TSupportedKeyWords;
+  p: PDlgTemplate;
+  menu, cls, title: TSzOrID;
+  faceName: string;
+  v: TValue;
+  controlOptions: TControlParamsOptions;
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
@@ -763,14 +763,14 @@ begin
   cy := NextInteger;  GetToken;
 
   // Get dialog options - eg. caption.
-  options := CreateResourceOptions (DialogOptionKeywords, validKeywords);
+  options := CreateResourceOptions (DialogOptionKeyWords, validKeyWords);
   try
 
   // Create the dialog resource
-    if Assigned (options) then
-      dlg := TDialogResourceDetails.CreateNew(fParent, options.fLanguage, ValToStr (fName))
+    if Assigned(options) then
+      dlg := TDialogResourceDetails.CreateNew(FParent, options.FLanguage, ValToStr (FName))
     else
-      dlg := TDialogResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
+      dlg := TDialogResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
 
     // Initialize a blank resource template
     p := PDlgTemplate (dlg.Data.Memory);
@@ -784,17 +784,17 @@ begin
     faceName := 'MS Shell Dlg';
 
     // Fill in the resource template options.
-    if Assigned (options) then
+    if Assigned(options) then
     begin
-      if kwStyle in validKeywords then style := options.Style;
-      if kwExStyle in validKeywords then exstyle := options.ExStyle;
-      if kwCaption in validKeywords then title := StringToSzOrID (options.fCaption);
-      if kwClass   in validKeywords then cls := options.fClass;
-      if kwMenu    in validKeywords then menu := options.fMenuId;
-      if kwFont    in validKeywords then
+      if kwStyle in validKeyWords then style := options.Style;
+      if kwExStyle in validKeyWords then exstyle := options.ExStyle;
+      if kwCaption in validKeyWords then title := StringToSzOrID (options.FCaption);
+      if kwClass   in validKeyWords then cls := options.FClass;
+      if kwMenu    in validKeyWords then menu := options.FMenuId;
+      if kwFont    in validKeyWords then
       begin
-        fontSize := options.fFontSize;
-        faceName := options.fFontFace;
+        fontSize := options.FFontSize;
+        faceName := options.FFontFace;
       end
     end;
 
@@ -818,10 +818,10 @@ begin
                 style := WS_CHILD or WS_VISIBLE or WS_GROUP;
 
                 case KeyID of
-                  kwLText : style := style or SS_LEFT;
-                  kwCText : style := style or SS_CENTER;
-                  kwRText : style := style or SS_RIGHT;
-                  kwIcon  : begin
+                  kwLText: style := style or SS_LEFT;
+                  kwCText: style := style or SS_CENTER;
+                  kwRText: style := style or SS_RIGHT;
+                  kwIcon: begin
                               style := style or SS_ICON;
                               controlOptions := [cpHasText];
                               cx := GetSystemMetrics (SM_CXICON);
@@ -834,27 +834,27 @@ begin
 
                 GetControlParams (false, title, id, x, y, cx, cy, style, exstyle, dummy, controlOptions);
                 dlg.InitAddControl(cls, id, title, x, y, cx, cy, style, exstyle, 0, id);
-                Inc (CtlCount)
+                Inc(CtlCount)
               end;
 
-            kwListBox :         // Handle ListBox control
+            kwListBox:         // Handle ListBox control
               begin
                 cls.isID := True;
                 cls.id := LISTBOX_ID;
                 style := WS_CHILD or WS_VISIBLE or WS_BORDER or LBS_NOTIFY;
                 GetControlParams (false, title, id, x, y, cx, cy, style, exstyle, dummy, [cpNeedsCXCY]);
                 dlg.InitAddControl(cls, id, title, x, y, cx, cy, style, exstyle, 0, id);
-                Inc (CtlCount)
+                Inc(CtlCount)
               end;
 
-            kwComboBox :        // Handle ComboBox control
+            kwComboBox:        // Handle ComboBox control
               begin
                 cls.isID := True;
                 cls.id := COMBOBOX_ID;
                 style := WS_CHILD or WS_VISIBLE or CBS_SIMPLE or WS_TABSTOP;
                 GetControlParams (false, title, id, x, y, cx, cy, style, exstyle, dummy, [cpNeedsCXCY]);
                 dlg.InitAddControl(cls, id, title, x, y, cx, cy, style, exstyle, 0, id);
-                Inc (CtlCount)
+                Inc(CtlCount)
               end;
 
               kwPushButton,     // Handle Button-type control
@@ -873,34 +873,34 @@ begin
                   style := WS_CHILD or WS_VISIBLE or WS_TABSTOP;
 
                   case KeyID of
-                    kwPushButton      : style := style or BS_PUSHBUTTON;
-                    kwDefPushButton   : style := style or BS_DEFPUSHBUTTON;
-                    kwAuto3State      : style := style or BS_AUTO3STATE;
-                    kwAutoCheckBox    : style := style or BS_AUTOCHECKBOX;
-                    kwAutoRadioButton : style := style or BS_AUTORADIOBUTTON;
-                    kwCheckBox        : style := style or BS_CHECKBOX;
-                    kwRadioButton     : style := style or BS_RADIOBUTTON;
-                    kwState3          : style := style or BS_3STATE;
-                    kwGroupBox        : style := (style and (not WS_TABSTOP)) or BS_GROUPBOX;
-                    kwPushBox         : style := style or BS_PUSHBOX;
+                    kwPushButton  : style := style or BS_PUSHBUTTON;
+                    kwDefPushButton: style := style or BS_DEFPUSHBUTTON;
+                    kwAuto3State  : style := style or BS_AUTO3STATE;
+                    kwAutoCheckBox: style := style or BS_AUTOCHECKBOX;
+                    kwAutoRadioButton: style := style or BS_AUTORADIOBUTTON;
+                    kwCheckBox    : style := style or BS_CHECKBOX;
+                    kwRadioButton : style := style or BS_RADIOBUTTON;
+                    kwState3      : style := style or BS_3STATE;
+                    kwGroupBox    : style := (style and (not WS_TABSTOP)) or BS_GROUPBOX;
+                    kwPushBox     : style := style or BS_PUSHBOX;
                   end;
 
                   GetControlParams (false, title, id, x, y, cx, cy, style, exstyle, dummy, [cpHasText, cpNeedsCXCY]);
                   dlg.InitAddControl(cls, id, title, x, y, cx, cy, style, exstyle, 0, id);
-                  Inc (CtlCount)
+                  Inc(CtlCount)
                 end;
 
-              kwEditText :              // Handle Edit control
+              kwEditText:              // Handle Edit control
                 begin
                   cls.isID := True;
                   cls.id := EDIT_ID;
                   style := WS_CHILD or WS_VISIBLE or ES_LEFT or WS_BORDER or WS_TABSTOP;
                   GetControlParams (false, title, id, x, y, cx, cy, style, exstyle, dummy, [cpNeedsCXCY]);
                   dlg.InitAddControl(cls, id, title, x, y, cx, cy, style, exstyle, 0, id);
-                  Inc (CtlCount)
+                  Inc(CtlCount)
                 end;
 
-              kwControl :               // Handle custom control
+              kwControl:               // Handle custom control
                 begin
                   NextExpression (v);
                   title := ValToSZOrId (v);
@@ -923,7 +923,7 @@ begin
                   if (TokenType = ttChar) and (TokenChar = ',') then
                     exStyle := NextIntegerExpression;
                   dlg.InitAddControl(cls, id, title, x, y, cx, cy, style, exstyle, 0, id);
-                  Inc (CtlCount)
+                  Inc(CtlCount)
                 end
               else
                 GetToken;
@@ -933,7 +933,7 @@ begin
         until KeyID = kwEnd
       end
     finally
-      dlg.EndInit (CtlCount)
+      dlg.EndInit(CtlCount)
     end
   finally
     options.Free
@@ -954,16 +954,16 @@ end;
  *----------------------------------------------------------------------*)
 procedure TRCParser.DoDialogEx;
 var
-  x, y, cx, cy, ctlCount : Integer;
-  id, style, exstyle, fontSize, helpId, fontWeight, fontItalic, fontCharset : DWORD;
-  options : TResourceOptions;
-  dlg : TDialogResourceDetails;
-  validKeywords : TSupportedKeywords;
-  p : PDlgTemplate;
-  menu, cls, title : TSzOrID;
-  faceName : string;
-  v : TValue;
-  controlOptions : TControlParamsOptions;
+  x, y, cx, cy, ctlCount: Integer;
+  id, style, exstyle, fontSize, helpId, fontWeight, fontItalic, fontCharset: DWORD;
+  options: TResourceOptions;
+  dlg: TDialogResourceDetails;
+  validKeyWords: TSupportedKeyWords;
+  p: PDlgTemplate;
+  menu, cls, title: TSzOrID;
+  faceName: string;
+  v: TValue;
+  controlOptions: TControlParamsOptions;
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
@@ -980,15 +980,15 @@ begin
     GetToken
   end;
 
-  options := CreateResourceOptions (DialogOptionKeywords, validKeywords);
+  options := CreateResourceOptions (DialogOptionKeyWords, validKeyWords);
   try
-    if Assigned (options) then
+    if Assigned(options) then
     begin
-      dlg := TDialogResourceDetails.CreateNew(fParent, options.fLanguage, ValToStr (fName));
-      if kwCaption in validKeywords then
+      dlg := TDialogResourceDetails.CreateNew(FParent, options.FLanguage, ValToStr (FName));
+      if kwCaption in validKeyWords then
     end
     else
-      dlg := TDialogResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
+      dlg := TDialogResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
 
     p := PDlgTemplate (dlg.Data.Memory);
     style := p^.style;
@@ -1003,20 +1003,20 @@ begin
     fontItalic := 0;
     fontCharset := DEFAULT_CHARSET;
 
-    if Assigned (options) then
+    if Assigned(options) then
     begin
-      if kwStyle in validKeywords then style := options.Style;
-      if kwExStyle in validKeywords then exstyle := options.ExStyle;
-      if kwCaption in validKeywords then title := StringToSzOrID (options.fCaption);
-      if kwClass   in validKeywords then cls := options.fClass;
-      if kwMenu    in validKeywords then menu := options.fMenuId;
-      if kwFont    in validKeywords then
+      if kwStyle in validKeyWords then style := options.Style;
+      if kwExStyle in validKeyWords then exstyle := options.ExStyle;
+      if kwCaption in validKeyWords then title := StringToSzOrID (options.FCaption);
+      if kwClass   in validKeyWords then cls := options.FClass;
+      if kwMenu    in validKeyWords then menu := options.FMenuId;
+      if kwFont    in validKeyWords then
       begin
-        fontSize := options.fFontSize;
-        faceName := options.fFontFace;
-        fontWeight := options.fFontWeight;
-        fontItalic := options.fFontItalic;
-        fontCharset := options.fFontCharset
+        fontSize := options.FFontSize;
+        faceName := options.FFontFace;
+        fontWeight := options.FFontWeight;
+        fontItalic := options.FFontItalic;
+        fontCharset := options.FFontCharset
       end
     end;
 
@@ -1038,10 +1038,10 @@ begin
                 style := WS_CHILD or WS_VISIBLE or WS_GROUP;
 
                 case KeyID of
-                  kwLText : style := style or SS_LEFT;
-                  kwCText : style := style or SS_CENTER;
-                  kwRText : style := style or SS_RIGHT;
-                  kwIcon  : begin
+                  kwLText: style := style or SS_LEFT;
+                  kwCText: style := style or SS_CENTER;
+                  kwRText: style := style or SS_RIGHT;
+                  kwIcon: begin
                               style := style or SS_ICON;
                               controlOptions := [cpHasText];
                               cx := GetSystemMetrics (SM_CXICON);
@@ -1054,7 +1054,7 @@ begin
 
                 GetControlParams (true, title, id, x, y, cx, cy, style, exstyle, helpId, controlOptions);
                 dlg.InitAddControlEx(cls, id, title, x, y, cx, cy, style, exstyle, helpId, 0, id);
-                Inc (CtlCount)
+                Inc(CtlCount)
               end;
 
             kwListBox :
@@ -1064,7 +1064,7 @@ begin
                 style := WS_CHILD or WS_VISIBLE or WS_BORDER or LBS_NOTIFY;
                 GetControlParams (true, title, id, x, y, cx, cy, style, exstyle, helpId, [cpNeedsCXCY]);
                 dlg.InitAddControlEx(cls, id, title, x, y, cx, cy, style, exstyle, helpId, 0, id);
-                Inc (CtlCount)
+                Inc(CtlCount)
               end;
 
             kwComboBox :
@@ -1074,7 +1074,7 @@ begin
                 style := WS_CHILD or WS_VISIBLE or CBS_SIMPLE or WS_TABSTOP;
                 GetControlParams (true, title, id, x, y, cx, cy, style, exstyle, helpId, [cpNeedsCXCY]);
                 dlg.InitAddControlEx(cls, id, title, x, y, cx, cy, style, exstyle, helpId, 0, id);
-                Inc (CtlCount)
+                Inc(CtlCount)
               end;
 
               kwPushButton,
@@ -1093,21 +1093,21 @@ begin
                   style := WS_CHILD or WS_VISIBLE or WS_TABSTOP;
 
                   case KeyID of
-                    kwPushButton      : style := style or BS_PUSHBUTTON;
-                    kwDefPushButton   : style := style or BS_DEFPUSHBUTTON;
-                    kwAuto3State      : style := style or BS_AUTO3STATE;
-                    kwAutoCheckBox    : style := style or BS_AUTOCHECKBOX;
-                    kwAutoRadioButton : style := style or BS_AUTORADIOBUTTON;
-                    kwCheckBox        : style := style or BS_CHECKBOX;
-                    kwRadioButton     : style := style or BS_RADIOBUTTON;
-                    kwState3          : style := style or BS_3STATE;
-                    kwGroupBox        : style := (style and (not WS_TABSTOP)) or BS_GROUPBOX;
-                    kwPushBox         : style := style or BS_PUSHBOX;
+                    kwPushButton  : style := style or BS_PUSHBUTTON;
+                    kwDefPushButton: style := style or BS_DEFPUSHBUTTON;
+                    kwAuto3State  : style := style or BS_AUTO3STATE;
+                    kwAutoCheckBox: style := style or BS_AUTOCHECKBOX;
+                    kwAutoRadioButton: style := style or BS_AUTORADIOBUTTON;
+                    kwCheckBox    : style := style or BS_CHECKBOX;
+                    kwRadioButton : style := style or BS_RADIOBUTTON;
+                    kwState3      : style := style or BS_3STATE;
+                    kwGroupBox    : style := (style and (not WS_TABSTOP)) or BS_GROUPBOX;
+                    kwPushBox     : style := style or BS_PUSHBOX;
                   end;
 
                   GetControlParams (true, title, id, x, y, cx, cy, style, exstyle, helpId, [cpHasText, cpNeedsCXCY]);
                   dlg.InitAddControlEx(cls, id, title, x, y, cx, cy, style, exstyle, helpId, 0, id);
-                  Inc (CtlCount)
+                  Inc(CtlCount)
                 end;
 
               kwEditText :
@@ -1117,7 +1117,7 @@ begin
                   style := WS_CHILD or WS_VISIBLE or ES_LEFT or WS_BORDER or WS_TABSTOP;
                   GetControlParams (true, title, id, x, y, cx, cy, style, exstyle, helpId, [cpNeedsCXCY]);
                   dlg.InitAddControlEx(cls, id, title, x, y, cx, cy, style, exstyle, helpId, 0, id);
-                  Inc (CtlCount)
+                  Inc(CtlCount)
                 end;
 
               kwControl :
@@ -1145,7 +1145,7 @@ begin
                   if (TokenType = ttChar) and (TokenChar = ',') then
                     helpId := NextIntegerExpression;
                   dlg.InitAddControlEx(cls, id, title, x, y, cx, cy, style, exstyle, helpId, 0, id);
-                  Inc (CtlCount)
+                  Inc(CtlCount)
                 end
               else
                 GetToken;
@@ -1173,14 +1173,14 @@ end;
  *----------------------------------------------------------------------*}
 procedure TRCParser.DoIcon;
 var
-  fFileName : string;
-  ico : TIconCursorGroupResourceDetails;
+  FFileName: string;
+  ico: TIconCursorGroupResourceDetails;
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
-  fFileName := ExpectString ('File name expected');
-  ico := TIconGroupResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
-  ico.LoadImage(PathName + fFileName);
+  FFileName := ExpectString ('File name expected');
+  ico := TIconGroupResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
+  ico.LoadImage(PathName + FFileName);
   GetToken;
 end;
 
@@ -1193,12 +1193,12 @@ end;
  *----------------------------------------------------------------------*}
 procedure TRCParser.DoLanguage;
 var
-  pri, sec : word;
+  pri, sec: Word;
 begin
   pri := NextInteger;
   NextChar (',');
   sec := NextInteger;
-  fLangId := MakeLangID (pri, sec);
+  FLangId := MakeLangID (pri, sec);
   GetToken;
 end;
 
@@ -1212,10 +1212,10 @@ end;
  *----------------------------------------------------------------------*)
 procedure TRCParser.DoMenu;
 var
-  validKeywords : TSupportedKeywords;
-  options : TResourceOptions;
-  mn : TMenuResourceDetails;
-  itm : TMenuItem;
+  validKeyWords: TSupportedKeyWords;
+  options: TResourceOptions;
+  mn: TMenuResourceDetails;
+  itm: TMenuItem;
 
 // Get menuitem or popup options - like CHECKED, GRAYED, etc.
   procedure GetMenuOptions;
@@ -1226,17 +1226,17 @@ var
 
 // Create a menu item, and populate it from the RC data.
 // Called recursively for popups.
-  function CreateMenuItem : TMenuItem;
+  function CreateMenuItem: TMenuItem;
   var
-    st : string;
-    id : Integer;
-    it : TMenuItem;
+    st: string;
+    id: Integer;
+    it: TMenuItem;
   begin
     GetToken;
-    result := TMenuItem.Create(nil);
+    Result := TMenuItem.Create(nil);
     repeat
       case KeyID of
-        kwMenuItem : begin
+        kwMenuItem: begin
                        GetToken;  // Menu caption, or SEPARATOR
                        id := 0;
                        if TokenType = ttString then
@@ -1256,14 +1256,14 @@ var
                        if TokenType = ttChar then
                          GetMenuOptions;
 
-                       it := TMenuItem.Create(Nil);
+                       it := TMenuItem.Create(nil);
                        it.Caption := st;
                        it.Tag := id;    // Can't set menuitem.command because it's
                                         // read-only.  TMenuResourceDetails uses
                                         // Tag instead.
-                       result.Add(it);
+                       Result.Add(it);
                      end;
-        kwPopup    : begin
+        kwPopup: begin
                         st := NextString;       // Popup menu caption
                         GetToken;
                         if TokenType = ttChar then
@@ -1274,7 +1274,7 @@ var
                         else
                           it := TMenuItem.Create (nil);
                         it.Caption := st;
-                        result.Add(it)
+                        Result.Add(it)
                      end;
         else
           break
@@ -1287,12 +1287,12 @@ begin
   GetToken;
   SkipYeOldeMemoryAttributes;
 
-  options := CreateResourceOptions (MenuOptionKeywords, validKeywords);
+  options := CreateResourceOptions (MenuOptionKeyWords, validKeyWords);
   try
-   if Assigned (options) then
-      mn := TMenuResourceDetails.CreateNew(fParent, options.Language, ValToStr (fName))
+   if Assigned(options) then
+      mn := TMenuResourceDetails.CreateNew(FParent, options.Language, ValToStr (FName))
     else
-      mn := TMenuResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
+      mn := TMenuResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
 
     if KeyID = kwBegin then
     begin
@@ -1310,23 +1310,23 @@ end;
 
 procedure TRCParser.DoMessageTable;
 var
-  fFileName : string;
-  mt : TMessageResourceDetails;
+  FFileName: string;
+  mt: TMessageResourceDetails;
 begin
   SkipWhitespace;
   if Ch = '"' then
     NextString
   else
     GetRestOfLine;
-  fFileName := Token;
-  mt := TMessageResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
-  mt.Data.LoadFromFile(PathName + fFileName);
+  FFileName := Token;
+  mt := TMessageResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
+  mt.Data.LoadFromFile(PathName + FFileName);
   GetToken;
 end;
 
 procedure TRCParser.DoStringTable;
 var
-  kw : DWORD;
+  kw: DWORD;
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
@@ -1341,10 +1341,10 @@ end;
 
 procedure TRCParser.DoToolbar;
 var
-//p  btnWidth, btnHeight : Integer;
-//  tb : TToolbarResourceDetails;
-  kw : Integer;
-  v : TValue;
+//p  btnWidth, btnHeight: Integer;
+//  tb: TToolbarResourceDetails;
+  kw: Integer;
+  v: TValue;
 begin
   GetToken;
   SkipYeOldeMemoryAttributes;
@@ -1353,7 +1353,7 @@ begin
   (* btnHeight := *) NextInteger;
   NextToken;
 
-  (* tb := *) TToolbarResourceDetails.CreateNew(fParent, fLangId, ValToStr (fName));
+  (* tb := *) TToolbarResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
 
   if KeyID = kwBegin then
   repeat
@@ -1382,17 +1382,17 @@ end;
 
 procedure TRCParser.DoVersionInfo;
 var
-//  v : TVersionInfoResourceDetails;
-  st : string;
-  beginendlevel : Integer;
+//  v: TVersionInfoResourceDetails;
+  st: string;
+  beginendlevel: Integer;
 
-  procedure GetFIXEDINFOId (const id : string; var st : string);
+  procedure GetFIXEDINFOId (const id: string; var st: string);
   var
-    msg : string;
+    msg: string;
   begin
     msg := id + ' expected';
     NextIdentifier (msg);
-    if not SameText (id, Token) then
+    if not SameText(id, Token) then
       raise EParser.Create(msg);
 
     st := GetRestOfLine;
@@ -1404,11 +1404,11 @@ begin
     if (Token = 'BLOCK') or (Token = 'BEGIN') then
       break;
     st := GetRestOfLine
-  until fEOF;
+  until FEOF;
 
-  if fEOF then Exit;
+  if FEOF then Exit;
 
-  (* v := *) TVersionInfoResourceDetails.CreateNew(fParent, fLangID, ValToStr (fName));
+  (* v := *) TVersionInfoResourceDetails.CreateNew(FParent, FLangId, ValToStr (FName));
 
   if Token = 'BEGIN' then
     beginendlevel := 1
@@ -1416,23 +1416,23 @@ begin
     beginEndLevel := 0;
 
   repeat
-    fEOF := not GetToken;
-    if fEOF then
+    FEOF := not GetToken;
+    if FEOF then
       break;
     if TokenType = ttIdentifier then
       if Token = 'BEGIN' then
-        Inc (beginendlevel)
+        Inc(beginendlevel)
       else
         if Token = 'END' then
-          Dec (beginendlevel)
+          Dec(beginendlevel)
   until beginendlevel = 0;
   GetToken;
 end;
 
-function TRCParser.GetControlParams(ex : boolean; var text: TSzOrID; var id: DWORD;
-  var x, y, cx, cy: Integer; var style, exStyle, helpId : DWORD; options : TControlParamsOptions) : boolean;
+function TRCParser.GetControlParams(ex: Boolean; var text: TSzOrID; var id: DWORD;
+  var x, y, cx, cy: Integer; var style, exStyle, helpId: DWORD; options: TControlParamsOptions): Boolean;
 var
-  v : TValue;
+  v: TValue;
 begin
   if cpHasText in options then
   begin
@@ -1475,97 +1475,97 @@ begin
   if ex then
     if (TokenType = ttChar) and (TokenChar = ',') then
       helpId := NextIntegerExpression;
-  result := True
+  Result := True
 end;
 
-function TRCParser.KeyID : Integer;
+function TRCParser.KeyID: Integer;
 var
-  kw : TKeywordDetails;
+  kw: TKeyWordDetails;
 begin
   if TokenType <> ttIdentifier then
-    result := -1
+    Result := -1
   else
   begin
-    kw := Keyword (Token);
-    if Assigned (kw) then
-      result := kw.kw
+    kw := KeyWord (Token);
+    if Assigned(kw) then
+      Result := kw.kw
     else
-      result := -1
+      Result := -1
   end
 end;
 
-function TRCParser.Keyword(const st: string): TKeywordDetails;
+function TRCParser.KeyWord(const st: string): TKeyWordDetails;
 var
-  idx : Integer;
+  idx: Integer;
 begin
-  idx := fKeywords.IndexOf(st);
+  idx := FKeyWords.IndexOf(st);
   if idx >= 0 then
-    result := TKeywordDetails (fKeywords.Objects [idx])
+    Result := TKeyWordDetails (FKeyWords.Objects [idx])
   else
-    result := Nil;
+    Result := nil;
 end;
 
-function TRCParser.NextExpression (var v : TValue) : boolean;
+function TRCParser.NextExpression (var v: TValue): Boolean;
 var
-  st : string;
+  st: string;
 begin
   st := '';
   repeat
-    fEOF := not GetToken;
-    if fEOF then break;
+    FEOF := not GetToken;
+    if FEOF then break;
 
     case TokenType of
-     ttIdentifier :  if Assigned (KeyWord (Token)) then
+     ttIdentifier:  if Assigned(KeyWord (Token)) then
                        break
                      else
                        st := st + Token;
-     ttChar       :  if CharInSet (TokenChar, ['+', '-', '/', '\', '|', '~', '=', '&', '(', ')', '*']) then
+     ttChar   :  if CharInSet(TokenChar, ['+', '-', '/', '\', '|', '~', '=', '&', '(', ')', '*']) then
                        st := st + TokenChar
                      else
                        break;
 
-     ttNumber     : st := st + Token;
-     ttString     : st := st + '"' + Token + '"'
+     ttNumber : st := st + Token;
+     ttString : st := st + '"' + Token + '"'
     end
   until False;
 
   if st <> '' then
   begin
     v := Calc (st);
-    result := True
+    Result := True
   end
   else
-    result := False;
+    Result := False;
 end;
 
 function TRCParser.NextIntegerExpression: Integer;
 var
-  v : TValue;
+  v: TValue;
 begin
   NextExpression (v);
   if v.tp <> vInteger then
     raise EParser.Create('Integer expression expected');
-  result := v.iVal
+  Result := v.iVal
 end;
 
 procedure TRCParser.Parse;
 var
-  dets : TKeywordDetails;
-  tokenHandled : boolean;
-  i : Integer;
+  dets: TKeyWordDetails;
+  tokenHandled: Boolean;
+  i: Integer;
 begin
   GetChar;
-  fEOF := not GetToken;
-  while not fEOF do
+  FEOF := not GetToken;
+  while not FEOF do
   begin
     tokenHandled := False;
     if TokenType = ttIdentifier then
     begin
-      dets := Keyword (Token);
-      if not Assigned (dets) then
-        fName := ResolveToken
+      dets := KeyWord (Token);
+      if not Assigned(dets) then
+        FName := ResolveToken
       else
-        if Assigned (dets.proc) then
+        if Assigned(dets.proc) then
         begin
           dets.proc;
           tokenHandled := True
@@ -1574,15 +1574,15 @@ begin
     else
       if TokenType = ttNumber then
         if TokenSOL then
-          fName := ResolveToken
+          FName := ResolveToken
         else
         begin
-          for i := 0 to NoKeywords -1 do
-            if Integer (KeywordTable [i].resID) = StrToInt (Token) then
+          for i := 0 to NoKeyWords -1 do
+            if Integer (KeyWordTable [i].resID) = StrToInt(Token) then
             begin
-              dets := Keyword (KeywordTable [i].kw);
+              dets := KeyWord (KeyWordTable [i].kw);
 
-              if Assigned (dets) and Assigned (dets.proc) then
+              if Assigned(dets) and Assigned(dets.proc) then
               begin
                 dets.proc;
                 tokenHandled := True
@@ -1592,30 +1592,30 @@ begin
             end
         end;
     if not tokenHandled then
-      fEOF := not GetToken
+      FEOF := not GetToken
   end
 end;
 
 procedure TRCParser.SkipYeOldeMemoryAttributes;
 begin
-  while not fEOF and (KeyID in [kwDiscardable, kwPure, kwMoveable, kwPreload, kwLoadOnCall]) do
-    fEOF := not GetToken
+  while not FEOF and (KeyID in [kwDiscardable, kwPure, kwMoveable, kwPreload, kwLoadOnCall]) do
+    FEOF := not GetToken
 end;
 
-{ TKeywordDetails }
+{ TKeyWordDetails }
 
-constructor TKeywordDetails.Create(AKeyword: Integer; AProc: TKeywordProc);
+constructor TKeyWordDetails.Create(AKeyWord: Integer; AProc: TKeyWordProc);
 begin
-  kw :=AKeyword;
+  kw :=AKeyWord;
   Proc := AProc;
 end;
 
 { TResourceOptions }
 
-constructor TResourceOptions.Create(Parser : TRCParser; SupportedKeywords: TSupportedKeywords);
+constructor TResourceOptions.Create(Parser: TRCParser; SupportedKeyWords: TSupportedKeyWords);
 begin
-  fParser := Parser;
-  fSupportedKeywords := SupportedKeywords;
+  FParser := Parser;
+  FSupportedKeyWords := SupportedKeyWords;
 end;
 
 end.

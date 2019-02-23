@@ -78,10 +78,14 @@ function TExSplitter.GetRequiredArrow: TExSplitterArrow;
 begin
   Result := arLeft;
   case Align of
-    alLeft  : if Shrunken then Result := arRight else Result := arLeft;
-    alRight : if Shrunken then Result := arLeft  else Result := arRight;
-    alTop   : if Shrunken then Result := arDown  else Result := arUp;
-    alBottom: if Shrunken then Result := arUp    else Result := arDown
+    alLeft: 
+      if Shrunken then Result := arRight else Result := arLeft;
+    alRight: 
+      if Shrunken then Result := arLeft  else Result := arRight;
+    alTop: 
+      if Shrunken then Result := arDown  else Result := arUp;
+    alBottom: 
+      if Shrunken then Result := arUp    else Result := arDown
   end
 end;
 
@@ -155,27 +159,27 @@ begin
   if Align in [alLeft, alRight] then
   begin
     bs := ClientWidth + 8;
-    tl := Point (-4, (ClientHeight - bs) div 2);
+    tl := Point(-4, (ClientHeight - bs) div 2);
     if not FShrunken then
-      Inc (tl.X);
+      Inc(tl.X);
   end
   else
     if Align in [alTop, alBottom] then
      begin
        bs := ClientHeight + 8;
-       tl := Point ((ClientWidth - bs) div 2, -4);
+       tl := Point((ClientWidth - bs) div 2, -4);
        if not FShrunken then
-         Inc (tl.y);
+         Inc(tl.y);
      end;
 
-  Result := rect (tl.X, tl.Y, tl.x + bs - 1, tl.Y + bs - 1);
+  Result := rect(tl.X, tl.Y, tl.x + bs - 1, tl.Y + bs - 1);
 end;
 
 procedure TExSplitter.MouseDown(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 begin
 
-  if PtInRect (GetShrinkButtonRect, Point (x, y)) then
+  if PtInRect(GetShrinkButtonRect, Point(x, y)) then
     Shrunken := not Shrunken
   else
   begin
@@ -192,7 +196,7 @@ procedure TExSplitter.MouseMove(Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
 
-  if PtInRect (GetShrinkButtonRect, Point (x, y)) then
+  if PtInRect(GetShrinkButtonRect, Point(x, y)) then
   begin
     if Cursor <> crArrow then
     begin
@@ -219,15 +223,15 @@ begin
   if ShrinkButton then
   begin
     case requiredArrow of
-      arLeft : dfcs := DFCS_SCROLLLEFT;
+      arLeft: dfcs := DFCS_SCROLLLEFT;
       arRight: dfcs := DFCS_SCROLLRIGHT;
-      arUp   : dfcs := DFCS_SCROLLUP;
-      arDown : dfcs := DFCS_SCROLLDOWN;
+      arUp: dfcs := DFCS_SCROLLUP;
+      arDown: dfcs := DFCS_SCROLLDOWN;
       else
         dfcs := 0;
     end;
     DrawFrameControl (Canvas.Handle, rect, DFC_SCROLL, dfcs or DFCS_FLAT or DFCS_INACTIVE or DFCS_TRANSPARENT);
-    FrameRect (Canvas.Handle, rect, Canvas.Brush.Handle)
+    FrameRect(Canvas.Handle, rect, Canvas.Brush.Handle)
   end
 end;
 
@@ -276,7 +280,7 @@ end;
 
 procedure TExSplitter.StopSizing;
 var
-  Resized: boolean;
+  Resized: Boolean;
 begin
   inherited;
 

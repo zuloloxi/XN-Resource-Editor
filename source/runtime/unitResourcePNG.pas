@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates Png image resources in resources                        |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -18,7 +18,7 @@ interface
 
 uses
   WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
-  Vcl.Imaging.pngimage, unitResourceDetails, unitResourceGraphics;
+  Vcl.Imaging.PngImage, unitResourceDetails, unitResourceGraphics;
 
 type
 //------------------------------------------------------------------------
@@ -29,10 +29,10 @@ type
     function GetHeight: Integer; override;
     function GetPixelFormat: TPixelFormat; override;
     function GetWidth: Integer; override;
-    class function SupportsData(Size: Integer; data: Pointer): Boolean; override;
+    class function SupportsData(Size: Integer; Data: Pointer): Boolean; override;
   public
     class function GetBaseType: UnicodeString; override;
-    procedure GetImage (picture: TPicture); override;
+    procedure GetImage (Picture: TPicture); override;
   end;
 
 
@@ -47,14 +47,14 @@ end;
 
 function TPngResourceDetails.GetHeight: Integer;
 begin
-  Result := PWORD (PByte (data) + 6 + SizeOf (Word))^;
+  Result := PWORD(PByte(Data) + 6 + SizeOf(Word))^;
 end;
 
-procedure TPngResourceDetails.GetImage(picture: TPicture);
+procedure TPngResourceDetails.GetImage(Picture: TPicture);
 begin
-  picture.graphic := TPngImage.Create;
-  data.Seek (0, soFromBeginning);
-  TPngImage (picture.graphic).LoadFromStream (data)
+  Picture.Graphic := TPngImage.Create;
+  Data.Seek (0, soFromBeginning);
+  TPngImage(Picture.Graphic).LoadFromStream(Data)
 end;
 
 function TPngResourceDetails.GetPixelFormat: TPixelFormat;
@@ -64,24 +64,24 @@ end;
 
 function TPngResourceDetails.GetWidth: Integer;
 begin
-  result := PWORD (PByte (data) + 6)^;
+  Result := PWORD(PByte(Data) + 6)^;
 end;
 
 class function TPngResourceDetails.SupportsData(Size: Integer;
-  data: Pointer): Boolean;
+  Data: Pointer): Boolean;
 var
   p: PAnsiChar;
 begin
-  p := PAnsiChar (data);
-  Inc (p);
+  p := PAnsiChar(Data);
+  Inc(p);
 
   Result := (StrLIComp (p, 'PNG', 3) = 0);
 end;
 
 initialization
-  RegisterResourceDetails (TPngResourceDetails);
+  RegisterResourceDetails(TPngResourceDetails);
 finalization
-  UnregisterResourceDetails (TPngResourceDetails);
+  UnregisterResourceDetails(TPngResourceDetails);
 end.
 
 

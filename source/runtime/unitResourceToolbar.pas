@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates Toolbar resources in resources                          |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -18,15 +18,17 @@ interface
 
 uses
   WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs,
-  unitResourceDetails, Vcl.Menus;
+  Vcl.Menus, unitResourceDetails;
 
 const
-  RT_TOOLBAR = MakeIntResource (241);
+  RT_TOOLBAR = MakeIntResource(241);
 
 type
   TToolbarResourceDetails = class (TResourceDetails)
   protected
-    constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
+    constructor Create (AParent: TResourceModule; ALanguage: Integer;
+      const AName, AType: UnicodeString; ASize: Integer;
+      AData: Pointer); override;
   public
     destructor Destroy; override;
 
@@ -40,11 +42,11 @@ implementation
 
 type
   TToolbarData = packed record  // From a CodeGuru message quoting MFC source...
-    wVersion: word;
-    wBtnWidth: word;
-    wBtnHeight: word;
-    wBtnCount: word;
-    wButtonIDs: array [0..0] of word;
+    wVersion: Word;
+    wBtnWidth: Word;
+    wBtnHeight: Word;
+    wBtnCount: Word;
+    wButtonIDs: array [0..0] of Word;
   end;
 
 { TToolbarResourceDetails }
@@ -56,7 +58,7 @@ end;
 
 constructor TToolbarResourceDetails.Create(AParent: TResourceModule;
   ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer;
-  AData: pointer);
+  AData: Pointer);
 begin
   inherited Create(AParent, ALanguage, AName, AType, ASize, AData);
 end;
@@ -80,7 +82,7 @@ begin
   ToolbarData.wBtnHeight := 15;
   ToolbarData.wBtnCount := 0;
 
-  Data.Write(ToolbarData, SizeOf (ToolbarData) - SizeOf (ToolbarData.wButtonIDs))
+  Data.Write(ToolbarData, SizeOf (ToolbarData) - SizeOf (ToolbarData.wButtonIDs));
 end;
 
 initialization

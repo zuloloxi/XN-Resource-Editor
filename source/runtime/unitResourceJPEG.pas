@@ -19,9 +19,9 @@ uses
 
 type
 //------------------------------------------------------------------------
-// JPeg resource details class
+// Jpeg resource details class
 
-  TJPegResourceDetails = class (TGraphicsResourceDetails)
+  TJpegResourceDetails = class (TGraphicsResourceDetails)
   protected
     FWidth, FHeight: Integer;
     function GetHeight: Integer; override;
@@ -40,7 +40,7 @@ implementation
 var
   ParameterlessSegments: AnsiString = #$01#$d0#$d1#$d2#$d3#$d4#$d5#$d6#$d7#$d8#$d9;
 
-function FindJPegSegment (var data: PAnsiChar; segment: byte): Boolean;
+function FindJpegSegment(var data: PAnsiChar; segment: byte): Boolean;
 var
   p: PAnsiChar;
   seg: Byte;
@@ -53,13 +53,13 @@ begin
     if p^ <> #$ff then
       raise Exception.Create ('Invalid JPEG Image');
 
-    Inc (p);
+    Inc(p);
 
     seg := Byte (p^);
 
     if seg <> $ff then
     begin
-      Inc (p);
+      Inc(p);
 
       if seg = segment then
       begin
@@ -74,74 +74,74 @@ begin
       if Pos (AnsiChar (seg), ParameterlessSegments) = 0 then
       begin
         len := 256 * Byte (p^) + Byte ((p + 1)^);
-        Inc (p, len)
+        Inc(p, len)
       end;
     end;
   until False;
 end;
 
-procedure GetJPegSize (data: PAnsiChar; var Width, Height: Integer);
+procedure GetJpegSize(data: PAnsiChar; var Width, Height: Integer);
 var
   len: Integer;
 begin
-  if FindJPegSegment (data, $c0) then
+  if FindJpegSegment(data, $c0) then
   begin
     len := 256 * Byte (data^) + Byte ((data + 1)^);
 
     if len > 5 then
     begin
-      Inc (data, 3);  // Skip len word & precision byte
+      Inc(data, 3);  // Skip len Word & precision byte
       Height := 256 * Byte (data^) + Byte ((data + 1)^);
 
-      Inc (data, 2);
+      Inc(data, 2);
       Width := 256 * Byte (data^) + Byte ((data + 1)^);
     end;
   end;
 end;
 
-{ TJPegResourceDetails }
+{ TJpegResourceDetails }
 
-class function TJPegResourceDetails.GetBaseType: UnicodeString;
+class function TJpegResourceDetails.GetBaseType: UnicodeString;
 begin
   Result := 'JPEG';
 end;
 
-function TJPegResourceDetails.GetHeight: Integer;
+function TJpegResourceDetails.GetHeight: Integer;
 begin
   if FHeight = 0 then
-    GetJPegSize (data.Memory, FWidth, FHeight);
+    GetJpegSize (data.Memory, FWidth, FHeight);
 
   Result := FHeight;
 end;
 
-procedure TJPegResourceDetails.GetImage(picture: TPicture);
+procedure TJpegResourceDetails.GetImage(picture: TPicture);
 begin
-  picture.graphic := TJPegImage.Create;
+  picture.graphic := TJpegImage.Create;
   data.Seek (0, soFromBeginning);
   TJpegImage (picture.graphic).LoadFromStream (data);
   FWidth := picture.graphic.Width;
   FHeight := picture.graphic.Height;
 end;
 
-function TJPegResourceDetails.GetPixelFormat: TPixelFormat;
+function TJpegResourceDetails.GetPixelFormat: TPixelFormat;
 begin
   Result := pf24Bit;
 end;
 
-function TJPegResourceDetails.GetWidth: Integer;
+function TJpegResourceDetails.GetWidth: Integer;
 begin
   if FWidth = 0 then
-    GetJPegSize (data.Memory, FWidth, FHeight);
+    GetJpegSize (data.Memory, FWidth, FHeight);
   Result := FWidth;
 end;
 
-procedure TJPegResourceDetails.InitNew;
+procedure TJpegResourceDetails.InitNew;
 var
-  img: TJPegImage;
+  img: TJpegImage;
   bmp: TBitmap;
 begin
   bmp := nil;
-  img := TJPegImage.Create;
+  img := TJpegImage.Create;
   try
     bmp := TBitmap.Create;
     bmp.Width := 64;
@@ -154,27 +154,27 @@ begin
   end;
 end;
 
-procedure TJPegResourceDetails.SetImage(image: TPicture);
+procedure TJpegResourceDetails.SetImage(image: TPicture);
 begin
   inherited;
   FWidth := image.Width;
   FHeight := image.Height;
 end;
 
-class function TJPegResourceDetails.SupportsData(Size: Integer;
+class function TJpegResourceDetails.SupportsData(Size: Integer;
   data: Pointer): Boolean;
 var
   len: Integer;
 begin
   Result := False;
   if PWORD (data)^ = $d8ff then
-    if FindJPegSegment (PAnsiChar (data), $e0) then
+    if FindJpegSegment(PAnsiChar (data), $e0) then
     begin
       len := 256 * Byte (PAnsiChar (data)^) + Byte ((PAnsiChar (data) + 1)^);
 
       if len >= 16 then
       begin
-        Inc (PAnsiChar (data), 2);
+        Inc(PAnsiChar (data), 2);
 
         if StrLIComp (data, 'JFIF', 4) = 0 then
           Result := True;
@@ -183,7 +183,7 @@ begin
 end;
 
 initialization
-  RegisterResourceDetails (TJPEGResourceDetails);
+  RegisterResourceDetails (TJpegResourceDetails);
 finalization
-  UnRegisterResourceDetails (TJPEGResourceDetails);
+  UnRegisterResourceDetails (TJpegResourceDetails);
 end.

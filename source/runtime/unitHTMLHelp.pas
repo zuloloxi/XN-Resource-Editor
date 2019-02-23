@@ -27,7 +27,8 @@ unit unitHTMLHelp;
 
 interface
 
-uses Windows;
+uses
+  Windows;
 
 const
   HH_DISPLAY_TOPIC        = $0000;
@@ -153,83 +154,86 @@ const
 
 type
   THHNNotify = record
-	hdr : TNMHDR;
-	pszUrl : PChar; // Multi-byte, null-terminated string
+	hdr: TNMHDR;
+	pszUrl: PChar; // Multi-byte, null-terminated string
   end;
 
   THHPopup = record
-    cbStruct : Integer;        // sizeof this structure
-    hInst : Integer;           // instance handle for string resource
-    idString : UINT;           // string resource id, or text id if pszFile is specified in HtmlHelp call
-    pszTest : PChar;           // used if idString is zero
-    pt : TPoint;               // top center of popup window
-    clrForeground : COLORREF;  // use -1 for default
-    clrBackground : COLORREF;  // use -1 for default
-    rcMargins : TRect;         // amount of space between edges of window and text, -1 for each member to ignore
-    pszFont : Pchar;            // facename, point size, char set, BOLD ITALIC UNDERLINE
+    cbStruct: Integer;        // sizeof this structure
+    hInst: Integer;           // instance handle for string resource
+    idString: UINT;           // string resource id, or text id if pszFile is specified in HtmlHelp call
+    pszTest: PChar;           // used if idString is zero
+    pt: TPoint;               // top center of popup window
+    clrForeground: COLORREF;  // use -1 for default
+    clrBackground: COLORREF;  // use -1 for default
+    rcMargins: TRect;         // amount of space between edges of window and text, -1 for each member to ignore
+    pszFont: Pchar;            // facename, point size, char set, BOLD ITALIC UNDERLINE
   end;
 
   THHAKlink = record
-	cbStruct : Integer;        // sizeof this structure
-	fReserved : BOOL;          // must be FALSE (really!)
-	pszKeywords : PChar;       // semi-colon separated keywords
-	pszUrl : PChar;            // URL to jump to if no keywords found (may be NULL)
-	pszMsgText : PChar;        // Message text to display in MessageBox if pszUrl is NULL and no keyword match
-	pszMsgTitle : PChar;       // Message text to display in MessageBox if pszUrl is NULL and no keyword match
-	pszWindow : PChar;         // Window to display URL in
+    cbStruct: Integer;        // sizeof this structure
+    fReserved: BOOL;          // must be FALSE (really!)
+    pszKeyWords: PChar;       // semi-colon separated keyWords
+    pszUrl: PChar;            // URL to jump to if no keyWords found (may be NULL)
+    pszMsgText: PChar;        // Message text to display in MessageBox if pszUrl is NULL and no keyWord match
+    pszMsgTitle: PChar;       // Message text to display in MessageBox if pszUrl is NULL and no keyWord match
+    pszWindow: PChar;         // Window to display URL in
   end;
 
 
   THHAction = (
-	HHACT_EXPAND,
-	HHACT_CONTRACT,
-	HHACT_BACK,
-	HHACT_FORWARD,
-	HHACT_STOP,
-	HHACT_REFRESH,
-	HHACT_HOME,
-	HHACT_SYNC,
-	HHACT_OPTIONS,
-	HHACT_PRINT,
+    HHACT_EXPAND,
+    HHACT_CONTRACT,
+    HHACT_BACK,
+    HHACT_FORWARD,
+    HHACT_STOP,
+    HHACT_REFRESH,
+    HHACT_HOME,
+    HHACT_SYNC,
+    HHACT_OPTIONS,
+    HHACT_PRINT,
 
-	HHACT_TAB_CONTENTS,
-	HHACT_TAB_INDEX,
-	HHACT_TAB_SEARCH,
-	HHACT_TAB_HISTORY,
-	HHACT_TAB_FAVORITES
+    HHACT_TAB_CONTENTS,
+    HHACT_TAB_INDEX,
+    HHACT_TAB_SEARCH,
+    HHACT_TAB_HISTORY,
+    HHACT_TAB_FAVORITES
   );
 
   THHNTrack = record
-    hdr : TNMHdr;
-	pszCurUrl : PChar;      // Multi-byte, null-terminated string
-	idAction : THHAction;    // HHACT_ value
+    hdr: TNMHdr;
+    pszCurUrl: PChar;      // Multi-byte, null-terminated string
+    idAction: THHAction;    // HHACT_ value
   end;
 
   THHNavType = (
-	HHWIN_NAVTYPE_TOC,
-	HHWIN_NAVTYPE_INDEX,
-	HHWIN_NAVTYPE_SEARCH,
-	HHWIN_NAVTYPE_HISTORY,          // not implemented
-	HHWIN_NAVTYPE_FAVORITES);       // not implemented
+    HHWIN_NAVTYPE_TOC,
+    HHWIN_NAVTYPE_INDEX,
+    HHWIN_NAVTYPE_SEARCH,
+    HHWIN_NAVTYPE_HISTORY,   // not implemented
+    HHWIN_NAVTYPE_FAVORITES  // not implemented
+  );
 
   THHInfoType = DWORD;
   PHHInfoType = ^THHInfoType;
 
   THHNavTab = (
-	HHWIN_NAVTAB_TOP,
-	HHWIN_NAVTAB_LEFT,
-	HHWIN_NAVTAB_BOTTOM);
+    HHWIN_NAVTAB_TOP,
+    HHWIN_NAVTAB_LEFT,
+    HHWIN_NAVTAB_BOTTOM
+  );
 
 const
   HH_MAX_TABS = 19;  // maximum number of tabs
 
 type
   THHTab = (
-	HH_TAB_CONTENTS,
-	HH_TAB_INDEX,
-	HH_TAB_SEARCH,
-	HH_TAB_HISTORY,
-	HH_TAB_FAVORITES);
+    HH_TAB_CONTENTS,
+    HH_TAB_INDEX,
+    HH_TAB_SEARCH,
+    HH_TAB_HISTORY,
+    HH_TAB_FAVORITES
+  );
 
 const
 // HH_DISPLAY_SEARCH Command Related Structures and Constants
@@ -238,70 +242,69 @@ const
 
 type
   THHFTSQuery = record
-	cbStruct : Integer;        // Sizeof structure in bytes.
-	fUniCodeStrings : BOOL;    // TRUE if all strings are unicode.
-	pszSearchQuery : PChar;    // String containing the search query.
-	iProximity : LongInt;      // Word proximity.
-	fStemmedSearch : BOOL;     // TRUE for StemmedSearch only.
-	fTitleOnly : BOOL;         // TRUE for Title search only.
-	fExecute : BOOL;           // TRUE to initiate the search.
-	pszWindow : PChar;         // Window to display in
+    cbStruct: Integer;        // Sizeof structure in bytes.
+    fUniCodeStrings: BOOL;    // TRUE if all strings are unicode.
+    pszSearchQuery: PChar;    // String containing the search query.
+    iProximity: LongInt;      // Word proximity.
+    fStemmedSearch: BOOL;     // TRUE for StemmedSearch only.
+    fTitleOnly: BOOL;         // TRUE for Title search only.
+    fExecute: BOOL;           // TRUE to initiate the search.
+    pszWindow: PChar;         // Window to display in
   end;
 
 
 // HH_WINTYPE Structure
 
   THHWinType = record
-	cbStruct : Integer;         // IN: size of this structure including all Information Types
-	fUniCodeStrings : BOOL;     // IN/OUT: TRUE if all strings are in UNICODE
-	pszType : PChar;            // IN/OUT: Name of a type of window
-	fsValidMembers : DWORD;     // IN: Bit flag of valid members (HHWIN_PARAM_)
-	fsWinProperties : DWORD;    // IN/OUT: Properties/attributes of the window (HHWIN_)
+    cbStruct: Integer;         // IN: size of this structure including all Information Types
+    fUniCodeStrings: BOOL;     // IN/OUT: TRUE if all strings are in UNICODE
+    pszType: PChar;            // IN/OUT: Name of a type of window
+    fsValidMembers: DWORD;     // IN: Bit flag of valid members (HHWIN_PARAM_)
+    fsWinProperties: DWORD;    // IN/OUT: Properties/attributes of the window (HHWIN_)
 
-	pszCaption : PChar;         // IN/OUT: Window title
-	dwStyles : DWORD;           // IN/OUT: Window styles
-	dwExStyles : DWORD;         // IN/OUT: Extended Window styles
-	rcWindowPos : TRect;        // IN: Starting position, OUT: current position
-	nShowState : Integer;       // IN: show state (e.g., SW_SHOW)
+    pszCaption: PChar;         // IN/OUT: Window title
+    dwStyles: DWORD;           // IN/OUT: Window styles
+    dwExStyles: DWORD;         // IN/OUT: Extended Window styles
+    rcWindowPos: TRect;        // IN: Starting position, OUT: current position
+    nShowState: Integer;       // IN: show state (e.g., SW_SHOW)
 
-	hwndHelp : HWND;            // OUT: window handle
-	hwndCaller : HWND;          // OUT: who called this window
+    hwndHelp: HWND;            // OUT: window handle
+    hwndCaller: HWND;          // OUT: who called this window
 
-	paInfoTypes : PHHInfoType;  // IN: Pointer to an array of Information Types
+    paInfoTypes: PHHInfoType;  // IN: Pointer to an array of Information Types
 
-	// The following members are only valid if HHWIN_PROP_TRI_PANE is set
+    // The following members are only valid if HHWIN_PROP_TRI_PANE is set
 
-	hwndToolBar : HWND;         // OUT: toolbar window in tri-pane window
-	hwndNavigation : HWND;      // OUT: navigation window in tri-pane window
-	hwndHTML : HWND;            // OUT: window displaying HTML in tri-pane window
-	iNavWidth : Integer;        // IN/OUT: width of navigation window
-	rcHTML : TRect;             // OUT: HTML window coordinates
+    hwndToolBar: HWND;         // OUT: toolbar window in tri-pane window
+    hwndNavigation: HWND;      // OUT: navigation window in tri-pane window
+    hwndHTML: HWND;            // OUT: window displaying HTML in tri-pane window
+    iNavWidth: Integer;        // IN/OUT: width of navigation window
+    rcHTML: TRect;             // OUT: HTML window coordinates
 
-	pszToc : PChar; 		    // IN: Location of the table of contents file
-	pszIndex : PChar;		    // IN: Location of the index file
-	pszFile : PChar;		    // IN: Default location of the html file
-	pszHome : PChar;		    // IN/OUT: html file to display when Home button is clicked
-	fsToolBarFlags : DWORD;     // IN: flags controling the appearance of the toolbar
-	fNotExpanded : BOOL;	    // IN: TRUE/FALSE to contract or expand, OUT: current state
-	curNavType : Integer; 	    // IN/OUT: UI to display in the navigational pane
-	tabpos : Integer; 		    // IN/OUT: NAVTAB_TOP, NAVTAB_LEFT, or NAVTAB_BOTTOM
-	idNotify : Integer;		    // IN: ID to use for WM_NOTIFY messages
-	tabOrder : array [0..HH_MAX_TABS] of byte;	  // IN/OUT: tab order: Contents, Index, Search, History, Favorites, Reserved 1-5, Custom tabs
-	cHistory : Integer;		    // IN/OUT: number of history items to keep (default is 30)
-	pszJump1 : PChar;		    // Text for HHWIN_BUTTON_JUMP1
-	pszJump2 : PChar;		    // Text for HHWIN_BUTTON_JUMP2
-	pszUrlJump1 : PChar;	    // URL for HHWIN_BUTTON_JUMP1
-	pszUrlJump2 : PChar;	    // URL for HHWIN_BUTTON_JUMP2
-	rcMinSize : TRect;		    // Minimum size for window (ignored in version 1)
+    pszToc: PChar; 		    // IN: Location of the table of contents file
+    pszIndex: PChar;		    // IN: Location of the index file
+    pszFile: PChar;		    // IN: Default location of the html file
+    pszHome: PChar;		    // IN/OUT: html file to display when Home button is clicked
+    fsToolBarFlags: DWORD;     // IN: flags controling the appearance of the toolbar
+    fNotExpanded: BOOL;	    // IN: TRUE/FALSE to contract or expand, OUT: current state
+    curNavType: Integer; 	    // IN/OUT: UI to display in the navigational pane
+    tabpos: Integer; 		    // IN/OUT: NAVTAB_TOP, NAVTAB_LEFT, or NAVTAB_BOTTOM
+    idNotify: Integer;		    // IN: ID to use for WM_NOTIFY messages
+    tabOrder: array [0..HH_MAX_TABS] of byte;	  // IN/OUT: tab order: Contents, Index, Search, History, Favorites, Reserved 1-5, Custom tabs
+    cHistory: Integer;		    // IN/OUT: number of history items to keep (default is 30)
+    pszJump1: PChar;		    // Text for HHWIN_BUTTON_JUMP1
+    pszJump2: PChar;		    // Text for HHWIN_BUTTON_JUMP2
+    pszUrlJump1: PChar;	    // URL for HHWIN_BUTTON_JUMP1
+    pszUrlJump2: PChar;	    // URL for HHWIN_BUTTON_JUMP2
+    rcMinSize: TRect;		    // Minimum size for window (ignored in version 1)
   end;
-
 
 
 const
   ATOM_HTMLHELP_API_ANSI    = 14;
   ATOM_HTMLHELP_API_UNICODE = 15;
 
-function HtmlHelp (hwndCaller : HWND; pszFile : PChar; uCommand : UINT; dwData : DWORD) : DWORD; stdcall;
+function HtmlHelp (hwndCaller: HWND; pszFile: PChar; uCommand: UINT; dwData: DWORD): DWORD; stdcall;
 
 implementation
 

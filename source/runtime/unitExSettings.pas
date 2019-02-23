@@ -23,104 +23,106 @@ unit unitExSettings;
 
 interface
 
-uses Windows, Classes, SysUtils;
+uses
+  Windows, Classes, SysUtils;
 
 type
-TExSettingsType = (stUser, stMachine);
-TIsOpen = (woClosed, woReopen, woOpen);
+  TExSettingsType = (stUser, stMachine);
+  TIsOpen = (woClosed, woReopen, woOpen);
 
-//-----------------------------------------------------------------------
-// TExSettings.
-//
-// Base class for derived classes that store application and other settings
-// to the registry, ini files, XML files, etc.
-TExSettings = class
-private
-  fSettingsType : TExSettingsType;
-  fApplication : string;
-  fManufacturer : string;
-  fVersion : string;
-  fSection: string;
-  fParentSection : string;
-  fUpdateCount : Integer;
-  fParent : TExSettings;
+  //-----------------------------------------------------------------------
+  // TExSettings.
+  //
+  // Base class for derived classes that store application and other settings
+  // to the registry, ini files, XML files, etc.
+  TExSettings = class
+  private
+    FSettingsType: TExSettingsType;
+    FApplication: string;
+    FManufacturer: string;
+    FVersion: string;
+    FSection: string;
+    FParentSection: string;
+    FUpdateCount: Integer;
+    FParent: TExSettings;
 
-  function GetBoolValue(const name: string): boolean;
-  function GetIntValue(const name: string): Integer;
-  function GetStrValue(const name: string): string;
+    function GetBoolValue(const name: string): Boolean;
+    function GetIntValue(const name: string): Integer;
+    function GetStrValue(const name: string): string;
 
-  procedure SetStrValue (const name, value : string);
-  procedure SetIntValue (const name : string; value : Integer);
-  procedure SetBoolValue (const name : string; value : Boolean);
-  function GetRegStub(const section: string) : string;
+    procedure SetStrValue (const name, value: string);
+    procedure SetIntValue (const name: string; value: Integer);
+    procedure SetBoolValue (const name: string; value: Boolean);
+    function GetRegStub(const section: string): string;
 
-protected
-  fReadOnly : boolean;
+  protected
+    FReadOnly: Boolean;
 
-  function IsOpen : boolean; virtual; abstract;
-  function CheckIsOpen (readOnly, autoReadOnly : boolean) : TIsOpen; virtual;
-  procedure SetSection(const SectionPath : string); virtual;
+    function IsOpen: Boolean; virtual; abstract;
+    function CheckIsOpen (readOnly, autoReadOnly: Boolean): TIsOpen; virtual;
+    procedure SetSection(const SectionPath: string); virtual;
 
-  procedure InternalSetIntegerValue (const valueName : string; value : Integer); virtual;
-  procedure InternalSetStringValue (const valueName, value : string); virtual; abstract;
+    procedure InternalSetIntegerValue (const valueName: string; value: Integer); virtual;
+    procedure InternalSetStringValue (const valueName, value: string); virtual; abstract;
 
-public
-  constructor Create (const AManufacturer, AApplication : string; const AVersion : string = ''; ASettingsType : TExSettingsType = stUser);
-  constructor CreateChild (AParent : TExSettings; const ASection : string); virtual;
+  public
+    constructor Create (const AManufacturer, AApplication: string; const AVersion: string = ''; ASettingsType: TExSettingsType = stUser);
+    constructor CreateChild (AParent: TExSettings; const ASection: string); virtual;
 
-  destructor Destroy; override;
-  function Open (readOnly : boolean = false) : boolean; virtual;
-  procedure Close; virtual;
-  procedure Flush; virtual;
-  procedure BeginUpdate;
-  procedure EndUpdate;
+    destructor Destroy; override;
+    function Open (readOnly: Boolean = false): Boolean; virtual;
+    procedure Close; virtual;
+    procedure Flush; virtual;
+    procedure BeginUpdate;
+    procedure EndUpdate;
 
-  procedure DeleteValue (const valueName : string); virtual; abstract;
-  procedure DeleteSection (const sectionName : string); virtual; abstract;
-  procedure GetValueNames (names : TStrings); virtual; abstract;
-  procedure GetSectionNames (names : TStrings); virtual; abstract;
+    procedure DeleteValue (const valueName: string); virtual; abstract;
+    procedure DeleteSection (const sectionName: string); virtual; abstract;
+    procedure GetValueNames (names: TStrings); virtual; abstract;
+    procedure GetSectionNames (names: TStrings); virtual; abstract;
 
-  function GetBooleanValue (const valueName : string; deflt : boolean = false) : boolean; virtual;
-  function GetStringValue  (const valueName : string; const deflt : string = '') : string; virtual; abstract;
-  function GetIntegerValue (const valueName : string; deflt : Integer = 0) : Integer; virtual;
-  function HasSection (const ASection : string) : boolean; virtual; abstract;
-  function HasValue (const AValueName : string) : boolean; virtual; abstract;
-  function GetStrings      (const valueName : string; sl : TStrings) : Integer; virtual;
+    function GetBooleanValue (const valueName: string; deflt: Boolean = false): Boolean; virtual;
+    function GetStringValue  (const valueName: string; const deflt: string = ''): string; virtual; abstract;
+    function GetIntegerValue (const valueName: string; deflt: Integer = 0): Integer; virtual;
+    function HasSection (const ASection: string): Boolean; virtual; abstract;
+    function HasValue (const AValueName: string): Boolean; virtual; abstract;
+    function GetStrings      (const valueName: string; sl: TStrings): Integer; virtual;
 
-  procedure SetBooleanValue (const valueName : string; value : boolean; deflt : boolean = false); virtual;
-  procedure SetStringValue  (const valueName : string; const value : string; const deflt : string = ''); virtual;
-  procedure SetIntegerValue (const valueName : string; value : Integer; deflt : Integer = 0); virtual;
-  procedure SetStrings      (const valueName : string; sl : TStrings); virtual;
+    procedure SetBooleanValue (const valueName: string; value: Boolean; deflt: Boolean = false); virtual;
+    procedure SetStringValue  (const valueName: string; const value: string; const deflt: string = ''); virtual;
+    procedure SetIntegerValue (const valueName: string; value: Integer; deflt: Integer = 0); virtual;
+    procedure SetStrings      (const valueName: string; sl: TStrings); virtual;
 
-  procedure RenameSection (const oldValue, newValue : string); virtual; abstract;
-  procedure RenameValue (const oldValue, newValue : string); virtual; abstract;
+    procedure RenameSection (const oldValue, newValue: string); virtual; abstract;
+    procedure RenameValue (const oldValue, newValue: string); virtual; abstract;
 
-  function GetExportValue (const valueName : string) : string; virtual;
+    function GetExportValue (const valueName: string): string; virtual;
 
-  procedure ExportToRegStream (const section : string; stream : TStream; excludeSections : TStrings = Nil);
-  procedure ImportFromRegStream (stream : TStream);
+    procedure ExportToRegStream (const section: string; stream: TStream; excludeSections: TStrings = Nil);
+    procedure ImportFromRegStream (stream: TStream);
 
-  property Application : string read fApplication;
-  property Manufacturer : string read fManufacturer;
-  property ReadOnly : boolean read fReadOnly;
-  property SettingsType : TExSettingsType read fSettingsType;
-  property Version : string read fVersion;
+    property Application: string read FApplication;
+    property Manufacturer: string read FManufacturer;
+    property ReadOnly: Boolean read FReadOnly;
+    property SettingsType: TExSettingsType read FSettingsType;
+    property Version: string read FVersion;
 
-  property Section : string read fSection write SetSection;
-  property Parent : TExSettings read fParent;
+    property Section: string read FSection write SetSection;
+    property Parent: TExSettings read FParent;
 
-  property IntegerValue [const name : string] : integer read GetIntValue write SetIntValue;
-  property StringValue [const name : string] : string read GetStrValue write SetStrValue;
-  property BooleanValue [const name : string] : boolean read GetBoolValue write SetBoolValue;
-end;
+    property IntegerValue [const name: string]: integer read GetIntValue write SetIntValue;
+    property StringValue [const name: string]: string read GetStrValue write SetStrValue;
+    property BooleanValue [const name: string]: Boolean read GetBoolValue write SetBoolValue;
+  end;
 
-TExSettingsClass = class of TExSettings;
+  TExSettingsClass = class of TExSettings;
 
-EExSettings = class (Exception);
+  EExSettings = class (Exception);
 
 implementation
 
-uses unitStreamTextReader, unitSearchString;
+uses
+  unitStreamTextReader, unitSearchString;
 
 
 { TExSettings }
@@ -132,10 +134,10 @@ uses unitStreamTextReader, unitSearchString;
  *----------------------------------------------------------------------*)
 procedure TExSettings.BeginUpdate;
 begin
-  if fUpdateCount <= 0 then
-    fUpdateCount := 1
+  if FUpdateCount <= 0 then
+    FUpdateCount := 1
   else
-    Inc (fUpdateCount);
+    Inc(FUpdateCount);
 end;
 
 (*----------------------------------------------------------------------*
@@ -150,31 +152,31 @@ end;
  | Returns woClosed if the persistor is closed.                         |
  |                                                                      |
  | autoReadOnly should contain the actual read-only state of the        |
- | persistor, whereas fReadOnly should contain the maximum ro value,    |
+ | persistor, whereas FReadOnly should contain the maximum ro value,    |
  | and readOnly contains the requested state.                           |
  |                                                                      |
  | Derived classes override this to provide further processing to       |
  | ensure that their return value is woOpen or an exception is raised.  |
  *----------------------------------------------------------------------*)
-function TExSettings.CheckIsOpen (readOnly, autoReadOnly : boolean) : TIsOpen;
+function TExSettings.CheckIsOpen (readOnly, autoReadOnly: Boolean): TIsOpen;
 var
-  wasOpen : boolean;
+  wasOpen: Boolean;
 begin
   wasOpen := IsOpen;
   if wasOpen then
     if readOnly or not autoReadOnly then
     begin
-      result := woOpen;
+      Result := woOpen;
       Exit
     end
     else
-      if fReadOnly then
+      if FReadOnly then
         raise EExSettings.Create('Can''t write to read-only settings');
 
   if wasOpen then
-    result := woReopen
+    Result := woReopen
   else
-    result := woClosed
+    Result := woClosed
 end;
 
 (*----------------------------------------------------------------------*
@@ -184,7 +186,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExSettings.Close;
 begin
-  Flush
+  Flush;
 end;
 
 (*----------------------------------------------------------------------*
@@ -193,12 +195,12 @@ end;
  | Constructor                                                          |
  *----------------------------------------------------------------------*)
 constructor TExSettings.Create(const AManufacturer, AApplication,
-  AVersion: string; ASettingsType : TExSettingsType);
+  AVersion: string; ASettingsType: TExSettingsType);
 begin
-  fApplication := AApplication;
-  fVersion := AVersion;
-  fManufacturer := AManufacturer;
-  fSettingsType := ASettingsType;
+  FApplication := AApplication;
+  FVersion := AVersion;
+  FManufacturer := AManufacturer;
+  FSettingsType := ASettingsType;
 end;
 
 constructor TExSettings.CreateChild(AParent: TExSettings;
@@ -207,20 +209,20 @@ begin
   if ClassType <> AParent.ClassType then
     raise EExSettings.Create ('Child class must be the same as the parent class');
 
-  fParent := AParent;
-  fSettingsType := AParent.SettingsType;
-  fApplication := AParent.Application;
-  fManufacturer := AParent.Manufacturer;
-  fVersion := AParent.Version;
-  fParentSection := AParent.Section;
+  FParent := AParent;
+  FSettingsType := AParent.SettingsType;
+  FApplication := AParent.Application;
+  FManufacturer := AParent.Manufacturer;
+  FVersion := AParent.Version;
+  FParentSection := AParent.Section;
 
   if ASection = '' then
-    fSection := fParentSection
+    FSection := FParentSection
   else
-    if fParentSection = '' then
-      fSection := ASection
+    if FParentSection = '' then
+      FSection := ASection
     else
-      fSection := AParent.Section + '\' + ASection;
+      FSection := AParent.Section + '\' + ASection;
 end;
 
 (*----------------------------------------------------------------------*
@@ -242,28 +244,28 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExSettings.EndUpdate;
 begin
-  Dec (fUpdateCount);
-  if fUpdateCount <= 0 then
+  Dec(FUpdateCount);
+  if FUpdateCount <= 0 then
   begin
     Flush;
-    fUpdateCount := 0
+    FUpdateCount := 0
   end
 end;
 
 procedure TExSettings.ImportFromRegStream(stream: TStream);
 var
-  strings : TStrings;
-  st : string;
-  i : Integer;
+  strings: TStrings;
+  st: string;
+  i: Integer;
 
   procedure SyntaxError;
   begin
-    raise Exception.CreateFmt ('Syntax error in reg stream at line %d', [i])
+    raise Exception.CreateFmt('Syntax error in reg stream at line %d', [i])
   end;
 
   procedure CreateNewKey;
   var
-    s : string;
+    s: string;
   begin
     Delete (st, 1, 1);
     if st [Length (st)] <> ']' then
@@ -302,12 +304,12 @@ var
       raise EExSettings.Create ('Can''t import');
   end;
 
-  function GetCString (st : string; var n : Integer) : string;
+  function GetCString (st: string; var n: Integer): string;
   var
-    i : Integer;
-    eos : boolean;
+    i: Integer;
+    eos: Boolean;
   begin
-    result := '';
+    Result := '';
     i := 2;
     repeat
       eos := False;
@@ -320,31 +322,31 @@ var
         end;
 
         if st [i] = '\' then
-          Inc (i);
+          Inc(i);
 
         if i <= Length (st) then
-          result := result + st [i];
+          Result := Result + st [i];
 
-        Inc (i)
+        Inc(i)
       end;
 
       if not eos then
       begin
-        result := result + #13#10;
-        Inc (n);
+        Result := Result + #13#10;
+        Inc(n);
         st := strings [n];
         i := 1
       end
     until eos
   end;
 
-  function GetBinaryBuffer (const st : string) : string;
+  function GetBinaryBuffer (const st: string): string;
   var
-    i : Integer;
-    val : string;
+    i: Integer;
+    val: string;
   begin
     i := 1;
-    result := '';
+    Result := '';
     while i <= Length (st) do
     begin
       if IsCharHex (st [i]) then
@@ -353,24 +355,24 @@ var
       begin
         if val <> '' then
         begin
-          result := result + chr (StrToInt ('$' + val));
+          Result := Result + chr (StrToInt('$' + val));
           val := ''
         end
       end;
 
-      Inc (i)
+      Inc(i)
     end
   end;
 
-  procedure CreateNewValue (var i : Integer);
+  procedure CreateNewValue (var i: Integer);
   var
-    s, s1 : string;
-    fn : string;
-    p : Integer;
-    tp : Integer;
-    buf : string;
-    sl : TStrings;
-    ch : char;
+    s, s1: string;
+    fn: string;
+    p: Integer;
+    tp: Integer;
+    buf: string;
+    sl: TStrings;
+    ch: char;
   begin
     if st [1] = '"' then
     begin
@@ -388,7 +390,7 @@ var
       s := ''
     end;
 
-    st := TrimLeft (st);
+    st := TrimLeft(st);
 
     if st = '' then
       SyntaxError;
@@ -398,7 +400,7 @@ var
 
     Delete (st, 1, 1);
 
-    st := TrimLeft (st);
+    st := TrimLeft(st);
 
     if st [1] = '"' then
       SetStringValue (s, GetCString (st, i))
@@ -410,14 +412,14 @@ var
         ch := st [i];
         if (ch = ':') or (ch = '(') or (ch = ' ') then
           break;
-        Inc (p);
+        Inc(p);
       end;
 
       fn := Copy (st, 1, p - 1);
 
-      st := TrimLeft (Copy (st, p, MaxInt));
+      st := TrimLeft(Copy (st, p, MaxInt));
 
-      if CompareText (fn, 'hex') = 0 then
+      if CompareText(fn, 'hex') = 0 then
       begin
         tp := 3;
         if st [1] = '(' then
@@ -428,10 +430,10 @@ var
           while (p <= Length (st)) and (st [p] <> ')') do
           begin
             fn := fn + st [p];
-            Inc (p)
+            Inc(p)
           end;
 
-          tp := StrToInt (fn);
+          tp := StrToInt(fn);
           st := Trim (Copy (st, p + 1, MaxInt));
         end;
 
@@ -465,13 +467,13 @@ var
 //        WriteTypedBinaryData (s, tp, PChar (buf)^, Length (buf));
       end
       else
-        if CompareText (fn, 'dword') = 0 then
+        if CompareText(fn, 'dWord') = 0 then
         begin
           if st [1] <> ':' then
             SyntaxError;
 
           Delete (st, 1, 1);
-          SetIntegerValue (s, StrToInt ('$' + TrimLeft (st)))
+          SetIntegerValue (s, StrToInt('$' + TrimLeft(st)))
         end
         else
           SyntaxError
@@ -503,7 +505,7 @@ begin
       if st <> '' then
         while st [Length (st)] = '\' do
         begin
-          Inc (i);
+          Inc(i);
           Delete (st, Length (st), 1);
           if i < strings.Count then
             st := st + strings [i]
@@ -514,35 +516,35 @@ begin
       if (Length (st) > 0) and (st [1] <> ';') then
       begin
         case st [1] of
-          '[' : CreateNewKey;
-          '"' : CreateNewValue (i);
-          '@' : CreateNewValue (i);
+          '[': CreateNewKey;
+          '"': CreateNewValue (i);
+          '@': CreateNewValue (i);
           else
             SyntaxError
         end
       end;
 
-      Inc (i)
+      Inc(i)
     end
   finally
     strings.Free
   end
 end;
 
-function TExSettings.GetRegStub(const section: string) : string;
+function TExSettings.GetRegStub(const section: string): string;
 begin
   if Application = '' then
-    result := Section
+    Result := Section
   else
   begin
     if Manufacturer = '' then
-      result := 'Software\' + Application
+      Result := 'Software\' + Application
     else
-      result := 'Software\' + Manufacturer + '\' + Application;
+      Result := 'Software\' + Manufacturer + '\' + Application;
     if Version <> '' then
-      result := result + '\' + Version;
+      Result := Result + '\' + Version;
     if Section <> '' then
-      result := result + '\' + Section;
+      Result := Result + '\' + Section;
   end;
 end;
 
@@ -550,15 +552,15 @@ procedure TExSettings.ExportToRegStream(const section: string; stream: TStream;
   excludeSections: TStrings);
 
 var
-  s : TStreamTextIO;
-  rootKeyName : string;
-  rs : string;
+  s: TStreamTextIO;
+  rootKeyName: string;
+  rs: string;
 
-  procedure Exp (sctn : string);
+  procedure Exp (sctn: string);
   var
-    sl : TStrings;
-    i : Integer;
-    sn : string;
+    sl: TStrings;
+    i: Integer;
+    sn: string;
   begin
     SetSection (sctn);
 
@@ -568,7 +570,7 @@ var
       sn := rs + '\' + sctn;
 
     s.WriteLn ('');
-    s.WriteLn(Format ('[%s\%s]', [rootKeyName, sn]));
+    s.WriteLn(Format('[%s\%s]', [rootKeyName, sn]));
 
     sl := TStringList.Create;
     try
@@ -640,27 +642,27 @@ end;
 function TExSettings.GetStrings(const valueName: string; sl: TStrings): Integer;
 begin
   sl.Text := StringValue [valueName];
-  result := sl.Count
+  Result := sl.Count
 end;
 
 function TExSettings.GetStrValue(const name: string): string;
 begin
-  result := GetStringValue (name)
+  Result := GetStringValue (name)
 end;
 
 (*----------------------------------------------------------------------*
  | function TExSettings.GetBooleanValue                                 |
  |                                                                      |
- | Get a boolean value.  Return the default if the value doesn't exist  |
+ | Get a Boolean value.  Return the default if the value doesn't exist  |
  |                                                                      |
  | The base class expects the value to be persisted as an integer -     |
  | 0 = false; 1 = true.  Override this function to persist it in        |
- | another format (eg. Y/N, true/false, etc.)                           |
+ | another format(eg. Y/N, true/false, etc.)                           |
  *----------------------------------------------------------------------*)
 function TExSettings.GetBooleanValue(const valueName: string;
-  deflt: boolean): boolean;
+  deflt: Boolean): Boolean;
 begin
-  result := GetIntegerValue (valueName, Ord (deflt)) <> 0;
+  Result := GetIntegerValue (valueName, Ord (deflt)) <> 0;
 end;
 
 (*----------------------------------------------------------------------*
@@ -668,14 +670,14 @@ end;
  |                                                                      |
  | 'Get' method for the BooleanValue property                           |
  *----------------------------------------------------------------------*)
-function TExSettings.GetBoolValue(const name: string): boolean;
+function TExSettings.GetBoolValue(const name: string): Boolean;
 begin
-  result := GetBooleanValue (name);
+  Result := GetBooleanValue (name);
 end;
 
 function TExSettings.GetExportValue(const valueName: string): string;
 begin
-  result := '"' + valueName + '"="' + StringValue [valueName] + '"';
+  Result := '"' + valueName + '"="' + StringValue [valueName] + '"';
 end;
 
 (*----------------------------------------------------------------------*
@@ -690,7 +692,7 @@ end;
 function TExSettings.GetIntegerValue(const valueName: string;
   deflt: Integer): Integer;
 begin
-  result := StrToIntDef (GetStringValue (valueName, IntToStr (deflt)), deflt);
+  Result := StrToIntDef (GetStringValue (valueName, IntToStr (deflt)), deflt);
 end;
 
 (*----------------------------------------------------------------------*
@@ -700,7 +702,7 @@ end;
  *----------------------------------------------------------------------*)
 function TExSettings.GetIntValue(const name: string): Integer;
 begin
-  result := GetIntegerValue (name);
+  Result := GetIntegerValue (name);
 end;
 
 (*----------------------------------------------------------------------*
@@ -720,20 +722,20 @@ end;
  |                                                                      |
  | Override this procedure to open the persistor mechanism              |
  *----------------------------------------------------------------------*)
-function TExSettings.Open(readOnly : boolean) : boolean;
+function TExSettings.Open(readOnly: Boolean): Boolean;
 begin
-  fReadOnly := readOnly;
-  result := False;
+  FReadOnly := readOnly;
+  Result := False;
 end;
 
 (*----------------------------------------------------------------------*
  | procedure TExSettings.SetBooleanValue                                |
  |                                                                      |
- | Set a boolean value - or delete the value if it's the same as the    |
- | default.  Override this if you want to persist boolean values as     |
+ | Set a Boolean value - or delete the value if it's the same as the    |
+ | default.  Override this if you want to persist Boolean values as     |
  | something other than 0 or 1                                          |
  *----------------------------------------------------------------------*)
-procedure TExSettings.SetBooleanValue(const valueName: string; value : boolean; deflt: boolean);
+procedure TExSettings.SetBooleanValue(const valueName: string; value: Boolean; deflt: Boolean);
 begin
   SetIntegerValue (valueName, Ord (value), Ord (deflt));
 end;
@@ -779,15 +781,15 @@ end;
  | Override this in a derived class to perform additional processing    |
  | when the section is changed.                                         |
  *----------------------------------------------------------------------*)
-procedure TExSettings.SetSection(const SectionPath : string);
+procedure TExSettings.SetSection(const SectionPath: string);
 begin
   if SectionPath = '' then
-    fSection := fParentSection
+    FSection := FParentSection
   else
-    if fParentSection = '' then
-      fSection := SectionPath
+    if FParentSection = '' then
+      FSection := SectionPath
     else
-      fSection := fParentSection + '\' + SectionPath;
+      FSection := FParentSection + '\' + SectionPath;
 end;
 
 (*----------------------------------------------------------------------*

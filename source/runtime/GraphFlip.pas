@@ -3,7 +3,7 @@
  |                                                                      |
  | Simple functions to flip and rotate 24-bit bitmaps                   |
  |                                                                      |
- | Not that these functions *create* copies of the bitmap which must be |
+ | Not that these functions *create* copies of the Bitmap which must be |
  | freed.                                                               |
  |                                                                      |
  | The contents of this file are subject to the Mozilla Public License  |
@@ -28,24 +28,25 @@ unit GraphFlip;
 
 interface
 
-uses WinAPI.Windows, System.Classes, System.Sysutils, Vcl.Graphics;
+uses
+  WinAPI.Windows, System.Classes, System.Sysutils, Vcl.Graphics;
 
-function RotateBitmap270 (const bitmap : TBitmap) : TBitmap;
-function RotateBitmap90 (const bitmap : TBitmap) : TBitmap;
-function ConvertToGrayscale (const bitmap : TBitmap; TransparentColor : TColor = clNone) : TBitmap;
-function ConvertToNegative (const bitmap : TBitmap) : TBitmap;
+function RotateBitmap270(const Bitmap: TBitmap): TBitmap;
+function RotateBitmap90(const Bitmap: TBitmap): TBitmap;
+function ConvertToGrayscale(const Bitmap: TBitmap; TransparentColor: TColor = clNone): TBitmap;
+function ConvertToNegative(const Bitmap: TBitmap): TBitmap;
 
 implementation
 
 (*----------------------------------------------------------------------*
- | function BytesPerScanLine : LongInt                                  |
+ | function BytesPerScanLine: LongInt                                  |
  |                                                                      |
  | Returns the bytes required per scanline                              |
  |                                                                      |
  | Parameters:                                                          |
- |   PixelsPerScanline : LongInt     The width of the bitmap in pixels  |
+ |   PixelsPerScanline: LongInt     The width of the Bitmap in pixels  |
  |   BitsPerPixel                    No. of bits per pixel - eg. 24     |
- |   Alignment                       The bitmap byte alignment - eg. 32 |
+ |   Alignment                       The Bitmap byte alignment - eg. 32 |
  *----------------------------------------------------------------------*)
 function BytesPerScanline(PixelsPerScanline, BitsPerPixel, Alignment: Longint): Longint;
 begin
@@ -57,44 +58,44 @@ end;
 (*----------------------------------------------------------------------*
  | function RotateBitmap270                                             |
  |                                                                      |
- | Rotate a bitmap clockwise through 270 degrees                        |
+ | Rotate a Bitmap clockwise through 270 degrees                        |
  |                                                                      |
  | Parameters:                                                          |
- |   bitmap                          The bitmap to rotate               |
+ |   Bitmap                          The Bitmap to rotate               |
  |                                                                      |
- | The function creates a rotated copy of the bitmap.                   |
+ | The function creates a rotated copy of the Bitmap.                   |
  *----------------------------------------------------------------------*)
-function RotateBitmap270 (const bitmap : TBitmap) : TBitmap;
+function RotateBitmap270 (const Bitmap: TBitmap): TBitmap;
 var
-  x, y : Integer;
-  ps, ps1, pr, pr1 : PRGBTriple;
-  bpss, bpsr : Integer;
+  x, y: Integer;
+  ps, ps1, pr, pr1: PRGBTriple;
+  bpss, bpsr: Integer;
 
 begin
-  Assert (bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
+  Assert(Bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
 
-  result := TBitmap.Create;
+  Result := TBitmap.Create;
   try
-    result.PixelFormat := bitmap.PixelFormat;
-    result.Height := bitmap.Width;
-    result.Width := bitmap.Height;
+    result.PixelFormat := Bitmap.PixelFormat;
+    result.Height := Bitmap.Width;
+    result.Width := Bitmap.Height;
 
-    ps1 := bitmap.ScanLine [0];
-    pr1 := result.ScanLine [bitmap.Width - 1];
+    ps1 := Bitmap.ScanLine [0];
+    pr1 := result.ScanLine [Bitmap.Width - 1];
 
-    bpss := BytesPerScanLine (bitmap.Width, 24, 32);
+    bpss := BytesPerScanLine (Bitmap.Width, 24, 32);
     bpsr := BytesPerScanLine (result.Width, 24, 32);
 
-    for y := 0 to bitmap.Height - 1 do
+    for y := 0 to Bitmap.Height - 1 do
     begin
       ps := PRGBTriple (PByte (ps1) - bpss * y);
 
-      for x := 0 to bitmap.Width - 1 do
+      for x := 0 to Bitmap.Width - 1 do
       begin
         pr := PRGBTriple (PByte (pr1) + bpsr * x);
-        Inc (pr, y);
+        Inc(pr, y);
         pr^ := ps^;
-        Inc (ps)
+        Inc(ps)
       end
     end;
     GDIFlush
@@ -107,44 +108,44 @@ end;
 (*----------------------------------------------------------------------*
  | function RotateBitmap90                                              |
  |                                                                      |
- | Rotate a bitmap clockwise through 90 degrees                         |
+ | Rotate a Bitmap clockwise through 90 degrees                         |
  |                                                                      |
  | Parameters:                                                          |
- |   bitmap                          The bitmap to rotate               |
+ |   Bitmap                          The Bitmap to rotate               |
  |                                                                      |
- | The function creates a rotated copy of the bitmap.                   |
+ | The function creates a rotated copy of the Bitmap.                   |
  *----------------------------------------------------------------------*)
-function RotateBitmap90 (const bitmap : TBitmap) : TBitmap;
+function RotateBitmap90 (const Bitmap: TBitmap): TBitmap;
 var
-  x, y : Integer;
-  ps, ps1, pr, pr1 : PRGBTriple;
-  bpss, bpsr : Integer;
+  x, y: Integer;
+  ps, ps1, pr, pr1: PRGBTriple;
+  bpss, bpsr: Integer;
 
 begin
-  Assert (bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
+  Assert(Bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
 
-  result := TBitmap.Create;
+  Result := TBitmap.Create;
   try
-    result.PixelFormat := bitmap.PixelFormat;
-    result.Height := bitmap.Width;
-    result.Width := bitmap.Height;
+    result.PixelFormat := Bitmap.PixelFormat;
+    result.Height := Bitmap.Width;
+    result.Width := Bitmap.Height;
 
-    ps1 := bitmap.ScanLine [bitmap.Height - 1];
+    ps1 := Bitmap.ScanLine [Bitmap.Height - 1];
     pr1 := result.ScanLine [0];
 
-    bpss := BytesPerScanLine (bitmap.Width, 24, 32);
+    bpss := BytesPerScanLine (Bitmap.Width, 24, 32);
     bpsr := BytesPerScanLine (result.Width, 24, 32);
 
-    for y := 0 to bitmap.Height - 1 do
+    for y := 0 to Bitmap.Height - 1 do
     begin
       ps := PRGBTriple (PByte (ps1) + bpss * y);
 
       for x := 0 to Bitmap.Width - 1 do
       begin
         pr := PRGBTriple (PByte (pr1) - bpsr * x);
-        Inc (pr, y);
+        Inc(pr, y);
         pr^ := ps^;
-        Inc (ps)
+        Inc(ps)
       end
     end;
     GDIFlush
@@ -157,25 +158,25 @@ end;
 (*----------------------------------------------------------------------*
  | function ConvertToGrayscale                                          |
  |                                                                      |
- | Convert a bitmap to it's greyscale equivalent                        |
+ | Convert a Bitmap to it's greyscale equivalent                        |
  |                                                                      |
  | Parameters:                                                          |
- |   bitmap                          The bitmap to convert              |
+ |   Bitmap                          The Bitmap to convert              |
  |                                                                      |
- | The function creates a greyscale copy of the bitmap.                 |
+ | The function creates a greyscale copy of the Bitmap.                 |
  *----------------------------------------------------------------------*)
-function ConvertToGrayscale (const bitmap : TBitmap; TransparentColor : TColor) : TBitmap;
+function ConvertToGrayscale (const Bitmap: TBitmap; TransparentColor: TColor): TBitmap;
 var
-  x, y : Integer;
-  ps, ps1, pr, pr1 : PRGBTriple;
-  bps : Integer;
-  n : Integer;
-  transparent : boolean;
-  transparentTriple : TRGBTriple;
+  x, y: Integer;
+  ps, ps1, pr, pr1: PRGBTriple;
+  bps: Integer;
+  n: Integer;
+  transparent: Boolean;
+  transparentTriple: TRGBTriple;
   rgb :DWORD;
 
 begin
-  Assert (bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
+  Assert(Bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
 
   transparent := TransparentColor <> clNone;
   if transparent then
@@ -186,18 +187,18 @@ begin
     transparentTriple.rgbtRed := GetRValue (rgb)
   end;
 
-  result := TBitmap.Create;
+  Result := TBitmap.Create;
   try
-    result.PixelFormat := bitmap.PixelFormat;
-    result.Height := bitmap.Height;
-    result.Width := bitmap.Width;
+    result.PixelFormat := Bitmap.PixelFormat;
+    result.Height := Bitmap.Height;
+    result.Width := Bitmap.Width;
 
-    ps1 := bitmap.ScanLine [0];
+    ps1 := Bitmap.ScanLine [0];
     pr1 := result.ScanLine [0];
 
-    bps := BytesPerScanLine (bitmap.Width, 24, 32);
+    bps := BytesPerScanLine (Bitmap.Width, 24, 32);
 
-    for y := 0 to bitmap.Height - 1 do
+    for y := 0 to Bitmap.Height - 1 do
     begin
       ps := PRGBTriple (PByte (ps1) - bps * y);
       pr := PRGBTriple (PByte (pr1) - bps * y);
@@ -220,8 +221,8 @@ begin
         else
           pr^ := ps^;
 
-        Inc (pr);
-        Inc (ps)
+        Inc(pr);
+        Inc(ps)
       end
     end;
     GDIFlush
@@ -234,33 +235,33 @@ end;
 (*----------------------------------------------------------------------*
  | function ConvertToNegative                                           |
  |                                                                      |
- | Convert a bitmap to it's negative equivalent                         |
+ | Convert a Bitmap to it's negative equivalent                         |
  |                                                                      |
  | Parameters:                                                          |
- |   bitmap                          The bitmap to convert              |
+ |   Bitmap                          The Bitmap to convert              |
  |                                                                      |
- | The function creates a negative copy of the bitmap.                  |
+ | The function creates a negative copy of the Bitmap.                  |
  *----------------------------------------------------------------------*)
-function ConvertToNegative (const bitmap : TBitmap) : TBitmap;
+function ConvertToNegative (const Bitmap: TBitmap): TBitmap;
 var
-  x, y : Integer;
-  ps, ps1, pr, pr1 : PRGBTriple;
-  bps : Integer;
+  x, y: Integer;
+  ps, ps1, pr, pr1: PRGBTriple;
+  bps: Integer;
 begin
-  Assert (bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
+  Assert(Bitmap.PixelFormat = pf24Bit, 'Invalid pixel format');
 
-  result := TBitmap.Create;
+  Result := TBitmap.Create;
   try
-    result.PixelFormat := bitmap.PixelFormat;
-    result.Height := bitmap.Height;
-    result.Width := bitmap.Width;
+    result.PixelFormat := Bitmap.PixelFormat;
+    result.Height := Bitmap.Height;
+    result.Width := Bitmap.Width;
 
-    ps1 := bitmap.ScanLine [0];
+    ps1 := Bitmap.ScanLine [0];
     pr1 := result.ScanLine [0];
 
-    bps := BytesPerScanLine (bitmap.Width, 24, 32);
+    bps := BytesPerScanLine (Bitmap.Width, 24, 32);
 
-    for y := 0 to bitmap.Height - 1 do
+    for y := 0 to Bitmap.Height - 1 do
     begin
       ps := PRGBTriple (PByte (ps1) - bps * y);
       pr := PRGBTriple (PByte (pr1) - bps * y);
@@ -271,8 +272,8 @@ begin
         pr^.rgbtGreen := 255 - ps^.rgbtGreen;
         pr^.rgbtRed := 255 - ps^.rgbtRed;
 
-        Inc (pr);
-        Inc (ps)
+        Inc(pr);
+        Inc(ps)
       end
     end;
     GDIFlush

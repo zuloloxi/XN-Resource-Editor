@@ -1,7 +1,7 @@
 (*======================================================================*
  | unit TextResourceForm                                                |
  |                                                                      |
- | Display / edit text (string and message) resources                   |
+ | Display / edit text(string and message) resources                   |
  |                                                                      |
  | Beware - string table ids must be numeric, consecutive, etc.         |
  |                                                                      |
@@ -151,7 +151,7 @@ begin
     UpdateDisplay (Nil);
 
     while idx >= FWorkStrings.Count do
-      Dec (idx);
+      Dec(idx);
 
     p := NodeN (idx);
     if Assigned(p) then
@@ -266,7 +266,7 @@ begin
     while (Result <> Nil) and (n > 0) do
     begin
       Result := vstStrings.GetNextSibling(Result);
-      Dec (n)
+      Dec(n)
     end
   end
   else
@@ -275,7 +275,7 @@ end;
 
 function TfmTextResource.NodeString(node: PVirtualNode): TStringInfo;
 begin
-  if Assigned(node) and (Integer (node^.Index) < FWorkStrings.Count) then
+  if Assigned(node) and (Integer(node^.Index) < FWorkStrings.Count) then
     Result := TStringInfo (FWorkStrings [node^.Index])
   else
     Result := Nil
@@ -328,7 +328,7 @@ begin
 
   FDetails := ResourceDetails as TTextResourceDetails;
 
-  FIsStrings := not (FDetails is TMessageResourceDetails);
+  FIsStrings := not(FDetails is TMessageResourceDetails);
   FHexMode := not FIsStrings;
 
   FWorkStrings.Clear;
@@ -368,7 +368,7 @@ var
 begin
   vstStrings.BeginUpdate;
   try
-    if FWorkStrings.Count <> Integer (vstStrings.RootNodeCount) then
+    if FWorkStrings.Count <> Integer(vstStrings.RootNodeCount) then
       vstStrings.RootNodeCount := FWorkStrings.Count
     else
       vstStrings.ReinitNode(Nil, True);
@@ -391,8 +391,8 @@ end;
 
 procedure TfmTextResource.UpdateFonts;
 begin
-  UseInternationalFont (mmoMessage.Font);
-  UseInternationalFont (vstStrings.Font);
+  UseInternationalFont(mmoMessage.Font);
+  UseInternationalFont(vstStrings.Font);
 end;
 
 (*----------------------------------------------------------------------*
@@ -429,9 +429,9 @@ begin
   case Column of
     0:
       if FHexMode then
-        CellText := IntToHex (si.Id , 8)
+        CellText := IntToHex(si.Id , 8)
       else
-        CellText := IntToStr (si.Id);
+        CellText := IntToStr(si.Id);
     1:
       CellText := si.St
   end
@@ -464,15 +464,15 @@ begin
 
   try
     if FHexMode then
-      newId := StrToInt ('$' + NewText)
+      newId := StrToInt('$' + NewText)
     else
-      newID := StrToInt (NewText);
+      newID := StrToInt(NewText);
 
     if st.Id <> newID then
     begin
       for i := 0 to FDetails.Count - 1 do
         if FDetails.Ids [i] = newID then
-          raise Exception.Create (rstDuplicateMessageID);
+          raise Exception.Create(rstDuplicateMessageID);
 
       st.Id := NewId;
       SaveResource (rstChangeID)
@@ -491,7 +491,7 @@ end;
 procedure TfmTextResource.TidyUp;
 begin
  if mmoMessage.Visible then
-   mmoMessageExit (nil);
+   mmoMessageExit(nil);
 end;
 
 end.

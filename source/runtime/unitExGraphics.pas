@@ -30,27 +30,28 @@ unit unitEXGraphics;
 
 interface
 
-uses WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics;
+uses
+  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics;
 
 var
-  SystemPalette256 : HPALETTE;  // 256 color 'web' palette.
-  SystemPalette2 : HPALETTE;
+  SystemPalette256: HPALETTE;  // 256 color 'web' palette.
+  SystemPalette2: HPALETTE;
 
 implementation
 
 function WebPalette: HPalette;
 type
   TLogWebPalette	= packed record
-    palVersion		: word;
-    palNumEntries	: word;
-    PalEntries		: array [0..5,0..5,0..5] of TPaletteEntry;
-    MonoEntries         : array [0..23] of TPaletteEntry;
-    StdEntries          : array [0..15] of TPaletteEntry;
+    palVersion: Word;
+    palNumEntries: Word;
+    PalEntries: array [0..5,0..5,0..5] of TPaletteEntry;
+    MonoEntries: array [0..23] of TPaletteEntry;
+    StdEntries: array [0..15] of TPaletteEntry;
   end;
 var
-  r, g, b		: byte;
-  LogWebPalette		: TLogWebPalette;
-  LogPalette		: TLogpalette absolute LogWebPalette; // Stupid typecast
+  r, g, b: Byte;
+  LogWebPalette: TLogWebPalette;
+  LogPalette: TLogpalette absolute LogWebPalette; // Stupid typecast
 begin
   with LogWebPalette do
   begin
@@ -65,7 +66,7 @@ begin
       MonoEntries [r].peGreen := g;
       MonoEntries [r].peBlue := g;
       MonoEntries [r].peFlags := 0;
-      Inc (g, 10)
+      Inc(g, 10)
     end;
 
     for r:=0 to 5 do
@@ -89,12 +90,12 @@ end;
  |                                                                            |
  | Does what it says on the tin..                                             |
  *----------------------------------------------------------------------------*)
-function Create2ColorPalette : HPALETTE;
+function Create2ColorPalette: HPALETTE;
 const
-  palColors2 : array [0..1] of TColor = ($000000, $ffffff);
+  palColors2: array [0..1] of TColor = ($000000, $ffffff);
 var
-  logPalette : PLogPalette;
-  i, c : Integer;
+  logPalette: PLogPalette;
+  i, c: Integer;
 
 begin
   GetMem (logPalette, sizeof (logPalette) + 2 * sizeof (PALETTEENTRY));
@@ -113,7 +114,7 @@ begin
         peBlue :=  c shr 16 and $ff
       end;
 {$R+}
-    result := CreatePalette (logPalette^);
+    Result := CreatePalette (logPalette^);
   finally
     FreeMem (logPalette)
   end
@@ -123,6 +124,6 @@ initialization
   SystemPalette256 := WebPalette;
   SystemPalette2 := Create2ColorPalette;
 finalization
-  DeleteObject (SystemPalette2);
-  DeleteObject (SystemPalette256);
+  DeleteObject(SystemPalette2);
+  DeleteObject(SystemPalette256);
 end.

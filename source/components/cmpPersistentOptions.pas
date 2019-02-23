@@ -247,7 +247,7 @@ resourcestring
   rstOptionNotFound = 'Option %s not found in section %s';
 
 const
-  OptionTypeNames: array [TOptionType] of string = ('integer', 'boolean', 'string', 'emumerated');
+  OptionTypeNames: array [TOptionType] of string = ('integer', 'Boolean', 'string', 'emumerated');
 
 { TPersistentOptions }
 
@@ -385,7 +385,7 @@ var
   p: PChar;
   n: Integer;
   s: TSection;
-  secName : string;
+  secName: string;
 begin
   RemoveLeadingSlash (path);
   p := StrRScan (PChar (path), '\');
@@ -409,7 +409,7 @@ begin
       secName := s.Name
     else
       secName := '[Default]';
-    raise EOptionError.CreateFmt (rstOptionNotFound, [path, secName])
+    raise EOptionError.CreateFmt(rstOptionNotFound, [path, secName])
   end
 end;
 
@@ -422,7 +422,7 @@ end;
  *----------------------------------------------------------------------*)
 function TPersistentOptions.GetPersist: Boolean;
 begin
-  Result := not Designing and not (csLoading in ComponentState);
+  Result := not Designing and not(csLoading in ComponentState);
 end;
 
 (*----------------------------------------------------------------------*
@@ -553,7 +553,7 @@ begin
   for i := 0 to Count - 1 do
   begin
     o := Option [i];
-    if AnsiSameText (Name, o.Name) then
+    if AnsiSameText(Name, o.Name) then
     begin
       Result := o;
       Break
@@ -603,7 +603,7 @@ end;
 (*----------------------------------------------------------------------*
  | function TOption.GetAsBoolean                                        |
  |                                                                      |
- | Return the option value if it's a boolean option - otherwise raise   |
+ | Return the option value if it's a Boolean option - otherwise raise   |
  | an exception.                                                        |
  *----------------------------------------------------------------------*)
 function TOption.GetAsBoolean: Boolean;
@@ -702,10 +702,10 @@ function TOption.GetHasDefaultValue: Boolean;
 begin
   Result := False;
   case OptionType of
-    otString : Result := AnsiCompareStr (DefaultValue, FStrVal) = 0;
+    otString: Result := AnsiCompareStr (DefaultValue, FStrVal) = 0;
     otInteger: Result := StrToIntDef (DefaultValue, 0) = FIntVal;
     otBoolean: Result := StrToBoolDef (DefaultValue, False) = FBoolVal;
-    otEnum   : Result := FIntVal = EnumValues.IndexOf(DefaultValue)
+    otEnum: Result := FIntVal = EnumValues.IndexOf(DefaultValue)
   end
 end;
 
@@ -884,7 +884,7 @@ end;
 
 constructor EOptionTypeMismatch.Create(Option: TOption);
 begin
-  inherited CreateFmt (rstTypeMismatch, [Option.Name, OptionTypeNames [Option.OptionType]])
+  inherited CreateFmt(rstTypeMismatch, [Option.Name, OptionTypeNames [Option.OptionType]])
 end;
 
 { TSections }
@@ -924,7 +924,7 @@ begin
   for i := 0 to Count - 1 do
   begin
     s := Section [i];
-    if AnsiSameText (name, s.Name) then
+    if AnsiSameText(name, s.Name) then
     begin
       Result := s;
       Break
@@ -932,7 +932,7 @@ begin
   end;
 
   if not Assigned(Result) then
-    raise EOptionError.CreateFmt (rstSectionNotFound, [name])
+    raise EOptionError.CreateFmt(rstSectionNotFound, [name])
 end;
 
 { TCustomPersistentOptions }
@@ -979,17 +979,17 @@ begin
 
     if forceDefaults or not settings.HasValue(option.Name) then
     case option.OptionType of
-      otString : option.FStrVal  := option.FDefaultValue;
+      otString: option.FStrVal  := option.FDefaultValue;
       otInteger: option.FIntVal  := StrToIntDef (option.FDefaultValue, 0);
       otBoolean: option.FBoolVal := StrToBoolDef (option.FDefaultValue, False);
-      otEnum   : option.FIntVal  := option.FEnumValues.IndexOf(option.FDefaultValue)
+      otEnum: option.FIntVal  := option.FEnumValues.IndexOf(option.FDefaultValue)
     end
     else
     case option.OptionType of
-      otString : option.FStrVal  := settings.StringValue [option.Name];
+      otString: option.FStrVal  := settings.StringValue [option.Name];
       otInteger: option.FIntVal  := settings.IntegerValue [option.Name];
       otBoolean: option.FBoolVal := settings.BooleanValue [option.Name];
-      otEnum   : option.FIntVal  := settings.IntegerValue [option.Name]
+      otEnum: option.FIntVal  := settings.IntegerValue [option.Name]
     end;
     option.FDirty := False
   end
@@ -1062,10 +1062,10 @@ begin
         deleteValues.Delete(idx);
 
       case Option.OptionType of
-        otString : settings.SetStringValue (Option.Name, Option.FStrVal, Option.DefaultValue);
+        otString: settings.SetStringValue (Option.Name, Option.FStrVal, Option.DefaultValue);
         otInteger: settings.SetIntegerValue (Option.Name,  Option.FIntVal, StrToIntDef (Option.DefaultValue, 0));
         otBoolean: settings.SetBooleanValue (Option.Name, Option.FBoolVal, StrToBoolDef (Option.DefaultValue, false));
-        otEnum   : settings.SetIntegerValue (Option.Name, Option.FIntVal, Option.EnumValues.IndexOf(Option.DefaultValue));
+        otEnum: settings.SetIntegerValue (Option.Name, Option.FIntVal, Option.EnumValues.IndexOf(Option.DefaultValue));
 
       // The logic behind the 'enum' stuff works so that if the default string value is
       // not a member of the enum, the actual enum value gets saved.

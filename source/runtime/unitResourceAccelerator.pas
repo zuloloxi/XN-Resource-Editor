@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates Accelerator resources in resources                      |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -19,47 +19,48 @@ interface
 
 uses
   WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs,
-  unitResourceDetails, Vcl.Menus;
+  Vcl.Menus, unitResourceDetails;
 
 type
-TAccelerator = packed record
-  flags : word;
-  code : word;
-  id : word;
-  padding : word;
-end;
-PAccelerator = ^TAccelerator;
+  TAccelerator = packed record
+    flags: Word;
+    code: Word;
+    id: Word;
+    padding: Word;
+  end;
+  PAccelerator = ^TAccelerator;
 
-TAcceleratorResourceDetails = class (TResourceDetails)
-private
-  fCount : Integer;
-  function GetCount: Integer;
-  function GetAccelerator(idx: Integer): TAccelerator;
-  function GetAccelPointer (idx : Integer) : PAccelerator;
-public
-  constructor Create (AParent : TResourceModule; ALanguage : Integer; const AName, AType : UnicodeString; ASize : Integer; AData : pointer); override;
-  class function GetBaseType : UnicodeString; override;
+  TAcceleratorResourceDetails = class (TResourceDetails)
+  private
+    FCount: Integer;
+    function GetCount: Integer;
+    function GetAccelerator(idx: Integer): TAccelerator;
+    function GetAccelPointer (idx: Integer): PAccelerator;
+  public
+    constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
+    class function GetBaseType: UnicodeString; override;
 
-  procedure InitNew; override;
-  function Add (flags, code, id : Integer) : Integer;
-  procedure Delete (idx : Integer);
-  procedure SetAccelDetails (idx : Integer; flags, code, id : Integer);
+    procedure InitNew; override;
+    function Add (flags, code, id: Integer): Integer;
+    procedure Delete (idx: Integer);
+    procedure SetAccelDetails (idx: Integer; flags, code, id: Integer);
 
-  property Count : Integer read GetCount;
-  property Accelerator [idx : Integer] : TAccelerator read GetAccelerator;
-end;
+    property Count: Integer read GetCount;
+    property Accelerator [idx: Integer]: TAccelerator read GetAccelerator;
+  end;
+
 implementation
 
 { TAcceleratorResourceDetails }
 
-function TAcceleratorResourceDetails.Add(flags, code, id: Integer) : Integer;
+function TAcceleratorResourceDetails.Add(flags, code, id: Integer): Integer;
 var
-  ct : Integer;
-  p : PAccelerator;
+  ct: Integer;
+  p: PAccelerator;
 begin
   ct := Count;
   Data.Size := Data.Size + sizeof (TAccelerator);
-  Inc (fCount);
+  Inc(FCount);
   p := GetAccelPointer (ct);
   p^.flags := flags or $80;
   p^.code := code;
@@ -71,7 +72,7 @@ begin
     p := GetAccelPointer (Count - 2);
     p^.flags := p^.flags and not $80
   end;
-  result := ct;
+  Result := ct;
 end;
 
 constructor TAcceleratorResourceDetails.Create(AParent: TResourceModule;
@@ -80,12 +81,12 @@ constructor TAcceleratorResourceDetails.Create(AParent: TResourceModule;
 begin
   inherited Create (AParent, ALanguage, AName, AType, ASize, AData);
 
-  fCount := -1;
+  FCount := -1;
 end;
 
 procedure TAcceleratorResourceDetails.Delete(idx: Integer);
 var
-  p, p1 : PAccelerator;
+  p, p1: PAccelerator;
 begin
   if idx >= Count then Exit;
 
@@ -96,7 +97,7 @@ begin
     Move (p1^, p^, sizeof (TAccelerator) * (Count - idx - 1));
   end;
 
-  Dec (fCount);
+  Dec(FCount);
   Data.Size := Data.Size - sizeof (TAccelerator);
 
   if Count > 0 then
@@ -109,7 +110,7 @@ end;
 function TAcceleratorResourceDetails.GetAccelerator(
   idx: Integer): TAccelerator;
 begin
-  result := GetAccelPointer (idx)^
+  Result := GetAccelPointer (idx)^
 end;
 
 function TAcceleratorResourceDetails.GetAccelPointer(
@@ -117,8 +118,8 @@ function TAcceleratorResourceDetails.GetAccelPointer(
 begin
   if idx < Count then
   begin
-    result := PAccelerator (Data.Memory);
-    Inc (result, idx)
+    Result := PAccelerator (Data.Memory);
+    Inc(result, idx)
   end
   else
     raise ERangeError.Create('Index out of bounds');
@@ -126,29 +127,29 @@ end;
 
 class function TAcceleratorResourceDetails.GetBaseType: UnicodeString;
 begin
-  result := IntToStr (Integer (RT_ACCELERATOR));
+  Result := IntToStr (Integer (RT_ACCELERATOR));
 end;
 
 function TAcceleratorResourceDetails.GetCount: Integer;
 var
-  p : PAccelerator;
-  sz : Integer;
+  p: PAccelerator;
+  sz: Integer;
 begin
-  if fCount = -1 then
+  if FCount = -1 then
   begin
     p := PAccelerator (Data.Memory);
-    fCount := 0;
+    FCount := 0;
     sz := 0;
     while sz + sizeof (TAccelerator) <= Data.Size do
     begin
-      Inc (fCount);
+      Inc(FCount);
       if (p^.flags and $80) <> 0 then
         Break;
-      Inc (p);
-      Inc (sz, sizeof (TAccelerator))
+      Inc(p);
+      Inc(sz, sizeof (TAccelerator))
     end
   end;
-  result := fCount;
+  Result := FCount;
 end;
 
 procedure TAcceleratorResourceDetails.InitNew;
@@ -160,7 +161,7 @@ end;
 procedure TAcceleratorResourceDetails.SetAccelDetails(idx, flags, code,
   id: Integer);
 var
-  p : PAccelerator;
+  p: PAccelerator;
 begin
   p := GetAccelPointer (idx);
   if p <> Nil then

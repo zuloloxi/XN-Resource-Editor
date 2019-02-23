@@ -90,7 +90,7 @@ begin
   inherited;
   FDetails := Obj as TMenuResourceDetails;
 
-  item := TMenuItem.Create (nil);
+  item := TMenuItem.Create(nil);
   try
     FDetails.GetItems (item);
     MenuDesigner1.SetItems (item, False)
@@ -101,8 +101,8 @@ end;
 
 procedure TfmMenuResource.UpdateFonts;
 begin
-  useInternationalFont (PropertyListBox1.Font);
-  useInternationalFont (MenuDesigner1.Font);
+  useInternationalFont(PropertyListBox1.Font);
+  useInternationalFont(MenuDesigner1.Font);
 end;
 
 procedure TfmMenuResource.MenuDesigner1SelectedItemChange(Sender: TObject);
@@ -123,7 +123,7 @@ begin
   with PropertyListBox1.FindProperty (rstShortcut) do
   begin
     Tag := taShortcut;
-    s := ExtractShortcut (Utf8Decode (item.Caption));
+    s := ExtractShortcut(Utf8Decode (item.Caption));
 
     if s = '' then
       s := rstNone;
@@ -134,7 +134,7 @@ begin
   with PropertyListBox1.FindProperty (rstID) do
   begin
     Tag := taID;
-    PropertyValue := IntToStr (item.ID);
+    PropertyValue := IntToStr(item.ID);
   end;
 
   with PropertyListBox1,FindProperty (rstEnabled) do
@@ -161,7 +161,7 @@ var
   begin
     for w := lo to hi do
     begin
-      s := ShortCutToText (w + flags);
+      s := ShortCutToText(w + flags);
       if s <> '' then
         prop.EnumValues.Add (s)
     end
@@ -200,7 +200,7 @@ end;
 
 procedure TfmMenuResource.actMenuDeleteItemExecute(Sender: TObject);
 begin
-  if Assigned (menuDesigner1.SelectedItem) then
+  if Assigned(menuDesigner1.SelectedItem) then
   begin
     menuDesigner1.DeleteItem (menuDesigner1.SelectedItem);
     SaveResource (rstDeleteItem)
@@ -244,7 +244,7 @@ begin
   case PropertyListBox1.SelectedPropertyNo of
     taCaption :
       begin
-        MenuDesigner1.SelectedItem.Caption := Utf8Encode (MergeCaption (prop.PropertyValue, ExtractShortcut (Utf8Decode (MenuDesigner1.SelectedItem.Caption))));
+        MenuDesigner1.SelectedItem.Caption := Utf8Encode (MergeCaption (prop.PropertyValue, ExtractShortcut(Utf8Decode (MenuDesigner1.SelectedItem.Caption))));
         s := rstChangeItemCaption
       end;
 

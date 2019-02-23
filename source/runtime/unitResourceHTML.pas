@@ -3,7 +3,7 @@
  |                                                                      |
  | Encapsulates HTML resources in resources                             |
  |                                                                      |
- | Copyright (c) Colin Wilson 2001,2008                                 |
+ | Copyright(c) Colin Wilson 2001,2008                                 |
  |                                                                      |
  | All rights reserved                                                  |
  |                                                                      |
@@ -29,9 +29,9 @@ type
   THTMLResourceDetails = class (TAnsiResourceDetails)
   protected
     procedure InitNew; override;
-    class function SupportsData (Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsData (Size: Integer; data: Pointer): Boolean; override;
   public
-    class function GetBaseType : UnicodeString; override;
+    class function GetBaseType: UnicodeString; override;
   end;
 
 
@@ -41,7 +41,7 @@ implementation
 
 class function THTMLResourceDetails.GetBaseType: UnicodeString;
 begin
-  result := IntToStr (Integer (RT_HTML))
+  Result := IntToStr (Integer (RT_HTML))
 end;
 
 procedure THTMLResourceDetails.InitNew;
@@ -52,7 +52,7 @@ end;
 class function THTMLResourceDetails.SupportsData(Size: Integer;
   data: Pointer): Boolean;
 var
-  p : PAnsiChar;
+  p: PAnsiChar;
 begin
   p := PAnsiChar (data);
   Result := (StrLIComp (p, '<HTML', 5) = 0) or (StrLIComp (p, '<!', 2) = 0);

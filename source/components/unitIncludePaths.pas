@@ -56,7 +56,7 @@ var
   packages: TIncludePathPackages;
 begin
   packages := TIncludePathPackages.Create;
-  result := packages.IncludePath [PackageName]
+  Result := packages.IncludePath [PackageName]
 end;
 
 { TIncludePathPackages }
@@ -85,11 +85,11 @@ function TIncludePathPackages.FindIncludePathPackage(
 var
   i: Integer;
 begin
-  result := Nil;
+  Result := Nil;
   for i := 0 to Count - 1 do
-    if SameText (Package [i].Name, PackageName) then
+    if SameText(Package [i].Name, PackageName) then
     begin
-      result := Package [i];
+      Result := Package [i];
       break
     end
 end;
@@ -97,7 +97,7 @@ end;
 function TIncludePathPackages.GetCount: Integer;
 begin
   Analyze;
-  result := FIncludePathPackages.Count;
+  Result := FIncludePathPackages.Count;
 end;
 
 function TIncludePathPackages.GetIncludePath(const PackageName: string): string;
@@ -105,28 +105,28 @@ var
   incl: TIncludePathPackage;
 begin
   incl := FindIncludePathPackage (PackageName);
-  if Assigned (incl) then
-    result := incl.IncludePath
+  if Assigned(incl) then
+    Result := incl.IncludePath
   else
-    result := ''
+    Result := ''
 end;
 
 function TIncludePathPackages.GetPackage(idx: Integer): TIncludePathPackage;
 begin
   Analyze;
-  result := TIncludePathPackage (FIncludePathPackages [idx]);
+  Result := TIncludePathPackage (FIncludePathPackages [idx]);
 end;
 
 { TIncludePathPackage }
 
 function TIncludePathPackage.GetIncludePath: string;
 begin
-  result := GetRootDirectory + '\Include'
+  Result := GetRootDirectory + '\Include'
 end;
 
 function TIncludePathPackage.GetInstalled: Boolean;
 begin
-  result := DirectoryExists (GetRootDirectory);
+  Result := DirectoryExists (GetRootDirectory);
 end;
 
 function TIncludePathPackage.GetName: string;
@@ -136,7 +136,7 @@ begin
   for i := 0 to gRegisteredPackages.Count - 1 do
     if self is gRegisteredPackages.Classes [i] then
     begin
-      result := gRegisteredPackages.Strings [i];
+      Result := gRegisteredPackages.Strings [i];
       break
     end
 end;

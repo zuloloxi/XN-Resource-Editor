@@ -21,7 +21,7 @@ type
     FOnOtherInstance: TOnOtherInstance;
     FMutex: THandle;
     FName: string;
-    function CheckOtherApp (hwnd: HWND): boolean;
+    function CheckOtherApp (hwnd: HWND): Boolean;
     procedure OwnerWindowProc(var msg: TMessage);
     procedure ProcessParameters (remoteMemHandle: THandle; remoteProcessID: DWORD);
   protected
@@ -37,7 +37,7 @@ implementation
 
 { TRunOnce }
 
-function TRunOnce.CheckOtherApp(hwnd: HWND): boolean;
+function TRunOnce.CheckOtherApp(hwnd: HWND): Boolean;
 var
   msgResult: DWORD;
 begin
@@ -101,7 +101,7 @@ var
   i: Integer;
 begin
   inherited;
-  if not (csDesigning in ComponentState) and (Owner is TForm) then
+  if not(csDesigning in ComponentState) and (Owner is TForm) then
   begin
     FName := UpperCase (ExtractFileName (Application.Exename));
     FMutex := CreateMutex (Nil, True, PChar (FName));
@@ -125,7 +125,7 @@ begin
       begin
         ParamSize := 1;
         for i := 0 to ParamCount do
-          Inc (ParamSize, 1 + Length (ParamStr (i)));
+          Inc(ParamSize, 1 + Length (ParamStr (i)));
         MapHandle := CreateFileMapping ($ffffffff, Nil, PAGE_READWRITE, 0, 65536, Nil);
         if MapHandle <> 0 then
         try
@@ -136,7 +136,7 @@ begin
             for i := 0 to ParamCount do
             begin
               lstrcpy (p, PChar (ParamStr (i)));
-              Inc (p, Length (ParamStr (i)) + 1)
+              Inc(p, Length (ParamStr (i)) + 1)
             end;
             p^ := #0;
           finally
@@ -179,14 +179,14 @@ begin
       ParamPtr := MapViewOfFile (memHandle, FILE_MAP_READ, 0, 0, 65536);
       if ParamPtr <> Nil then
       try
-        if Assigned(FOnOtherInstance) and not (csDestroying in ComponentState) then
+        if Assigned(FOnOtherInstance) and not(csDestroying in ComponentState) then
         begin
           p := ParamPtr;
           paramCount := 0;
           while p^ <> #0 do
           begin
-            Inc (paramCount);
-            Inc (p, lstrlen (p) + 1);
+            Inc(paramCount);
+            Inc(p, lstrlen (p) + 1);
           end;
           SetLength (params, paramCount);
           p := ParamPtr;
@@ -194,8 +194,8 @@ begin
           while p^ <> #0 do
           begin
             params [i] := p;
-            Inc (p, lstrlen (p) + 1);
-            Inc (i);
+            Inc(p, lstrlen (p) + 1);
+            Inc(i);
           end;
 
           OnOtherInstance (Self, paramCount - 1, params);

@@ -18,7 +18,7 @@ type
     function GetCursor: TExCursor;
     procedure SetHotspot(const ScreenPt: TPoint);
   protected
-    procedure SetObject (const Value: TObject); override;
+    procedure SetObject(const Value: TObject); override;
   public
     procedure PreviewKey (var key: Word; shift: TShiftState); override;
     procedure SaveResource (const undoDetails: string); override;
@@ -44,7 +44,7 @@ const
 
 { TfmCursorGraphicsResource }
 
-procedure TfmCursorGraphicsResource.SetHotspot (const ScreenPt: TPoint);
+procedure TfmCursorGraphicsResource.SetHotspot(const ScreenPt: TPoint);
 var
   pt: TPoint;
   change: string;
@@ -135,7 +135,7 @@ begin
   pt := PopupMenu1.PopupPoint;
   if pt.X = -1 then
     pt := Mouse.CursorPos;
-  SetHotspot (pt);
+  SetHotspot(pt);
   pt.x := -1;
   pt.y := -1;
   TCrackPopupMenu (PopupMenu1).SetPopupPoint(pt);

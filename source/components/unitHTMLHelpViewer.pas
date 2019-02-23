@@ -5,7 +5,7 @@ interface
 uses
   WinAPI.Windows, System.Classes, System.SysUtils;
 
-function HHPreTranslateMessage (var Msg : TMsg) : Boolean;
+function HHPreTranslateMessage (var Msg: TMsg): Boolean;
 procedure InitializeHTMLHelp;
 
 implementation
@@ -18,20 +18,21 @@ type
     twhContext,
     twhCommand,
     twhContents,
-    twhQuit);
+    twhQuit
+  );
 
   THTMLHelpViewer = class(TInterfacedObject, ICustomHelpViewer,
     IExtendedHelpViewer, IHelpSelector)
   private
-    FViewerID : Integer;
+    FViewerID: Integer;
     FLastCommandType: TWHCommandType;
   public
     FHelpManager: IHelpManager;
     procedure InternalShutDown;
 
     { ICustomHelpViewer }
-    function GetViewerName : String;
-    function UnderstandsKeyword(const HelpString: String): Integer;
+    function GetViewerName: String;
+    function UnderstandsKeyWord(const HelpString: String): Integer;
     function GetHelpStrings(const HelpString: String): TStringList;
     function CanShowTableOfContents: Boolean;
     procedure ShowTableOfContents;
@@ -48,11 +49,11 @@ type
     procedure DisplayHelpByContext(const ContextID: THelpContext;
       const HelpFileName: string);
 
-    property HelpManager : IHelpManager read FHelpManager write FHelpManager;
-    property ViewerID : Integer read FViewerID;
+    property HelpManager: IHelpManager read FHelpManager write FHelpManager;
+    property ViewerID: Integer read FViewerID;
 
     { IHelpSelector}
-    function SelectKeyword(Keywords: TStrings) : Integer;
+    function SelectKeyWord(KeyWords: TStrings): Integer;
     function TableOfContents(Contents: TStrings): Integer;
   end;
 
@@ -67,7 +68,7 @@ resourcestring
 
 { THTMLHelpViewer }
 
-function HHPreTranslateMessage (var Msg : TMsg) : Boolean;
+function HHPreTranslateMessage (var Msg: TMsg): Boolean;
 begin
   Result := HtmlHelp (0, Nil, HH_PRETRANSLATEMESSAGE, DWORD (@Msg)) = 0
 end;
@@ -128,15 +129,15 @@ begin
   FViewerID := ViewerID;
 end;
 
-function THTMLHelpViewer.SelectKeyword(Keywords: TStrings): Integer;
+function THTMLHelpViewer.SelectKeyWord(KeyWords: TStrings): Integer;
 var
-  p : Integer;
-  st : string;
+  p: Integer;
+  st: string;
 begin
   Result := 0;
-  while Result < keywords.Count do
+  while Result < keyWords.Count do
   begin
-    st := keywords [Result];
+    st := keyWords [Result];
     p := Pos (':', st);
     if p >= 0 then
       st := Copy (st, 1, p - 1);
@@ -144,7 +145,7 @@ begin
     if st = rstHTMLHelp then
       Exit
     else
-      Inc (Result);
+      Inc(Result);
   end;
   Result := -1
 end;
@@ -156,7 +157,7 @@ end;
 
 procedure THTMLHelpViewer.ShowTableOfContents;
 var
-  fn, pn : string;
+  fn, pn: string;
 begin
   fn := FHelpManager.GetHelpFile;
   pn := ExtractFilePath (ParamStr (0));
@@ -183,7 +184,7 @@ begin
     if contents [result] = rstHTMLHelp then
       exit
     else
-      Inc (Result);
+      Inc(Result);
   Result := -1;
 end;
 
@@ -193,11 +194,11 @@ begin
   Result := False;
 end;
 
-function THTMLHelpViewer.UnderstandsKeyword(
+function THTMLHelpViewer.UnderstandsKeyWord(
   const HelpString: String): Integer;
 var
-  params : THHAKlink;
-  fn, pn : string;
+  params: THHAKlink;
+  fn, pn: string;
 begin
   fn := FHelpManager.GetHelpFile;
   pn := ExtractFilePath (ParamStr (0));
@@ -205,7 +206,7 @@ begin
   HTMLHelp (Application.Handle, PChar (fn), HH_DISPLAY_TOPIC, 0);
 
   params.cbStruct := SizeOf (params);
-  params.pszKeywords := PChar (HelpString);
+  params.pszKeyWords := PChar (HelpString);
   params.pszUrl := nil;
   params.pszMsgText := nil;
   params.pszMsgTitle := nil;
@@ -213,7 +214,7 @@ begin
   params.fReserved := False;
 
   HTMLHelp (Application.Handle, PChar (fn), HH_ALINK_LOOKUP, DWORD (@params));
-  result := 1;
+  Result := 1;
 
 end;
 

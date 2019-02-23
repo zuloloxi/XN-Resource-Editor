@@ -94,23 +94,23 @@ end;
 destructor TColorSelector.Destroy;
 begin
   if FPalette <> 0 then
-    DeleteObject (FPalette);
+    DeleteObject(FPalette);
   inherited
 end;
 
 function TColorSelector.GetColor(idx: Integer): TCOlor;
 begin
   with FPaletteEntries [idx] do
-    result := RGB (peRed, peGreen, peBlue);
+    Result := RGB (peRed, peGreen, peBlue);
 end;
 
 function TColorSelector.GetSelectedPaletteColor: TColor;
 begin
   if FPalette <> 0 then
     with FPaletteEntries [FSelectedIdx] do
-      result := RGB (peRed, peGreen, peBlue)
+      Result := RGB (peRed, peGreen, peBlue)
   else
-    result := FSelectedColor;
+    Result := FSelectedColor;
 end;
 
 procedure TColorSelector.MouseDown(Button: TMouseButton;
@@ -118,14 +118,14 @@ procedure TColorSelector.MouseDown(Button: TMouseButton;
 var
   p: TPoint;
   selectedColor: TColor;
-  changed: boolean;
+  changed: Boolean;
   selectedIdx: Integer;
   b: TBitmap;
 begin
   SetFocus;
   p.x := x;
   p.y := y;
-  ScreenToClient (p);
+  ScreenToClient(p);
 
   selectedIdx := -1;
   if FPalette = 0 then
@@ -171,7 +171,7 @@ begin
 
     FSelectedIdx := selectedIdx;
     FSelectedColor := selectedColor;
-    if Assigned(FOnColorSelect) and Changed and not (csDestroying in ComponentState) then
+    if Assigned(FOnColorSelect) and Changed and not(csDestroying in ComponentState) then
       OnColorSelect(Self)
   end
 end;
@@ -192,11 +192,11 @@ begin
         Canvas.Brush.Color := RGB (peRed, peGreen, peBlue);
 
       Canvas.Rectangle (x, y, x + FColWidth, y + FRowHeight);
-      Inc (x, FColWidth);
+      Inc(x, FColWidth);
       if x + FColWidth > width then
       begin
         x := 0;
-        Inc (y, FRowHeight)
+        Inc(y, FRowHeight)
       end
     end
   end
@@ -232,7 +232,7 @@ begin
           rt.rgbtGreen := GetGValue (c);
           rt.rgbtBlue := GetBValue (c);
           ps^ := rt;
-          Inc (ps);
+          Inc(ps);
         end
       end;
     except
@@ -298,18 +298,18 @@ end;
 
 procedure TColorSelector.SetPalette(const Value: HPalette);
 var
-  colorCount: word;
+  colorCount: Word;
 begin
   if Value <> FPalette then
   begin
     if FPalette <> 0 then
     begin
-      DeleteObject (FPalette);
+      DeleteObject(FPalette);
       FPalette := 0
     end;
 
     if value <> 0 then
-      if GetObject (Value, sizeof (colorCount), @colorCount) <> 0 then
+      if GetObject(Value, sizeof (colorCount), @colorCount) <> 0 then
       begin
         SetLength (FPaletteEntries, colorCount);
         FColorCount := colorCount;
@@ -330,7 +330,7 @@ end;
 
 procedure TColorSelector.SetSelectedPaletteColor(color: TColor);
 var
-  colorCount: word;
+  colorCount: Word;
   rgb, i: LongInt;
   fNewPal: HPALETTE;
   logPal: PLogPalette;
@@ -338,7 +338,7 @@ begin
   if FPalette = 0 then
     Exit;
 
-  if GetObject (FPalette, sizeof (colorCount), @colorCount) <> 0 then
+  if GetObject(FPalette, sizeof (colorCount), @colorCount) <> 0 then
   begin
     rgb := ColorToRGB (color);
     SetLength (FPaletteEntries, colorCount);
@@ -360,7 +360,7 @@ begin
       try
         Palette := fNewPal;
       finally
-        DeleteObject (fNewPal)
+        DeleteObject(fNewPal)
       end
     finally
       FreeMem (logPal)

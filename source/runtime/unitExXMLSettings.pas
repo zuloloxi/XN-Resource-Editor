@@ -23,60 +23,61 @@ unit unitExXMLSettings;
 
 interface
 
-uses Classes, SysUtils, unitExSettings, unitExFileSettings, MSXML;
+uses
+  Classes, SysUtils, MSXML, unitExSettings, unitExFileSettings;
 
 type
+  //-----------------------------------------------------------------------
+  // TExXMLSettings.
+  //
+  // Class to store application and other settings to XML files
+  TExXMLSettings = class (TExFileSettings)
+  private
+    FDoc: IXMLDOMDocument;
+    FAutoReadOnly: Boolean;
+    FSectionElement: IXMLDOMElement;
+    FDirty: Boolean;
 
-//-----------------------------------------------------------------------
-// TExXMLSettings.
-//
-// Class to store application and other settings to XML files
-TExXMLSettings = class (TExFileSettings)
-private
-  fDoc : IXMLDOMDocument;
-  fAutoReadOnly : boolean;
-  fSectionElement : IXMLDOMElement;
-  fDirty : boolean;
+    function EncodeNodeName (nodeName: string): string;
+    function DecodeNodeName (const nodeName: string): string;
+    function SetupSectionElement: Boolean;
 
-  function EncodeNodeName (nodeName : string) : string;
-  function DecodeNodeName (const nodeName : string) : string;
-  function SetupSectionElement : boolean;
+    function FindChild (elem: IXMLDOMElement; const name: string; section: Boolean): IXMLDOMElement;
+    function AppendChild(elem: IXMLDOMElement; const name: string): IXMLDOMElement;
+    function AppendChildSection (elem: IXMLDOMElement; const name: string): IXMLDOMElement;
+    function AppendChildValue(elem: IXMLDOMElement; const name, value: string): IXMLDOMElement;
+    function IsSection (node: IXMLDOMElement): Boolean;
+    procedure EnumChildNames(elem: IXMLDOMElement; childNames: TStrings; section: Boolean);
+      function GetXMLFileName: string;
 
-  function FindChild (elem : IXMLDOMElement; const name : string; section : boolean) : IXMLDOMElement;
-  function AppendChild(elem : IXMLDOMElement; const name: string) : IXMLDOMElement;
-  function AppendChildSection (elem : IXMLDOMElement; const name : string) : IXMLDOMElement;
-  function AppendChildValue(elem : IXMLDOMElement; const name, value : string) : IXMLDOMElement;
-  function IsSection (node : IXMLDOMElement) : boolean;
-  procedure EnumChildNames(elem : IXMLDOMElement; childNames : TStrings; section : boolean);
-    function GetXMLFileName: string;
+  protected
+    function IsOpen: Boolean; override;
+    function  CheckIsOpen (readOnly, autoReadOnly: Boolean): TIsOpen; override;
+    procedure InternalSetStringValue (const valueName, value: string); override;
+    procedure SetSection(const SectionPath: string); override;
+  public
+    procedure Close; override;
+    constructor CreateChild (AParent: TExSettings; const ASection: string); override;
+    function Open (readOnly: Boolean = false): Boolean; override;
+    procedure Flush; override;
 
-protected
-  function IsOpen : boolean; override;
-  function  CheckIsOpen (readOnly, autoReadOnly : boolean) : TIsOpen; override;
-  procedure InternalSetStringValue (const valueName, value : string); override;
-  procedure SetSection(const SectionPath : string); override;
-public
-  procedure Close; override;
-  constructor CreateChild (AParent : TExSettings; const ASection : string); override;
-  function Open (readOnly : boolean = false) : boolean; override;
-  procedure Flush; override;
+    procedure DeleteValue (const valueName: string); override;
+    procedure DeleteSection (const sectionName: string); override;
+    function HasSection (const ASection: string): Boolean; override;
+    function HasValue (const AValue: string): Boolean; override;
+    procedure GetValueNames (names: TStrings); override;
+    procedure GetSectionNames (names: TStrings); override;
+    procedure RenameSection (const oldValue, newValue: string); override;
+    procedure RenameValue (const oldValue, newValue: string); override;
 
-  procedure DeleteValue (const valueName : string); override;
-  procedure DeleteSection (const sectionName : string); override;
-  function HasSection (const ASection : string) : boolean; override;
-  function HasValue (const AValue : string) : boolean; override;
-  procedure GetValueNames (names : TStrings); override;
-  procedure GetSectionNames (names : TStrings); override;
-  procedure RenameSection (const oldValue, newValue : string); override;
-  procedure RenameValue (const oldValue, newValue : string); override;
-
-  function GetStringValue  (const valueName : string; const deflt : string = '') : string; override;
-  property FileName : string read GetXMLFileName;
-end;
+    function GetStringValue  (const valueName: string; const deflt: string = ''): string; override;
+    property FileName: string read GetXMLFileName;
+  end;
 
 implementation
 
-uses ComObj, unitSearchString;
+uses
+  ComObj, unitSearchString;
 
 { TExXMLSettings }
 
@@ -85,29 +86,29 @@ uses ComObj, unitSearchString;
  |                                                                      |
  | Ensure that the file is open.                                        |
  *----------------------------------------------------------------------*)
-function TExXMLSettings.CheckIsOpen (readOnly, autoReadOnly : boolean) : TIsOpen;
+function TExXMLSettings.CheckIsOpen (readOnly, autoReadOnly: Boolean): TIsOpen;
 var
-  fn : string;
+  fn: string;
 begin
-  result := inherited CheckIsOpen (readOnly, fAutoReadOnly);
+  Result := inherited CheckIsOpen (readOnly, FAutoReadOnly);
 
   case result of
     woClosed :
       begin
         if Open (readOnly) then
-          result := woOpen;
+          Result := woOpen;
         fReadOnly := False;
       end;
     woReopen :
       begin
-        fAutoReadOnly := readOnly;  // Actually, readOnly will always be false
+        FAutoReadOnly := readOnly;  // Actually, readOnly will always be false
                                     // because we wouldn't be reopening it
                                     // otherwise!
 
         fn := FileName;
         if not readOnly then
           ForceDirectories (ExtractFilePath (fn));
-        result := woOpen
+        Result := woOpen
       end;
   end;
 end;
@@ -122,29 +123,29 @@ begin
   if Parent = Nil then
     Flush
   else
-    TExXMLSettings (Parent).fDirty := TExXMLSettings (Parent).fDirty or fDirty;
+    TExXMLSettings (Parent).FDirty := TExXMLSettings (Parent).FDirty or FDirty;
 
-  fSectionElement := Nil;
-  fDoc := Nil;  // Release the DOC object
-  fDirty := False;
+  FSectionElement := Nil;
+  FDoc := Nil;  // Release the DOC object
+  FDirty := False;
 end;
 
 constructor TExXMLSettings.CreateChild(AParent: TExSettings;
   const ASection: string);
 var
-  parentDoc : IXMLDOMDocument;
+  parentDoc: IXMLDOMDocument;
 begin
   inherited;
 
-  parentDoc := TExXMLSettings (AParent).fDoc;
+  parentDoc := TExXMLSettings (AParent).FDoc;
 
   if parentDoc = Nil then
   begin
     AParent.Open (ReadOnly);
-    parentDoc := TExXMLSettings (AParent).fDoc
+    parentDoc := TExXMLSettings (AParent).FDoc
   end;
 
-  fDoc := parentDoc;
+  FDoc := parentDoc;
   SetupSectionElement
 end;
 
@@ -154,9 +155,9 @@ const
   
 function TExXMLSettings.DecodeNodeName(const nodeName: string): string;
 var
-  l, ip, op : Integer;
-  ch : char;
-  st : string;
+  l, ip, op: Integer;
+  ch: char;
+  st: string;
 begin
   l := Length (nodeName);
   SetLength (result, l);
@@ -167,12 +168,12 @@ begin
   while ip <= l do
   begin
     ch := nodeName [ip];
-    Inc (ip);
+    Inc(ip);
 
     if (ip = 2) and (ch = '_') then
     begin
       ch := nodeName [ip];
-      Inc (ip)
+      Inc(ip)
     end;
 
     if ch = escape then
@@ -180,8 +181,8 @@ begin
       if ip <= l - 2 then
       begin
         st := Copy (nodeName, ip, 2);
-        Inc (ip, 2);
-        ch := char (StrToInt ('$' + st));
+        Inc(ip, 2);
+        ch := char (StrToInt('$' + st));
       end;
     end
     else
@@ -189,7 +190,7 @@ begin
         ch := ' ';
 
     result [op] := ch;
-    Inc (op)
+    Inc(op)
   end;
   SetLength (result, op-1);
 end;
@@ -201,17 +202,17 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExXMLSettings.DeleteSection(const sectionName: string);
 var
-  n : IXMLDOMElement;
+  n: IXMLDOMElement;
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen (false, FAutoReadOnly);
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
-    n := FindChild (fSectionElement, sectionName, true);
+    n := FindChild (FSectionElement, sectionName, true);
     if n <> Nil then
     begin
-      fSectionElement.removeChild(n);
-      fDirty := True
+      FSectionElement.removeChild(n);
+      FDirty := True
     end
   end
 end;
@@ -223,23 +224,23 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExXMLSettings.DeleteValue(const valueName: string);
 var
-  n : IXMLDOMElement;
+  n: IXMLDOMElement;
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen (false, FAutoReadOnly);
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
-    n := FindChild (fSectionElement, valueName, false);
+    n := FindChild (FSectionElement, valueName, false);
     if n <> Nil then
     begin
-      fSectionElement.removeChild(n);
-      fDirty := True
+      FSectionElement.removeChild(n);
+      FDirty := True
     end
   end
 end;
 
 const
-  specialChars : set of AnsiChar = ['$', '_', '%', '+', '!', '"', '£', '^', '&'];
+  specialChars: set of AnsiChar = ['$', '_', '%', '+', '!', '"', '£', '^', '&'];
   specialFirstChars = ['0'..'9', '.'];
 
 (*----------------------------------------------------------------------*
@@ -259,10 +260,10 @@ const
  *----------------------------------------------------------------------*)
 function TExXMLSettings.EncodeNodeName(nodeName: string): string;
 var
-  l, ip, op : Integer;
-  ch : char;
-  st : string;
-  dontEscape : boolean;
+  l, ip, op: Integer;
+  ch: char;
+  st: string;
+  dontEscape: Boolean;
 begin
   nodeName := Trim (nodeName);
 
@@ -274,7 +275,7 @@ begin
   while ip <= l do
   begin
     ch := nodeName [ip];
-    Inc (ip);
+    Inc(ip);
 
     if ch = ' ' then
       result [op] := '_'
@@ -286,34 +287,34 @@ begin
         if ip = 2 then
         begin
           result [op] := '_';
-          Inc (op);
-          if (ch <> escape) and not (AnsiChar (ch) in specialChars)  then
+          Inc(op);
+          if (ch <> escape) and not(AnsiChar (ch) in specialChars)  then
             dontEscape := True
         end;
 
         if not dontEscape then
         begin
           result [op] := escape;
-          Inc (op);
+          Inc(op);
 
           st := IntToHex (Ord (ch), 2);
           result [op] := st [1];
-          Inc (op);
+          Inc(op);
           ch := st [2];
         end
       end;
       result [op] := ch
     end;
 
-    Inc (op)
+    Inc(op)
   end;
   SetLength (result, op - 1);
 end;
 
 procedure TExXMLSettings.EnumChildNames(elem: IXMLDOMElement;
-  childNames: TStrings; section: boolean);
+  childNames: TStrings; section: Boolean);
 var
-  node : IXMLDOMNode;
+  node: IXMLDOMNode;
 begin
   childNames.Clear;
   if elem = Nil then Exit;
@@ -333,10 +334,10 @@ end;
  | Find the XMLDOMNode for a child value or section                     |
  *----------------------------------------------------------------------*)
 function TExXMLSettings.FindChild(elem: IXMLDOMElement;
-  const name: string; section : boolean): IXMLDOMElement;
+  const name: string; section: Boolean): IXMLDOMElement;
 var
-  node : IXMLDOMNode;
-  nm : string;
+  node: IXMLDOMNode;
+  nm: string;
 
 begin
   node := elem.firstChild;
@@ -346,15 +347,15 @@ begin
   begin
     if node.nodeType = NODE_ELEMENT then
     begin
-      result := node as IXMLDOMElement;
-      if (section = IsSection (result)) and SameText (result.nodeName, nm) then
+      Result := node as IXMLDOMElement;
+      if (section = IsSection (Result)) and SameText(result.nodeName, nm) then
         break;
       node := node.nextSibling
     end
   end;
 
   if node = nil then
-    result := nil
+    Result := nil
 end;
 
 (*----------------------------------------------------------------------*
@@ -364,10 +365,10 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExXMLSettings.Flush;
 begin
-  if (fDoc <> Nil) and fDirty then
+  if (FDoc <> Nil) and FDirty then
   begin
-    fDoc.Save (FileName);
-    fDirty := False
+    FDoc.Save (FileName);
+    FDirty := False
   end
 end;
 
@@ -378,54 +379,54 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExXMLSettings.GetSectionNames(names: TStrings);
 begin
-  if CheckIsOpen (true, fAutoReadOnly) = woOpen then
-    EnumChildNames (fSectionElement, names, true);
+  if CheckIsOpen (true, FAutoReadOnly) = woOpen then
+    EnumChildNames (FSectionElement, names, true);
 end;
 
 function TExXMLSettings.GetStringValue(const valueName, deflt: string): string;
 var
-  n : IXMLDOMElement;
+  n: IXMLDOMElement;
 begin
-  CheckIsOpen (true, fAutoReadOnly);
+  CheckIsOpen (true, FAutoReadOnly);
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
-    n := FindChild (fSectionElement, valueName, false);
+    n := FindChild (FSectionElement, valueName, false);
 
     if n <> Nil then
-      result := n.text
+      Result := n.text
     else
-      result := deflt
+      Result := deflt
   end
 end;
 
 procedure TExXMLSettings.GetValueNames(names: TStrings);
 begin
-  CheckIsOpen (true, fAutoReadOnly);
-  EnumChildNames (fSectionElement, names, false)
+  CheckIsOpen (true, FAutoReadOnly);
+  EnumChildNames (FSectionElement, names, false)
 end;
 
 function TExXMLSettings.GetXMLFileName: string;
 begin
-  result := GetFileName ('.xml');
+  Result := GetFileName ('.xml');
 end;
 
-function TExXMLSettings.HasSection(const ASection: string): boolean;
+function TExXMLSettings.HasSection(const ASection: string): Boolean;
 var
-  e : IXMLDOMElement;
-  s, st : string;
+  e: IXMLDOMElement;
+  s, st: string;
 begin
-  CheckIsOpen (true, fAutoReadOnly);
-  result := False;
+  CheckIsOpen (true, FAutoReadOnly);
+  Result := False;
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
     if ASection = '' then
-      result := True
+      Result := True
     else
     begin
       s := ASection;
-      e := fSectionElement;
+      e := FSectionElement;
       while s <> '' do
       begin
         st := SplitString ('\', s);
@@ -433,24 +434,24 @@ begin
         if e = Nil then break
         
       end;
-      result := e <> Nil
+      Result := e <> Nil
     end
   end
 end;
 
-function TExXMLSettings.HasValue(const AValue: string): boolean;
+function TExXMLSettings.HasValue(const AValue: string): Boolean;
 var
-  n : IXMLDOMElement;
+  n: IXMLDOMElement;
 begin
-  CheckIsOpen (true, fAutoReadOnly);
-  result := False;
+  CheckIsOpen (true, FAutoReadOnly);
+  Result := False;
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
-    n := FindChild (fSectionElement, AValue, false);
+    n := FindChild (FSectionElement, AValue, false);
 
     if n <> Nil then
-      result := True
+      Result := True
   end
 end;
 
@@ -459,23 +460,23 @@ end;
  |                                                                      |
  | Append a child value or section to the specified section node        |
  *----------------------------------------------------------------------*)
-function TExXMLSettings.AppendChild(elem : IXMLDOMElement; const name: string) : IXMLDOMElement;
+function TExXMLSettings.AppendChild(elem: IXMLDOMElement; const name: string): IXMLDOMElement;
 begin
-  result := fDoc.createElement(EncodeNodeName (name));
-  elem.appendChild(result);
-  fDirty := True;
+  Result := FDoc.createElement(EncodeNodeName (name));
+  elem.appendChild(Result);
+  FDirty := True;
 end;
 
 function TExXMLSettings.AppendChildSection(elem: IXMLDOMElement;
   const name: string): IXMLDOMElement;
 begin
-  result := AppendChild (elem, name);
+  Result := AppendChild (elem, name);
   result.setAttribute('Section', true);
 end;
 
-function TExXMLSettings.AppendChildValue(elem : IXMLDOMElement; const name, value : string) : IXMLDOMElement;
+function TExXMLSettings.AppendChildValue(elem: IXMLDOMElement; const name, value: string): IXMLDOMElement;
 begin
-  result := AppendChild (elem, name);
+  Result := AppendChild (elem, name);
   result.text := value;
 end;
 
@@ -486,20 +487,20 @@ end;
  *----------------------------------------------------------------------*)
 procedure TExXMLSettings.InternalSetStringValue(const valueName, value: string);
 var
-  n : IXMLDOMElement;
+  n: IXMLDOMElement;
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen (false, FAutoReadOnly);
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
-    n := FindChild (fSectionElement, valueName, false);
+    n := FindChild (FSectionElement, valueName, false);
 
     if n <> Nil then
       n.text := value
     else
-      AppendChildValue(fSectionElement, valueName, value);
+      AppendChildValue(FSectionElement, valueName, value);
 
-    fDirty := True
+    FDirty := True
   end
 end;
 
@@ -508,20 +509,20 @@ end;
  |                                                                      |
  | Return true if the object is Open                                    |
  *----------------------------------------------------------------------*)
-function TExXMLSettings.IsOpen: boolean;
+function TExXMLSettings.IsOpen: Boolean;
 begin
-  result := fDoc <> Nil
+  Result := FDoc <> Nil
 end;
 
-function TExXMLSettings.IsSection(node: IXMLDOMElement): boolean;
+function TExXMLSettings.IsSection(node: IXMLDOMElement): Boolean;
 var
-  n : IXMLDOMNode;
+  n: IXMLDOMNode;
 begin
   n := node.getAttributeNode('Section');
   if n <> Nil then
-    result := n.nodeValue
+    Result := n.nodeValue
   else
-    result := False
+    Result := False
 end;
 
 (*----------------------------------------------------------------------*
@@ -529,14 +530,14 @@ end;
  |                                                                      |
  | Open the XML file.  Create it if it doesn't exist                    |
  *----------------------------------------------------------------------*)
-function TExXMLSettings.Open(readOnly: boolean) : boolean;
+function TExXMLSettings.Open(readOnly: Boolean): Boolean;
 var
-  fn, xml : string;
+  fn, xml: string;
 begin
   inherited Open (ReadOnly);
-  if fDoc <> Nil then
+  if FDoc <> Nil then
     Close;
-  fAutoReadOnly := readOnly;
+  FAutoReadOnly := readOnly;
 
   fn := FileName;
   if not readOnly then
@@ -544,40 +545,40 @@ begin
   else
     if not FileExists (fn) then
     begin
-      result := False;
+      Result := False;
       Exit;
     end;
 
-  fDoc := CoDOMDocument.Create;
+  FDoc := CoDOMDocument.Create;
 
-  if not fDoc.load(fn) then
+  if not FDoc.load(fn) then
   begin
     xml := '<?xml version="1.0" encoding="UTF-8"?><' + EncodeNodeName (Application) + '></' + EncodeNodeName (Application) + '>';
-    if not fDoc.loadXML(xml) then
+    if not FDoc.loadXML(xml) then
       raise EExSettings.Create ('Unable to create the XML document');
   end;
 
-  result := SetupSectionElement
+  Result := SetupSectionElement
 end;
 
 procedure TExXMLSettings.RenameSection(const oldValue, newValue: string);
 var
-  newN, n : IXMLDOMElement;
-  c : IXMLDOMNode;
+  newN, n: IXMLDOMElement;
+  c: IXMLDOMNode;
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen (false, FAutoReadOnly);
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
-    n := FindChild (fSectionElement, newValue, true);
+    n := FindChild (FSectionElement, newValue, true);
     if n <> Nil then
       raise EExSettings.Create('Section ' + newValue + ' already exists');
 
-    n := FindChild (fSectionElement, oldValue, true);
+    n := FindChild (FSectionElement, oldValue, true);
     if n = Nil then
       raise EExSettings.Create('Section ' + oldValue + ' does not exist');
 
-    newN := fDoc.createElement ((EncodeNodeName (newValue)));
+    newN := FDoc.createElement((EncodeNodeName (newValue)));
 
     // We know that the only attribute is 'Section' - so rather than
     // cloning the attributes, simply create a new Section attribute
@@ -590,28 +591,28 @@ begin
       c := c.nextSibling;
     end;
 
-    fSectionElement.replaceChild(newN, n);
-    fDirty := True
+    FSectionElement.replaceChild(newN, n);
+    FDirty := True
   end
 end;
 
 procedure TExXMLSettings.RenameValue(const oldValue, newValue: string);
 var
-  newN, n : IXMLDOMElement;
+  newN, n: IXMLDOMElement;
 begin
-  CheckIsOpen (false, fAutoReadOnly);
+  CheckIsOpen (false, FAutoReadOnly);
 
-  if fSectionElement <> Nil then
+  if FSectionElement <> Nil then
   begin
-    n := FindChild (fSectionElement, oldValue, false);
+    n := FindChild (FSectionElement, oldValue, false);
     if n = Nil then
       raise EExSettings.Create('Value ' + oldValue + ' does not exist');
 
-    newN := fDoc.createElement(EncodeNodeName (newValue));
+    newN := FDoc.createElement(EncodeNodeName (newValue));
     newN.text := n.text;
-    fSectionElement.replaceChild(newN, n);
+    FSectionElement.replaceChild(newN, n);
 
-    fDirty := True
+    FDirty := True
   end
 end;
 
@@ -632,15 +633,15 @@ end;
  |                                                                      |
  | Find or create the node for the current section                      |
  *----------------------------------------------------------------------*)
-function TExXMLSettings.SetupSectionElement : boolean;
+function TExXMLSettings.SetupSectionElement: Boolean;
 var
-  s, n : string;
-  node : IXMLDOMElement;
+  s, n: string;
+  node: IXMLDOMElement;
 begin
-  result := True;
-  if fDoc <> Nil then
+  Result := True;
+  if FDoc <> Nil then
   begin
-    fSectionElement := fDoc.documentElement;
+    FSectionElement := FDoc.documentElement;
 
     s := Section;
 
@@ -648,22 +649,22 @@ begin
       n := SplitString ('\', s);
       if n = '' then break;
 
-      node := FindChild (fSectionElement, n, true);
+      node := FindChild (FSectionElement, n, true);
 
       if node = Nil then
         if ReadOnly then
         begin
-          result := False;
+          Result := False;
           break
         end
         else
-          fSectionElement := AppendChildSection (fSectionElement, n)
+          FSectionElement := AppendChildSection (FSectionElement, n)
       else
-        fSectionElement := node;
+        FSectionElement := node;
     until false;
   end
   else
-    fSectionElement := Nil;
+    FSectionElement := Nil;
 end;
 
 end.

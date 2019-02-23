@@ -10,10 +10,8 @@ uses
 type
   TfmProperties = class(TfmPropertyBase)
     procedure FormDestroy(Sender: TObject);
-  private
-  protected
   public
-    constructor Create (AOwner: TComponent); override;
+    constructor Create(AOwner: TComponent); override;
   end;
 
 implementation
