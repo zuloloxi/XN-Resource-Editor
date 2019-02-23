@@ -41,14 +41,14 @@ function TRunOnce.CheckOtherApp(hwnd: HWND): boolean;
 var
   msgResult: DWORD;
 begin
-  result := False;
+  Result := False;
   if hwnd <> TForm (Owner).Handle then
   begin
     if GetWindowLong (hwnd, GWL_USERDATA) = $badf00d then
       if (SendMessageTimeout(hwnd, FUniqueMessage, 0, 0, SMTO_BLOCK or SMTO_ABORTIFHUNG, 1000, @msgResult) <> 0) and (msgResult = FUniqueMessage) then
       begin
         FOtherWindowHandle := hwnd;
-        result := True
+        Result := True
       end
   end
 end;
@@ -60,8 +60,8 @@ end;
 
 destructor TRunOnce.Destroy;
 begin
-  if Assigned (FObjectInstance) then
-    System.Classes.FreeObjectInstance (FObjectInstance);
+  if Assigned(FObjectInstance) then
+    System.Classes.FreeObjectInstance(FObjectInstance);
 
 
   if FMutex <> 0 then
@@ -72,32 +72,32 @@ begin
   inherited;
 end;
 
-function EnumWindowsProc (hwnd: HWND; lParam: LPARAM): BOOL; stdcall;
+function EnumWindowsProc (hwnd: HWND; LParam: LParam): BOOL; stdcall;
 begin
-  result := not TRunOnce (lParam).CheckOtherApp (hwnd)
+  Result := not TRunOnce (LParam).CheckOtherApp (hwnd)
 end;
 
 procedure TRunOnce.OwnerWindowProc (var msg: TMessage);
 begin
   with msg do
     if Msg = FUniqueMessage then
-      result := FUniqueMessage
+      Result := FUniqueMessage
     else
       if Msg = FParamsMessage then
       try
-        ProcessParameters (wParam, lParam)
+        ProcessParameters (WParam, LParam)
       except
-        Application.HandleException (self)
+        Application.HandleException(Self)
       end
       else
-        result := CallWindowProc (FOldOwnerWindowProc, TForm (Owner).Handle, msg, wParam, lParam);
+        Result := CallWindowProc (FOldOwnerWindowProc, TForm (Owner).Handle, msg, WParam, LParam);
 end;
 
 procedure TRunOnce.Loaded;
 var
-  mapHandle: THandle;
-  paramPtr, p: PChar;
-  paramSize: DWORD;
+  MapHandle: THandle;
+  ParamPtr, p: PChar;
+  ParamSize: DWORD;
   i: Integer;
 begin
   inherited;
@@ -119,20 +119,20 @@ begin
     if FMutex = 0 then
     begin
       Sleep (100);
-      EnumWindows (@EnumWindowsProc, LPARAM (self));
+      EnumWindows (@EnumWindowsProc, LParam (Self));
 
       if FOtherWindowHandle <> 0 then
       begin
-        paramSize := 1;
+        ParamSize := 1;
         for i := 0 to ParamCount do
-          Inc (paramSize, 1 + Length (ParamStr (i)));
-        mapHandle := CreateFileMapping ($ffffffff, Nil, PAGE_READWRITE, 0, 65536, Nil);
-        if mapHandle <> 0 then
+          Inc (ParamSize, 1 + Length (ParamStr (i)));
+        MapHandle := CreateFileMapping ($ffffffff, Nil, PAGE_READWRITE, 0, 65536, Nil);
+        if MapHandle <> 0 then
         try
-          paramPtr := MapViewOfFile (mapHandle, FILE_MAP_WRITE, 0, 0, paramSize);
-          if paramPtr <> Nil then
+          ParamPtr := MapViewOfFile (MapHandle, FILE_MAP_WRITE, 0, 0, ParamSize);
+          if ParamPtr <> Nil then
           try
-            p := paramPtr;
+            p := ParamPtr;
             for i := 0 to ParamCount do
             begin
               lstrcpy (p, PChar (ParamStr (i)));
@@ -140,21 +140,21 @@ begin
             end;
             p^ := #0;
           finally
-            UnmapViewOfFile (paramPtr);
+            UnmapViewOfFile (ParamPtr);
           end
           else
             RaiseLastOSError;
 
-          SendMessage (FOtherWindowHandle, FParamsMessage, mapHandle, GetCurrentProcessID);
+          SendMessage (FOtherWindowHandle, FParamsMessage, MapHandle, GetCurrentProcessID);
         finally
-          CloseHandle (mapHandle);
+          CloseHandle (MapHandle);
         end
         else
           RaiseLastOSError;
 
         SetForegroundWindow (FOtherWindowHandle)
       end;
-      Halt
+      Halt;
     end
     else
     SetWindowLong (TForm (Owner).Handle, GWL_USERDATA, $badf00d)
@@ -165,7 +165,7 @@ procedure TRunOnce.ProcessParameters(remoteMemHandle: THandle; remoteProcessID: 
 var
   memHandle: THandle;
   remoteProcessHandle: THandle;
-  paramPtr: PChar;
+  ParamPtr: PChar;
   p: PChar;
   paramCount: DWORD;
   params: array of string;
@@ -176,20 +176,20 @@ begin
   try
     if DuplicateHandle (remoteProcessHandle, remoteMemHandle, GetCurrentProcess, @memHandle, FILE_MAP_READ, False, 0) then
     try
-      paramPtr := MapViewOfFile (memHandle, FILE_MAP_READ, 0, 0, 65536);
-      if paramPtr <> Nil then
+      ParamPtr := MapViewOfFile (memHandle, FILE_MAP_READ, 0, 0, 65536);
+      if ParamPtr <> Nil then
       try
-        if Assigned (FOnOtherInstance) and not (csDestroying in ComponentState) then
+        if Assigned(FOnOtherInstance) and not (csDestroying in ComponentState) then
         begin
-          p := paramPtr;
+          p := ParamPtr;
           paramCount := 0;
           while p^ <> #0 do
           begin
             Inc (paramCount);
-            Inc (p, lstrlen (p) + 1)
+            Inc (p, lstrlen (p) + 1);
           end;
           SetLength (params, paramCount);
-          p := paramPtr;
+          p := ParamPtr;
           i := 0;
           while p^ <> #0 do
           begin
@@ -198,20 +198,20 @@ begin
             Inc (i);
           end;
 
-          OnOtherInstance (self, paramCount - 1, params)
+          OnOtherInstance (Self, paramCount - 1, params);
         end
       finally
-        UnmapViewOfFile (paramPtr)
+        UnmapViewOfFile (ParamPtr);
       end
       else
-        RaiseLastOSError
+        RaiseLastOSError;
     finally
       CloseHandle (memHandle);
     end
     else
-      RaiseLastOSError
+      RaiseLastOSError;
   finally
-    CloseHandle (remoteProcessHandle)
+    CloseHandle (remoteProcessHandle);
   end
   else
     RaiseLastOSError;

@@ -2,7 +2,8 @@ unit cmpRegistryPersistentOptions;
 
 interface
 
-uses Windows, Classes, SysUtils, cmpPersistentOptions, unitExSettings;
+uses
+  Windows, Classes, SysUtils, cmpPersistentOptions, unitExSettings;
 
 type
 //---------------------------------------------------------------------
@@ -21,7 +22,8 @@ type
 
 implementation
 
-uses unitExRegSettings;
+uses
+  unitExRegSettings;
 
 { TRegistryPersistentOptions }
 
@@ -38,17 +40,17 @@ begin
     raise EOptionError.Create (rstNoAppName);
 
   if Manufacturer <> '' then
-    result := '\Software\' + Manufacturer + '\' + Application
+    Result := '\Software\' + Manufacturer + '\' + Application
   else
-    result := '\Software\' + Application;
+    Result := '\Software\' + Application;
 
   if Version <> '' then
-    result := result + '\' + Version
+    Result := Result + '\' + Version
 end;
 
 function TRegistryPersistentOptions.GetSettingsClass: TExSettingsClass;
 begin
-  result := TExRegSettings;
+  Result := TExRegSettings;
 end;
 
 end.

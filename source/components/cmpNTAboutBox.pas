@@ -31,31 +31,24 @@ type
     lbDonations: TListBox;
     procedure FormShow(Sender: TObject);
   private
-    fThanksTo: string;
-    procedure GetRegistrationInformation (isNT: boolean; var owner, organization: string);
-    { Private declarations }
-  public
-    { Public declarations }
+    FThanksTo: string;
+    procedure GetRegistrationInformation (isNT: Boolean; var owner, organization: string);
   end;
 
   TNTAboutBox = class(TComponent)
   private
-    fCopyright: string;
-    fDisplaySupportLink: boolean;
-    fThanksTo: string;
-    { Private declarations }
-  protected
-    { Protected declarations }
+    FCopyright: string;
+    FDisplaySupportLink: Boolean;
+    FThanksTo: string;
   public
     procedure Execute;
   published
-    property Copyright: string read fCopyright Write fCopyright;
-    property DisplaySupportLink: boolean read fDisplaySupportLink write fDisplaySupportLink;
-    property ThanksTo: string read fThanksTo write fThanksTo;
-    { Published declarations }
+    property Copyright: string read FCopyright Write FCopyright;
+    property DisplaySupportLink: Boolean read FDisplaySupportLink write FDisplaySupportLink;
+    property ThanksTo: string read FThanksTo write FThanksTo;
   end;
 
-  function LoadGifResource (const resName: string; image: TImage): boolean;
+  function LoadGifResource (const resName: string; image: TImage): Boolean;
 
 var
   fmNTAboutBox: TfmNTAboutBox;
@@ -67,7 +60,7 @@ uses
 
 {$R *.DFM}
 
-function LoadGifResource (const resName: string; image: TImage): boolean;
+function LoadGifResource (const resName: string; image: TImage): Boolean;
 var
   g: TGifImage;
   rs: TResourceStream;
@@ -93,12 +86,12 @@ begin
   end;
 end;
 
-procedure TfmNTAboutBox.GetRegistrationInformation (isNT: boolean; var owner, organization: string);
+procedure TfmNTAboutBox.GetRegistrationInformation (isNT: Boolean; var owner, organization: string);
 var
   product: string;
   p: Integer;
   reg: TRegistry;
-  gotDetails: boolean;
+  gotDetails: Boolean;
 begin
   gotDetails := False;
   product := ExtractFileName (Application.ExeName);
@@ -171,7 +164,7 @@ begin
   Caption := 'About ' + Application.Title;
 
   if not LoadGifResource (Application.Title, icoProduct) then
-    if Assigned (Application.Icon) then
+    if Assigned(Application.Icon) then
       icoProduct.Picture.Icon := Application.Icon;
 
   st := Application.Title;
@@ -193,7 +186,7 @@ begin
     st := st + Format (' Version %d.%d.%d.%d', [HiWord (info^.dwProductVersionMS), LoWord (info^.dwProductVersionMS), HiWord (info^.dwProductVersionLS), LoWord (info^.dwProductVersionLS)])
   end;
 
-  if fThanksTo = '' then
+  if FThanksTo = '' then
   begin
     TabSheet2.Free;
     TabSheet1.TabVisible := False
@@ -201,7 +194,7 @@ begin
   else
   begin
     stThankYou.Caption := 'Many thanks for the generous donations from the following kind people!  Without these donations, ' + Application.Title + ' couldn''t have been written';
-    lbDonations.Items.Text := fThanksTo
+    lbDonations.Items.Text := FThanksTo
   end;
 
   PageControl1.ActivePageIndex := 0;
@@ -253,7 +246,7 @@ begin
       dlg.hlbSupport.Visible := True
     end;
 
-    dlg.fThanksTo := fThanksTo;
+    dlg.FThanksTo := FThanksTo;
 
     dlg.ShowModal
   finally

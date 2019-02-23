@@ -2,7 +2,8 @@ unit cmpIniFilePersistentOptions;
 
 interface
 
-uses Windows, Classes, SysUtils, cmpPersistentOptions, unitExSettings;
+uses
+  Windows, Classes, SysUtils, cmpPersistentOptions, unitExSettings;
 
 type
 //---------------------------------------------------------------------
@@ -10,7 +11,7 @@ type
 // file
   TIniFilePersistentOptions = class (TCustomPersistentOptions)
   private
-    fCustomFileName : string;
+    FCustomFileName : string;
   protected
     function GetSettingsClass : TExSettingsClass; override;
     procedure SettingsCreated (settings : TExSettings); override;
@@ -20,20 +21,21 @@ type
 
 implementation
 
-uses unitExIniSettings;
+uses
+  unitExIniSettings;
 
 { TIniFilePersistentOptions }
 
 function TIniFilePersistentOptions.GetSettingsClass: TExSettingsClass;
 begin
-  result := TExIniSettings;
+  Result := TExIniSettings;
 end;
 
 procedure TIniFilePersistentOptions.SettingsCreated(settings: TExSettings);
 begin
   inherited;
 
-  TExIniSettings (settings).CustomPath := fCustomFileName
+  TExIniSettings(settings).CustomPath := FCustomFileName;
 end;
 
 end.

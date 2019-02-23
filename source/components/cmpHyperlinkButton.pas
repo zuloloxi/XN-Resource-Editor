@@ -9,21 +9,21 @@ uses
 type
   THyperlinkButton = class(TGraphicControl)
   private
-    fImageIndex: Integer;
-    fImages: TImageList;
+    FImageIndex: Integer;
+    FImages: TImageList;
     FMouseInControl : Boolean;
     FFontColor : TColor;
     FFontStyles : TFontStyles;
-    fInPlace: Boolean;
-    fLink: string;
-    fAutoLink: Boolean;
-    fParentObj: IUnknown;
-    fSelectedFont: TFont;
-    fSelectedFontColor: TColor;
-    fSelectedFontStyles: TFontStyles;
-    fSelected : boolean;
-    fOnEndCapture: TNotifyEvent;
-    fOnPainted: TNotifyEvent;
+    FInPlace: Boolean;
+    FLink: string;
+    FAutoLink: Boolean;
+    FParentObj: IUnknown;
+    FSelectedFont: TFont;
+    FSelectedFontColor: TColor;
+    FSelectedFontStyles: TFontStyles;
+    FSelected : boolean;
+    FOnEndCapture: TNotifyEvent;
+    FOnPainted: TNotifyEvent;
     procedure CMTextChanged(var Message: TMessage); message CM_TEXTCHANGED;
     procedure SetImageIndex(const Value: Integer);
     procedure SetImages(const Value: TImageList);
@@ -38,7 +38,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure Click; override;
-    property ParentObj : IUnknown read fParentObj write fParentObj;
+    property ParentObj : IUnknown read FParentObj write FParentObj;
     property Canvas;
 
   published
@@ -48,31 +48,32 @@ type
     property Caption;
     property Color;
     property Font;
-    property Images : TImageList read fImages write SetImages;
-    property ImageIndex : Integer read fImageIndex write SetImageIndex;
+    property Images : TImageList read FImages write SetImages;
+    property ImageIndex : Integer read FImageIndex write SetImageIndex;
     property ParentColor;
     property ParentFont;
-    property SelectedFontColor : TColor read fSelectedFontColor write fSelectedFontColor;
-    property SelectedFontStyles : TFontStyles read fSelectedFontStyles write fSelectedFontStyles;
+    property SelectedFontColor : TColor read FSelectedFontColor write FSelectedFontColor;
+    property SelectedFontStyles : TFontStyles read FSelectedFontStyles write FSelectedFontStyles;
     property Transparent : Boolean read GetTransparent write SetTransparent default False;
     property Visible;
-    property Link : string read fLink write fLink;
-    property AutoLink : Boolean read fAutoLink write fAutoLink;
-    property InPlace : Boolean read fInPlace write fInPlace;
-    property OnEndCapture : TNotifyEvent read fOnEndCapture write fOnEndCapture;
-    property OnPainted : TNotifyEvent read fOnPainted write fOnPainted;
+    property Link : string read FLink write FLink;
+    property AutoLink : Boolean read FAutoLink write FAutoLink;
+    property InPlace : Boolean read FInPlace write FInPlace;
+    property OnEndCapture : TNotifyEvent read FOnEndCapture write FOnEndCapture;
+    property OnPainted : TNotifyEvent read FOnPainted write FOnPainted;
   end;
 
 implementation
 
-uses shellapi, urlmon;
+uses
+  Shellapi, Urlmon;
 
 { THyperlinkButton }
 
 procedure THyperlinkButton.Click;
 var
   ext, url : string;
-  done : Boolean;
+  Done : Boolean;
   f : system.Text;
   cmd, param : string;
   pp : PChar;
@@ -82,11 +83,11 @@ var
 begin
   inherited;
 
-  if fAutoLink then
+  if FAutoLink then
   begin
-    done := False;
+    Done := False;
 
-    if fInPlace then
+    if FInPlace then
     begin
       param := AnsiDequotedStr (Link, '"');
       ext := ExtractFileExt (param);
@@ -108,8 +109,8 @@ begin
 
         if url <> '' then
         begin
-          HLinkNavigateString (fParentObj, PWideChar (WideString (url)));
-          done := True
+          HLinkNavigateString (FParentObj, PWideChar (WideString (url)));
+          Done := True
         end
       end
     end;
@@ -152,7 +153,7 @@ end;
 
 procedure THyperlinkButton.CMMouseEnter(var Message: TMessage);
 begin
-  if not (csDesigning in ComponentState) and not fSelected then
+  if not (csDesigning in ComponentState) and not FSelected then
   begin
     FSelected := True;
 
@@ -168,7 +169,7 @@ procedure THyperlinkButton.CMMouseLeave(var Message: TMessage);
 begin
   if not (csDesigning in ComponentState) then
   begin
-    fSelected := False;
+    FSelected := False;
     Font.Color := FFontColor;
     Font.Style := FFontStyles
   end
@@ -183,7 +184,7 @@ constructor THyperlinkButton.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   ControlStyle := [csClickEvents, csSetCaption, csOpaque, csDoubleClicks, csReplicatable];
-  fSelectedFont := TFont.Create;
+  FSelectedFont := TFont.Create;
 
   Width := 64;
   Height := 16
@@ -205,7 +206,6 @@ var
   Rect: TRect;
   FontHeight: Integer;
   Flags: Longint;
-
 begin
   Rect := GetClientRect;
   with Canvas do
@@ -220,10 +220,10 @@ begin
     Font := Self.Font;
     FontHeight := TextHeight('W');
 
-    if Assigned (fImages) and (fImageIndex >=0) and (fImageIndex < fImages.Count) then
+    if Assigned(FImages) and (FImageIndex >=0) and (FImageIndex < FImages.Count) then
     begin
-      fImages.Draw (Canvas, rect.Left, rect.Top, fImageIndex);
-      Rect.Left := Rect.Left + fImages.Width + 8
+      FImages.Draw (Canvas, rect.Left, rect.Top, FImageIndex);
+      Rect.Left := Rect.Left + FImages.Width + 8
     end;
 
     with Rect do
@@ -238,27 +238,26 @@ begin
     DrawText(Handle, PChar(Caption), -1, Rect, Flags);
   end;
 
-  If Assigned (OnPainted) and not (csDestroying in ComponentState) then
-    OnPainted (self);
-
+  If Assigned(OnPainted) and not (csDestroying in ComponentState) then
+    OnPainted(Self);
 end;
 
 procedure THyperlinkButton.SetImageIndex(const Value: Integer);
 begin
-  if fImageIndex <> Value then
+  if FImageIndex <> Value then
   begin
-    fImageIndex := Value;
-    Invalidate
-  end
+    FImageIndex := Value;
+    Invalidate;
+  end;
 end;
 
 procedure THyperlinkButton.SetImages(const Value: TImageList);
 begin
-  if fImages <> Value then
+  if FImages <> Value then
   begin
-    fImages := Value;
-    Invalidate
-  end
+    FImages := Value;
+    Invalidate;
+  end;
 end;
 
 procedure THyperlinkButton.SetTransparent(const Value: Boolean);
@@ -283,8 +282,8 @@ begin
     if FMouseInControl then
     begin
       Perform(CM_MOUSELEAVE, 0, 0);
-      if Assigned (OnEndCapture) then
-        OnEndCapture (self);
+      if Assigned(OnEndCapture) then
+        OnEndCapture(Self);
       SetCaptureControl (nil)
     end
     else
@@ -292,7 +291,7 @@ begin
       if GetCaptureControl = nil then
       begin
         Perform(CM_MOUSEENTER, 0, 0);
-        SetCaptureControl (Self)
+        SetCaptureControl(Self)
       end
     end
   end;

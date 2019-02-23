@@ -145,7 +145,7 @@ end;
 
 function TCountryComboBox.GetCountryCode(idx: Integer): TCountryCode;
 begin
-  result := TCountryCode (FCodes [idx]);
+  Result := TCountryCode (FCodes [idx]);
 end;
 
 procedure TCountryComboBox.SetPreferredCountryCodes(const Value: string);

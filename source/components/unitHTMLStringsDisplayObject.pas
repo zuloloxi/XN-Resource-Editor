@@ -149,7 +149,7 @@ begin
     begin
       elm := doc.ActiveElement as IHTMLElement2; //body as IHTMLElement2;
 
-      if Assigned (elm) then
+      if Assigned(elm) then
       begin
         Ctrl.Width := elm.scrollWidth;
         Ctrl.Height := elm.scrollHeight;
@@ -176,7 +176,7 @@ var
 begin
 //  Application.ProcessMessages;
   try
-    if Assigned (obj) then
+    if Assigned(obj) then
     begin
       b := TExWebBrowser (obj);
       Result := b.Busy;
@@ -216,7 +216,7 @@ begin
   begin
     elm := doc.body as IHTMLElement2;
 
-    if Assigned (elm) then
+    if Assigned(elm) then
     begin
       Ctrl.Height := elm.scrollHeight;
       Owner.RecalcBounds
@@ -255,7 +255,7 @@ var
   b: TExWebBrowser;
 begin
   if Busy then
-    if Assigned (obj) then
+    if Assigned(obj) then
     begin
       b := TExWebBrowser (obj);
       try

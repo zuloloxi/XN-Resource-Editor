@@ -2,7 +2,8 @@ unit cmpXMLPersistentOptions;
 
 interface
 
-uses Windows, Classes, SysUtils, cmpPersistentOptions, unitExSettings;
+uses
+  Windows, Classes, SysUtils, cmpPersistentOptions, unitExSettings;
 
 type
 
@@ -21,7 +22,8 @@ type
 
 implementation
 
-uses unitExXMLSettings;
+uses
+  unitExXMLSettings;
 
 { TXMLPersistentOptions }
 

@@ -53,7 +53,7 @@ type
 
   IDocHostShowUI = interface(IUnknown)
     ['{c4d244b0-d43e-11cf-893b-00aa00bdce1a}']
-    function ShowMessage (hwnd : HWND; lpstrText : POLESTR; lpstrCaption : POLESTR; dwType : DWORD; lpstrHelpFile : POLESTR; dwHelpContext : DWORD; out result : LRESULT) : HRESULT; stdcall;
+    function ShowMessage (hwnd : HWND; lpstrText : POLESTR; lpstrCaption : POLESTR; dwType : DWORD; lpstrHelpFile : POLESTR; dwHelpContext : DWORD; out Result : LRESULT) : HRESULT; stdcall;
     function ShowHelp (hwnd : HWND; pszHelpFile : POLESTR; uCommand : UINT; dwData : DWORD; ptMouse : TPoint; out ppDispatchObjectHit : IDispatch) : HRESULT; stdcall;
   end;
 
@@ -66,42 +66,42 @@ type
 
   TUIProperties = class (TPersistent)
   private
-    fOwner : TExWebBrowser;
+    FOwner : TExWebBrowser;
 
-    fEnableContextMenu: boolean;
-    fEnableScrollBars: boolean;
-    fFlatScrollBars: boolean;
-    fHas3DBorder: boolean;
-    fOpenLinksInNewWindow: boolean;
-    fEnableScripting: boolean;
-    fShowImages: boolean;
-    fShowActiveX: boolean;
-    fEnableDownloadActiveX: boolean;
-    fEnableJava: boolean;
+    FEnableContextMenu: boolean;
+    FEnableScrollBars: boolean;
+    FFlatScrollBars: boolean;
+    FHas3DBorder: boolean;
+    FOpenLinksInNewWindow: boolean;
+    FEnableScripting: boolean;
+    FShowImages: boolean;
+    FShowActiveX: boolean;
+    FEnableDownloadActiveX: boolean;
+    FEnableJava: boolean;
   public
     constructor Create (AOwner : TExWebBrowser);
   published
-    property EnableContextMenu : boolean read fEnableContextMenu write fEnableContextMenu;
-    property EnableScrollBars : boolean read fEnableScrollBars write fEnableScrollBars;
-    property FlatScrollBars : boolean read fFlatScrollBars write fFlatScrollBars;
-    property Has3DBorder : boolean read fHas3DBorder write fHas3DBorder;
-    property OpenLinksInNewWindow : boolean read fOpenLinksInNewWindow write fOpenLinksInNewWindow;
+    property EnableContextMenu : boolean read FEnableContextMenu write FEnableContextMenu;
+    property EnableScrollBars : boolean read FEnableScrollBars write FEnableScrollBars;
+    property FlatScrollBars : boolean read FFlatScrollBars write FFlatScrollBars;
+    property Has3DBorder : boolean read FHas3DBorder write FHas3DBorder;
+    property OpenLinksInNewWindow : boolean read FOpenLinksInNewWindow write FOpenLinksInNewWindow;
 
-    property EnableScripting : boolean read fEnableScripting write fEnableScripting;
-    property EnableJava : boolean read fEnableJava write fEnableJava;
-    property EnableDownloadActiveX : boolean read fEnableDownloadActiveX write fEnableDownloadActiveX;
+    property EnableScripting : boolean read FEnableScripting write FEnableScripting;
+    property EnableJava : boolean read FEnableJava write FEnableJava;
+    property EnableDownloadActiveX : boolean read FEnableDownloadActiveX write FEnableDownloadActiveX;
 
-    property ShowImages : boolean read fShowImages write fShowImages default True;
-    property ShowActiveX : boolean read fShowActiveX write fShowActiveX default True;
+    property ShowImages : boolean read FShowImages write FShowImages default True;
+    property ShowActiveX : boolean read FShowActiveX write FShowActiveX default True;
   end;
 
   TExWebBrowser = class(TWebBrowser, IDocHostUIHandler, IDocHostShowUI, IDispatch, IOleCommandTarget)
   private
-    fUIProperties : TUIProperties;
-    fURL : string;
-    fExtMenuItem: TMenuItem;
-    fOwnedObject: TObject;
-//    fInternetSession : IInternetSession;
+    FUIProperties : TUIProperties;
+    FURL : string;
+    FExtMenuItem: TMenuItem;
+    FOwnedObject: TObject;
+//    FInternetSession : IInternetSession;
     { IDispatch }
     function IDispatch.Invoke = Invoke;
     function Invoke(DispID: Integer; const IID: TGUID; LocaleID: Integer; Flags: Word; var Params; VarResult, ExcepInfo, ArgErr: Pointer): HResult; stdcall;
@@ -142,15 +142,16 @@ type
     procedure LoadFromString (const st : string);
     procedure LoadFromStream (s : TStream; takeOwnership : boolean = false);
 
-    property OwnedObject : TObject read fOwnedObject write fOwnedObject;
+    property OwnedObject : TObject read FOwnedObject write FOwnedObject;
   published
-    property UIProperties : TUIProperties read fUIProperties write fUIProperties;
+    property UIProperties : TUIProperties read FUIProperties write FUIProperties;
     property URL : string read GetURL write SetURL;
   end;
 
 implementation
 
-uses ComObj, MSHTML, Registry;
+uses
+  ComObj, MSHTML, Registry;
 
 const
   DOCHOSTUIFLAG_DIALOG = $00000001;
@@ -176,23 +177,23 @@ constructor TExWebBrowser.Create(AOwner: TComponent);
 //  Factory : IClassFactory;
 begin
   inherited Create (AOwner);
-  fExtMenuItem := TMenuItem.Create(self);
-  fUIProperties := TUIProperties.Create (self);
-//  OleCheck (CoInternetGetSession (0, fInternetSession, 0));
+  FExtMenuItem := TMenuItem.Create(Self);
+  FUIProperties := TUIProperties.Create(Self);
+//  OleCheck (CoInternetGetSession (0, FInternetSession, 0));
 
-//  if fInternetSession <> Nil then
+//  if FInternetSession <> Nil then
 //  begin
 //    CoGetClassObject(Class_CIDMimeFilter, CLSCTX_SERVER, nil, IClassFactory, Factory);
-//    OleCheck (fInternetSession.RegisterMimeFilter(Factory, Class_CIDMimeFilter, 'cid'));
-//    OleCheck (fInternetSession.RegisterNameSpace(Factory, CLASS_CIDMIMEFilter, 'cid', 0, nil, 0))
+//    OleCheck (FInternetSession.RegisterMimeFilter(Factory, Class_CIDMimeFilter, 'cid'));
+//    OleCheck (FInternetSession.RegisterNameSpace(Factory, CLASS_CIDMIMEFilter, 'cid', 0, nil, 0))
 //  end
 end;
 
 destructor TExWebBrowser.Destroy;
 begin
-  fUIProperties.Free;
-  fOwnedObject.Free;
-//  fInternetSession := Nil;
+  FUIProperties.Free;
+  FOwnedObject.Free;
+//  FInternetSession := Nil;
 
   inherited;
 end;
@@ -204,7 +205,7 @@ end;
  *----------------------------------------------------------------------*)
 function TExWebBrowser.EnableModeless(const fEnable: BOOL): HRESULT;
 begin
-  result := S_OK;
+  Result := S_OK;
 end;
 
 function TExWebBrowser.Exec(CmdGroup: PGUID; nCmdID, nCmdexecopt: DWORD;
@@ -223,12 +224,12 @@ var
 *)
   vIn, vOut : PVariantArg;
 begin
-  result := S_OK;
+  Result := S_OK;
 
   vIn := PVariantArg (@vaIn);
   vOut := PVariantArg (@vaOut);
 
-  if Assigned (CmdGroup) and IsEqualGUID (CmdGroup^, CGID_DocHostCommandHandler) then
+  if Assigned(CmdGroup) and IsEqualGUID (CmdGroup^, CGID_DocHostCommandHandler) then
   case nCmdID of
     OLECMDID_SHOWSCRIPTERROR:
       begin
@@ -265,14 +266,14 @@ begin
           vOut^.vt := VT_BOOL;
           vOut^.vbool := true; // Continue running scripts
         except
-          result := E_FAIL
+          Result := E_FAIL
         end;
       end;
     else
-      result := OLECMDERR_E_NOTSUPPORTED;
+      Result := OLECMDERR_E_NOTSUPPORTED;
   end
   else
-    result := OLECMDERR_E_UNKNOWNGROUP;
+    Result := OLECMDERR_E_UNKNOWNGROUP;
 end;
 
 (*----------------------------------------------------------------------*
@@ -287,7 +288,7 @@ function TExWebBrowser.FilterDataObject(const pDO: IDataObject;
   out ppDORet: IDataObject): HRESULT;
 begin
   ppDORet := Nil;
-  result := S_FALSE;
+  Result := S_FALSE;
 end;
 
 (*----------------------------------------------------------------------*
@@ -305,7 +306,7 @@ function TExWebBrowser.GetDropTarget(const pDropTarget: IDropTarget;
   out ppDropTarget: IDropTarget): HRESULT;
 begin
   ppDropTarget := Nil;
-  result := E_NOTIMPL
+  Result := E_NOTIMPL
 end;
 
 (*----------------------------------------------------------------------*
@@ -317,7 +318,7 @@ end;
 function TExWebBrowser.GetExternal(out ppDispatch: IDispatch): HRESULT;
 begin
   ppDispatch := Application;
-  result := S_OK
+  Result := S_OK
 end;
 
 function TExWebBrowser.GetHostInfo(var pInfo: TDOCHOSTUIINFO): HRESULT;
@@ -343,26 +344,26 @@ begin
   if not UIProperties.EnableScripting then
     pInfo.dwFlags := pInfo.dwFlags or DOCHOSTUIFLAG_DISABLE_SCRIPT_INACTIVE;
 
-  result := S_OK;
+  Result := S_OK;
 end;
 
 function TExWebBrowser.GetOptionKeyPath(var pchKey: POLESTR;
   const dw: DWORD): HRESULT;
 begin
-  result := S_FALSE;
+  Result := S_FALSE;
 end;
 
 function TExWebBrowser.GetURL: string;
 begin
   if (csDesigning in ComponentState) then
-    result := fURL
+    Result := FURL
   else
-    result := self.LocationURL
+    Result := Self.LocationURL
 end;
 
 function TExWebBrowser.HideUI: HRESULT;
 begin
-  result := S_OK;
+  Result := S_OK;
 end;
 
 function TExWebBrowser.Invoke(DispID: Integer; const IID: TGUID;
@@ -384,11 +385,11 @@ var
   ort : HRESULT;
   dlc : Integer;
 begin
-  result := inherited Invoke (DispID, IID, LocaleID, Flags, Params, VarResult, ExcepInfo, ArgErr);
+  Result := inherited Invoke (DispID, IID, LocaleID, Flags, Params, VarResult, ExcepInfo, ArgErr);
   if (Flags and DISPATCH_PROPERTYGET <> 0) and (VarResult <> nil) then
   begin
-    ort := result;
-    result := S_OK;
+    ort := Result;
+    Result := S_OK;
     case DispID of
 (*
       DISPID_AMBIENT_USERMODE:
@@ -419,7 +420,7 @@ begin
           PVariant(VarResult)^ := dlc
         end;
       else
-        result := ort
+        Result := ort
     end
   end
 end;
@@ -429,10 +430,10 @@ begin
   inherited;
 
   if not (csDesigning in ComponentState) then
-    if fURL = '' then
+    if FURL = '' then
       Navigate ('about:blank')
     else
-      Navigate (fURL);
+      Navigate (FURL);
 end;
 
 procedure TExWebBrowser.LoadFromStream(s: TStream; takeOwnership: boolean);
@@ -463,30 +464,30 @@ end;
 
 function TExWebBrowser.OnDocWindowActivate(const fActivate: BOOL): HRESULT;
 begin
-  result := S_OK;
+  Result := S_OK;
 end;
 
 function TExWebBrowser.OnFrameWindowActivate(
   const fActivate: BOOL): HRESULT;
 begin
-  result := S_OK;
+  Result := S_OK;
 end;
 
 function TExWebBrowser.QueryStatus(CmdGroup: PGUID; cCmds: Cardinal;
   prgCmds: POleCmd; CmdText: POleCmdText): HResult;
 begin
-  result := OLECMDERR_E_NOTSUPPORTED;
+  Result := OLECMDERR_E_NOTSUPPORTED;
 end;
 
 function TExWebBrowser.ResizeBorder(const prcBorder: PRECT;
   const pUIWindow: IOleInPlaceUIWindow; const fRameWindow: BOOL): HRESULT;
 begin
-  result := S_OK;
+  Result := S_OK;
 end;
 
 procedure TExWebBrowser.SetURL(const Value: string);
 begin
-  fURL := Value;
+  FURL := Value;
 
   if (csLoading in ComponentState) or (csDesigning in ComponentState) then
     Exit;
@@ -511,11 +512,11 @@ var
 
 begin
   if UIProperties.EnableContextMenu then
-    result := S_FALSE
+    Result := S_FALSE
   else
   begin
-    result := S_OK;
-    if Assigned (PopupMenu) then
+    Result := S_OK;
+    if Assigned(PopupMenu) then
     begin
       pomData.id := dwID;
       pomData.disp := pdispReserved;
@@ -530,14 +531,14 @@ function TExWebBrowser.ShowHelp(hwnd: HWND; pszHelpFile: POLESTR;
   out ppDispatchObjectHit: IDispatch): HRESULT;
 begin
   ppDispatchObjectHit := Nil;
-  result := S_FALSE;
+  Result := S_FALSE;
 end;
 
 function TExWebBrowser.ShowMessage(hwnd: HWND; lpstrText, lpstrCaption: POLESTR;
   dwType: DWORD; lpstrHelpFile: POLESTR; dwHelpContext: DWORD;
   out reslt: LRESULT): HRESULT;
 begin
-  result := S_OK;
+  Result := S_OK;
 end;
 
 function TExWebBrowser.ShowUI(const dwID: DWORD;
@@ -545,7 +546,7 @@ function TExWebBrowser.ShowUI(const dwID: DWORD;
   const pCommandTarget: IOleCommandTarget; const pFrame: IOleInPlaceFrame;
   const pDoc: IOleInPlaceUIWindow): HRESULT;
 begin
-  result := S_OK;
+  Result := S_OK;
 end;
 
 function TExWebBrowser.TranslateAccelerator(const lpMsg: PMSG;
@@ -553,38 +554,38 @@ function TExWebBrowser.TranslateAccelerator(const lpMsg: PMSG;
 var
   vk : Integer;
 begin
-  result := S_OK;
-  if not Assigned (lpMsg) or (lpMsg^.message <> WM_KEYDOWN) then
+  Result := S_OK;
+  if not Assigned(lpMsg) or (lpMsg^.message <> WM_KEYDOWN) then
     Exit;
 
   vk := lpMsg^.wParam;
 
   if (vk = VK_TAB) or (vk = VK_RETURN) or (vk = VK_DELETE) then
   begin
-    result := S_FALSE;
+    Result := S_FALSE;
   end
   else
-    result := S_OK
+    Result := S_OK
 end;
 
 function TExWebBrowser.TranslateUrl(const dwTranslate: DWORD;
   const pchURLIn: POLESTR; var ppchURLOut: POLESTR): HRESULT;
 begin
-  result := S_FALSE;   // URL was not translated
+  Result := S_FALSE;   // URL was not translated
 end;
 
 function TExWebBrowser.UpdateUI: HRESULT;
 begin
-  result := S_FALSE;
+  Result := S_FALSE;
 end;
 
 { TUIProperties }
 
 constructor TUIProperties.Create(AOwner: TExWebBrowser);
 begin
-  fOwner := AOwner;
-  fShowImages := True;
-  fShowActiveX := True;
+  FOwner := AOwner;
+  FShowImages := True;
+  FShowActiveX := True;
 end;
 
 end.

@@ -126,7 +126,7 @@ begin
   else
   begin
     ctrl := ResizeControl;
-    if Assigned (ctrl) then
+    if Assigned(ctrl) then
       if Align in [alLeft, alRight] then
         Result := ctrl.Width
       else
@@ -179,7 +179,7 @@ begin
     Shrunken := not Shrunken
   else
   begin
-    if Assigned (ResizeControl) then
+    if Assigned(ResizeControl) then
       if Align in [alLeft, alRight] then
         FSaveSize := ResizeControl.Width
       else
@@ -247,7 +247,7 @@ begin
 
     ctrl := ResizeControl;
 
-    if Assigned (ctrl) then
+    if Assigned(ctrl) then
     begin
       if Value then
         if Align in [alLeft, alRight] then
@@ -276,21 +276,21 @@ end;
 
 procedure TExSplitter.StopSizing;
 var
-  resized: boolean;
+  Resized: boolean;
 begin
   inherited;
 
-  resized := False;
-  if Assigned (ResizeControl) then
+  Resized := False;
+  if Assigned(ResizeControl) then
     if Align in [alLeft, alRight] then
-      resized := ResizeControl.Width <> FSaveSize
+      Resized := ResizeControl.Width <> FSaveSize
     else
-      resized := ResizeControl.Height <> FSaveSize;
+      Resized := ResizeControl.Height <> FSaveSize;
 
-  if resized then
+  if Resized then
   begin
     FShrunken := False;
-    Invalidate
+    Invalidate;
   end
 end;
 

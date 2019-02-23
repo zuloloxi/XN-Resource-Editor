@@ -31,14 +31,14 @@ uses
 type
   TMRUList = class(TComponent)
   private
-    fMRU: TStringList;
-    fManufacturer: string;
-    fCapacity: Integer;
-    fLoaded: boolean;
-    fPopupMenu: TPopupMenu;
-    fOnPopupMenuClick: TNotifyEvent;
-    fAppSection: string;
-    fApplication: string;
+    FMRU: TStringList;
+    FManufacturer: string;
+    FCapacity: Integer;
+    FLoaded: boolean;
+    FPopupMenu: TPopupMenu;
+    FOnPopupMenuClick: TNotifyEvent;
+    FAppSection: string;
+    FApplication: string;
 
     procedure SetManufacturer(const Value: string);
     procedure SetCapacity(const Value: Integer);
@@ -66,18 +66,19 @@ type
 
 
   published
-    property Manufacturer: string read fManufacturer write SetManufacturer;
-    property Application: string read fApplication write SetApplication;
-    property AppSection: string read fAppSection write SetAppSection;
-    property Capacity: Integer read fCapacity write SetCapacity default 5;
-    property PopupMenu: TPopupMenu read fPopupMenu write SetPopupMenu;
+    property Manufacturer: string read FManufacturer write SetManufacturer;
+    property Application: string read FApplication write SetApplication;
+    property AppSection: string read FAppSection write SetAppSection;
+    property Capacity: Integer read FCapacity write SetCapacity default 5;
+    property PopupMenu: TPopupMenu read FPopupMenu write SetPopupMenu;
 
-    property OnPopupMenuClick: TNotifyEvent read fOnPopupMenuClick write fOnPopupMenuClick;
+    property OnPopupMenuClick: TNotifyEvent read FOnPopupMenuClick write FOnPopupMenuClick;
   end;
 
 implementation
 
-uses Registry;
+uses
+  Registry;
 
 { TMRUList }
 
@@ -87,32 +88,32 @@ var
 begin
   LoadList;
   idx := 0;
-  while idx < fMRU.Count do
-    if SameText (fMRU [idx], fileName) then
-      fMRU.Delete(idx)
+  while idx < FMRU.Count do
+    if SameText (FMRU [idx], fileName) then
+      FMRU.Delete(idx)
     else
       Inc (idx);
 
-  while fMRU.Count >= Capacity do
-    fMRU.Delete (fMRU.Count - 1);
+  while FMRU.Count >= Capacity do
+    FMRU.Delete (FMRU.Count - 1);
 
-  fMRU.Insert (0, fileName);
+  FMRU.Insert (0, fileName);
   PopulateMenu
 end;
 
 constructor TMRUList.Create(AOwner: TComponent);
 begin
-  inherited Create (AOwner);
-  fMRU := TStringList.Create;
-  fMRU.CaseSensitive := False;
-  fCapacity := 5
+  inherited Create(AOwner);
+  FMRU := TStringList.Create;
+  FMRU.CaseSensitive := False;
+  FCapacity := 5
 end;
 
 destructor TMRUList.Destroy;
 begin
   if not (csDesigning in ComponentState) then
     SaveList;
-  fMRU.Free;
+  FMRU.Free;
   inherited;
 end;
 
@@ -125,8 +126,8 @@ begin
   else
     app := Application;
 
-  if fAppSection <> '' then
-    result := Format ('SOFTWARE\%s\%s\%s', [Manufacturer, Application, fAppSection])
+  if FAppSection <> '' then
+    result := Format ('SOFTWARE\%s\%s\%s', [Manufacturer, Application, FAppSection])
   else
     result := Format ('SOFTWARE\%s\%s\Recent Files', [Manufacturer, Application]);
 end;
@@ -147,7 +148,7 @@ end;
 function TMRUList.GetStrings: TStrings;
 begin
   LoadList;
-  result := fMRU
+  result := FMRU
 end;
 
 procedure TMRUList.LoadList;
@@ -155,9 +156,9 @@ var
   values: TStringList;
   i: Integer;
 begin
-  if not fLoaded then
+  if not FLoaded then
   begin
-    fMRU.Clear;
+    FMRU.Clear;
     if Manufacturer <> '' then
       with TRegistry.Create do
       try
@@ -167,7 +168,7 @@ begin
           try
             GetValueNames (values);
             for i := 0 to values.Count - 1 do
-              fMRU.Add (ReadString (values [i]));
+              FMRU.Add (ReadString (values [i]));
           finally
             values.Free
           end
@@ -175,7 +176,7 @@ begin
       finally
         Free
       end;
-    fLoaded := True
+    FLoaded := True
   end
 end;
 
@@ -186,9 +187,9 @@ var
 begin
   if not (csDesigning in ComponentState) then
   begin
-    if Assigned (fPopupMenu) then
+    if Assigned(FPopupMenu) then
     begin
-      fPopupMenu.Items.Clear;
+      FPopupMenu.Items.Clear;
       for i := 0 to Strings.Count - 1 do
       begin
         item := TMenuItem.Create (Self);
@@ -202,7 +203,7 @@ end;
 
 procedure TMRUList.PopupMenuItemOnClick(sender: TObject);
 begin
-  if Assigned (OnPopupMenuClick) then
+  if Assigned(OnPopupMenuClick) then
     OnPopupMenuClick (sender);
 end;
 
@@ -212,8 +213,8 @@ var
   s: TStrings;
   vn: string;
 begin
-  if (Manufacturer <> '') and fLoaded then
-    if fMRU.Count > 0 then
+  if (Manufacturer <> '') and FLoaded then
+    if FMRU.Count > 0 then
     begin
       s := Nil;
       with TRegistry.Create do
@@ -225,10 +226,10 @@ begin
 
           GetValueNames (s);
 
-          for i := 0 to fMRU.Count - 1 do
+          for i := 0 to FMRU.Count - 1 do
           begin
             vn := Format ('File %d', [i]);
-            WriteString (vn, fMRU [i]);
+            WriteString (vn, FMRU [i]);
 
             idx := s.IndexOf (vn);
             if idx >= 0 then
@@ -249,21 +250,21 @@ end;
 
 procedure TMRUList.SetApplication(const Value: string);
 begin
-  if fApplication <> value then
+  if FApplication <> value then
   begin
     SaveList;
-    fApplication := Value;
-    fLoaded := False
+    FApplication := Value;
+    FLoaded := False
   end
 end;
 
 procedure TMRUList.SetAppSection(const Value: string);
 begin
-  if fAppSection <> value then
+  if FAppSection <> value then
   begin
     SaveList;
-    fAppSection := Value;
-    fLoaded := False
+    FAppSection := Value;
+    FLoaded := False
   end
 end;
 
@@ -271,25 +272,25 @@ procedure TMRUList.SetCapacity(const Value: Integer);
 begin
   if Capacity <> value then
   begin
-    fCapacity := Value
+    FCapacity := Value
   end
 end;
 
 procedure TMRUList.SetManufacturer(const Value: string);
 begin
-  if fManufacturer <> value then
+  if FManufacturer <> value then
   begin
     SaveList;
-    fManufacturer := Value;
-    fLoaded := False
+    FManufacturer := Value;
+    FLoaded := False
   end
 end;
 
 procedure TMRUList.SetPopupMenu(const Value: TPopupMenu);
 begin
-  if fPopupMenu <> value then
+  if FPopupMenu <> value then
   begin
-    fPopupMenu := value;
+    FPopupMenu := value;
     PopulateMenu
   end
 end;
