@@ -11,7 +11,7 @@ inherited fmMenuResource: TfmMenuResource
     Top = 0
     Height = 455
   end
-  object Panel1: TPanel
+  object PanelLeft: TPanel
     Left = 0
     Top = 0
     Width = 185
@@ -80,7 +80,7 @@ inherited fmMenuResource: TfmMenuResource
       OnPropertyChanged = PropertyListBoxPropertyChanged
     end
   end
-  object Panel2: TPanel
+  object PanelMain: TPanel
     Left = 188
     Top = 0
     Width = 513

@@ -27,8 +27,8 @@ type
     MenuItemMenu: TMenuItem;
     N1: TMenuItem;
     N2: TMenuItem;
-    Panel1: TPanel;
-    Panel2: TPanel;
+    PanelLeft: TPanel;
+    PanelMain: TPanel;
     PopupMenu: TPopupMenu;
     PropertyListBox: TPropertyListBox;
     Splitter: TSplitter;

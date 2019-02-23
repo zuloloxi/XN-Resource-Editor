@@ -6,7 +6,7 @@ inherited fmPackagesResource: TfmPackagesResource
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Splitter1: TSplitter
+  object Splitter: TSplitter
     Left = 185
     Top = 0
     Height = 455
@@ -22,6 +22,10 @@ inherited fmPackagesResource: TfmPackagesResource
     object TabSheetRequires: TTabSheet
       Caption = 'Requires'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ListViewRequires: TListView
         Left = 0
         Top = 0

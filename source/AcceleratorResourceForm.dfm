@@ -2,7 +2,7 @@ inherited fmAcceleratorResource: TfmAcceleratorResource
   Left = 283
   Top = 201
   ActiveControl = ListViewAccelerator
-  Caption = 'fmAcceleratorResource'
+  Caption = 'Accelerator Resource'
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13

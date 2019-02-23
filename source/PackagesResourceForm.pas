@@ -13,7 +13,7 @@ type
     TabSheetContains: TTabSheet;
     PanelMain: TPanel;
     PropertyListBoxFlags: TPropertyListBox;
-    Splitter1: TSplitter;
+    Splitter: TSplitter;
     ListViewRequires: TListView;
     ListViewContains: TListView;
     procedure FormShow(Sender: TObject);
@@ -75,16 +75,18 @@ begin
       with ListViewContains.Items.Add do
       begin
         Caption := FDetails.Contains [Index];
-  { PackageUnitFlags:
-    bit      meaning
-    -----------------------------------------------------------------------------------------
-    0      | main unit
-    1      | package unit(dpk source)
-    2      | $WEAKPACKAGEUNIT unit
-    3      | original containment of $WEAKPACKAGEUNIt(package into which it was compiled)
-    4      | implicitly imported
-    5..7   | reserved
-  }
+
+        { PackageUnitFlags:
+          bit      meaning
+          -----------------------------------------------------------------------------------------
+          0      | main unit
+          1      | package unit(dpk source)
+          2      | $WEAKPACKAGEUNIT unit
+          3      | original containment of $WEAKPACKAGEUNIt(package into which it was compiled)
+          4      | implicitly imported
+          5..7   | reserved
+        }
+
         Flgs := FDetails.ContainsFlag [Index];
 
         st := '';

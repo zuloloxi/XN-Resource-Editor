@@ -99,7 +99,7 @@ object fmMain: TfmMain
     ShowCaptions = True
     TabOrder = 3
     Wrapable = False
-    object btnFile: TToolButton
+    object ToolButtonFile: TToolButton
       Left = 10
       Top = 0
       AutoSize = True
@@ -107,7 +107,7 @@ object fmMain: TfmMain
       Grouped = True
       MenuItem = MenuItemFile
     end
-    object btnEdit: TToolButton
+    object ToolButtonEdit: TToolButton
       Left = 37
       Top = 0
       AutoSize = True
@@ -115,7 +115,7 @@ object fmMain: TfmMain
       Grouped = True
       MenuItem = MenuItemEdit
     end
-    object ToolButton2: TToolButton
+    object ToolButtonView: TToolButton
       Left = 66
       Top = 0
       AutoSize = True
@@ -123,7 +123,7 @@ object fmMain: TfmMain
       Grouped = True
       MenuItem = MenuItemView
     end
-    object ToolButton1: TToolButton
+    object ToolButtonResource: TToolButton
       Left = 99
       Top = 0
       AutoSize = True
@@ -131,7 +131,7 @@ object fmMain: TfmMain
       Grouped = True
       MenuItem = MenuItemResource
     end
-    object btnResourceObject: TToolButton
+    object ToolButtonResourceObject: TToolButton
       Left = 155
       Top = 0
       AutoSize = True
@@ -140,7 +140,7 @@ object fmMain: TfmMain
       ImageIndex = 0
       Visible = False
     end
-    object btnHelp: TToolButton
+    object ToolButtonHelp: TToolButton
       Left = 208
       Top = 0
       AutoSize = True
@@ -164,40 +164,40 @@ object fmMain: TfmMain
     ShowHint = True
     TabOrder = 4
     Wrapable = False
-    object btnFileNew: TToolButton
+    object ToolButtonFileNew: TToolButton
       Left = 7
       Top = 0
-      Action = actFileNew
+      Action = ActionFileNew
     end
-    object btnFileOpen: TToolButton
+    object ToolButtonFileOpen: TToolButton
       Left = 30
       Top = 0
-      Action = actFileOpenFile
+      Action = ActionFileOpenFile
       DropdownMenu = PopupMenuMRU
       Style = tbsDropDown
     end
-    object btnFileSave: TToolButton
+    object ToolButtonFileSave: TToolButton
       Left = 66
       Top = 0
-      Action = actFileSave
+      Action = ActionFileSave
     end
-    object ToolButton3: TToolButton
+    object ToolButtonSplitter: TToolButton
       Left = 89
       Top = 0
       Width = 8
-      Caption = 'ToolButton3'
+      Caption = 'ToolButtonSplitter'
       ImageIndex = 10
       Style = tbsSeparator
     end
-    object ToolButton4: TToolButton
+    object ToolButtonAdd: TToolButton
       Left = 97
       Top = 0
-      Action = actResourceAddResource
+      Action = ActionResourceAddResource
     end
-    object ToolButton5: TToolButton
+    object ToolButtonDelete: TToolButton
       Left = 120
       Top = 0
-      Action = actResourceDeleteResource
+      Action = ActionResourceDeleteResource
     end
   end
   object MainMenu: TMainMenu
@@ -209,128 +209,128 @@ object fmMain: TfmMain
     object MenuItemFile: TMenuItem
       Caption = '&File'
       object MenuItemFileNew: TMenuItem
-        Action = actFileNew
+        Action = ActionFileNew
       end
       object MenuItemFileOpen: TMenuItem
-        Action = actFileOpenFile
+        Action = ActionFileOpenFile
       end
       object MenuItemFileSave: TMenuItem
-        Action = actFileSave
+        Action = ActionFileSave
       end
       object MenuItemFileSaveAs: TMenuItem
-        Action = actFileSaveAs
+        Action = ActionFileSaveAs
       end
       object N2: TMenuItem
         Caption = '-'
       end
       object MenuItemFilePrint: TMenuItem
-        Action = actFilePrint
+        Action = ActionFilePrint
       end
       object N3: TMenuItem
         Caption = '-'
       end
       object MenuItemFileExit: TMenuItem
-        Action = actFileExit
+        Action = ActionFileExit
       end
     end
     object MenuItemEdit: TMenuItem
       Caption = '&Edit'
       OnClick = MenuItemEditClick
       object MenuItemEditUndo: TMenuItem
-        Action = actEditUndo
+        Action = ActionEditUndo
       end
       object MenuItemEditRedo: TMenuItem
-        Action = actEditRedo
+        Action = ActionEditRedo
       end
       object N1: TMenuItem
         Caption = '-'
       end
       object MenuItemEditCut: TMenuItem
-        Action = actEditCut
+        Action = ActionEditCut
       end
       object MenuItemEditCopy: TMenuItem
-        Action = actEditCopy
+        Action = ActionEditCopy
       end
       object MenuItemEditPaste: TMenuItem
-        Action = actEditPaste
+        Action = ActionEditPaste
       end
       object MenuItemEditDelete: TMenuItem
-        Action = actEditDelete
+        Action = ActionEditDelete
       end
       object MenuItemEditSelectAll: TMenuItem
-        Action = actEditSelectAll
+        Action = ActionEditSelectAll
       end
     end
     object MenuItemView: TMenuItem
       Caption = '&View'
       object MenuItemViewToolbar: TMenuItem
-        Action = actViewToolbar
+        Action = ActionViewToolbar
       end
       object MenuItemViewStatusbar: TMenuItem
-        Action = actViewStatusbar
+        Action = ActionViewStatusbar
       end
       object N5: TMenuItem
         Caption = '-'
       end
       object MenuItemViewProperties: TMenuItem
-        Action = actViewProperties
+        Action = ActionViewProperties
       end
     end
     object MenuItemResource: TMenuItem
       Caption = '&Resource'
       object MenuItemResourceAddResource: TMenuItem
-        Action = actResourceAddResource
+        Action = ActionResourceAddResource
       end
       object MenuItemResourceDeleteResource: TMenuItem
-        Action = actResourceDeleteResource
+        Action = ActionResourceDeleteResource
       end
       object N4: TMenuItem
         Caption = '-'
       end
       object MenuItemImportImageResource: TMenuItem
-        Action = actResourceImportResource
+        Action = ActionResourceImportResource
       end
       object MenuItemImportRCDataResource: TMenuItem
-        Action = actResourceImportRCDataResource
+        Action = ActionResourceImportRCDataResource
       end
       object MenuItemImportUserResource: TMenuItem
-        Action = actResourceImportOtherResource
+        Action = ActionResourceImportOtherResource
       end
       object N11: TMenuItem
         Caption = '-'
       end
       object MenuItemExportResource: TMenuItem
-        Action = actResourceExportResource
+        Action = ActionResourceExportResource
       end
       object MenuItemCloneResource: TMenuItem
-        Action = actResourceClone
+        Action = ActionResourceClone
       end
       object MenuItemGrab: TMenuItem
-        Action = actResourceGrab
+        Action = ActionResourceGrab
       end
       object N8: TMenuItem
         Caption = '-'
       end
       object MenuItemResourceProperties: TMenuItem
-        Action = actResourceProperties
+        Action = ActionResourceProperties
       end
     end
     object MenuItemHelp: TMenuItem
       Caption = '&Help'
       object MenuItemHelpContents: TMenuItem
-        Action = actHelpContents
+        Action = ActionHelpContents
       end
       object MenuItemHelpHelpOnHelp: TMenuItem
-        Action = actHelpHelpOnHelp
+        Action = ActionHelpHelpOnHelp
       end
       object MenuItemHelpTopicSearch: TMenuItem
-        Action = actHelpTopicSearch
+        Action = ActionHelpTopicSearch
       end
       object N6: TMenuItem
         Caption = '-'
       end
       object MenuItemHelpAbout: TMenuItem
-        Action = actHelpAbout
+        Action = ActionHelpAbout
       end
     end
   end
@@ -1009,185 +1009,185 @@ object fmMain: TfmMain
     Images = ImageListMain
     Left = 256
     Top = 148
-    object actHelpContents: THelpContents
+    object ActionHelpContents: THelpContents
       Category = 'Help'
       Caption = '&Contents'
       ImageIndex = 16
       ShortCut = 112
     end
-    object actHelpHelpOnHelp: THelpOnHelp
+    object ActionHelpHelpOnHelp: THelpOnHelp
       Category = 'Help'
       Caption = '&Help on Help'
     end
-    object actHelpTopicSearch: THelpTopicSearch
+    object ActionHelpTopicSearch: THelpTopicSearch
       Category = 'Help'
       Caption = '&Topic Search'
     end
-    object actFileNew: TAction
+    object ActionFileNew: TAction
       Category = 'File'
       Caption = '&New'
       Hint = 'New'
       ImageIndex = 7
       ShortCut = 16462
-      OnExecute = actFileNewExecute
+      OnExecute = ActionFileNewExecute
     end
-    object actFileOpenFile: TAction
+    object ActionFileOpenFile: TAction
       Category = 'File'
       Caption = '&Open...'
       Hint = 'Open'
       ImageIndex = 8
       ShortCut = 16463
-      OnExecute = actFileOpenFileExecute
+      OnExecute = ActionFileOpenFileExecute
     end
-    object actFileSave: TAction
+    object ActionFileSave: TAction
       Category = 'File'
       Caption = '&Save'
       Hint = 'Save'
       ImageIndex = 9
       ShortCut = 16467
-      OnExecute = actFileSaveExecute
+      OnExecute = ActionFileSaveExecute
     end
-    object actFileSaveAs: TAction
+    object ActionFileSaveAs: TAction
       Category = 'File'
       Caption = 'Save &As...'
       Hint = 'Save As'
       ShortCut = 24659
-      OnExecute = actFileSaveAsExecute
+      OnExecute = ActionFileSaveAsExecute
     end
-    object actFilePrint: TAction
+    object ActionFilePrint: TAction
       Category = 'File'
       Caption = '&Print...'
       Hint = 'Print'
       ImageIndex = 10
       ShortCut = 16464
-      OnExecute = actFilePrintExecute
+      OnExecute = ActionFilePrintExecute
     end
-    object actFileExit: TAction
+    object ActionFileExit: TAction
       Category = 'File'
       Caption = 'E&xit'
-      OnExecute = actFileExitExecute
+      OnExecute = ActionFileExitExecute
     end
-    object actResourceAddResource: TAction
+    object ActionResourceAddResource: TAction
       Category = 'Resource'
       Caption = '&Add Resource'
       Hint = 'Add Resource'
       ImageIndex = 11
       ShortCut = 24621
-      OnExecute = actResourceAddResourceExecute
+      OnExecute = ActionResourceAddResourceExecute
     end
-    object actResourceDeleteResource: TAction
+    object ActionResourceDeleteResource: TAction
       Category = 'Resource'
       Caption = '&Delete Resource'
       Hint = 'Delete Resource'
       ImageIndex = 12
       ShortCut = 24622
-      OnExecute = actResourceDeleteResourceExecute
+      OnExecute = ActionResourceDeleteResourceExecute
     end
-    object actViewToolbar: TAction
+    object ActionViewToolbar: TAction
       Category = 'View'
       Caption = '&Toolbar'
       Checked = True
-      OnExecute = actViewToolbarExecute
+      OnExecute = ActionViewToolbarExecute
     end
-    object actViewStatusbar: TAction
+    object ActionViewStatusbar: TAction
       Category = 'View'
       Caption = '&Status Bar'
       Checked = True
-      OnExecute = actViewStatusbarExecute
+      OnExecute = ActionViewStatusbarExecute
     end
-    object actViewProperties: TAction
+    object ActionViewProperties: TAction
       Category = 'View'
       Caption = '&Options...'
-      OnExecute = actViewPropertiesExecute
+      OnExecute = ActionViewPropertiesExecute
     end
-    object actEditCopy: TAction
+    object ActionEditCopy: TAction
       Category = 'Edit'
       Caption = '&Copy'
       ImageIndex = 0
       ShortCut = 16451
-      OnExecute = actEditCopyExecute
+      OnExecute = ActionEditCopyExecute
     end
-    object actEditPaste: TAction
+    object ActionEditPaste: TAction
       Category = 'Edit'
       Caption = '&Paste'
       ImageIndex = 3
       ShortCut = 16470
-      OnExecute = actEditPasteExecute
+      OnExecute = ActionEditPasteExecute
     end
-    object actEditCut: TAction
+    object ActionEditCut: TAction
       Category = 'Edit'
       Caption = 'Cu&t'
       ImageIndex = 1
       ShortCut = 16472
-      OnExecute = actEditCutExecute
+      OnExecute = ActionEditCutExecute
     end
-    object actEditSelectAll: TAction
+    object ActionEditSelectAll: TAction
       Category = 'Edit'
       Caption = 'Sel&ect All'
       ShortCut = 16449
-      OnExecute = actEditSelectAllExecute
+      OnExecute = ActionEditSelectAllExecute
     end
-    object actEditUndo: TAction
+    object ActionEditUndo: TAction
       Category = 'Edit'
       Caption = '&Undo'
       ImageIndex = 4
       ShortCut = 16474
-      OnExecute = actEditUndoExecute
+      OnExecute = ActionEditUndoExecute
     end
-    object actEditRedo: TAction
+    object ActionEditRedo: TAction
       Category = 'Edit'
       Caption = '&Redo'
       ImageIndex = 13
       ShortCut = 16473
-      OnExecute = actEditRedoExecute
+      OnExecute = ActionEditRedoExecute
     end
-    object actHelpAbout: TAction
+    object ActionHelpAbout: TAction
       Category = 'Help'
       Caption = '&About XN Resource Editor'
       ImageIndex = 17
-      OnExecute = actHelpAboutExecute
+      OnExecute = ActionHelpAboutExecute
     end
-    object actResourceExportResource: TAction
+    object ActionResourceExportResource: TAction
       Category = 'Resource'
       Caption = 'E&xport Resource'
-      OnExecute = actResourceExportResourceExecute
+      OnExecute = ActionResourceExportResourceExecute
     end
-    object actResourceImportResource: TAction
+    object ActionResourceImportResource: TAction
       Category = 'Resource'
       Caption = 'Import &Image Resource'
-      OnExecute = actResourceImportResourceExecute
+      OnExecute = ActionResourceImportResourceExecute
     end
-    object actResourceProperties: TAction
+    object ActionResourceProperties: TAction
       Category = 'Resource'
       Caption = '&Properties'
-      OnExecute = actResourcePropertiesExecute
+      OnExecute = ActionResourcePropertiesExecute
     end
-    object actEditDelete: TAction
+    object ActionEditDelete: TAction
       Category = 'Edit'
       Caption = '&Delete'
       ImageIndex = 2
       ShortCut = 16430
-      OnExecute = actEditDeleteExecute
+      OnExecute = ActionEditDeleteExecute
     end
-    object actResourceGrab: TAction
+    object ActionResourceGrab: TAction
       Category = 'Resource'
       Caption = '&Grab Bitmap'
-      OnExecute = actResourceGrabExecute
+      OnExecute = ActionResourceGrabExecute
     end
-    object actResourceImportRCDataResource: TAction
+    object ActionResourceImportRCDataResource: TAction
       Category = 'Resource'
       Caption = 'Import &RC Data Resource'
-      OnExecute = actResourceImportRCDataResourceExecute
+      OnExecute = ActionResourceImportRCDataResourceExecute
     end
-    object actResourceImportOtherResource: TAction
+    object ActionResourceImportOtherResource: TAction
       Category = 'Resource'
       Caption = 'Import &User Resource...'
-      OnExecute = actResourceImportOtherResourceExecute
+      OnExecute = ActionResourceImportOtherResourceExecute
     end
-    object actResourceClone: TAction
+    object ActionResourceClone: TAction
       Category = 'Resource'
       Caption = '&Clone Resource'
-      OnExecute = actResourceCloneExecute
+      OnExecute = ActionResourceCloneExecute
     end
   end
   object OpenDialog: TOpenDialog
@@ -1786,37 +1786,37 @@ object fmMain: TfmMain
     Left = 288
     Top = 86
     object MenuItemAddResource1: TMenuItem
-      Action = actResourceAddResource
+      Action = ActionResourceAddResource
     end
     object MenuItemDeleteResource1: TMenuItem
-      Action = actResourceDeleteResource
+      Action = ActionResourceDeleteResource
     end
     object N9: TMenuItem
       Caption = '-'
     end
     object MenuItemImportImageResource1: TMenuItem
-      Action = actResourceImportResource
+      Action = ActionResourceImportResource
     end
     object MenuItemImportRCDataResource2: TMenuItem
-      Action = actResourceImportRCDataResource
+      Action = ActionResourceImportRCDataResource
     end
     object MenuItemImportUserResource2: TMenuItem
-      Action = actResourceImportOtherResource
+      Action = ActionResourceImportOtherResource
     end
-    object N12: TMenuItem
+    object N7: TMenuItem
       Caption = '-'
     end
     object MenuItemExportResource2: TMenuItem
-      Action = actResourceExportResource
+      Action = ActionResourceExportResource
     end
     object MenuItemGrabBitmap: TMenuItem
-      Action = actResourceGrab
+      Action = ActionResourceGrab
     end
     object N10: TMenuItem
       Caption = '-'
     end
     object MenuItemProperties: TMenuItem
-      Action = actResourceProperties
+      Action = ActionResourceProperties
     end
   end
   object SavePictureDialog: TSavePictureDialog
