@@ -23,28 +23,28 @@ type
 
   TJPegResourceDetails = class (TGraphicsResourceDetails)
   protected
-    fWidth, fHeight : Integer;
+    FWidth, FHeight: Integer;
     function GetHeight: Integer; override;
     function GetPixelFormat: TPixelFormat; override;
     function GetWidth: Integer; override;
     procedure InitNew; override;
-    class function SupportsData (Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsData (Size: Integer; data: Pointer): Boolean; override;
   public
-    class function GetBaseType : UnicodeString; override;
-    procedure GetImage (picture : TPicture); override;
-    procedure SetImage (image : TPicture); override;
+    class function GetBaseType: UnicodeString; override;
+    procedure GetImage (picture: TPicture); override;
+    procedure SetImage (image: TPicture); override;
   end;
 
 implementation
 
 var
-  ParameterlessSegments : AnsiString = #$01#$d0#$d1#$d2#$d3#$d4#$d5#$d6#$d7#$d8#$d9;
+  ParameterlessSegments: AnsiString = #$01#$d0#$d1#$d2#$d3#$d4#$d5#$d6#$d7#$d8#$d9;
 
-function FindJPegSegment (var data : PAnsiChar; segment : byte) : Boolean;
+function FindJPegSegment (var data: PAnsiChar; segment: byte): Boolean;
 var
-  p : PAnsiChar;
-  seg : Byte;
-  len : Word;
+  p: PAnsiChar;
+  seg: Byte;
+  len: Word;
 begin
   p := data;
   Result := False;
@@ -75,14 +75,14 @@ begin
       begin
         len := 256 * Byte (p^) + Byte ((p + 1)^);
         Inc (p, len)
-      end
-    end
-  until False
+      end;
+    end;
+  until False;
 end;
 
-procedure GetJPegSize (data : PAnsiChar; var Width, Height : Integer);
+procedure GetJPegSize (data: PAnsiChar; var Width, Height: Integer);
 var
-  len : Integer;
+  len: Integer;
 begin
   if FindJPegSegment (data, $c0) then
   begin
@@ -95,23 +95,23 @@ begin
 
       Inc (data, 2);
       Width := 256 * Byte (data^) + Byte ((data + 1)^);
-    end
-  end
+    end;
+  end;
 end;
 
 { TJPegResourceDetails }
 
 class function TJPegResourceDetails.GetBaseType: UnicodeString;
 begin
-  Result := 'JPEG'
+  Result := 'JPEG';
 end;
 
 function TJPegResourceDetails.GetHeight: Integer;
 begin
-  if fHeight = 0 then
+  if FHeight = 0 then
     GetJPegSize (data.Memory, FWidth, FHeight);
 
-  Result := fHeight;
+  Result := FHeight;
 end;
 
 procedure TJPegResourceDetails.GetImage(picture: TPicture);
@@ -119,8 +119,8 @@ begin
   picture.graphic := TJPegImage.Create;
   data.Seek (0, soFromBeginning);
   TJpegImage (picture.graphic).LoadFromStream (data);
-  fWidth := picture.graphic.Width;
-  fHeight := picture.graphic.Height;
+  FWidth := picture.graphic.Width;
+  FHeight := picture.graphic.Height;
 end;
 
 function TJPegResourceDetails.GetPixelFormat: TPixelFormat;
@@ -130,15 +130,15 @@ end;
 
 function TJPegResourceDetails.GetWidth: Integer;
 begin
-  if fWidth = 0 then
+  if FWidth = 0 then
     GetJPegSize (data.Memory, FWidth, FHeight);
-  Result := fWidth;
+  Result := FWidth;
 end;
 
 procedure TJPegResourceDetails.InitNew;
 var
-  img : TJPegImage;
-  bmp : TBitmap;
+  img: TJPegImage;
+  bmp: TBitmap;
 begin
   bmp := nil;
   img := TJPegImage.Create;
@@ -150,21 +150,21 @@ begin
     img.SaveToStream (data);
   finally
     img.Free;
-    bmp.Free
-  end
+    bmp.Free;
+  end;
 end;
 
 procedure TJPegResourceDetails.SetImage(image: TPicture);
 begin
   inherited;
-  fWidth := image.Width;
-  fHeight := image.Height;
+  FWidth := image.Width;
+  FHeight := image.Height;
 end;
 
 class function TJPegResourceDetails.SupportsData(Size: Integer;
   data: Pointer): Boolean;
 var
-  len : Integer;
+  len: Integer;
 begin
   Result := False;
   if PWORD (data)^ = $d8ff then
@@ -177,9 +177,9 @@ begin
         Inc (PAnsiChar (data), 2);
 
         if StrLIComp (data, 'JFIF', 4) = 0 then
-          Result := True
-      end
-    end
+          Result := True;
+      end;
+    end;
 end;
 
 initialization

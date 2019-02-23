@@ -2,7 +2,8 @@ unit unitResFile;
 
 interface
 
-uses Windows, Classes, SysUtils, ConTnrs, unitResourceDetails;
+uses
+  Windows, Classes, SysUtils, Contnrs, unitResourceDetails;
 
 type
 TResourceList = class (TResourceModule)

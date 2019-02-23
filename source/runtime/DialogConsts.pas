@@ -2,7 +2,8 @@ unit DialogConsts;
 
 interface
 
-uses Windows, Classes, SysUtils;
+uses
+  Windows, Classes, SysUtils;
 
 const
   BUTTON_ID    = $80;
@@ -14,30 +15,30 @@ const
 
 type
   TSZOrID = record
-    isID : Boolean;
-    sz : UnicodeString;
-    id : Integer;
+    isID: Boolean;
+    sz: UnicodeString;
+    id: Integer;
   end;
 
   TDlgTemplateEx = packed record
-    dlgVer : word;
-    signature : word;
-    helpID : DWORD;
-    exStyle : DWORD;
-    style : DWORD;
-    cDlgItems : WORD;
-    x, y, cx, cy : smallint;
+    dlgVer: word;
+    signature: word;
+    helpID: DWORD;
+    exStyle: DWORD;
+    style: DWORD;
+    cDlgItems: WORD;
+    x, y, cx, cy: smallint;
 
     // Then follows menu, class, title sz or id
 
     // if DS_SETFONT in style then follows
 
 (*
-    pointsize : Word;
-    weight : Word;
-    italic : Byte;
-    charset : Byte;
-    typeface : TszOrID;  //(sz only!)
+    pointsize: Word;
+    weight: Word;
+    italic: Byte;
+    charset: Byte;
+    typeface: TszOrID;  //(sz only!)
 *)
 
   end;
@@ -45,40 +46,40 @@ type
   PDlgTemplateEx = ^TDlgTemplateEx;
 
   TDlgItemTemplateEx = packed record
-    helpID : DWORD;
-    exStyle : DWORD;
-    Style : DWORD;
-    x : Smallint;
-    y : Smallint;
-    cx : Smallint;
-    cy : Smallint;
-    id : Word;
+    helpID: DWORD;
+    exStyle: DWORD;
+    Style: DWORD;
+    x: Smallint;
+    y: Smallint;
+    cx: Smallint;
+    cy: Smallint;
+    id: Word;
 
     // Then follows class and title sz or ID
 
-    // Then follows extraCount : WORD, followed by creation data
+    // Then follows extraCount: WORD, followed by creation data
   end;
   PDlgItemTemplateEx = ^TDlgItemTemplateEx;
 
 
-procedure WriteSzOrId (stream : TStream; const id : TSzOrId);
-function StringToSzOrID (const st : UnicodeString) : TszOrID;
-procedure Pad (stream : TStream);
+procedure WriteSzOrId(Stream: TStream; const id: TSzOrId);
+function StringToSzOrID(const st: UnicodeString): TszOrID;
+procedure Pad(Stream: TStream);
 
 implementation
 
-procedure WriteSzOrId (stream : TStream; const id : TSzOrId);
+procedure WriteSzOrId (Stream: TStream; const id: TSzOrId);
 var
-  w : Word;
-  ws : UnicodeString;
+  w: Word;
+  ws: UnicodeString;
 begin
   if id.isID then
   begin
     w := $ffff;
-    stream.Write (w, SizeOf (w));
+    Stream.Write (w, SizeOf (w));
 
     w := id.id;
-    stream.Write (w, SizeOf (w))
+    Stream.Write (w, SizeOf (w))
   end
   else
   begin
@@ -86,48 +87,48 @@ begin
     if ws = '' then
     begin
       w := 0;
-      stream.Write(w, sizeof (w))
+      Stream.Write(w, sizeof (w))
     end
     else
-      stream.Write (ws [1], (Length (ws) + 1) * SizeOf (WideChar))
+      Stream.Write (ws [1], (Length (ws) + 1) * SizeOf (WideChar))
   end
 end;
 
-function StringToSzOrID (const st : UnicodeString) : TszOrID;
+function StringToSzOrID (const st: UnicodeString): TszOrID;
 var
-  i : Integer;
+  i: Integer;
 begin
-  result.isID := True;
-  result.sz := st;
+  Result.isID := True;
+  Result.sz := st;
 
   for i := 1 to Length (st) do
     if (st [i] < '0') or (st [i] > '9') then
     begin
-      result.isID := False;
+      Result.isID := False;
       break
     end;
 
-  if result.isID then
+  if Result.isID then
   begin
-    result.id := StrToInt (st);
-    if result.id > $ffff then
-      result.isID := False
+    Result.id := StrToInt (st);
+    if Result.id > $ffff then
+      Result.isID := False
   end;
 
-  if result.isID then
-    result.sz := ''
+  if Result.isID then
+    Result.sz := ''
   else
-    result.id := 0
+    Result.id := 0
 end;
 
-procedure Pad (stream : TStream);
+procedure Pad (Stream: TStream);
 var
-  padding : Integer;
+  Padding: Integer;
 begin
-  if stream.Position mod 4 <> 0 then
+  if Stream.Position mod 4 <> 0 then
   begin
-    padding := 0;
-    stream.Write (padding, 4 - (stream.Position mod 4))
+    Padding := 0;
+    Stream.Write (Padding, 4 - (Stream.Position mod 4))
   end
 end;
 

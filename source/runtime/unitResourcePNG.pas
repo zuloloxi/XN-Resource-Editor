@@ -29,10 +29,10 @@ type
     function GetHeight: Integer; override;
     function GetPixelFormat: TPixelFormat; override;
     function GetWidth: Integer; override;
-    class function SupportsData (Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsData(Size: Integer; data: Pointer): Boolean; override;
   public
-    class function GetBaseType : UnicodeString; override;
-    procedure GetImage (picture : TPicture); override;
+    class function GetBaseType: UnicodeString; override;
+    procedure GetImage (picture: TPicture); override;
   end;
 
 
@@ -70,7 +70,7 @@ end;
 class function TPngResourceDetails.SupportsData(Size: Integer;
   data: Pointer): Boolean;
 var
-  p : PAnsiChar;
+  p: PAnsiChar;
 begin
   p := PAnsiChar (data);
   Inc (p);

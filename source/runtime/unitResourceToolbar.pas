@@ -26,12 +26,12 @@ const
 type
   TToolbarResourceDetails = class (TResourceDetails)
   protected
-    constructor Create (AParent : TResourceModule; ALanguage : Integer; const AName, AType : UnicodeString; ASize : Integer; AData : pointer); override;
+    constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
   public
     destructor Destroy; override;
 
-    class function GetBaseType : UnicodeString; override;
-    procedure ChangeData (newData : TMemoryStream); override;
+    class function GetBaseType: UnicodeString; override;
+    procedure ChangeData (newData: TMemoryStream); override;
 
     procedure InitNew; override;
   end;
@@ -40,11 +40,11 @@ implementation
 
 type
   TToolbarData = packed record  // From a CodeGuru message quoting MFC source...
-    wVersion : word;
-    wBtnWidth : word;
-    wBtnHeight : word;
-    wBtnCount : word;
-    wButtonIDs : array [0..0] of word;
+    wVersion: word;
+    wBtnWidth: word;
+    wBtnHeight: word;
+    wBtnCount: word;
+    wButtonIDs: array [0..0] of word;
   end;
 
 { TToolbarResourceDetails }
@@ -58,7 +58,7 @@ constructor TToolbarResourceDetails.Create(AParent: TResourceModule;
   ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer;
   AData: pointer);
 begin
-  inherited Create (AParent, ALanguage, AName, AType, ASize, AData);
+  inherited Create(AParent, ALanguage, AName, AType, ASize, AData);
 end;
 
 destructor TToolbarResourceDetails.Destroy;
@@ -68,19 +68,19 @@ end;
 
 class function TToolbarResourceDetails.GetBaseType: UnicodeString;
 begin
-  result := IntToStr (Integer (RT_TOOLBAR));
+  Result := IntToStr(Integer(RT_TOOLBAR));
 end;
 
 procedure TToolbarResourceDetails.InitNew;
 var
-  dat : TToolbarData;
+  ToolbarData: TToolbarData;
 begin
-  dat.wVersion := 1;
-  dat.wBtnWidth := 16;
-  dat.wBtnHeight := 15;
-  dat.wBtnCount := 0;
+  ToolbarData.wVersion := 1;
+  ToolbarData.wBtnWidth := 16;
+  ToolbarData.wBtnHeight := 15;
+  ToolbarData.wBtnCount := 0;
 
-  data.Write(dat, sizeof (dat) - sizeof (dat.wButtonIDs))
+  Data.Write(ToolbarData, SizeOf (ToolbarData) - SizeOf (ToolbarData.wButtonIDs))
 end;
 
 initialization

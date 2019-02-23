@@ -16,7 +16,8 @@ unit unitResourceHTML;
 
 interface
 
-uses Windows, Classes, SysUtils, unitResourceDetails;
+uses
+  Windows, Classes, SysUtils, unitResourceDetails;
 
 const
   RT_HTML = MakeIntResource(23);

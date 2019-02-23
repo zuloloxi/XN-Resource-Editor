@@ -2,25 +2,25 @@ unit unitOBJfile;
 
 interface
 
-uses Windows, Classes, SysUtils, unitPEFile, unitResourceDetails;
+uses
+  Windows, Classes, SysUtils, unitPEFile, unitResourceDetails;
 
 type
+  TObjFile = class (TPEBase)
+  private
+    FLNames: TStrings;
+    function IsValidCOFFMachineType (w: word): boolean;
+    procedure DecodeCOFF (memory: pointer; size: Integer);
+    procedure DecodeOMF (memory: pointer; size: Integer);
+  protected
+    function GetResourceCount: Integer; override;
+    function GetResourceDetails(idx: Integer): TResourceDetails; override;
 
-TObjFile = class (TPEBase)
-private
-  fLNames : TStrings;
-  function IsValidCOFFMachineType (w : word) : boolean;
-  procedure DecodeCOFF (memory : pointer; size : Integer);
-  procedure DecodeOMF (memory : pointer; size : Integer);
-protected
-  function GetResourceCount: Integer; override;
-  function GetResourceDetails(idx: Integer): TResourceDetails; override;
-
-  procedure Decode (memory : pointer; exeSize : Integer); override;
-public
-  destructor Destroy; override;
-  function IndexOfResource (details : TResourceDetails) : Integer; override;
-end;
+    procedure Decode (memory: pointer; exeSize: Integer); override;
+  public
+    destructor Destroy; override;
+    function IndexOfResource (details: TResourceDetails): Integer; override;
+  end;
 
 implementation
 
@@ -28,9 +28,9 @@ implementation
 
 procedure TObjFile.Decode(memory: pointer; exeSize: Integer);
 var
-  w : word;
+  w: word;
 begin
-  fSectionList.Clear;
+  FSectionList.Clear;
 
   w := PWord (PByte (Memory))^;
 
@@ -42,15 +42,15 @@ end;
 
 procedure TObjFile.DecodeCOFF(memory: pointer; size: Integer);
 var
-  i, offset : Integer;
-  sectionHeader : PImageSectionHeader;
-  sect : TImageSection;
+  i, Offset: Integer;
+  SectionHeader: PImageSectionHeader;
+  Sect: TImageSection;
 begin
   if size < sizeof (TImageFileHeader) then
     raise Exception.Create ('End of data');
 
-  offset := 0;
-  fCOFFHeader := PImageFileHeader (PByte (Memory) + offset)^;
+  Offset := 0;
+  fCOFFHeader := PImageFileHeader (PByte (Memory) + Offset)^;
 
   if (fCOFFHeader.SizeOfOptionalHeader <> 0) or
      (fCOFFHeader.Characteristics <> 0)
@@ -60,28 +60,28 @@ begin
   DecodeStringTable (Memory);
   DecodeSymbolTable (Memory);
 
-  Inc (offset, sizeof (TImageFileHeader));
+  Inc (Offset, sizeof (TImageFileHeader));
 
   for i := 0 to fCOFFHeader.NumberOfSections - 1 do
   begin
-    sectionHeader := PImageSectionHeader (PByte (memory) + offset);
-    sect := TImageSection.Create (self, sectionHeader^, PByte (memory), false);
-    fSectionList.Add (sect);
-    Inc (offset, sizeof (TImageSectionHeader));
+    SectionHeader := PImageSectionHeader (PByte (memory) + Offset);
+    Sect := TImageSection.Create (self, SectionHeader^, PByte (memory), false);
+    FSectionList.Add (Sect);
+    Inc (Offset, sizeof (TImageSectionHeader));
   end;
 end;
 
 procedure TObjFile.DecodeOMF(memory: pointer; size: Integer);
 var
-  offset : Integer;
-  pmem : PByte;
-  recordType : byte;
-  recordLen : word;
-  hasDWORDS : boolean;
+  Offset: Integer;
+  pmem: PByte;
+  recordType: byte;
+  recordLen: word;
+  hasDWORDS: boolean;
 
-  function GetString (var p : PByte; var len : Integer) : string;
+  function GetString (var p: PByte; var len: Integer): string;
   var
-    l : byte;
+    l: byte;
   begin
     if len = 3 then
       raise Exception.Create ('End of data');
@@ -91,71 +91,71 @@ var
     if len < l then
       raise Exception.Create ('End of data');
 
-    SetLength (result, l);
-    Move (p^, result [1], l);
+    SetLength (Result, l);
+    Move (p^, Result [1], l);
     Inc (p, l);
     Dec (len, 1 + l);
   end;
 
-  function GetByte (var p : PByte; var len : Integer) : byte;
+  function GetByte (var p: PByte; var len: Integer): byte;
   begin
     if len < sizeof (byte) then
       raise Exception.Create ('End of data');
 
-    result := p^;
+    Result := p^;
     Inc (p);
     Dec (len);
   end;
 
-  function GetWord (var p : PByte; var len : Integer) : word;
+  function GetWord (var p: PByte; var len: Integer): word;
   begin
     if len < sizeof (word) then
       raise Exception.Create ('End of data');
 
-    result := p^;
+    Result := p^;
     Inc (p, sizeof (word));
     Dec (len, sizeof (word));
   end;
 
-  function GetDWord (var p : PByte; var len : Integer) : dword;
+  function GetDWord (var p: PByte; var len: Integer): dword;
   begin
     if len < sizeof (dword) then
       raise Exception.Create ('End of data');
 
-    result := p^;
+    Result := p^;
     Inc (p, sizeof (dword));
     Dec (len, sizeof (dword));
   end;
 
-  function GetByteOrWord (var p : PByte; var len : Integer; _32BitNumbers : boolean) : word;
+  function GetByteOrWord (var p: PByte; var len: Integer; _32BitNumbers: boolean): word;
   begin
     if  _32BitNumbers then
-      result := GetWord (p, len)
+      Result := GetWord (p, len)
     else
-      result := GetByte (p, len)
+      Result := GetByte (p, len)
   end;
 
-  function GetWordOrDWORD (var p : PByte; var len : Integer; _32BitNumbers : boolean) : DWORD;
+  function GetWordOrDWORD (var p: PByte; var len: Integer; _32BitNumbers: boolean): DWORD;
   begin
     if  _32BitNumbers then
-      result := GetDWord (p, len)
+      Result := GetDWord (p, len)
     else
-      result := GetWord (p, len)
+      Result := GetWord (p, len)
   end;
 
-  procedure DecodeTHEADR (p : PByte; len : Integer);
+  procedure DecodeTHEADR (p: PByte; len: Integer);
   begin
   end;
 
-  procedure DecodeLHEADR (p : PByte; len : Integer);
+  procedure DecodeLHEADR (p: PByte; len: Integer);
   begin
   end;
 
-  procedure DecodeIMPDEF (p : PByte; len : Integer);
+  procedure DecodeIMPDEF (p: PByte; len: Integer);
   var
-    byOrd : boolean;
-    internalName : string;
-    moduleName : string;
+    byOrd: boolean;
+    internalName: string;
+    moduleName: string;
   begin
     byOrd := GetByte (p, len) <> 0;
     internalName := GetString (p, len);
@@ -165,11 +165,11 @@ var
 
   end;
 
-  procedure DecodeCOMENT (p : PByte; len : Integer);
+  procedure DecodeCOMENT (p: PByte; len: Integer);
   var
-    comentType : Byte;
-    comentClass : Byte;
-    subType : Byte;
+    comentType: Byte;
+    comentClass: Byte;
+    subType: Byte;
   begin
     if len < 3 then
       raise Exception.Create ('End of data');
@@ -184,7 +184,7 @@ var
           subType := GetByte (p, len);
 
           case subType of
-            1 : DecodeIMPDEF (p, len);
+            1: DecodeIMPDEF (p, len);
           end;
 
         end;
@@ -201,22 +201,22 @@ var
 
   end;
 
-  procedure DecodeMODEND (p : PByte; len : Integer; _32BitNumbers : boolean);
+  procedure DecodeMODEND (p: PByte; len: Integer; _32BitNumbers: boolean);
   begin
   end;
 
-  procedure DecodeEXTDEF (p : PByte; len : Integer);
+  procedure DecodeEXTDEF (p: PByte; len: Integer);
   begin
   end;
 
-  procedure DecodePUBDEF (p : PByte; len : Integer; _32BitNumbers : boolean);
+  procedure DecodePUBDEF (p: PByte; len: Integer; _32BitNumbers: boolean);
   begin
   end;
 
-  procedure DecodeLNAMES (p : PByte; len : Integer);
+  procedure DecodeLNAMES (p: PByte; len: Integer);
   var
-    l : byte;
-    ast : AnsiString;
+    l: byte;
+    ast: AnsiString;
   begin
     while len > 1 do
     begin
@@ -225,24 +225,24 @@ var
         raise Exception.Create ('End of data');
       SetString (ast, PAnsiChar (p), l);
       Inc (p, l);Dec (len, l);
-      if fLNames = Nil then
-        fLNames := TStringList.Create;
+      if FLNames = Nil then
+        FLNames := TStringList.Create;
 
-      fLNames.Add (String (ast))
+      FLNames.Add (String (ast))
     end
   end;
 
-  procedure DecodeSEGDEF (p : PByte; len : Integer; _32BitNumbers : boolean);
+  procedure DecodeSEGDEF (p: PByte; len: Integer; _32BitNumbers: boolean);
   var
-    sect : TImageSection;
-    sectionHeader : PImageSectionHeader;
-    A, C : byte;
-    _B, _P : boolean;
-    b, Offset : byte;
-    FrameNumber, segNameIdx, clsNameIdx, ovlNameIdx : word;
-    segLen : DWORD;
-    op : PByte;
-    sectName, clsName : AnsiString;
+    Sect: TImageSection;
+    SectionHeader: PImageSectionHeader;
+    A, C: byte;
+    _B, _P: boolean;
+    b, Offset: byte;
+    FrameNumber, segNameIdx, clsNameIdx, ovlNameIdx: word;
+    segLen: DWORD;
+    op: PByte;
+    sectName, clsName: AnsiString;
 
   begin
     op := p;
@@ -253,7 +253,7 @@ var
     _B := (b and $2) <> 0;
     _P := (b and $1) <> 0;
 
-    offset := 0;
+    Offset := 0;
     FrameNumber := 0;
 
     if A = 0 then
@@ -267,25 +267,25 @@ var
     clsNameIdx := GetByteOrWord (p, len, _32BitNumbers);
     ovlNameIdx := GetByteOrWord (p, len, _32BitNumbers);
 
-    GetMem (sectionHeader, sizeof (TImageSectionHeader));
-    ZeroMemory (sectionHeader, sizeof (TImageSectionHeader));
+    GetMem (SectionHeader, sizeof (TImageSectionHeader));
+    ZeroMemory (SectionHeader, sizeof (TImageSectionHeader));
 
-    sectName := AnsiString (fLNames [segNameIdx-1]);
-    lstrcpynA (PAnsiChar (@sectionHeader^.Name [0]), PAnsiChar (sectName), sizeof (sectionHeader^.Name));
+    sectName := AnsiString (FLNames [segNameIdx-1]);
+    lstrcpynA (PAnsiChar (@SectionHeader^.Name [0]), PAnsiChar (sectName), sizeof (SectionHeader^.Name));
 
-    clsName := AnsiString (fLNames [clsNameIdx-1]);
+    clsName := AnsiString (FLNames [clsNameIdx-1]);
 
     if SameText (String (clsName), 'CODE') then
-      sectionHeader.Characteristics := IMAGE_SCN_CNT_CODE or IMAGE_SCN_MEM_EXECUTE
+      SectionHeader.Characteristics := IMAGE_SCN_CNT_CODE or IMAGE_SCN_MEM_EXECUTE
     else
       if SameText (string (clsName), 'DATA') then
-        sectionHeader.Characteristics := IMAGE_SCN_CNT_INITIALIZED_DATA
+        SectionHeader.Characteristics := IMAGE_SCN_CNT_INITIALIZED_DATA
       else
         if SameText (string (clsName), 'STACK') then
-          sectionHeader.Characteristics := IMAGE_SCN_CNT_UNINITIALIZED_DATA;
+          SectionHeader.Characteristics := IMAGE_SCN_CNT_UNINITIALIZED_DATA;
 
-    sect := TImageSection.Create (self, sectionHeader^, PByte (memory), false);
-    fSectionList.Add (sect);
+    Sect := TImageSection.Create (self, SectionHeader^, PByte (memory), false);
+    FSectionList.Add (Sect);
 
     if ovlNameIdx = ovlNameIdx then;
     if segLen = segLen then;
@@ -297,77 +297,77 @@ var
     if op = Nil then;
   end;
 
-  procedure DecodeFIXUP (p : PByte; len : Integer; _32BitNumbers : boolean);
+  procedure DecodeFIXUP (p: PByte; len: Integer; _32BitNumbers: boolean);
   begin
   end;
 
-  procedure DecodeLEDATA (p : PByte; len : Integer; _32BitNumbers : boolean);
+  procedure DecodeLEDATA (p: PByte; len: Integer; _32BitNumbers: boolean);
   var
-    segIdx : word;
-    enumOfs : dword;
-    sect : TImageSection;
+    segIdx: word;
+    enumOfs: dword;
+    Sect: TImageSection;
   begin
     segIdx := GetByteOrWord (p, len, _32BitNumbers);
     enumOfs := GetWordOrDWORD (p, len, _32BitNumbers);
 
-    sect := ImageSection [segIdx-1];
-    sect.AddData(p^, len-1);
+    Sect := ImageSection [segIdx-1];
+    Sect.AddData(p^, len-1);
 
     if enumOfs = 0 then;
 
   end;
 
-  procedure DecodeGRPDEF (p : PByte; len : Integer);
+  procedure DecodeGRPDEF (p: PByte; len: Integer);
   begin
   end;
 
 begin
-  offset := 0;
+  Offset := 0;
   pmem := PByte (memory);
 
   hasDWORDS := false;
-  while offset < size do
+  while Offset < size do
   begin
-    recordType := pmem^;        Inc (pmem);  Inc (offset);
+    recordType := pmem^;        Inc (pmem);  Inc (Offset);
     hasDWORDs := Odd (recordType);
     recordType := recordType and $fe;
 
-    if size - offset < sizeof (word) then
+    if size - Offset < sizeof (word) then
       raise Exception.Create ('End of data');
 
     recordLen := PWord (pmem)^; Inc (pmem, sizeof (word));
 
     case recordType of
-      $80 : DecodeTHEADR (pmem, recordLen);
-      $82 : DecodeLHEADR (pmem, recordLen);
-      $88 : DecodeCOMENT (pmem, recordLen);
+      $80: DecodeTHEADR (pmem, recordLen);
+      $82: DecodeLHEADR (pmem, recordLen);
+      $88: DecodeCOMENT (pmem, recordLen);
       $8a,$8b :
         begin
           DecodeMODEND (pmem, recordLen, recordType = $8b);
-          break
+          Break
         end;
-      $8c : DecodeEXTDEF (pmem, recordLen);
+      $8c: DecodeEXTDEF (pmem, recordLen);
       $90,
-      $91 : DecodePUBDEF (pmem, recordLen, recordType = $91);
+      $91: DecodePUBDEF (pmem, recordLen, recordType = $91);
       $96 :
             DecodeLNAMES (pmem, recordLen);
       $98,
-      $99 : DecodeSEGDEF (pmem, recordLen, recordType = $99);
-      $9A : DecodeGRPDEF (pmem, recordlen);
+      $99: DecodeSEGDEF (pmem, recordLen, recordType = $99);
+      $9A: DecodeGRPDEF (pmem, recordlen);
       $9C,
       $9d: DecodeFIXUP  (pmem, recordLen, recordType = $9d);
       $A0,
-      $A1 : DecodeLEDATA (pmem, recordLen, recordType = $A1);
+      $A1: DecodeLEDATA (pmem, recordLen, recordType = $A1);
       else
         raise Exception.CreateFmt ('Invalid OMF record type %x', [recordType]);
     end;
 
-    if size - offset < recordLen then
+    if size - Offset < recordLen then
       raise Exception.Create ('End of data');
 
 
     Inc (pmem, recordLen);
-    Inc (offset, recordLen)
+    Inc (Offset, recordLen)
   end;
 
   if hasDWORDS then;
@@ -376,24 +376,24 @@ end;
 
 destructor TObjFile.Destroy;
 begin
-  fLNames.Free;
+  FLNames.Free;
 
   inherited;
 end;
 
 function TObjFile.GetResourceCount: Integer;
 begin
-  result := 0
+  Result := 0
 end;
 
 function TObjFile.GetResourceDetails(idx: Integer): TResourceDetails;
 begin
-  result := Nil
+  Result := Nil
 end;
 
 function TObjFile.IndexOfResource(details: TResourceDetails): Integer;
 begin
-  result := -1
+  Result := -1
 end;
 
 const
@@ -409,7 +409,7 @@ const
   IMAGE_FILE_MACHINE_THUMB     = $1c2;
 
 var
-  ValidCOFFMachineTypes : array [0..16] of word = (
+  ValidCOFFMachineTypes: array [0..16] of word = (
 
   { defined in Windows.Pas }
     IMAGE_FILE_MACHINE_UNKNOWN,
@@ -433,16 +433,16 @@ var
     IMAGE_FILE_MACHINE_THUMB
   );
 
-function TObjFile.IsValidCOFFMachineType(w : word): boolean;
+function TObjFile.IsValidCOFFMachineType(w: word): boolean;
 var
-  i : Integer;
+  i: Integer;
 begin
-  result := False;
+  Result := False;
   for i := Low (ValidCOFFMachineTypes) to High (ValidCOFFMachineTypes) do
     if w = ValidCOFFMachineTypes [i] then
     begin
-      result := true;
-      break
+      Result := true;
+      Break
     end
 end;
 

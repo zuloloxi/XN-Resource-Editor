@@ -23,13 +23,13 @@ uses
 type
   TRCDataResourceDetails = class (TResourceDetails)
   private
-    FDelegate : TResourceDetails;
+    FDelegate: TResourceDetails;
   public
-    class function GetBaseType : UnicodeString; override;
-    procedure ChangeData (newData : TMemoryStream); override;
+    class function GetBaseType: UnicodeString; override;
+    procedure ChangeData (newData: TMemoryStream); override;
     function GetData: TMemoryStream; override;
 
-    property Delegate : TResourceDetails read FDelegate;
+    property Delegate: TResourceDetails read FDelegate;
   end;
 
   TRCDataDescriptionResourceDetails = class (TRCDataResourceDetails)
@@ -37,9 +37,9 @@ type
     function GetDescription: UnicodeString;
     procedure SetDescription(const Value: UnicodeString);
   protected
-    class function SupportsRCData (const AName : UnicodeString; Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsRCData (const AName: UnicodeString; Size: Integer; data: Pointer): Boolean; override;
   public
-    property Description : UnicodeString read GetDescription write SetDescription;
+    property Description: UnicodeString read GetDescription write SetDescription;
   end;
 
   TRCDataFormResourceDetails = class (TRCDataResourceDetails)
@@ -47,30 +47,30 @@ type
     function GetText: UnicodeString;
     procedure SetText(const Value: UnicodeString);
   protected
-    class function SupportsRCData (const AName : UnicodeString; Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsRCData (const AName: UnicodeString; Size: Integer; data: Pointer): Boolean; override;
   public
-    property Text : UnicodeString read GetText write SetText;
+    property Text: UnicodeString read GetText write SetText;
   end;
 
   TRCDataCompressedBitmapResourceDetails = class (TRCDataResourceDetails)
   protected
-    class function SupportsRCData (const AName : UnicodeString; Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsRCData (const AName: UnicodeString; Size: Integer; data: Pointer): Boolean; override;
   public
-    constructor Create (AParent : TResourceModule; ALanguage : Integer; const AName, AType : UnicodeString; ASize : Integer; AData : pointer); override;
+    constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
   end;
 
   TCompressedBitmapResourceDetails = class (TBitmapResourceDetails)
   private
-    FCompressedData : TMemoryStream;
+    FCompressedData: TMemoryStream;
 
   protected
-    function GetData : TMemoryStream; override;
-    constructor Create (AParent : TResourceModule; ALanguage : Integer; const AName, AType : UnicodeString; ASize : Integer; AData : pointer); override;
+    function GetData: TMemoryStream; override;
+    constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
 
   public
-    constructor CreateNew (AParent : TResourceModule; ALanguage : Integer; const AName : UnicodeString); override;
+    constructor CreateNew (AParent: TResourceModule; ALanguage: Integer; const AName: UnicodeString); override;
     destructor Destroy; override;
-    procedure ChangeData (data : TMemoryStream); override;
+    procedure ChangeData (data: TMemoryStream); override;
   end;
 
   TPackageEnvironment = (pePreV4, peUndefine, peBCB, peDelphi);
@@ -78,12 +78,12 @@ type
 
   TRCDataPackagesResourceDetails = class (TRCDataResourceDetails)
   private
-    FRequiresList : TStrings;
-    FContainsList : TStrings;
-    FFlags : DWORD;
+    FRequiresList: TStrings;
+    FContainsList: TStrings;
+    FFlags: DWORD;
 
     function GetRequiresCount: Integer;
-    function GetRequires(idx : Integer): string;
+    function GetRequires(idx: Integer): string;
     function GetContainsCount: Integer;
     function GetContains(idx: Integer): string;
     function GetContainsFlag(idx: Integer): Byte;
@@ -96,30 +96,30 @@ type
     function GetNeverBuild: Boolean;
     function GetRunTimeOnly: Boolean;
   protected
-    class function SupportsRCData (const AName : UnicodeString; Size : Integer; data : Pointer) : Boolean; override;
+    class function SupportsRCData (const AName: UnicodeString; Size: Integer; data: Pointer): Boolean; override;
   public
     destructor Destroy; override;
-    procedure ChangeData (newData : TMemoryStream); override;
-    property RequiresCount : Integer read GetRequiresCount;
-    property Requires [idx : Integer] : string read GetRequires;
-    property ContainsCount : Integer read GetContainsCount;
-    property Contains [idx : Integer] : string read GetContains;
-    property ContainsFlag [idx : Integer] : Byte read GetContainsFlag;
+    procedure ChangeData (newData: TMemoryStream); override;
+    property RequiresCount: Integer read GetRequiresCount;
+    property Requires [idx: Integer]: string read GetRequires;
+    property ContainsCount: Integer read GetContainsCount;
+    property Contains [idx: Integer]: string read GetContains;
+    property ContainsFlag [idx: Integer]: Byte read GetContainsFlag;
 
-    property NeverBuild : Boolean read GetNeverBuild;
-    property DesignTimeOnly : Boolean read GetDesignTimeOnly;
-    property RunTimeOnly : Boolean read GetRunTimeOnly;
-    property CheckForDuplicates : Boolean read GetCheckForDuplicates;
-    property Environment : TPackageEnvironment read GetEnvironment;
-    property ModuleType : TModuleType read GetModuleType;
+    property NeverBuild: Boolean read GetNeverBuild;
+    property DesignTimeOnly: Boolean read GetDesignTimeOnly;
+    property RunTimeOnly: Boolean read GetRunTimeOnly;
+    property CheckForDuplicates: Boolean read GetCheckForDuplicates;
+    property Environment: TPackageEnvironment read GetEnvironment;
+    property ModuleType: TModuleType read GetModuleType;
   end;
 
 implementation
 
 type
   TPkgName = packed record
-    HashCode : Byte;
-    Name : array [0..255] of AnsiChar;
+    HashCode: Byte;
+    Name: array [0..255] of AnsiChar;
   end;
   PPkgName = ^TPkgName;
 
@@ -136,7 +136,7 @@ type
 
   PUnitName = ^TUnitName;
   TUnitName = packed record
-    Flags : Byte;
+    Flags: Byte;
     HashCode: Byte;
     Name: array[0..255] of AnsiChar;
   end;
@@ -196,10 +196,10 @@ end;
 
 procedure TRCDataPackagesResourceDetails.DecodeData;
 var
-  p : PAnsiChar;
-  i, Count : Integer;
-  pkg : PPkgName;
-  unt : PUnitName;
+  p: PAnsiChar;
+  i, Count: Integer;
+  pkg: PPkgName;
+  unt: PUnitName;
 begin
   if not Assigned (FRequiresList) then
   begin
@@ -290,7 +290,7 @@ begin
   Result := (FFlags and 1) <> 0
 end;
 
-function TRCDataPackagesResourceDetails.GetRequires(idx : Integer): string;
+function TRCDataPackagesResourceDetails.GetRequires(idx: Integer): string;
 begin
   DecodeData;
   Result := FRequiresList [idx]
@@ -316,12 +316,12 @@ end;
 
 { TRCDataFormResourceDetails }
 
-function ObjectTextToUTF8 (src : TStream) : UTF8String;
+function ObjectTextToUTF8 (src: TStream): UTF8String;
 var
-  ach : AnsiChar;
-  outp : Integer;
-  token : AnsiString;
-  i : Integer;
+  ach: AnsiChar;
+  outp: Integer;
+  token: AnsiString;
+  i: Integer;
 begin
   SetLength (result, src.Size - src.Position);
   outp := 1;
@@ -359,10 +359,10 @@ end;
 
 function TRCDataFormResourceDetails.GetText: UnicodeString;
 var
-  m : TMemoryStream;
-  off : TStreamOriginalFormat;
-  s : TStrings;
-  st : string;
+  m: TMemoryStream;
+  off: TStreamOriginalFormat;
+  s: TStrings;
+  st: string;
 begin
   s := Nil;
   m := TMemoryStream.Create;
@@ -383,8 +383,8 @@ end;
 
 procedure TRCDataFormResourceDetails.SetText(const Value: UnicodeString);
 var
-  m, m1 : TMemoryStream;
-  us : UTF8String;
+  m, m1: TMemoryStream;
+  us: UTF8String;
 begin
   m := Nil;
 
@@ -416,8 +416,8 @@ constructor TRCDataCompressedBitmapResourceDetails.Create(
   AParent: TResourceModule; ALanguage: Integer; const AName,
   AType: UnicodeString; ASize: Integer; AData: pointer);
 var
-  delBitmap : TBitmapResourceDetails;
-  ms : TMemoryStream;
+  delBitmap: TBitmapResourceDetails;
+  ms: TMemoryStream;
 begin
   inherited;
   delBitmap := TCompressedBitmapResourceDetails.CreateNew (Nil, ALanguage, AName);
@@ -435,8 +435,8 @@ end;
 class function TRCDataCompressedBitmapResourceDetails.SupportsRCData(
   const AName: UnicodeString; Size: Integer; data: Pointer): Boolean;
 var
-  outBuffer : pointer;
-  inSize, outSize : Integer;
+  outBuffer: pointer;
+  inSize, outSize: Integer;
 
   procedure ZDecompressPartial(const inBuffer: Pointer; inSize: Integer;
     out outBuffer: Pointer; out outSize: Integer);
@@ -501,9 +501,9 @@ end;
 
 procedure TCompressedBitmapResourceDetails.ChangeData(data: TMemoryStream);
 var
-  outb : Pointer;
-  outs : Integer;
-  ms : TMemoryStream;
+  outb: Pointer;
+  outs: Integer;
+  ms: TMemoryStream;
 begin
   data.Seek(0, soFromBeginning);
   ms := Nil;
@@ -542,10 +542,10 @@ end;
 
 function TCompressedBitmapResourceDetails.GetData: TMemoryStream;
 var
-  ms, m : TMemoryStream;
+  ms, m: TMemoryStream;
   hdr :TBitmapFileHeader;
-  outb : Pointer;
-  outs : Integer;
+  outb: Pointer;
+  outs: Integer;
 begin
   ms := inherited GetData;
   FCompressedData.Clear;

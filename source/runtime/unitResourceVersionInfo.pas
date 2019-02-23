@@ -19,30 +19,30 @@ interface
 uses Windows, Classes, SysUtils, Contnrs, unitResourceDetails;
 
 type
-  TFileFlags = (ffDebug, ffInfoInferred, ffPatched, ffPreRelease, ffPrivateBuild, ffSpecialBuild);
+  TFileFlags = (ffDebug, ffInfoInferred, ffPatched, ffPreRelease,
+    ffPrivateBuild, ffSpecialBuild);
   TVersionFileFlags = set of TFileFlags;
 
   TVersionStringValue = class
   private
-    FKeyName : UnicodeString;
-    FValue : UnicodeString;
-    FLangId : Integer;
-    FCodePage : Integer;
-
+    FKeyName: UnicodeString;
+    FValue: UnicodeString;
+    FLangId: Integer;
+    FCodePage: Integer;
   public
-    constructor Create (const AKeyName, AValue : UnicodeString; ALangId, ACodePage : Integer);
-    property KeyName : UnicodeString read FKeyName;
-    property Value : UnicodeString read FValue;
+    constructor Create (const AKeyName, AValue: UnicodeString; ALangId, ACodePage: Integer);
+    property KeyName: UnicodeString read FKeyName;
+    property Value: UnicodeString read FValue;
   end;
 
   TVersionInfoResourceDetails = class (TResourceDetails)
   private
-    FChildStrings : TObjectList;
-    FFixedInfo : PVSFixedFileInfo;
-    FTranslations : TList;
+    FChildStrings: TObjectList;
+    FFixedInfo: PVSFixedFileInfo;
+    FTranslations: TList;
     procedure GetFixedFileInfo;
     procedure UpdateData;
-    procedure ExportToStream (strm : TStream);
+    procedure ExportToStream (strm: TStream);
 
     function GetFileFlags: TVersionFileFlags;
     function GetFileVersion: TULargeInteger;
@@ -53,22 +53,22 @@ type
     procedure SetFileVersion(const Value: TULargeInteger);
     procedure SetProductVersion(const Value: TULargeInteger);
   protected
-    constructor Create (AParent : TResourceModule; ALanguage : Integer; const AName, AType : UnicodeString; ASize : Integer; AData : pointer); override;
+    constructor Create (AParent: TResourceModule; ALanguage: Integer; const AName, AType: UnicodeString; ASize: Integer; AData: pointer); override;
     procedure InitNew; override;
   public
-    constructor CreateNew (AParent : TResourceModule; ALanguage : Integer; const AName : UnicodeString); override;
+    constructor CreateNew (AParent: TResourceModule; ALanguage: Integer; const AName: UnicodeString); override;
     destructor Destroy; override;
-    class function GetBaseType : UnicodeString; override;
-    procedure ChangeData (newData : TMemoryStream); override;
-    function SetKeyValue (const AKeyName, AValue : UnicodeString) : Integer;
-    procedure ChangeKey (const AOldKey, ANewKey : UnicodeString);
-    procedure DeleteKey (idx : Integer);
-    function IndexOf (const AKeyName : UnicodeString) : Integer;
-    property ProductVersion : TULargeInteger read GetProductVersion write SetProductVersion;
-    property FileVersion    : TULargeInteger read GetFileVersion write SetFileVersion;
-    property FileFlags : TVersionFileFlags read GetFileFlags write SetFileFlags;
-    property KeyCount : Integer read GetKeyCount;
-    property Key [idx : Integer] : TVersionStringValue read GetKey;
+    class function GetBaseType: UnicodeString; override;
+    procedure ChangeData (newData: TMemoryStream); override;
+    function SetKeyValue (const AKeyName, AValue: UnicodeString): Integer;
+    procedure ChangeKey (const AOldKey, ANewKey: UnicodeString);
+    procedure DeleteKey (idx: Integer);
+    function IndexOf (const AKeyName: UnicodeString): Integer;
+    property ProductVersion: TULargeInteger read GetProductVersion write SetProductVersion;
+    property FileVersion: TULargeInteger read GetFileVersion write SetFileVersion;
+    property FileFlags: TVersionFileFlags read GetFileFlags write SetFileFlags;
+    property KeyCount: Integer read GetKeyCount;
+    property Key [idx: Integer]: TVersionStringValue read GetKey;
   end;
 
 implementation
@@ -98,7 +98,7 @@ end;
 procedure TVersionInfoResourceDetails.ChangeKey(const AOldKey,
   ANewKey: UnicodeString);
 var
-  idx : Integer;
+  idx: Integer;
 begin
   if AOldKey <> ANewKey then
   begin
@@ -146,23 +146,23 @@ end;
 
 procedure TVersionInfoResourceDetails.ExportToStream(strm: TStream);
 var
-  zeros, v : DWORD;
-  wSize : WORD;
-  stringInfoStream : TMemoryStream;
-  strg : TVersionStringValue;
-  i, p, p1 : Integer;
-  wValue : WideString;
+  zeros, v: DWORD;
+  wSize: WORD;
+  stringInfoStream: TMemoryStream;
+  strg: TVersionStringValue;
+  i, p, p1: Integer;
+  wValue: WideString;
 
-  procedure PadStream (strm : TStream);
+  procedure PadStream (strm: TStream);
   begin
     if strm.Position mod 4 <> 0 then
       strm.Write (zeros, 4 - (strm.Position mod 4))
   end;
 
-  procedure SaveVersionHeader (strm : TStream; wLength, wValueLength, wType : word; const wKey : UnicodeString; const value);
+  procedure SaveVersionHeader (strm: TStream; wLength, wValueLength, wType: word; const wKey: UnicodeString; const value);
   var
-    valueLen : word;
-    keyLen : word;
+    valueLen: word;
+    keyLen: word;
   begin
     strm.Write (wLength, sizeof (wLength));
 
@@ -271,7 +271,7 @@ end;
 
 function TVersionInfoResourceDetails.GetFileFlags: TVersionFileFlags;
 var
-  flags : Integer;
+  flags: Integer;
 begin
   GetFixedFileInfo;
   result := [];
@@ -294,17 +294,17 @@ end;
 
 procedure TVersionInfoResourceDetails.GetFixedFileInfo;
 var
-  p : PByte;
-  t, wLength, wValueLength, wType : word;
-  key : UnicodeString;
+  p: PByte;
+  t, wLength, wValueLength, wType: word;
+  key: UnicodeString;
 
-  varwLength, varwValueLength, varwType : word;
-  varKey : UnicodeString;
+  varwLength, varwValueLength, varwType: word;
+  varKey: UnicodeString;
 
-  function GetVersionHeader (var p : PByte; var wLength, wValueLength, wType : word; var wKey : UnicodeString) : Integer;
+  function GetVersionHeader (var p: PByte; var wLength, wValueLength, wType: word; var wKey: UnicodeString): Integer;
   var
-    baseP : PByte;
-    szKey : PWideChar;
+    baseP: PByte;
+    szKey: PWideChar;
   begin
     baseP := p;
     wLength := PWord (p)^;
@@ -321,12 +321,12 @@ var
     wKey := szKey;
   end;
 
-  procedure GetStringChildren (var base : PByte; len : word);
+  procedure GetStringChildren (var base: PByte; len: word);
   var
-    p, strBase : PByte;
-    t, wLength, wValueLength, wType, wStrLength, wStrValueLength, wStrType : word;
-    key, value : UnicodeString;
-    langID, codePage : Integer;
+    p, strBase: PByte;
+    t, wLength, wValueLength, wType, wStrLength, wStrValueLength, wStrType: word;
+    key, value: UnicodeString;
+    langID, codePage: Integer;
 
   begin
     p := base;
@@ -363,12 +363,12 @@ var
     base := p
   end;
 
-  procedure GetVarChildren (var base : PByte; len : word);
+  procedure GetVarChildren (var base: PByte; len: word);
   var
-    p, strBase : PByte;
+    p, strBase: PByte;
     t, wLength, wValueLength, wType: word;
-    key : UnicodeString;
-    v : DWORD;
+    key: UnicodeString;
+    v: DWORD;
   begin
     p := base;
     while (p - base) < len do
@@ -448,8 +448,8 @@ end;
 function TVersionInfoResourceDetails.IndexOf(
   const AKeyName: UnicodeString): Integer;
 var
-  i : Integer;
-  k : TVersionStringValue;
+  i: Integer;
+  k: TVersionStringValue;
 begin
   result := -1;
   for i := 0 to KeyCount - 1 do
@@ -465,9 +465,9 @@ end;
 
 procedure TVersionInfoResourceDetails.InitNew;
 var
-  w, l : word;
-  fixedInfo : TVSFixedFileInfo;
-  ws : UnicodeString;
+  w, l: word;
+  fixedInfo: TVSFixedFileInfo;
+  ws: UnicodeString;
 begin
   l := 0;
 
@@ -517,7 +517,7 @@ end;
 procedure TVersionInfoResourceDetails.SetFileFlags(
   const Value: TVersionFileFlags);
 var
-  flags : DWORD;
+  flags: DWORD;
 begin
   GetFixedFileInfo;
 
@@ -549,8 +549,8 @@ end;
 function TVersionInfoResourceDetails.SetKeyValue(const AKeyName,
   AValue: UnicodeString): Integer;
 var
-  idx : Integer;
-  k : TVersionStringValue;
+  idx: Integer;
+  k: TVersionStringValue;
 begin
   idx := IndexOf (AKeyName);
 
@@ -588,7 +588,7 @@ end;
 
 procedure TVersionInfoResourceDetails.UpdateData;
 var
-  st : TMemoryStream;
+  st: TMemoryStream;
 begin
   st := TMemoryStream.Create;
   try
@@ -604,7 +604,7 @@ end;
 
 { TVersionStringValue }
 
-constructor TVersionStringValue.Create(const AKeyName, AValue: UnicodeString; ALangId, ACodePage : Integer);
+constructor TVersionStringValue.Create(const AKeyName, AValue: UnicodeString; ALangId, ACodePage: Integer);
 begin
   FKeyName := AKeyName;
   FValue := AValue;

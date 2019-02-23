@@ -7,22 +7,21 @@ uses
   unitResourceDetails, Vcl.AxCtrls;
 
 type
-TXPManifestResourceDetails = class (TUTF8ResourceDetails)
-public
-  class function GetBaseType : UnicodeString; override;
-  procedure InitNew; override;
-end;
+  TXPManifestResourceDetails = class (TUTF8ResourceDetails)
+  public
+    class function GetBaseType: UnicodeString; override;
+    procedure InitNew; override;
+  end;
 
 const
-  RT_XPMANIFEST = MakeIntResource (24);
+  RT_XPMANIFEST = MakeIntResource(24);
 
 implementation
 
 { TXPManifestResourceDetails }
 
 const
-
-  manifest : UTF8String =
+  manifest: UTF8String =
 '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'#13#10+
 '<assembly xmlns="urn:schemas-microsoft-com:asm.v1"'#13#10+
 'manifestVersion="1.0">'#13#10+
@@ -49,13 +48,13 @@ const
 
 class function TXPManifestResourceDetails.GetBaseType: UnicodeString;
 begin
-  result := IntToStr (Integer (RT_XPMANIFEST));
+  Result := IntToStr(Integer(RT_XPMANIFEST));
 end;
 
 procedure TXPManifestResourceDetails.InitNew;
 begin
   Data.Clear;
-  Data.Write(PAnsiChar (manifest)^, Length (manifest))
+  Data.Write(PAnsiChar(manifest)^, Length(manifest))
 end;
 
 initialization

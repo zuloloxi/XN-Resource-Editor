@@ -50,23 +50,23 @@ interface
 uses Classes, SysUtils, StrUtils, AnsiStrings;
 
 type
-TValueType = (vInteger, vString, vReal);
-TValue = record
-  tp : TValueType;
-  iVal : Integer;
-  sVal : string;
-  rVal : extended;
-end;
+  TValueType = (vInteger, vString, vReal);
+  TValue = record
+    tp: TValueType;
+    iVal: Integer;
+    sVal: string;
+    rVal: extended;
+  end;
 
-TStrValue = class
-private
-  fValue : string;
-public
-  constructor Create (const AValue : string);
-  property Value : string read fValue;
-end;
+  TStrValue = class
+  private
+    FValue: string;
+  public
+    constructor Create (const AValue: string);
+    property Value: string read FValue;
+  end;
 
-procedure CalcExpression (const st : string; defines : TStringList; var value : TValue);
+procedure CalcExpression (const st: string; defines: TStringList; var value: TValue);
 
 implementation
 
@@ -74,9 +74,9 @@ type
   TOperator = (opNop, opEq, opNotEq, opLessEq, opGtrEq, opLess, opGtr,
                opAdd, opSub, opLor, opOr, opMult, opDiv, opIDiv, opMod, oplAnd, opAnd, opNot);
 
-procedure DoOp (op : TOperator; var x : TValue; y : TValue);
+procedure DoOp (op: TOperator; var x: TValue; y: TValue);
 
-  procedure AssignBool (bool, rev : boolean);
+  procedure AssignBool (bool, rev: boolean);
   begin
     x.tp := vInteger;
     if rev then
@@ -119,48 +119,48 @@ begin
 
   case op of
     opEq,
-    opNotEq : case x.tp of
-                vInteger : AssignBool (x.iVal = y.iVal, op = opNotEq);
-                vString  : AssignBool (x.sVal = y.sVal, op = opNotEq);
-                vReal    : AssignBool (x.rVal = y.rVal, op = opNotEq);
+    opNotEq: case x.tp of
+                vInteger: AssignBool (x.iVal = y.iVal, op = opNotEq);
+                vString : AssignBool (x.sVal = y.sVal, op = opNotEq);
+                vReal   : AssignBool (x.rVal = y.rVal, op = opNotEq);
               end;
 
     opLess,
-    opGtrEq : case x.tp of
-                vInteger : AssignBool (x.iVal < y.iVal, op = opGtrEq);
-                vString  : AssignBool (x.sVal < y.sVal, op = opGtrEq);
-                vReal    : AssignBool (x.rVal < y.rVal, op = opGtrEq);
+    opGtrEq: case x.tp of
+                vInteger: AssignBool (x.iVal < y.iVal, op = opGtrEq);
+                vString : AssignBool (x.sVal < y.sVal, op = opGtrEq);
+                vReal   : AssignBool (x.rVal < y.rVal, op = opGtrEq);
               end;
 
     opGtr,
-    opLessEq : case x.tp of
-                vInteger : AssignBool (x.iVal > y.iVal, op = opLessEq);
-                vString  : AssignBool (x.sVal > y.sVal, op = opLessEq);
-                vReal    : AssignBool (x.rVal > y.rVal, op = opLessEq);
+    opLessEq: case x.tp of
+                vInteger: AssignBool (x.iVal > y.iVal, op = opLessEq);
+                vString : AssignBool (x.sVal > y.sVal, op = opLessEq);
+                vReal   : AssignBool (x.rVal > y.rVal, op = opLessEq);
               end;
 
-    oplAnd : AssignBool ((x.iVal and y.iVal) <> 0, false);
-    oplOr  : AssignBool ((x.iVal or y.iVal) <> 0, false);
-    opAnd  : x.iVal := x.iVal and y.iVal;
-    opOr   : x.iVal := x.iVal or y.iVal;
+    oplAnd: AssignBool ((x.iVal and y.iVal) <> 0, false);
+    oplOr : AssignBool ((x.iVal or y.iVal) <> 0, false);
+    opAnd : x.iVal := x.iVal and y.iVal;
+    opOr  : x.iVal := x.iVal or y.iVal;
 
-    opAdd  : case x.tp of
-               vInteger : x.iVal := x.iVal + y.iVal;
-               vReal    : x.rVal := x.rVal + y.rVal;
-               vString  : x.sVal := x.sVal + y.sVal
+    opAdd : case x.tp of
+               vInteger: x.iVal := x.iVal + y.iVal;
+               vReal   : x.rVal := x.rVal + y.rVal;
+               vString : x.sVal := x.sVal + y.sVal
              end;
 
-    opSub  : if x.tp = vInteger then
+    opSub : if x.tp = vInteger then
                x.iVal := x.iVal - y.iVal
              else
                x.rVal := x.rVal - y.rVal;
 
-    opMult : if x.tp = vInteger then
+    opMult: if x.tp = vInteger then
                x.iVal := x.iVal * y.iVal
              else
                x.rVal := x.rVal * y.rVal;
 
-    opDiv  : if x.tp = vInteger then
+    opDiv : if x.tp = vInteger then
              begin
                x.rVal := x.iVal div y.iVal;
                x.tp := vReal
@@ -168,22 +168,22 @@ begin
              else
                x.rVal := x.rVal / y.rVal;
 
-    opIDiv : x.iVal := x.iVal div y.iVal;
-    opMod  : x.iVal := x.iVal mod y.iVal;
+    opIDiv: x.iVal := x.iVal div y.iVal;
+    opMod : x.iVal := x.iVal mod y.iVal;
   end;
 end;
 
-procedure DoUnaryOp (op : TOperator; var x : TValue);
+procedure DoUnaryOp (op: TOperator; var x: TValue);
 begin
   if x.tp = vString then
     raise Exception.Create ('Type mismatch in expression');
 
   case op of
-    opSub : if x.tp = vInteger then
+    opSub: if x.tp = vInteger then
               x.iVal := -x.iVal
             else
               x.rVal := -x.rVal;
-    opNot : if x.tp <> vInteger then
+    opNot: if x.tp <> vInteger then
               raise Exception.Create ('Type mismatch in expression')
             else
               if x.iVal <> 0 then
@@ -194,14 +194,14 @@ begin
   end
 end;
 
-procedure CalcExpression (const st : string; defines : TStringList; var value : TValue);
+procedure CalcExpression (const st: string; defines: TStringList; var value: TValue);
 var
-  pos : Integer;
-  ch : char;
+  pos: Integer;
+  ch: char;
 
-  function CalcBoolean : TValue; forward;
+  function CalcBoolean: TValue; forward;
 
-  function GetChar : char;
+  function GetChar: char;
   begin
     if pos < Length (st) then
     begin
@@ -213,7 +213,7 @@ var
     result := ch;
   end;
 
-  function GetNonWhitespace : char;
+  function GetNonWhitespace: char;
   begin
     repeat GetChar until (ch <> ' ') and (ch <> #9);
     result := ch
@@ -225,25 +225,25 @@ var
       GetNonWhitespace
   end;
 
-  function IsIdChar (ch : char) : boolean;
+  function IsIdChar (ch: char): boolean;
   begin
     result := System.Pos (ch, 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_') > 0
   end;
 
-  function IsCharHex (ch : char) : boolean;
+  function IsCharHex (ch: char): boolean;
   begin
     result := System.Pos(ch, 'ABCDEFabcdef0123456789') > 0
   end;
 
-  function IsCharNumeric (ch : char) : boolean;
+  function IsCharNumeric (ch: char): boolean;
   begin
     result := System.Pos(ch, '0123456789') > 0
   end;
 
-  function CalcId : TValue;
+  function CalcId: TValue;
   var
-    id : string;
-    idx : Integer;
+    id: string;
+    idx: Integer;
   begin
     id := ch;
     while IsIdChar (GetChar) do
@@ -277,7 +277,7 @@ var
 
     idx := defines.IndexOf(id);
     if idx >= 0 then
-      CalcExpression (TStrValue (defines.Objects [idx]).fValue, defines, result)
+      CalcExpression (TStrValue (defines.Objects [idx]).FValue, defines, result)
     else
     begin
       result.tp := vInteger;
@@ -285,11 +285,11 @@ var
     end
   end;
 
-  function CalcNumber : TValue;
+  function CalcNumber: TValue;
   var
-    n : string;
-    hexFlag : boolean;
-    dotPos : Integer;
+    n: string;
+    hexFlag: boolean;
+    dotPos: Integer;
   begin
     n := ch;
     hexFlag := False;
@@ -344,22 +344,22 @@ var
       end
   end;
 
-  function CalcCString : TValue;
+  function CalcCString: TValue;
   var
-    st : string;
+    st: string;
   begin
     st := '';
     while GetChar <> #0 do
     case ch of
-      '"' : break;
+      '"': break;
       '\' :
         case GetChar of
-          '"' : st := st + '"';
-          'n' : st := st + #10;
-          'r' : st := st + #13;
-          't' : st := st + #9;
-          '\' : st := st + '\';
-          '0' : st := st + #0;
+          '"': st := st + '"';
+          'n': st := st + #10;
+          'r': st := st + #13;
+          't': st := st + #9;
+          '\': st := st + '\';
+          '0': st := st + #0;
           else
             raise EParserError.Create('Invalid escape sequence');
         end;
@@ -371,10 +371,10 @@ var
     result.sVal := st
   end;
 
-  function CalcTerm : TValue;
+  function CalcTerm: TValue;
   begin
     case ch of
-      '(' : begin
+      '(': begin
               GetNonWhitespace;
               result := CalcBoolean;
               if ch <> ')' then
@@ -389,7 +389,7 @@ var
     end
   end;
 
-  function CalcSignedTerm : TValue;
+  function CalcSignedTerm: TValue;
   begin
     if ch = '+' then
     begin
@@ -414,9 +414,9 @@ var
           result := CalcTerm
   end;
 
-  function CalcMultiplication : TValue;
+  function CalcMultiplication: TValue;
   var
-    op : TOperator;
+    op: TOperator;
   begin
     result := CalcSignedTerm;
     while (ch = '*') or (ch = '/') or (ch = '\') or (ch = '%') or (ch = '&') do
@@ -424,11 +424,11 @@ var
 
       op := opNop;
       case ch of
-       '*' : begin op := opMult; GetChar; end;
-       '/' : begin op := opDiv;  GetChar; end;
-       '\' : begin op := opIDiv; GetChar; end;
-       '%' : begin op := opMod;  GetChar; end;
-       '&' : if GetChar = '&' then
+       '*': begin op := opMult; GetChar; end;
+       '/': begin op := opDiv;  GetChar; end;
+       '\': begin op := opIDiv; GetChar; end;
+       '%': begin op := opMod;  GetChar; end;
+       '&': if GetChar = '&' then
              begin
                op := oplAnd;
                GetChar
@@ -444,18 +444,18 @@ var
     end
   end;
 
-  function CalcAddition : TValue;
+  function CalcAddition: TValue;
   var
-    op : TOperator;
+    op: TOperator;
   begin
     result := CalcMultiplication;
     while (ch = '+') or (ch = '-') or (ch = '|') do
     begin
       op := opNop;
       case ch of
-        '+' : begin op := opAdd; GetChar; end;
-        '-' : begin op := opSub; GetChar; end;
-        '|' : if GetChar = '|' then
+        '+': begin op := opAdd; GetChar; end;
+        '-': begin op := opSub; GetChar; end;
+        '|': if GetChar = '|' then
               begin
                 GetChar;
                 op := oplor
@@ -471,9 +471,9 @@ var
     end
   end;
 
-  function CalcBoolean : TValue;
+  function CalcBoolean: TValue;
   var
-    op : TOperator;
+    op: TOperator;
   begin
     result := CalcAddition;
 
@@ -482,17 +482,17 @@ var
 
       op := opNop;
       case ch of
-        '=' : if GetChar = '=' then
+        '=': if GetChar = '=' then
               begin
                 GetChar;
                 op := opEq
               end;
-        '!' : if GetChar = '=' then
+        '!': if GetChar = '=' then
               begin
                 GetChar;
                 op := opNotEq
               end;
-        '<' : if GetChar = '=' then
+        '<': if GetChar = '=' then
               begin
                 op := opLessEq;
                 GetChar
@@ -500,7 +500,7 @@ var
               else
                 op := opLess;
 
-        '>' : if GetChar = '=' then
+        '>': if GetChar = '=' then
               begin
                 op := opGtrEq;
                 GetChar;
@@ -529,7 +529,7 @@ end;
 
 constructor TStrValue.Create(const AValue: string);
 begin
-  fValue := AValue;
+  FValue := AValue;
 end;
 
 end.
