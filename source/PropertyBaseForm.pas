@@ -75,31 +75,31 @@ type
 // TfmPropertyBase is the base class for derived property tree forms
 
   TfmPropertyBase = class(TForm)
-    pnlOptions: TPanel;
-    vstSections: TVirtualStringTree;
-    Splitter1: TSplitter;
-    pnlButtons: TPanel;
     Bevel1: TBevel;
-    btnOK: TButton;
-    btnCancel: TButton;
-    PersistentPosition1: TPersistentPosition;
-    btnApply: TButton;
-    PopupMenu1: TPopupMenu;
-    ExpandAll1: TMenuItem;
-    CollapseAll1: TMenuItem;
-    btnHelp: TButton;
+    ButtonApply: TButton;
+    ButtonCancel: TButton;
+    ButtonHelp: TButton;
+    ButtonOK: TButton;
+    MenuItemCollapseAll: TMenuItem;
+    MenuItemExpandAll: TMenuItem;
+    PanelButtons: TPanel;
+    PanelOptions: TPanel;
+    PersistentPosition: TPersistentPosition;
+    PopupMenu: TPopupMenu;
+    Splitter: TSplitter;
+    vstSections: TVirtualStringTree;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure btnHelpClick(Sender: TObject);
-    procedure CollapseAll1Click(Sender: TObject);
-    procedure ExpandAll1Click(Sender: TObject);
-    procedure btnApplyClick(Sender: TObject);
+    procedure ButtonHelpClick(Sender: TObject);
+    procedure MenuItemCollapseAllClick(Sender: TObject);
+    procedure MenuItemExpandAllClick(Sender: TObject);
+    procedure ButtonApplyClick(Sender: TObject);
     procedure vstSectionsGetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
       var CellText: string);
     procedure FormShow(Sender: TObject);
     procedure vstSectionsFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
-    procedure btnOKClick(Sender: TObject);
+    procedure ButtonOKClick(Sender: TObject);
     procedure vstSectionsInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vstSectionsInitChildren(Sender: TBaseVirtualTree;
@@ -122,8 +122,8 @@ type
     procedure DoCheckDataMatches (Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 
 
-    function GetNodePropertyPageDetails(node: PVirtualNode): TPropertyPageDetails;
-    procedure SetNodePropertyPageDetails(node: PVirtualNode; Details: TPropertyPageDetails);
+    function GetNodePropertyPageDetails(Node: PVirtualNode): TPropertyPageDetails;
+    procedure SetNodePropertyPageDetails(Node: PVirtualNode; Details: TPropertyPageDetails);
     procedure SelectPage (Details: TPropertyPageDetails);
     procedure SaveSettings;
     procedure CancelChanges;
@@ -243,7 +243,7 @@ end;
  |                                                                      |
  | Onclick handler for the OK button.                                   |
  *----------------------------------------------------------------------*}
-procedure TfmPropertyBase.btnOKClick(Sender: TObject);
+procedure TfmPropertyBase.ButtonOKClick(Sender: TObject);
 begin
   FSaved := True;
   SaveSettings;
@@ -385,7 +385,7 @@ end;
  |                                                                      |
  | Parameters:                                                          |
  |   proc: TPropertyPageDetailsProc     Method to call for each node    |
- |   Param: Pointer                    Parameter to pass to the        |
+ |   Param: Pointer                     Parameter to pass to the        |
  |                                      iterator proc.                  |
  *----------------------------------------------------------------------*}
 function TfmPropertyBase.ForEachPropertyPageDetails(proc: TPropertyPageDetailsProc; Param: Pointer): TPropertyPageDetails;
@@ -444,8 +444,8 @@ begin
 
   if FUseConstraints then
   begin
-    pnlOptions.Constraints.MinWidth := FDetailsConstraints.X;
-    pnlOptions.Constraints.MinHeight := FDetailsConstraints.Y + Bevel1.Height;
+    PanelOptions.Constraints.MinWidth := FDetailsConstraints.X;
+    PanelOptions.Constraints.MinHeight := FDetailsConstraints.Y + Bevel1.Height;
   end;
 
   n := vstSections.GetFirst;
@@ -466,11 +466,11 @@ end;
  | Return the TPropertyPageDetails assiciated with a tree node          |
  *----------------------------------------------------------------------*}
 function TfmPropertyBase.GetNodePropertyPageDetails(
-  node: PVirtualNode): TPropertyPageDetails;
+  Node: PVirtualNode): TPropertyPageDetails;
 var
   obj: PObject;
 begin
-  obj := vstSections.GetNodeData(node);
+  obj := vstSections.GetNodeData(Node);
 
   if Assigned(obj) then
     Result := TPropertyPageDetails(obj^)
@@ -506,12 +506,12 @@ var
   newPage: Boolean;
 begin
   // (try to) provent flickering!
-  SendMessage(pnlOptions.Handle, WM_SETREDRAW, 0, 0);
+  SendMessage(PanelOptions.Handle, WM_SETREDRAW, 0, 0);
   try
     // Free the old form (if there was one)
-    if pnlOptions.ControlCount > 1 then
+    if PanelOptions.ControlCount > 1 then
     begin
-      Page := pnlOptions.Controls[1] as TfmPropertyPage;
+      Page := PanelOptions.Controls[1] as TfmPropertyPage;
 
       if Assigned(Details) and (Page.ClassType <> Details.FPropertyPageClass) then
         FreeAndNil(Page);
@@ -526,7 +526,7 @@ begin
         // Create new form of the correct class.
         Page := Details.FPropertyPageClass.Create(self);
         FixFormConstraints (Page);
-        Page.Parent := pnlOptions;
+        Page.Parent := PanelOptions;
         newPage := True;
       end
       else
@@ -549,8 +549,8 @@ begin
 
     FSelectedPage := Page;
   finally
-    SendMessage(pnlOptions.Handle, WM_SETREDRAW, 1, 0);
-    RedrawWindow(pnlOptions.Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
+    SendMessage(PanelOptions.Handle, WM_SETREDRAW, 1, 0);
+    RedrawWindow(PanelOptions.Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
   end
 end;
 
@@ -559,11 +559,11 @@ end;
  |                                                                      |
  | Set the given tree node's data to point to the given details class   |
  *----------------------------------------------------------------------*}
-procedure TfmPropertyBase.SetNodePropertyPageDetails(node: PVirtualNode;Details: TPropertyPageDetails);
+procedure TfmPropertyBase.SetNodePropertyPageDetails(Node: PVirtualNode;Details: TPropertyPageDetails);
 var
   obj: PObject;
 begin
-  obj := vstSections.GetNodeData(node);
+  obj := vstSections.GetNodeData(Node);
 
   if Assigned(obj) then
     obj^ := Details
@@ -631,9 +631,9 @@ begin
   else
   begin
     parentDetails := GetNodePropertyPageDetails(ParentNode);
-    Details := parentDetails.Child [node.Index]
+    Details := parentDetails.Child [Node.Index]
   end;
-  SetNodePropertyPageDetails(node, Details);
+  SetNodePropertyPageDetails(Node, Details);
   if Details.ChildCount > 0 then
     InitialStates := InitialStates + [ivsHasChildren];
 end;
@@ -713,7 +713,7 @@ begin
       if AHelpText <> '' then
         helpText := AHelpText
       else
-        helpText := tempPropertyPage.stSectionDetails.Caption;
+        helpText := tempPropertyPage.LabelSectionDetails.Caption;
 
       minX := tempPropertyPage.Constraints.MinWidth;
       minY := tempPropertyPage.Constraints.MinHeight;
@@ -759,7 +759,7 @@ end;
 {*----------------------------------------------------------------------*
  | function TPropertyPageDetails.GetChildCount                          |
  |                                                                      |
- | Count the children for a given Details node                          |
+ | Count the children for a given details node                          |
  *----------------------------------------------------------------------*}
 function TPropertyPageDetails.GetChildCount: Integer;
 var
@@ -778,17 +778,17 @@ end;
 
 class function TfmPropertyPageDummy.GetDataClass: TPropertyPageDataClass;
 begin
-  Result := TPropertyPageData
+  Result := TPropertyPageData;
 end;
 
 procedure TfmPropertyPageDummy.PopulateControls(AData: TPropertyPageData);
 begin
-  stSectionDetails.Caption := AData.HelpText
+  LabelSectionDetails.Caption := AData.HelpText;
 end;
 
 procedure TfmPropertyBase.FormDestroy(Sender: TObject);
 begin
-  PersistentPosition1.SetValue('Splitter', vstSections.Width);
+  PersistentPosition.SetValue('Splitter', vstSections.Width);
   if not FSaved then
     CancelChanges;
 end;
@@ -797,29 +797,29 @@ procedure TfmPropertyBase.WmUpdateSplitter(var msg: TMessage);
 var
   w: Integer;
 begin
-  w := PersistentPosition1.GetValue('Splitter');
+  w := PersistentPosition.GetValue('Splitter');
 
   if (w > 0) and (w < ClientWidth) then
     vstSections.Width := w;
 end;
 
-procedure TfmPropertyBase.btnApplyClick(Sender: TObject);
+procedure TfmPropertyBase.ButtonApplyClick(Sender: TObject);
 begin
   SaveSettings;
-  PostMessage(Application.MainForm.Handle,  WM_PROPERTIES_CHANGED, 0, 0);
+  PostMessage(Application.MainForm.Handle, WM_PROPERTIES_CHANGED, 0, 0);
 end;
 
-procedure TfmPropertyBase.ExpandAll1Click(Sender: TObject);
+procedure TfmPropertyBase.MenuItemExpandAllClick(Sender: TObject);
 begin
   vstSections.FullExpand;
 end;
 
-procedure TfmPropertyBase.CollapseAll1Click(Sender: TObject);
+procedure TfmPropertyBase.MenuItemCollapseAllClick(Sender: TObject);
 begin
   vstSections.FullCollapse;
 end;
 
-procedure TfmPropertyBase.btnHelpClick(Sender: TObject);
+procedure TfmPropertyBase.ButtonHelpClick(Sender: TObject);
 var
   kw: string;
   co: Integer;
@@ -849,7 +849,7 @@ begin
     Application.HelpKeyWord(kw)
   else
     if co <> 0 then
-      Application.HelpContext(co)
+      Application.HelpContext(co);
 end;
 
 procedure TfmPropertyBase.FormKeyDown(Sender: TObject; var Key: Word;
@@ -857,9 +857,9 @@ procedure TfmPropertyBase.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if key = VK_f1 then
   begin
-    btnHelpClick (nil);
+    ButtonHelpClick (nil);
     Key := 0
-  end
+  end;
 end;
 
 end.

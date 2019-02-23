@@ -47,20 +47,20 @@ const
 
 procedure TfmCursorGraphicsResource.SetHotspot(const ScreenPt: TPoint);
 var
-  pt: TPoint;
-  change: string;
+  Pt: TPoint;
+  Change: string;
 begin
-  pt := ScreenPt;
-  MapWindowPoints (0, BitmapEditor1.Handle, pt, 1);
-  pt.X := pt.X div BitmapEditor1.Magnification;
-  pt.Y := pt.Y div BitmapEditor1.Magnification;
+  Pt := ScreenPt;
+  MapWindowPoints (0, BitmapEditor.Handle, Pt, 1);
+  Pt.X := Pt.X div BitmapEditor.Magnification;
+  Pt.Y := Pt.Y div BitmapEditor.Magnification;
 
-  Cursor.Hotspot := pt.X + pt.Y shl 16;
-  change := rstHotspotChanged;
-  BitmapEditor1.HotSpotX := LoWord (self.Cursor.Hotspot);
-  BitmapEditor1.HotSpotY := HiWord (self.Cursor.Hotspot);
-  BitmapEditor1.Picture := Image1.Picture;      // Set the editor picture
-  SaveResource (change);
+  Cursor.Hotspot := Pt.X + Pt.Y shl 16;
+  Change := rstHotspotChanged;
+  BitmapEditor.HotSpotX := LoWord(Self.Cursor.Hotspot);
+  BitmapEditor.HotSpotY := HiWord(Self.Cursor.Hotspot);
+  BitmapEditor.Picture := Image.Picture;      // Set the editor picture
+  SaveResource(Change);
 end;
 
 procedure TfmCursorGraphicsResource.actImageHotSpotExecute(Sender: TObject);
@@ -71,7 +71,7 @@ end;
 
 function TfmCursorGraphicsResource.GetCursor: TExCursor;
 begin
-  Result := TExCursor (Image1.Picture.Graphic);
+  Result := TExCursor (Image.Picture.Graphic);
 end;
 
 procedure TfmCursorGraphicsResource.PreviewKey(var key: Word;
@@ -80,7 +80,7 @@ begin
   inherited;
 
   case key of
-    VK_MULTIPLY :
+    VK_MULTIPLY:
       SetHotspot(Mouse.CursorPos);
   end;
 end;
@@ -88,33 +88,33 @@ end;
 procedure TfmCursorGraphicsResource.PropertyListBox1PropertyChanged(
   Sender: TObject);
 var
-  change: string;
+  Change: string;
   prop: TPropertyListProperty;
 begin
-  with PropertyListBox1 do
+  with PropertyListBox do
     prop := Properties [SelectedPropertyNo];
 
-  change := '';
+  Change := '';
 
   case Prop.Tag of
-    taHotX :
+    taHotX:
       begin
         Cursor.Hotspot := (Cursor.Hotspot and $ffff0000) or Prop.PropertyValue;
-        change := rstHotspotChanged;
-        BitmapEditor1.HotSpotX := LoWord (self.Cursor.Hotspot);
+        Change := rstHotspotChanged;
+        BitmapEditor.HotSpotX := LoWord (Self.Cursor.Hotspot);
       end;
-    taHotY :
+    taHotY:
       begin
         Cursor.Hotspot := (Cursor.Hotspot and $0000ffff) or (Prop.PropertyValue shl 16);
-        change := rstHotspotChanged;
-        BitmapEditor1.HotSpotY := HiWord (self.Cursor.Hotspot);
+        Change := rstHotspotChanged;
+        BitmapEditor.HotSpotY := HiWord (Self.Cursor.Hotspot);
       end;
   end;
 
-  if change <> '' then
+  if Change <> '' then
   begin
-    BitmapEditor1.Picture := Image1.Picture;      // Set the editor picture
-    SaveResource (change);
+    BitmapEditor.Picture := Image.Picture;      // Set the editor picture
+    SaveResource (Change);
   end
   else
     inherited;
@@ -131,40 +131,40 @@ type
   end;
 procedure TfmCursorGraphicsResource.SetHotspot1Click(Sender: TObject);
 var
-  pt: TPoint;
+  Pt: TPoint;
 begin
-  pt := PopupMenu.PopupPoint;
-  if pt.X = -1 then
-    pt := Mouse.CursorPos;
-  SetHotspot(pt);
-  pt.x := -1;
-  pt.y := -1;
-  TCrackPopupMenu (PopupMenu).SetPopupPoint(pt);
+  Pt := PopupMenu.PopupPoint;
+  if Pt.X = -1 then
+    Pt := Mouse.CursorPos;
+  SetHotspot(Pt);
+  Pt.x := -1;
+  Pt.y := -1;
+  TCrackPopupMenu (PopupMenu).SetPopupPoint(Pt);
 end;
 
 procedure TfmCursorGraphicsResource.SetObject(const Value: TObject);
 begin
   inherited;
 
-  with PropertyListBox1 do                      // Set the properties
+  with PropertyListBox do                      // Set the properties
   begin
     with FindProperty (rstHotX) do
     begin
       Tag := taHotX;
-      PropertyValue := LoWord (self.Cursor.Hotspot);
+      PropertyValue := LoWord (Self.Cursor.Hotspot);
     end;
 
     with FindProperty (rstHotY) do
     begin
       Tag := taHotY;
-      PropertyValue := HiWord (self.Cursor.Hotspot);
+      PropertyValue := HiWord (Self.Cursor.Hotspot);
     end
   end;
 
   Screen.Cursors [crCurrentCursor] := Cursor.Handle;
-  sbThumbnail.Cursor := crCurrentCursor;
-  BitmapEditor1.HotSpotX := LoWord (self.Cursor.Hotspot);
-  BitmapEditor1.HotSpotY := HiWord (self.Cursor.Hotspot);
+  ScrollBoxThumbnail.Cursor := crCurrentCursor;
+  BitmapEditor.HotSpotX := LoWord(Self.Cursor.Hotspot);
+  BitmapEditor.HotSpotY := HiWord(Self.Cursor.Hotspot);
 end;
 
 end.

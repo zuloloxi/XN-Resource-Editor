@@ -8,8 +8,8 @@ uses
 
 type
   TfmGroupResource = class(TfmResource)
-    ScrollBox1: TScrollBox;
-    Image1: TImage;
+    ScrollBox: TScrollBox;
+    Image: TImage;
   protected
     procedure SetObject(const Value: TObject); override;
     function GetImportExportType: TImportExportType; override;
@@ -29,17 +29,17 @@ uses
 
 procedure TfmGroupResource.Copy;
 begin
-  Clipboard.Assign (Image1.Picture.Graphic);
+  Clipboard.Assign(Image.Picture.Graphic);
 end;
 
 function TfmGroupResource.GetCanCopy: Boolean;
 begin
-  Result := True
+  Result := True;
 end;
 
 function TfmGroupResource.GetImportExportType: TImportExportType;
 begin
-  Result := ixPicture
+  Result := ixPicture;
 end;
 
 procedure TfmGroupResource.SetObject(const Value: TObject);
@@ -47,9 +47,9 @@ var
   details: TIconCursorGroupResourceDetails;
 begin
   inherited;
-  
+
   details := obj as TIconCursorGroupResourceDetails;
-  details.GetImage (Image1.Picture);
+  details.GetImage(Image.Picture);
 end;
 
 end.

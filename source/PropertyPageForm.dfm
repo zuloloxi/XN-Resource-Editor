@@ -33,7 +33,7 @@ object fmPropertyPage: TfmPropertyPage
       Align = alBottom
       Shape = bsBottomLine
     end
-    object stSectionDetails: TLabel
+    object LabelSectionDetails: TLabel
       Left = 8
       Top = 6
       Width = 361

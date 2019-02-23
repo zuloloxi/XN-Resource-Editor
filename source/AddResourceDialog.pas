@@ -8,12 +8,12 @@ uses
 
 type
   TdlgAddResource = class(TForm)
-    ListView1: TListView;
-    btnOK: TButton;
-    btnCancel: TButton;
+    ListView: TListView;
+    ButtonOK: TButton;
+    ButtonCancel: TButton;
     procedure FormCreate(Sender: TObject);
-    procedure btnOKClick(Sender: TObject);
-    procedure ListView1DblClick(Sender: TObject);
+    procedure ButtonOKClick(Sender: TObject);
+    procedure ListViewDblClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
     FResourceDetailsClass: TResourceDetailsClass;
@@ -54,30 +54,30 @@ var
   i: Integer;
 begin
   for i := Low (AddableItems) to High (AddableItems) do
-    with ListView1.Items.Add do
+    with ListView.Items.Add do
     begin
-      Caption := GetTypeName (AddableItems[i].GetBaseType);
-      ImageIndex := GetTypeImage (AddableItems[i].GetBaseType);
+      Caption := GetTypeName(AddableItems[i].GetBaseType);
+      ImageIndex := GetTypeImage(AddableItems[i].GetBaseType);
     end
 end;
 
-procedure TdlgAddResource.btnOKClick(Sender: TObject);
+procedure TdlgAddResource.ButtonOKClick(Sender: TObject);
 begin
-  if Assigned(ListView1.Selected) then
-    FResourceDetailsClass := AddableItems[ListView1.Selected.Index]
+  if Assigned(ListView.Selected) then
+    FResourceDetailsClass := AddableItems[ListView.Selected.Index]
   else
-    FResourceDetailsClass := Nil
+    FResourceDetailsClass := nil;
 end;
 
-procedure TdlgAddResource.ListView1DblClick(Sender: TObject);
+procedure TdlgAddResource.ListViewDblClick(Sender: TObject);
 begin
-  btnOKClick (Self);
-  modalResult := mrOK
+  ButtonOKClick(Self);
+  ModalResult := mrOK
 end;
 
 procedure TdlgAddResource.FormResize(Sender: TObject);
 begin
-  ListView1.Columns [0].Width := ListView1.Width - 16;
+  ListView.Columns[0].Width := ListView.Width - 16;
 end;
 
 end.

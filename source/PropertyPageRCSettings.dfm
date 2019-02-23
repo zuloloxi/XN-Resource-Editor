@@ -17,7 +17,7 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
       Width = 278
       ExplicitWidth = 269
     end
-    inherited stSectionDetails: TLabel
+    inherited LabelSectionDetails: TLabel
       Width = 266
       Caption = 
         'Select the method of determining the Include path for .RC file c' +
@@ -47,7 +47,7 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
         WideText = 'Include Header Packages'
       end>
   end
-  object rbCustomIncludePath: TRadioButton
+  object RadioButtonCustomIncludePath: TRadioButton
     Left = 16
     Top = 235
     Width = 177
@@ -55,9 +55,9 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Anchors = [akLeft, akBottom]
     Caption = 'Use a Custo&m Include Path'
     TabOrder = 4
-    OnClick = rbCustomIncludePathClick
+    OnClick = RadioButtonCustomIncludePathClick
   end
-  object edCustomIncludePath: TEdit
+  object EditCustomIncludePath: TEdit
     Left = 32
     Top = 254
     Width = 203
@@ -65,7 +65,7 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 5
   end
-  object btnCustomIncludePath: TButton
+  object ButtonCustomIncludePath: TButton
     Left = 241
     Top = 254
     Width = 21
@@ -74,16 +74,16 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Caption = '...'
     TabOrder = 6
   end
-  object rbCompilerIncludePath: TRadioButton
+  object RadioButtonCompilerIncludePath: TRadioButton
     Left = 16
     Top = 60
     Width = 177
     Height = 17
     Caption = 'Use the &Compiler Include Path'
     TabOrder = 1
-    OnClick = rbCustomIncludePathClick
+    OnClick = RadioButtonCustomIncludePathClick
   end
-  object rbEnvironmentVariableIncludePath: TRadioButton
+  object RadioButtonEnvironmentVariableIncludePath: TRadioButton
     Left = 16
     Top = 203
     Width = 209
@@ -91,6 +91,6 @@ inherited fmPropertyPageRCSettings: TfmPropertyPageRCSettings
     Anchors = [akLeft, akBottom]
     Caption = 'Use the '#39'Include'#39' Environment Variable'
     TabOrder = 3
-    OnClick = rbCustomIncludePathClick
+    OnClick = RadioButtonCustomIncludePathClick
   end
 end

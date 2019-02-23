@@ -1,7 +1,7 @@
 inherited fmGraphicsResource: TfmGraphicsResource
   Left = 256
   Top = 154
-  ActiveControl = PropertyListBox1
+  ActiveControl = PropertyListBox
   Caption = 'Graphics Resource'
   ClientHeight = 507
   ClientWidth = 732
@@ -35,7 +35,7 @@ inherited fmGraphicsResource: TfmGraphicsResource
       Cursor = crVSplit
       Align = alTop
     end
-    object PropertyListBox1: TPropertyListBox
+    object PropertyListBox: TPropertyListBox
       Left = 1
       Top = 1
       Width = 183
@@ -83,9 +83,9 @@ inherited fmGraphicsResource: TfmGraphicsResource
       SpecialButtonDisabledImageIndex = -1
       SpecialButtonHotImageIndex = -1
       SpecialButtonPressedImageIndex = -1
-      OnPropertyChanged = PropertyListBox1PropertyChanged
+      OnPropertyChanged = PropertyListBoxPropertyChanged
     end
-    object sbThumbnail: TScrollBox
+    object ScrollBoxThumbnail: TScrollBox
       Left = 1
       Top = 124
       Width = 183
@@ -95,7 +95,7 @@ inherited fmGraphicsResource: TfmGraphicsResource
       Align = alClient
       PopupMenu = PopupMenu
       TabOrder = 1
-      object Image1: TImage
+      object Image: TImage
         Left = 8
         Top = 8
         Width = 105
@@ -124,7 +124,7 @@ inherited fmGraphicsResource: TfmGraphicsResource
       Align = alClient
       PopupMenu = PopupMenu
       TabOrder = 0
-      object BitmapEditor1: TBitmapEditor
+      object BitmapEditor: TBitmapEditor
         Left = 8
         Top = 8
         Width = 130
@@ -134,11 +134,11 @@ inherited fmGraphicsResource: TfmGraphicsResource
         DoubleBuffered = True
         PopupMenu = PopupMenu
         DrawingTool = dtNone
-        OnChange = BitmapEditor1Change
-        OnEndChange = BitmapEditor1EndChange
-        OnDrawToolChange = BitmapEditor1DrawToolChange
-        OnSelectionRectChange = BitmapEditor1SelectionRectChange
-        OnGetText = BitmapEditor1GetText
+        OnChange = BitmapEditorChange
+        OnEndChange = BitmapEditorEndChange
+        OnDrawToolChange = BitmapEditorDrawToolChange
+        OnSelectionRectChange = BitmapEditorSelectionRectChange
+        OnGetText = BitmapEditorGetText
       end
     end
   end
@@ -187,245 +187,245 @@ inherited fmGraphicsResource: TfmGraphicsResource
       GradientStartColor = clBtnHighlight
       Images = ImageList
       TabOrder = 0
-      object tbSelectRect: TToolButton
+      object ToolButtonSelectRect: TToolButton
         Tag = 15
         Left = 0
         Top = 0
-        Caption = 'actDrawing Tool'
+        Caption = 'Select Rect'
         Grouped = True
         ImageIndex = 0
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbSelectShape: TToolButton
+      object ToolButtonSelectShape: TToolButton
         Tag = 16
         Left = 23
         Top = 0
-        Caption = 'actDrawing Tool'
+        Caption = 'Select Shape'
         Grouped = True
         ImageIndex = 1
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbDropper: TToolButton
+      object ToolButtonDropper: TToolButton
         Tag = 17
         Left = 46
         Top = 0
-        Caption = 'actDrawing Tool'
+        Caption = 'Dropper'
         Grouped = True
         ImageIndex = 2
         Wrap = True
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbEraser: TToolButton
+      object ToolButtonEraser: TToolButton
         Tag = 19
         Left = 0
         Top = 22
-        Caption = 'actDrawing Tool'
+        Caption = 'Eraser'
         Grouped = True
         ImageIndex = 3
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbFloodFill: TToolButton
+      object ToolButtonFloodFill: TToolButton
         Tag = 6
         Left = 23
         Top = 22
-        Caption = 'actDrawing Tool'
+        Caption = 'Flood Fill'
         Grouped = True
         ImageIndex = 4
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbMagnifier: TToolButton
+      object ToolButtonMagnifier: TToolButton
         Tag = 13
         Left = 46
         Top = 22
-        Caption = 'actDrawing Tool'
+        Caption = 'Magnifier'
         Grouped = True
         ImageIndex = 5
         Wrap = True
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbPencil: TToolButton
+      object ToolButtonPencil: TToolButton
         Tag = 1
         Left = 0
         Top = 44
-        Caption = 'actDrawing Tool'
+        Caption = 'Pencil'
         Down = True
         Grouped = True
         ImageIndex = 6
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbBrush: TToolButton
+      object ToolButtonBrush: TToolButton
         Tag = 14
         Left = 23
         Top = 44
-        Caption = 'actDrawing Tool'
+        Caption = 'Brush'
         Grouped = True
         ImageIndex = 7
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbAirbrush: TToolButton
+      object ToolButtonAirbrush: TToolButton
         Tag = 20
         Left = 46
         Top = 44
-        Caption = 'actDrawing Tool'
+        Caption = 'Airbrush'
         Grouped = True
         ImageIndex = 8
         Wrap = True
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object ToolButton10: TToolButton
+      object ToolButtonLine: TToolButton
         Tag = 2
         Left = 0
         Top = 66
-        Caption = 'actDrawing Tool'
+        Caption = 'Line'
         Grouped = True
         ImageIndex = 9
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object ToolButton12: TToolButton
+      object ToolButtonText: TToolButton
         Tag = 18
         Left = 23
         Top = 66
-        Caption = 'actDrawing Tool'
+        Caption = 'Text'
         Grouped = True
         ImageIndex = 11
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbFrameRect: TToolButton
+      object ToolButtonFrameRect: TToolButton
         Tag = 3
         Left = 46
         Top = 66
-        Caption = 'actDrawing Tool'
+        Caption = 'Frame Rect'
         Grouped = True
         ImageIndex = 12
         Wrap = True
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbFillRect: TToolButton
+      object ToolButtonFillRect: TToolButton
         Tag = 4
         Left = 0
         Top = 88
-        Caption = 'actDrawing Tool'
+        Caption = 'Fill Rect'
         Grouped = True
         ImageIndex = 13
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbRect: TToolButton
+      object ToolButtonRect: TToolButton
         Tag = 5
         Left = 23
         Top = 88
-        Caption = 'actDrawing Tool'
+        Caption = 'Rect'
         Grouped = True
         ImageIndex = 14
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbFrameRoundRect: TToolButton
+      object ToolButtonFrameRoundRect: TToolButton
         Tag = 7
         Left = 46
         Top = 88
-        Caption = 'actDrawing Tool'
+        Caption = 'Frame Round Rect'
         Grouped = True
         ImageIndex = 15
         Wrap = True
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbFillRoundRect: TToolButton
+      object ToolButtonFillRoundRect: TToolButton
         Tag = 8
         Left = 0
         Top = 110
-        Caption = 'actDrawing Tool'
+        Caption = 'Round Rect'
         Grouped = True
         ImageIndex = 16
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbRoundRect: TToolButton
+      object ToolButtonRoundRect: TToolButton
         Tag = 9
         Left = 23
         Top = 110
-        Caption = 'actDrawing Tool'
+        Caption = 'Round Rect'
         Grouped = True
         ImageIndex = 17
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbFrameEllipse: TToolButton
+      object ToolButtonFrameEllipse: TToolButton
         Tag = 10
         Left = 46
         Top = 110
-        Caption = 'actDrawing Tool'
+        Caption = 'Frame Ellipse'
         Grouped = True
         ImageIndex = 18
         Wrap = True
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbFillEllipse: TToolButton
+      object ToolButtonFillEllipse: TToolButton
         Tag = 11
         Left = 0
         Top = 132
-        Caption = 'actDrawing Tool'
+        Caption = 'Fill Ellipse'
         Grouped = True
         ImageIndex = 19
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object tbEllipse: TToolButton
+      object ToolButtonEllipse: TToolButton
         Tag = 12
         Left = 23
         Top = 132
-        Caption = 'actDrawing Tool'
+        Caption = 'Ellipse'
         Grouped = True
         ImageIndex = 20
         Style = tbsCheck
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object ToolButton1: TToolButton
+      object ToolButtonGradientHorizontal: TToolButton
         Tag = 21
         Left = 46
         Top = 132
-        Caption = 'ToolButton1'
+        Caption = 'ToolButtonGradientHorizontal'
         ImageIndex = 21
         Wrap = True
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object ToolButton2: TToolButton
+      object ToolButtonGradientVertical: TToolButton
         Tag = 22
         Left = 0
         Top = 154
-        Caption = 'ToolButton2'
+        Caption = 'Gradient Vertical'
         ImageIndex = 22
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object ToolButton3: TToolButton
+      object ToolButtonGradientDiagonal1: TToolButton
         Tag = 23
         Left = 23
         Top = 154
-        Caption = 'ToolButton3'
+        Caption = 'Gradient Diagonal'
         ImageIndex = 23
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
-      object ToolButton4: TToolButton
+      object ToolButtonGradientDiagonal2: TToolButton
         Tag = 24
         Left = 46
         Top = 154
-        Caption = 'ToolButton4'
+        Caption = 'Gradient Diagonal'
         ImageIndex = 24
-        OnClick = tbPencilClick
+        OnClick = ToolButtonPencilClick
       end
     end
   end
@@ -448,30 +448,30 @@ inherited fmGraphicsResource: TfmGraphicsResource
     Font.Style = []
     ParentFont = False
     TabOrder = 4
-    object shpBack: TShape
+    object ShapeBack: TShape
       Left = 19
       Top = 17
       Width = 13
       Height = 14
     end
-    object shpFore: TShape
+    object ShapeFore: TShape
       Left = 12
       Top = 6
       Width = 13
       Height = 14
       Brush.Color = clBlack
     end
-    object ColorSelector1: TColorSelector
+    object ColorSelector: TColorSelector
       Left = 6
       Top = 36
       Width = 60
       Height = 230
       ForegroundColor = clBlack
       BackgroundColor = clBlack
-      OnColorSelect = ColorSelector1ColorSelect
-      OnDblClick = ColorSelector1DblClick
+      OnColorSelect = ColorSelectorColorSelect
+      OnDblClick = ColorSelectorDblClick
     end
-    object pnlTransparent: TPanel
+    object PanelTransparent: TPanel
       Left = 52
       Top = 16
       Width = 13
@@ -483,10 +483,10 @@ inherited fmGraphicsResource: TfmGraphicsResource
       Ctl3D = False
       ParentCtl3D = False
       TabOrder = 1
-      OnDblClick = pnlTransparentDblClick
-      OnMouseDown = pnlTransparentMouseDown
+      OnDblClick = PanelTransparentDblClick
+      OnMouseDown = PanelTransparentMouseDown
     end
-    object TrackBar1: TTrackBar
+    object TrackBar: TTrackBar
       Left = 71
       Top = 27
       Width = 12
@@ -497,7 +497,7 @@ inherited fmGraphicsResource: TfmGraphicsResource
       TabOrder = 2
       ThumbLength = 10
       TickStyle = tsNone
-      OnChange = TrackBar1Change
+      OnChange = TrackBarChange
     end
   end
   object ImageList: TImageList
@@ -1385,27 +1385,27 @@ inherited fmGraphicsResource: TfmGraphicsResource
       Caption = '&Image'
       OnClick = MenuItemImageClick
       object MenuItemAddImage1: TMenuItem
-        Action = actImageAddImage
+        Action = ActionImageAddImage
       end
       object N2: TMenuItem
         Caption = '-'
       end
       object MenuItemZoomIn1: TMenuItem
-        Action = actImageZoomIn
+        Action = ActionImageZoomIn
       end
       object MenuItemZoomOut1: TMenuItem
-        Action = actImageZoomOut
+        Action = ActionImageZoomOut
       end
       object N1: TMenuItem
         Caption = '-'
       end
       object MenuItemToolPalettes1: TMenuItem
         Caption = 'Tool Palettes'
-        object ColorsPalette1: TMenuItem
-          Action = actImageColorsPalette
+        object MenuItemColorsPalette1: TMenuItem
+          Action = ActionImageColorsPalette
         end
-        object ToolsPalette1: TMenuItem
-          Action = actImageToolsPalette
+        object MenuItemToolsPalette: TMenuItem
+          Action = ActionImageToolsPalette
         end
       end
     end
@@ -1413,34 +1413,34 @@ inherited fmGraphicsResource: TfmGraphicsResource
   object ActionList: TActionList
     Left = 440
     Top = 88
-    object actImageZoomIn: TAction
+    object ActionImageZoomIn: TAction
       Category = 'Image'
       Caption = 'Zoom &In'
       ShortCut = 107
-      OnExecute = actImageZoomInExecute
+      OnExecute = ActionImageZoomInExecute
     end
-    object actImageZoomOut: TAction
+    object ActionImageZoomOut: TAction
       Category = 'Image'
       Caption = 'Zoom &Out'
       ShortCut = 109
-      OnExecute = actImageZoomOutExecute
+      OnExecute = ActionImageZoomOutExecute
     end
-    object actImageToolsPalette: TAction
+    object ActionImageToolsPalette: TAction
       Category = 'Image'
       Caption = '&Drawing Tools Palette'
       Checked = True
-      OnExecute = actImageToolsPaletteExecute
+      OnExecute = ActionImageToolsPaletteExecute
     end
-    object actImageColorsPalette: TAction
+    object ActionImageColorsPalette: TAction
       Category = 'Image'
       Caption = '&Colors Palette'
       Checked = True
-      OnExecute = actImageColorsPaletteExecute
+      OnExecute = ActionImageColorsPaletteExecute
     end
-    object actImageAddImage: TAction
+    object ActionImageAddImage: TAction
       Category = 'Image'
       Caption = '&Add Image'
-      OnExecute = actImageAddImageExecute
+      OnExecute = ActionImageAddImageExecute
     end
   end
   object ColorDialog: TColorDialog
@@ -1453,27 +1453,27 @@ inherited fmGraphicsResource: TfmGraphicsResource
     Left = 344
     Top = 88
     object MenuItemAddImage2: TMenuItem
-      Action = actImageAddImage
+      Action = ActionImageAddImage
     end
     object N3: TMenuItem
       Caption = '-'
     end
     object MenuItemZoomIn2: TMenuItem
-      Action = actImageZoomIn
+      Action = ActionImageZoomIn
     end
     object MenuItemZoomOut2: TMenuItem
-      Action = actImageZoomOut
+      Action = ActionImageZoomOut
     end
     object N4: TMenuItem
       Caption = '-'
     end
     object MenuItemToolPalettes2: TMenuItem
       Caption = '&Tool Palettes'
-      object ColorsPalette2: TMenuItem
-        Action = actImageColorsPalette
+      object MenuItemColorsPalette2: TMenuItem
+        Action = ActionImageColorsPalette
       end
-      object DrawingToolsPalette1: TMenuItem
-        Action = actImageToolsPalette
+      object MenuItemDrawingToolsPalette1: TMenuItem
+        Action = ActionImageToolsPalette
       end
     end
   end

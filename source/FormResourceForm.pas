@@ -3,13 +3,13 @@ unit FormResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, StdCtrls, unitResourceRCData;
+  Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls,
+  ResourceForm, unitResourceRCData;
 
 type
   TfmRCDataFormResource = class(TfmResource)
-    Memo1: TMemo;
-    procedure Memo1Exit(Sender: TObject);
+    Memo: TMemo;
+    procedure MemoExit(Sender: TObject);
   private
     FDetails: TRCDataFormResourceDetails;
     procedure SaveResource (const undoDetails: string);
@@ -32,21 +32,21 @@ begin
 
   FDetails := obj as TRCDataFormResourceDetails;
 
-  Memo1.Text := FDetails.Text
+  Memo.Text := FDetails.Text;
 end;
 
-procedure TfmRCDataFormResource.Memo1Exit(Sender: TObject);
+procedure TfmRCDataFormResource.MemoExit(Sender: TObject);
 begin
   inherited;
 
-  if Memo1.CanUndo then
+  if Memo.CanUndo then
    SaveResource(rstFormChange);
 end;
 
 procedure TfmRCDataFormResource.SaveResource(const undoDetails: string);
 begin
   AddUndoEntry(undoDetails);
-  FDetails.Text := Memo1.Text
+  FDetails.Text := Memo.Text;
 end;
 
 end.

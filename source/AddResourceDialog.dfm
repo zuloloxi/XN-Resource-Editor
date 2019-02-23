@@ -20,7 +20,7 @@ object dlgAddResource: TdlgAddResource
     325)
   PixelsPerInch = 96
   TextHeight = 13
-  object ListView1: TListView
+  object ListView: TListView
     Left = 16
     Top = 16
     Width = 250
@@ -39,11 +39,11 @@ object dlgAddResource: TdlgAddResource
     SmallImages = fmMain.ilResources
     TabOrder = 0
     ViewStyle = vsReport
-    OnDblClick = ListView1DblClick
+    OnDblClick = ListViewDblClick
   end
-  object btnOK: TButton
-    Left = 106
-    Top = 280
+  object ButtonOK: TButton
+    Left = 110
+    Top = 278
     Width = 75
     Height = 26
     Anchors = [akRight, akBottom]
@@ -51,11 +51,11 @@ object dlgAddResource: TdlgAddResource
     Default = True
     ModalResult = 1
     TabOrder = 1
-    OnClick = btnOKClick
+    OnClick = ButtonOKClick
   end
-  object btnCancel: TButton
-    Left = 190
-    Top = 280
+  object ButtonCancel: TButton
+    Left = 191
+    Top = 278
     Width = 75
     Height = 26
     Anchors = [akRight, akBottom]

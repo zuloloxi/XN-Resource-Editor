@@ -1,7 +1,7 @@
 inherited fmPackagesResource: TfmPackagesResource
   Left = 219
   Top = 214
-  ActiveControl = pcRequiresContains
+  ActiveControl = PageControlRequiresContains
   Caption = 'fmPackagesResource'
   OnShow = FormShow
   PixelsPerInch = 96
@@ -11,18 +11,18 @@ inherited fmPackagesResource: TfmPackagesResource
     Top = 0
     Height = 455
   end
-  object pcRequiresContains: TPageControl
+  object PageControlRequiresContains: TPageControl
     Left = 188
     Top = 0
     Width = 513
     Height = 455
-    ActivePage = TabSheet3
+    ActivePage = TabSheetContains
     Align = alClient
     TabOrder = 0
-    object TabSheet2: TTabSheet
+    object TabSheetRequires: TTabSheet
       Caption = 'Requires'
       ImageIndex = 1
-      object lvRequires: TListView
+      object ListViewRequires: TListView
         Left = 0
         Top = 0
         Width = 505
@@ -42,10 +42,10 @@ inherited fmPackagesResource: TfmPackagesResource
         ViewStyle = vsReport
       end
     end
-    object TabSheet3: TTabSheet
+    object TabSheetContains: TTabSheet
       Caption = 'Contains'
       ImageIndex = 2
-      object lvContains: TListView
+      object ListViewContains: TListView
         Left = 0
         Top = 0
         Width = 505
@@ -68,7 +68,7 @@ inherited fmPackagesResource: TfmPackagesResource
       end
     end
   end
-  object Panel1: TPanel
+  object PanelMain: TPanel
     Left = 0
     Top = 0
     Width = 185
@@ -77,7 +77,7 @@ inherited fmPackagesResource: TfmPackagesResource
     BevelOuter = bvLowered
     FullRepaint = False
     TabOrder = 1
-    object plbFlags: TPropertyListBox
+    object PropertyListBoxFlags: TPropertyListBox
       Left = 1
       Top = 1
       Width = 183
@@ -85,7 +85,6 @@ inherited fmPackagesResource: TfmPackagesResource
       VertScrollBar.Increment = 17
       VertScrollBar.Range = 102
       Align = alClient
-      AutoScroll = False
       BorderStyle = bsNone
       TabOrder = 0
       TabStop = False
@@ -155,6 +154,10 @@ inherited fmPackagesResource: TfmPackagesResource
           ReadOnly = False
         end>
       ActualValueColWidth = 0
+      SpecialButtonImageIndex = -1
+      SpecialButtonDisabledImageIndex = -1
+      SpecialButtonHotImageIndex = -1
+      SpecialButtonPressedImageIndex = -1
     end
   end
 end

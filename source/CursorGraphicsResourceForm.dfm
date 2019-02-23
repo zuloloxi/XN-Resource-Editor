@@ -11,7 +11,7 @@ inherited fmCursorGraphicsResource: TfmCursorGraphicsResource
   inherited PanelLeft: TPanel
     Height = 500
     ExplicitHeight = 500
-    inherited PropertyListBox1: TPropertyListBox
+    inherited PropertyListBox: TPropertyListBox
       VertScrollBar.Range = 85
       Properties = <
         item
@@ -61,7 +61,7 @@ inherited fmCursorGraphicsResource: TfmCursorGraphicsResource
           ReadOnly = False
         end>
     end
-    inherited sbThumbnail: TScrollBox
+    inherited ScrollBoxThumbnail: TScrollBox
       Height = 375
       ExplicitHeight = 375
     end

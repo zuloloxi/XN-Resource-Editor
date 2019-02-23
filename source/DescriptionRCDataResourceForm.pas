@@ -12,7 +12,7 @@ type
     EditDescription: TEdit;
     procedure EditDescriptionExit(Sender: TObject);
   private
-    procedure SaveResource (const undoDetails: string);
+    procedure SaveResource (const UndoDetails: string);
   protected
     procedure SetObject(const Value: TObject); override;
   public
@@ -33,12 +33,12 @@ resourcestring
 
 procedure TfmRCDataDescriptionResource.SetObject(const Value: TObject);
 var
-  details: TRCDataDescriptionResourceDetails;
+  Details: TRCDataDescriptionResourceDetails;
 begin
   inherited;
 
-  details := Obj as TRCDataDescriptionResourceDetails;
-  EditDescription.Text := details.Description;
+  Details := Obj as TRCDataDescriptionResourceDetails;
+  EditDescription.Text := Details.Description;
 end;
 
 procedure TfmRCDataDescriptionResource.UpdateFonts;
@@ -46,13 +46,13 @@ begin
   UseInternationalFont(EditDescription.Font);
 end;
 
-procedure TfmRCDataDescriptionResource.SaveResource (const undoDetails: string);
+procedure TfmRCDataDescriptionResource.SaveResource (const UndoDetails: string);
 var
-  details: TRCDataDescriptionResourceDetails;
+  Details: TRCDataDescriptionResourceDetails;
 begin
-  AddUndoEntry (undoDetails);
-  details := Obj as TRCDataDescriptionResourceDetails;
-  details.Description := EditDescription.Text;
+  AddUndoEntry (UndoDetails);
+  Details := Obj as TRCDataDescriptionResourceDetails;
+  Details.Description := EditDescription.Text;
 end;
 
 procedure TfmRCDataDescriptionResource.EditDescriptionExit(Sender: TObject);

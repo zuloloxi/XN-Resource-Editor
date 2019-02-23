@@ -20,13 +20,13 @@ type
   end;
 
   TfmPropertyPageRCSettings = class(TfmPropertyPage)
+    ButtonCustomIncludePath: TButton;
+    EditCustomIncludePath: TEdit;
+    RadioButtonCompilerIncludePath: TRadioButton;
+    RadioButtonCustomIncludePath: TRadioButton;
+    RadioButtonEnvironmentVariableIncludePath: TRadioButton;
     vstIncludePackages: TVirtualStringTree;
-    rbCustomIncludePath: TRadioButton;
-    edCustomIncludePath: TEdit;
-    btnCustomIncludePath: TButton;
-    rbCompilerIncludePath: TRadioButton;
-    rbEnvironmentVariableIncludePath: TRadioButton;
-    procedure rbCustomIncludePathClick(Sender: TObject);
+    procedure RadioButtonCustomIncludePathClick(Sender: TObject);
     procedure vstIncludePackagesChecked(Sender: TBaseVirtualTree;
       Node: PVirtualNode);
     procedure vstIncludePackagesGetText(Sender: TBaseVirtualTree;
@@ -38,7 +38,7 @@ type
   private
     FIncludePathPackages: TIncludePathPackages;
     FData: TPropertyPageRCSettingsData;
-    function GetNodePackage (node: PVirtualNode): TIncludePathPackage;
+    function GetNodePackage (Node: PVirtualNode): TIncludePathPackage;
     function GetNodeForPackage (const packageName: string): PVirtualNode;
     procedure UpdateCustomText;
   protected
@@ -67,7 +67,7 @@ end;
 
 procedure TfmPropertyPageRCSettings.PopulateControls(AData: TPropertyPageData);
 var
-  node: PVirtualNode;
+  Node: PVirtualNode;
 begin
   Inherited;
   FIncludePathPackages := TIncludePathPackages.Create;
@@ -78,22 +78,22 @@ begin
   case FData.FIncludePathType of
     includePathPackage:
       begin
-        rbCompilerIncludePath.Checked := True;
-        node := GetNodeForPackage (FData.FIncludePathPackageName);
-        if Assigned(node) then
-          node.CheckState := csCheckedNormal
+        RadioButtonCompilerIncludePath.Checked := True;
+        Node := GetNodeForPackage (FData.FIncludePathPackageName);
+        if Assigned(Node) then
+          Node.CheckState := csCheckedNormal
       end;
 
     includePathEnv:
-      rbEnvironmentVariableIncludePath.Checked:= True;
+      RadioButtonEnvironmentVariableIncludePath.Checked:= True;
 
     includePathCustom:
       begin
-        rbCustomIncludePath.Checked := True;
-        edCustomIncludePath.Text := FData.FCustomIncludePath
+        RadioButtonCustomIncludePath.Checked := True;
+        EditCustomIncludePath.Text := FData.FCustomIncludePath;
       end;
   end;
-  UpdateCustomText
+  UpdateCustomText;
 end;
 
 procedure TfmPropertyPageRCSettings.UpdateActions;
@@ -102,31 +102,31 @@ begin
     includePathPackage:
       begin
         vstIncludePackages.Enabled := True;
-        btnCustomIncludePath.Enabled := False;
-        edCustomIncludePath.Enabled := False;
+        ButtonCustomIncludePath.Enabled := False;
+        EditCustomIncludePath.Enabled := False;
       end;
     includePathCustom:
       begin
         vstIncludePackages.Enabled := False;
-        btnCustomIncludePath.Enabled := True;
-        edCustomIncludePath.Enabled := True;
+        ButtonCustomIncludePath.Enabled := True;
+        EditCustomIncludePath.Enabled := True;
       end;
-    includePathEnv :
+    includePathEnv:
       begin
         vstIncludePackages.Enabled := False;
-        btnCustomIncludePath.Enabled := False;
-        edCustomIncludePath.Enabled := False;
+        ButtonCustomIncludePath.Enabled := False;
+        EditCustomIncludePath.Enabled := False;
       end;
   end
 end;
 
 function TfmPropertyPageRCSettings.GetNodePackage(
-  node: PVirtualNode): TIncludePathPackage;
+  Node: PVirtualNode): TIncludePathPackage;
 var
   data: PObject;
 begin
-  data := PObject(vstIncludePackages.GetNodeData(node));
-  Result := TIncludePathPackage (data^);
+  data := PObject(vstIncludePackages.GetNodeData(Node));
+  Result := TIncludePathPackage(data^);
 end;
 
 function TfmPropertyPageRCSettings.GetNodeForPackage(
@@ -155,7 +155,7 @@ begin
       st := GetEnvironmentVariable ('Include');
   end;
 
-  edCustomIncludePath.Text := st;
+  EditCustomIncludePath.Text := st;
   FData.FCustomIncludePath := st;
 end;
 
@@ -191,8 +191,8 @@ procedure TfmPropertyPageRCSettings.vstIncludePackagesInitNode(
 var
   data: PObject;
 begin
-  data := PObject(vstIncludePackages.GetNodeData(node));
-  data^ := FIncludePathPackages.Package [node^.Index];
+  data := PObject(vstIncludePackages.GetNodeData(Node));
+  data^ := FIncludePathPackages.Package [Node^.Index];
   Node^.CheckType := ctRadioButton ;
 end;
 
@@ -202,7 +202,7 @@ procedure TfmPropertyPageRCSettings.vstIncludePackagesGetText(
 var
   Package: TIncludePathPackage;
 begin
-  Package := GetNodePackage(node);
+  Package := GetNodePackage(Node);
   if Assigned(Package) then
     CellText := Package.Name
 end;
@@ -211,20 +211,20 @@ procedure TfmPropertyPageRCSettings.vstIncludePackagesChecked(
   Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
   inherited;
-  if node.CheckState = csCheckedNormal then
+  if Node.CheckState = csCheckedNormal then
   begin
     FData.FIncludePathPackageName := GetNodePackage (Node).Name;
     UpdateCustomText
   end;
 end;
 
-procedure TfmPropertyPageRCSettings.rbCustomIncludePathClick(Sender: TObject);
+procedure TfmPropertyPageRCSettings.RadioButtonCustomIncludePathClick(Sender: TObject);
 var
   CompilerPath: Boolean;
   p: PVirtualNode;
   Package: TIncludePathPackage;
 begin
-  CompilerPath := rbCompilerIncludePath.Checked;
+  CompilerPath := RadioButtonCompilerIncludePath.Checked;
 
   p := vstIncludePackages.GetFirst;
   while Assigned(p) do
@@ -238,10 +238,10 @@ begin
     p := vstIncludePackages.GetNext(p);
   end;
 
-  if rbCompilerIncludePath.Checked then
+  if RadioButtonCompilerIncludePath.Checked then
     FData.FIncludePathType := includePathPackage
   else
-    if rbEnvironmentVariableIncludePath.Checked then
+    if RadioButtonEnvironmentVariableIncludePath.Checked then
       FData.FIncludePathType := includePathEnv
     else
       FData.FIncludePathType := includePathCustom;

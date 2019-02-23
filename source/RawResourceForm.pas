@@ -8,7 +8,7 @@ uses
 
 type
   TfmRawResource = class(TfmResource)
-    HexDump1: THexDump;
+    HexDump: THexDump;
   protected
     procedure SetObject(const Value: TObject); override;
   end;
@@ -27,8 +27,8 @@ begin
 
   Details := obj as TResourceDetails;
 
-  HexDump1.Address := Details.Data.Memory;
-  HexDump1.DataSize := Details.Data.Size
+  HexDump.Address := Details.Data.Memory;
+  HexDump.DataSize := Details.Data.Size
 end;
 
 end.

@@ -8,13 +8,13 @@ uses
 
 type
   TdlgCloneResource = class(TForm)
-    cbLanguage: TComboBox;
-    btnOK: TButton;
-    btnCancel: TButton;
-    rbByName: TRadioButton;
-    rbByLanguage: TRadioButton;
-    Label1: TLabel;
-    ntedName: TEdit;
+    ComboBoxLanguage: TComboBox;
+    ButtonOK: TButton;
+    ButtonCancel: TButton;
+    RadioButtonByName: TRadioButton;
+    RadioButtonByLanguage: TRadioButton;
+    LabelInfo: TLabel;
+    EditName: TEdit;
     procedure FormShow(Sender: TObject);
   private
     function GetLanguage: LCID;
@@ -41,29 +41,30 @@ var
   i: Integer;
   def: string;
 begin
-  UseInternationalFont(ntedName.Font);
+  UseInternationalFont(EditName.Font);
   if Assigned(ResourceDetails) then
   begin
     if resourceDetails is TStringResourceDetails then
-      ntedName.Text := ResIdToStringsId (ResourceDetails.ResourceName)
+      EditName.Text := ResIdToStringsId (ResourceDetails.ResourceName)
     else
-      ntedName.Text := ResourceDetails.ResourceName;
+      EditName.Text := ResourceDetails.ResourceName;
   end;
 
-  cbLanguage.Items.Add ('- ' + rstNeutral);
+  ComboBoxLanguage.Items.Add ('- ' + rstNeutral);
   def := '-';
 
   for i := 0 to Languages.Count - 1 do
   begin
-    cbLanguage.Items.Add (Languages.Name [i]);
-    if Assigned(ResourceDetails) and (ResourceDetails.ResourceLanguage <> 0) and (DWORD (ResourceDetails.ResourceLanguage) = Languages.LocaleID [i]) then
+    ComboBoxLanguage.Items.Add (Languages.Name [i]);
+    if Assigned(ResourceDetails) and (ResourceDetails.ResourceLanguage <> 0) and
+      (DWORD (ResourceDetails.ResourceLanguage) = Languages.LocaleID [i]) then
       def := Languages.Name [i];
   end;
 
   if def = '-' then
-    cbLanguage.ItemIndex := 0
+    ComboBoxLanguage.ItemIndex := 0
   else
-    cbLanguage.Text := def;
+    ComboBoxLanguage.Text := def;
 end;
 
 function TdlgCloneResource.GetLanguage: LCID;
@@ -71,9 +72,9 @@ var
   i: Integer;
 begin
   Result := 0;
-  if cbLanguage.ItemIndex <> 0 then
+  if ComboBoxLanguage.ItemIndex <> 0 then
     for i := 0 to Languages.Count -1 do
-      if Languages.Name [i] = cbLanguage.Text then
+      if Languages.Name [i] = ComboBoxLanguage.Text then
       begin
         Result := Languages.LocaleID [i];
         Break;
@@ -82,8 +83,8 @@ end;
 
 procedure TdlgCloneResource.UpdateActions;
 begin
-  ntedName.Enabled := rbByName.Checked;
-  cbLanguage.Enabled := rbByLanguage.Checked;
+  EditName.Enabled := RadioButtonByName.Checked;
+  ComboBoxLanguage.Enabled := RadioButtonByLanguage.Checked;
 end;
 
 end.

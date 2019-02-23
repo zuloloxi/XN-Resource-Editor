@@ -1,11 +1,11 @@
 inherited fmRawResource: TfmRawResource
   Left = 216
   Top = 221
-  ActiveControl = HexDump1
+  ActiveControl = HexDump
   Caption = 'fmRawResource'
   PixelsPerInch = 96
   TextHeight = 13
-  object HexDump1: THexDump
+  object HexDump: THexDump
     Left = 0
     Top = 0
     Width = 701

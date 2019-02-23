@@ -43,7 +43,7 @@ type
   TfmPropertyPage = class(TForm)
     Panel1: TPanel;
     Bevel1: TBevel;
-    stSectionDetails: TLabel;
+    LabelSectionDetails: TLabel;
   private
     FAltKeyWord: string;
   protected
@@ -71,7 +71,7 @@ begin
     AData.Initialize;
     AData.FInitialized := True
   end;
-  stSectionDetails.Caption := AData.HelpText;
+  LabelSectionDetails.Caption := AData.HelpText;
   FAltKeyWord := AData.HelpKeyWord;
 end;
 

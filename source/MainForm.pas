@@ -222,7 +222,7 @@ type
     FExaminer: TResourceExaminer;
 
     procedure SetCaption;
-    procedure UpdateDisplay (selectDetails: TResourceDetails);
+    procedure UpdateDisplay(selectDetails: TResourceDetails);
     procedure OpenFile (const fileName: string);
     procedure SwitchView (details: TObject);
     procedure WmInitialize (var msg: TMessage); message WM_INITIALIZE;
@@ -736,7 +736,7 @@ begin
       res := dlg.ResourceDetailsClass.CreateNew (FResourceModule, 0, FResourceModule.GetUniqueResourceName (dlg.ResourceDetailsClass.GetBaseType));
       res.Dirty := True;
       FResourceModule.SortResources;
-      UpdateDisplay (res);
+      UpdateDisplay(res);
     end
   finally
     dlg.Free
@@ -779,7 +779,7 @@ begin
       details := FResourceModule.ResourceDetails [idx - 1]
     else
       details := nil;
-  UpdateDisplay (details);
+  UpdateDisplay(details);
 end;
 
 (*----------------------------------------------------------------------*
@@ -900,7 +900,7 @@ begin
       PersistDirectoryName ['Import'] := ExtractFilePath (OpenDialog1.FileName);
 
       FResourceModule.SortResources;
-      UpdateDisplay (res);
+      UpdateDisplay(res);
     finally
       f.Free
     end
@@ -937,7 +937,7 @@ begin
       PersistDirectoryName ['Import'] := ExtractFilePath (OpenDialog1.FileName);
 
       FResourceModule.SortResources;
-      UpdateDisplay (res)
+      UpdateDisplay(res)
     finally
       f.Free
     end
@@ -995,7 +995,7 @@ begin
     PersistDirectoryName ['Import'] := ExtractFilePath (OpenPictureDialog1.FileName);
 
     FResourceModule.SortResources;
-    UpdateDisplay (res);
+    UpdateDisplay(res);
   end
 
 end;
@@ -1031,7 +1031,7 @@ begin
           if Assigned(r) and (r <> res) and (r.ResourceLanguage = newLanguage) then
             raise Exception.Create(rstDuplicateResourceName);
 
-          fm.AddUndoEntry (rstChangeResourceProperties);
+          fm.AddUndoEntry(rstChangeResourceProperties);
 
 
           if newLanguage <> res.ResourceLanguage then
@@ -1184,7 +1184,7 @@ procedure TfmMain.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if Assigned(fmResourceObject) then
   begin
-    fmResourceObject.PreviewKey (key, Shift);
+    fmResourceObject.PreviewKey(key, Shift);
     FIgnoreChar := key = 0;
   end
 end;
@@ -1234,7 +1234,7 @@ begin
   Result := '';
   reg := TRegistry.Create(KEY_READ);
   try
-    if reg.OpenKey ('\' + PersistentPosition1.ApplicationKey + '\Directories', False) then
+    if reg.OpenKey('\' + PersistentPosition1.ApplicationKey + '\Directories', False) then
       Result := reg.ReadString (section);
   finally
     reg.Free
@@ -1334,7 +1334,7 @@ begin
     item := TMenuItem (sender);
     p := Pos (' ', Item.Caption);
     if p > 0 then
-      OpenFile (Copy (Item.Caption, p + 1, MaxInt))
+      OpenFile (Copy(Item.Caption, p + 1, MaxInt))
   end
 end;
 
@@ -1441,7 +1441,7 @@ begin
       if p = 0 then
         fName := fName + '.res'
       else
-        fName := Copy (s, 1, p - 1) + '.res';
+        fName := Copy(s, 1, p - 1) + '.res';
     end;
 
     SaveDialog.FileName := fName;
@@ -1451,7 +1451,7 @@ begin
     begin
       s := ExtractFileExt(fName);
       if Length (s) > 0 then
-        s := Copy (s, 2, MaxInt);
+        s := Copy(s, 2, MaxInt);
     end
     else
       if FResourceModule is TResModule then
@@ -1491,7 +1491,7 @@ begin
           res := newModule.FindResource(tp, nm, lg)
         else
           res := Nil;
-        UpdateDisplay (res);
+        UpdateDisplay(res);
       end;
       FResourceModule.SaveToFile (SaveDialog.FileName);
       FileName := SaveDialog.FileName;
@@ -1571,7 +1571,7 @@ var
 begin
   reg := TRegistry.Create(KEY_READ or KEY_WRITE);
   try
-    if reg.OpenKey ('\' + PersistentPosition1.ApplicationKey + '\Directories', True) then
+    if reg.OpenKey('\' + PersistentPosition1.ApplicationKey + '\Directories', True) then
       reg.WriteString (section, Value)
   finally
     reg.Free
@@ -1738,7 +1738,7 @@ end;
  |                                                                      |
  | Update the display by building the tree view.                        |
  *----------------------------------------------------------------------*)
-procedure TfmMain.UpdateDisplay (selectDetails: TResourceDetails);
+procedure TfmMain.UpdateDisplay(selectDetails: TResourceDetails);
 var
   resSection: TResExamSection;
 
@@ -1803,7 +1803,7 @@ begin
       res := TIconCursorResourceDetails(CloneResource (res, '', -1));
       grp.AddToGroup (res);
       FResourceModule.SortResources;
-      UpdateDisplay (res);
+      UpdateDisplay(res);
     end
   end
 end;
@@ -1866,12 +1866,12 @@ begin
       dlg.ResourceDetails := res;
       if dlg.ShowModal = mrOk then
       begin
-        if dlg.rbByLanguage.Checked then
+        if dlg.RadioButtonByLanguage.Checked then
           res := CloneResource (res, '', dlg.Language)
         else
-          res := CloneResource (res, dlg.ntedName.Text, -1);
+          res := CloneResource (res, dlg.EditName.Text, -1);
         FResourceModule.SortResources;
-        UpdateDisplay (res)
+        UpdateDisplay(res);
       end
     finally
       dlg.Free
