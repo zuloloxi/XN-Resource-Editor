@@ -40,7 +40,9 @@ uses
   IconCursorGraphicsResourceForm in 'IconCursorGraphicsResourceForm.pas' {fmIconCursorGraphicsResource},
   CursorGraphicsResourceForm in 'CursorGraphicsResourceForm.pas' {fmCursorGraphicsResource},
   IconGraphicsResourceForm in 'IconGraphicsResourceForm.pas' {fmIconGraphicsResource},
-  FormTextInput in 'FormTextInput.pas' {fmTextInput};
+  FormTextInput in 'FormTextInput.pas' {fmTextInput},
+  ResourceObjectForm in 'components\ResourceObjectForm.pas' {fmResourceObject},
+  ResourceForm in 'components\ResourceForm.pas' {fmResourceForm};
 
 {$R *.RES}
 {$R i.res}

@@ -44,7 +44,6 @@ type
     function GetCanPaste: Boolean; virtual;
     function GetCanSelectAll: Boolean; virtual;
     function GetCanDelete: Boolean; virtual;
-
   public
     procedure AddUndoEntry(const UndoDetails: string);
     procedure Undo;
@@ -114,7 +113,7 @@ type
 
 var
   gUndoDetails: TObjectList;
-  gInternationalFont: TFont = Nil;
+  gInternationalFont: TFont = nil;
 
 {$R *.DFM}
 
@@ -259,7 +258,7 @@ begin
     Result := Details.FUndoStack.Count > 0
   end
   else
-    Result := False
+    Result := False;
 end;
 
 (*----------------------------------------------------------------------*
@@ -270,7 +269,7 @@ end;
  *----------------------------------------------------------------------*)
 function TfmResource.GetImportExportType: TImportExportType;
 begin
-  Result := ixNone
+  Result := ixNone;
 end;
 
 (*----------------------------------------------------------------------*
@@ -329,14 +328,13 @@ begin
       Entry := TUndoEntry(Details.FUndoStack.Peek);
 
       if Assigned(Entry) then
-        Result := Entry.FDetails
-    end
-  end
+        Result := Entry.FDetails;
+    end;
+  end;
 end;
 
 procedure TfmResource.Paste;
 begin
-
 end;
 
 (*----------------------------------------------------------------------*
@@ -352,7 +350,7 @@ begin
   begin
     Details := TUndoDetails(resourceDetails.Tag);
     Details.Redo;
-  end
+  end;
 end;
 
 (*----------------------------------------------------------------------*

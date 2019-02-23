@@ -24,7 +24,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ActnList, Menus, ExtCtrls, ComCtrls, ImgList, ToolWin, Vcl.Imaging.GifImg,
   ResourceForm, cmpPropertyListBox, cmpBitmapEditor, unitResourceGraphics,
-  cmpColorSelector, unitExIcon, cmpSizingPageControl;
+  cmpColorSelector, unitExIcon, cmpSizingPageControl, System.Actions,
+  System.ImageList;
 
 const
   WM_STATUSBAR = WM_USER + $203;
@@ -32,81 +33,81 @@ const
 
 type
   TfmGraphicsResource = class(TfmResource)
-    pnlLeft: TPanel;
-    Splitter1: TSplitter;
-    PropertyListBox1: TPropertyListBox;
-    Splitter2: TSplitter;
-    sbThumbnail: TScrollBox;
-    Image1: TImage;
-    Panel1: TPanel;
-    ScrollBox2: TScrollBox;
-    BitmapEditor1: TBitmapEditor;
-    SizingPageControl1: TSizingPageControl;
-    pnlGraphics: TPanel;
-    ImageList1: TImageList;
-    pnlColours: TPanel;
-    shpBack: TShape;
-    shpFore: TShape;
-    ColorSelector1: TColorSelector;
-    pnlTransparent: TPanel;
-    TrackBar1: TTrackBar;
-    ToolBar1: TToolBar;
-    tbSelectRect: TToolButton;
-    tbSelectShape: TToolButton;
-    tbDropper: TToolButton;
-    tbEraser: TToolButton;
-    tbFloodFill: TToolButton;
-    tbMagnifier: TToolButton;
-    tbPencil: TToolButton;
-    tbBrush: TToolButton;
-    tbAirbrush: TToolButton;
-    ToolButton10: TToolButton;
-    ToolButton12: TToolButton;
-    tbFrameRect: TToolButton;
-    tbFillRect: TToolButton;
-    tbRect: TToolButton;
-    tbFrameRoundRect: TToolButton;
-    tbFillRoundRect: TToolButton;
-    tbRoundRect: TToolButton;
-    tbFrameEllipse: TToolButton;
-    tbFillEllipse: TToolButton;
-    tbEllipse: TToolButton;
-    MainMenu1: TMainMenu;
-    ActionList1: TActionList;
-    mnuImage: TMenuItem;
+    actImageAddImage: TAction;
+    actImageColorsPalette: TAction;
+    actImageToolsPalette: TAction;
     actImageZoomIn: TAction;
     actImageZoomOut: TAction;
-    ZoomIn1: TMenuItem;
-    ZoomOut1: TMenuItem;
-    ColorDialog1: TColorDialog;
-    actImageToolsPalette: TAction;
-    actImageColorsPalette: TAction;
-    N1: TMenuItem;
-    ToolPalettes1: TMenuItem;
+    ActionList: TActionList;
+    BitmapEditor1: TBitmapEditor;
+    ColorDialog: TColorDialog;
+    ColorSelector1: TColorSelector;
     ColorsPalette1: TMenuItem;
-    ToolsPalette1: TMenuItem;
-    actImageAddImage: TAction;
-    AddImage1: TMenuItem;
-    N2: TMenuItem;
-    PopupMenu1: TPopupMenu;
-    AddImage2: TMenuItem;
-    N3: TMenuItem;
-    ZoomIn2: TMenuItem;
-    ZoomOut2: TMenuItem;
-    N4: TMenuItem;
-    ToolPalettes2: TMenuItem;
     ColorsPalette2: TMenuItem;
     DrawingToolsPalette1: TMenuItem;
+    Image1: TImage;
+    ImageList: TImageList;
+    MainMenu: TMainMenu;
+    MenuItemAddImage1: TMenuItem;
+    MenuItemAddImage2: TMenuItem;
+    MenuItemImage: TMenuItem;
+    MenuItemToolPalettes1: TMenuItem;
+    MenuItemToolPalettes2: TMenuItem;
+    MenuItemZoomIn1: TMenuItem;
+    MenuItemZoomIn2: TMenuItem;
+    MenuItemZoomOut1: TMenuItem;
+    MenuItemZoomOut2: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    PanelColors: TPanel;
+    PanelGraphics: TPanel;
+    PanelLeft: TPanel;
+    PanelMain: TPanel;
+    pnlTransparent: TPanel;
+    PopupMenu: TPopupMenu;
+    PropertyListBox1: TPropertyListBox;
+    sbThumbnail: TScrollBox;
+    ScrollBox2: TScrollBox;
+    shpBack: TShape;
+    shpFore: TShape;
+    SizingPageControl: TSizingPageControl;
+    Splitter: TSplitter;
+    Splitter2: TSplitter;
+    tbAirbrush: TToolButton;
+    tbBrush: TToolButton;
+    tbDropper: TToolButton;
+    tbEllipse: TToolButton;
+    tbEraser: TToolButton;
+    tbFillEllipse: TToolButton;
+    tbFillRect: TToolButton;
+    tbFillRoundRect: TToolButton;
+    tbFloodFill: TToolButton;
+    tbFrameEllipse: TToolButton;
+    tbFrameRect: TToolButton;
+    tbFrameRoundRect: TToolButton;
+    tbMagnifier: TToolButton;
+    tbPencil: TToolButton;
+    tbRect: TToolButton;
+    tbRoundRect: TToolButton;
+    tbSelectRect: TToolButton;
+    tbSelectShape: TToolButton;
+    ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton4: TToolButton;
+    ToolButton10: TToolButton;
+    ToolButton12: TToolButton;
+    ToolsPalette1: TMenuItem;
+    TrackBar1: TTrackBar;
     procedure BitmapEditor1GetText(sender: TObject; font: TFont;
       var txt: WideString);
     procedure FormShow(Sender: TObject);
-    procedure SizingPageControl1DockDrop(Sender: TObject;
+    procedure SizingPageControlDockDrop(Sender: TObject;
       Source: TDragDockObject; X, Y: Integer);
-    procedure SizingPageControl1UnDock(Sender: TObject; Client: TControl;
+    procedure SizingPageControlUnDock(Sender: TObject; Client: TControl;
       NewTarget: TWinControl; var Allow: Boolean);
     procedure ColorSelector1ColorSelect(Sender: TObject);
     procedure tbPencilClick(Sender: TObject);
@@ -123,9 +124,9 @@ type
     procedure TrackBar1Change(Sender: TObject);
     procedure actImageColorsPaletteExecute(Sender: TObject);
     procedure actImageToolsPaletteExecute(Sender: TObject);
-    procedure mnuImageClick(Sender: TObject);
+    procedure MenuItemImageClick(Sender: TObject);
     procedure BitmapEditor1SelectionRectChange(Sender: TObject);
-    procedure PopupMenu1Popup(Sender: TObject);
+    procedure PopupMenuPopup(Sender: TObject);
     procedure actImageAddImageExecute(Sender: TObject);
   private
     FPCWidth: Integer;
@@ -335,14 +336,14 @@ begin
   BitmapEditor1.DrawingTool := dtPencil;
                                                 // Save the palette panel Width,
                                                 // so we can restore it if we dock.
-  FPCWidth := pnlGraphics.Width;
-  if pnlColours.Width > FPCWidth then
-    FPCWidth := pnlColours.Width;
+  FPCWidth := PanelGraphics.Width;
+  if PanelColors.Width > FPCWidth then
+    FPCWidth := PanelColors.Width;
 
 
                                                 // Manually dock the panels
-  pnlGraphics.ManualDock (SizingPageControl1, nil, alNone);
-  pnlColours.ManualDock (SizingPageControl1, nil, alNone);
+  PanelGraphics.ManualDock(SizingPageControl, nil, alNone);
+  PanelColors.ManualDock(SizingPageControl, nil, alNone);
 end;
 
 (*----------------------------------------------------------------------*
@@ -351,12 +352,12 @@ end;
  | When a panel is dropped on the page control (which creates a new     |
  | tab) - set the tab's caption                                         |
  *----------------------------------------------------------------------*)
-procedure TfmGraphicsResource.SizingPageControl1DockDrop(Sender: TObject;
+procedure TfmGraphicsResource.SizingPageControlDockDrop(Sender: TObject;
   Source: TDragDockObject; X, Y: Integer);
 var
   i: Integer;
 begin
-  with SizingPageControl1 do
+  with SizingPageControl do
   begin
     for i := 0 to PageCount - 1 do
       Pages [i].Caption := TPanel (Pages [i].Controls [0]).Caption;
@@ -371,13 +372,13 @@ end;
  |                                                                      |
  | A panel is being undocked.  Set size to 0 if it's the last one.      |
  *----------------------------------------------------------------------*)
-procedure TfmGraphicsResource.SizingPageControl1UnDock(Sender: TObject;
+procedure TfmGraphicsResource.SizingPageControlUnDock(Sender: TObject;
   Client: TControl; NewTarget: TWinControl; var Allow: Boolean);
 begin
                                 // If we're undocking the last tab, set the
                                 // width to 0
-  if SizingPageControl1.PageCount = 1 then
-    SizingPageControl1.Width := 0;
+  if SizingPageControl.PageCount = 1 then
+    SizingPageControl.Width := 0;
 end;
 
 (*----------------------------------------------------------------------*
@@ -411,7 +412,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmGraphicsResource.actImageZoomInExecute(Sender: TObject);
 begin
-  BitmapEditor1.ZoomIn
+  BitmapEditor1.ZoomIn;
 end;
 
 (*----------------------------------------------------------------------*
@@ -421,7 +422,7 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmGraphicsResource.actImageZoomOutExecute(Sender: TObject);
 begin
-  BitmapEditor1.ZoomOut
+  BitmapEditor1.ZoomOut;
 end;
 
 (*----------------------------------------------------------------------*
@@ -431,7 +432,7 @@ end;
  *----------------------------------------------------------------------*)
 function TfmGraphicsResource.GetMenuItem: TMenuItem;
 begin
-  Result := mnuImage
+  Result := MenuItemImage;
 end;
 
 (*----------------------------------------------------------------------*
@@ -442,11 +443,11 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmGraphicsResource.ColorSelector1DblClick(Sender: TObject);
 begin
-  ColorDialog1.Color := BitmapEditor1.DrawPen.Color;
-  If ColorDialog1.Execute then
+  ColorDialog.Color := BitmapEditor1.DrawPen.Color;
+  if ColorDialog.Execute then
   begin
     // Adjust the palette in the colour selector
-    ColorSelector1.SetSelectedPaletteColor (ColorDialog1.Color);
+    ColorSelector1.SetSelectedPaletteColor (ColorDialog.Color);
 
     // Change the thumbnail palette...
     Image1.Picture.Graphic.Palette := ColorSelector1.Palette;
@@ -557,11 +558,11 @@ end;
 procedure TfmGraphicsResource.pnlTransparentDblClick(Sender: TObject);
 begin
   inherited;
-  ColorDialog1.Color := BitmapEditor1.TransparentColor;
-  If ColorDialog1.Execute then
+  ColorDialog.Color := BitmapEditor1.TransparentColor;
+  if ColorDialog.Execute then
   begin
-    BitmapEditor1.TransparentColor := ColorDialog1.Color;
-    pnlTransparent.Color := ColorDialog1.Color
+    BitmapEditor1.TransparentColor := ColorDialog.Color;
+    pnlTransparent.Color := ColorDialog.Color
   end
 end;
 
@@ -890,18 +891,18 @@ end;
 procedure TfmGraphicsResource.actImageColorsPaletteExecute(
   Sender: TObject);
 begin
-  pnlColours.Visible := not pnlColours.Visible;
+  PanelColors.Visible := not PanelColors.Visible;
 end;
 
 procedure TfmGraphicsResource.actImageToolsPaletteExecute(Sender: TObject);
 begin
-  pnlGraphics.Visible := not pnlGraphics.Visible
+  PanelGraphics.Visible := not PanelGraphics.Visible
 end;
 
-procedure TfmGraphicsResource.mnuImageClick(Sender: TObject);
+procedure TfmGraphicsResource.MenuItemImageClick(Sender: TObject);
 begin
-  actImageToolsPalette.Checked := pnlGraphics.Visible;
-  actImageColorsPalette.Checked := pnlColours.Visible
+  actImageToolsPalette.Checked := PanelGraphics.Visible;
+  actImageColorsPalette.Checked := PanelColors.Visible
 end;
 
 procedure TfmGraphicsResource.BitmapEditor1SelectionRectChange(
@@ -918,10 +919,10 @@ begin
   SendMessage(Application.MainForm.Handle, WM_STATUSBAR, 0, Integer(PChar (Msg)))
 end;
 
-procedure TfmGraphicsResource.PopupMenu1Popup(Sender: TObject);
+procedure TfmGraphicsResource.PopupMenuPopup(Sender: TObject);
 begin
-  actImageToolsPalette.Checked := pnlGraphics.Visible;
-  actImageColorsPalette.Checked := pnlColours.Visible
+  actImageToolsPalette.Checked := PanelGraphics.Visible;
+  actImageColorsPalette.Checked := PanelColors.Visible
 end;
 
 procedure TfmGraphicsResource.actImageAddImageExecute(Sender: TObject);
@@ -951,11 +952,11 @@ begin
 
   dt := BitmapEditor1.DrawingTool in [dtDropper, dtMagnifier];
   if dt then
-    PopupMenu1.AutoPopup := False
+    PopupMenu.AutoPopup := False
   else
-    if PopupMenu1.AutoPopup = False then
+    if PopupMenu.AutoPopup = False then
       if not(ssRight in KeyboardStateToShiftState) then
-        PopupMenu1.AutoPopup := True
+        PopupMenu.AutoPopup := True
 end;
 
 end.

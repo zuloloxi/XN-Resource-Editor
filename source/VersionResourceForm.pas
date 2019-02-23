@@ -14,7 +14,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, StdCtrls, ComCtrls, ExtCtrls, Menus, ActnList,
+  ResourceForm, StdCtrls, ComCtrls, ExtCtrls, Menus, ActnList, Actions,
   cmpPropertyListBox, unitResourceVersionInfo, cmpCWRichEdit;
 
 //=======================================================================
@@ -22,37 +22,37 @@ uses
 
 type
   TfmVersionResource = class(TfmResource)
-    ActionList1: TActionList;
-    actStringAddString: TAction;
-    actStringDeleteString: TAction;
-    actStringModifyString: TAction;
-    actStringModifyStringName: TAction;
-    actStringModifyStringName1: TMenuItem;
-    AddString2: TMenuItem;
-    DeleteString2: TMenuItem;
-    lvVersionStrings: TListView;
-    MainMenu1: TMainMenu;
-    mmoMessage: TExRichEdit;
-    mnuAddString: TMenuItem;
-    mnuDeleteString: TMenuItem;
-    mnuModifyString: TMenuItem;
-    mnuStrings: TMenuItem;
-    ModifyString2: TMenuItem;
-    ModifyStringName1: TMenuItem;
-    Panel1: TPanel;
-    PopupMenu1: TPopupMenu;
-    PropertyListBox1: TPropertyListBox;
-    Splitter1: TSplitter;
+    ActionList: TActionList;
+    ActionStringAddString: TAction;
+    ActionStringDeleteString: TAction;
+    ActionStringModifyString: TAction;
+    ActionStringModifyStringName: TAction;
+    ListViewVersionStrings: TListView;
+    MainMenu: TMainMenu;
+    MenuItemAddString1: TMenuItem;
+    MenuItemAddString2: TMenuItem;
+    MenuItemDeleteString1: TMenuItem;
+    MenuItemDeleteString2: TMenuItem;
+    MenuItemModifyString1: TMenuItem;
+    MenuItemModifyString2: TMenuItem;
+    MenuItemModifyStringName2: TMenuItem;
+    MenuItemStringModifyStringName1: TMenuItem;
+    MenuItemStrings: TMenuItem;
+    Panel: TPanel;
+    PopupMenu: TPopupMenu;
+    PropertyListBox: TPropertyListBox;
+    RichEditMessage: TExRichEdit;
+    Splitter: TSplitter;
     procedure FormResize(Sender: TObject);
-    procedure actStringDeleteStringExecute(Sender: TObject);
-    procedure actStringModifyStringExecute(Sender: TObject);
-    procedure mmoMessageExit(Sender: TObject);
-    procedure lvVersionStringsEdited(Sender: TObject; Item: TListItem;
+    procedure ActionStringDeleteStringExecute(Sender: TObject);
+    procedure ActionStringModifyStringExecute(Sender: TObject);
+    procedure RichEditMessageExit(Sender: TObject);
+    procedure ListViewVersionStringsEdited(Sender: TObject; Item: TListItem;
       var S: String);
-    procedure actStringModifyStringNameExecute(Sender: TObject);
-    procedure lvVersionStringsDblClick(Sender: TObject);
-    procedure actStringAddStringExecute(Sender: TObject);
-    procedure PropertyListBox1PropertyChanged(Sender: TObject);
+    procedure ActionStringModifyStringNameExecute(Sender: TObject);
+    procedure ListViewVersionStringsDblClick(Sender: TObject);
+    procedure ActionStringAddStringExecute(Sender: TObject);
+    procedure PropertyListBoxPropertyChanged(Sender: TObject);
   private
     FInitializing: Boolean;
     FSelectedItem: TListItem;
@@ -177,18 +177,18 @@ end;
  *----------------------------------------------------------------------*)
 function TfmVersionResource.GetMenuItem: TMenuItem;
 begin
-  Result := mnuStrings
+  Result := MenuItemStrings;
 end;
 
 (*----------------------------------------------------------------------*
  | TfmVersionResource.SaveFlags                                         |
  |                                                                      |
- | Save the version flags, product version and file version if they've  |
+ | Save the version Flags, product version and file version if they've  |
  | changed.                                                             |
  *----------------------------------------------------------------------*)
 procedure TfmVersionResource.SaveFlags;
 var
-  flags: TVersionFileFlags;
+  Flags: TVersionFileFlags;
   v: TULargeInteger;
 begin
   if not FInitializing then     // Ignore check box 'OnClick' handlers
@@ -196,21 +196,21 @@ begin
 
     with FDetails do
     begin
-      flags := FileFlags;
-      if PropertyListBox1.Properties [prDebug].PropertyValue then flags := flags + [ffDebug] else flags := flags - [ffDebug];
-      if PropertyListBox1.Properties [prInferred].PropertyValue then flags := flags + [ffInfoInferred] else flags := flags - [ffInfoInferred];
-      if PropertyListBox1.Properties [prPatched].PropertyValue then flags := flags + [ffPatched] else flags := flags - [ffPatched];
-      if PropertyListBox1.Properties [prPreRelease].PropertyValue then flags := flags + [ffPreRelease] else flags := flags - [ffPreRelease];
-      if PropertyListBox1.Properties [prPrivateBuild].PropertyValue then flags := flags + [ffPrivateBuild] else flags := flags - [ffPrivateBuild];
-      if PropertyListBox1.Properties [prSpecialBuild].PropertyValue then flags := flags + [ffSpecialBuild] else flags := flags - [ffSpecialBuild];
+      Flags := FileFlags;
+      if PropertyListBox.Properties [prDebug].PropertyValue then Flags := Flags + [ffDebug] else Flags := Flags - [ffDebug];
+      if PropertyListBox.Properties [prInferred].PropertyValue then Flags := Flags + [ffInfoInferred] else Flags := Flags - [ffInfoInferred];
+      if PropertyListBox.Properties [prPatched].PropertyValue then Flags := Flags + [ffPatched] else Flags := Flags - [ffPatched];
+      if PropertyListBox.Properties [prPreRelease].PropertyValue then Flags := Flags + [ffPreRelease] else Flags := Flags - [ffPreRelease];
+      if PropertyListBox.Properties [prPrivateBuild].PropertyValue then Flags := Flags + [ffPrivateBuild] else Flags := Flags - [ffPrivateBuild];
+      if PropertyListBox.Properties [prSpecialBuild].PropertyValue then Flags := Flags + [ffSpecialBuild] else Flags := Flags - [ffSpecialBuild];
 
-      if flags <> FileFlags then        // Has a flag changed ?
+      if Flags <> FileFlags then        // Has a flag changed ?
       begin
         AddUndoEntry (rstChangeFlags);
-        FileFlags := flags
+        FileFlags := Flags
       end;
 
-      v := StringToVersion (PropertyListBox1.Properties [prProductVersion].PropertyValue);
+      v := StringToVersion (PropertyListBox.Properties [prProductVersion].PropertyValue);
                                         // Has the product version changed ??
       if _ULARGE_INTEGER(v).QuadPart <> _ULARGE_INTEGER(ProductVersion).QuadPart then
       begin
@@ -218,7 +218,7 @@ begin
         ProductVersion := v
       end;
 
-      v := StringToVersion (PropertyListBox1.Properties [prFileVersion].PropertyValue);
+      v := StringToVersion (PropertyListBox.Properties [prFileVersion].PropertyValue);
                                         // Has the file version changed ??
       if _ULARGE_INTEGER(v).QuadPart <> _ULARGE_INTEGER(FileVersion).QuadPart then
       begin
@@ -236,9 +236,9 @@ end;
  *----------------------------------------------------------------------*)
 procedure TfmVersionResource.SetObject(const Value: TObject);
 var
-  fVersion: TULargeInteger;
-  pVersion: TULargeInteger;
-  flags: TVersionFileFlags;
+  FilVersion: TULargeInteger;
+  ProdVersion: TULargeInteger;
+  Flags: TVersionFileFlags;
   k: TVersionStringValue;
   i: Integer;
 begin
@@ -247,24 +247,24 @@ begin
   FInitializing := True;
   with FDetails do
   try
-    fVersion := FileVersion;
-    pVersion := ProductVersion;
-    flags := FileFlags;
+    FilVersion := FileVersion;
+    ProdVersion := ProductVersion;
+    Flags := FileFlags;
 
     // Initialize the form
 
-    PropertyListBox1.Properties [prFileVersion].PropertyValue := VersionToString (fVersion);
-    PropertyListBox1.Properties [prProductVersion].PropertyValue := VersionToString (pVersion);
+    PropertyListBox.Properties [prFileVersion].PropertyValue := VersionToString (FilVersion);
+    PropertyListBox.Properties [prProductVersion].PropertyValue := VersionToString (ProdVersion);
 
-    PropertyListBox1.Properties [prDebug].PropertyValue := ffDebug in flags;
-    PropertyListBox1.Properties [prInferred].PropertyValue := ffInfoInferred in flags;
-    PropertyListBox1.Properties [prPatched].PropertyValue := ffPatched in flags;
-    PropertyListBox1.Properties [prPreRelease].PropertyValue := ffPreRelease in flags;
-    PropertyListBox1.Properties [prPrivateBuild].PropertyValue := ffPrivateBuild in flags;
-    PropertyListBox1.Properties [prSpecialBuild].PropertyValue := ffSpecialBuild in flags;
+    PropertyListBox.Properties [prDebug].PropertyValue := ffDebug in Flags;
+    PropertyListBox.Properties [prInferred].PropertyValue := ffInfoInferred in Flags;
+    PropertyListBox.Properties [prPatched].PropertyValue := ffPatched in Flags;
+    PropertyListBox.Properties [prPreRelease].PropertyValue := ffPreRelease in Flags;
+    PropertyListBox.Properties [prPrivateBuild].PropertyValue := ffPrivateBuild in Flags;
+    PropertyListBox.Properties [prSpecialBuild].PropertyValue := ffSpecialBuild in Flags;
 
-    lvVersionStrings.Items.BeginUpdate;
-    with lvVersionStrings.Items do
+    ListViewVersionStrings.Items.BeginUpdate;
+    with ListViewVersionStrings.Items do
     try
       Clear;
       for i := 0 to KeyCount - 1 do
@@ -275,7 +275,7 @@ begin
           SubItems.Add (StringToCString (k.Value));
         end;
       if Count > 0 then
-        lvVersionStrings.ItemIndex := 0
+        ListViewVersionStrings.ItemIndex := 0
     finally
       EndUpdate
     end
@@ -289,27 +289,27 @@ end;
  |                                                                      |
  | Delete the selected version string                                   |
  *----------------------------------------------------------------------*)
-procedure TfmVersionResource.actStringDeleteStringExecute(Sender: TObject);
+procedure TfmVersionResource.ActionStringDeleteStringExecute(Sender: TObject);
 var
   n: Integer;
 begin
-  if Assigned(lvVersionStrings.Selected) then
+  if Assigned(ListViewVersionStrings.Selected) then
   begin
     AddUndoEntry (rstDeleteString);
-    n := lvVersionStrings.Selected.Index;
+    n := ListViewVersionStrings.Selected.Index;
 
     // Delete the string from the resouce
     FDetails.DeleteKey (n);
 
     // Delete the string from the list view
-    lvVersionStrings.Selected.Delete;
+    ListViewVersionStrings.Selected.Delete;
 
     // Select the next entry in the list after deleting
-    if n >= lvVersionStrings.Items.Count then
-      n := lvVersionStrings.Items.Count - 1;
+    if n >= ListViewVersionStrings.Items.Count then
+      n := ListViewVersionStrings.Items.Count - 1;
 
     if n >= 0 then
-      lvVersionStrings.Items.Item [n].Selected := True
+      ListViewVersionStrings.Items.Item [n].Selected := True
   end
 end;
 
@@ -319,23 +319,23 @@ end;
  | Start modifying the version string.  Reposition and reveal the       |
  | hidden memo.                                                         |
  *----------------------------------------------------------------------*)
-procedure TfmVersionResource.actStringModifyStringExecute(Sender: TObject);
+procedure TfmVersionResource.ActionStringModifyStringExecute(Sender: TObject);
 var
   idx: Integer;
 begin
-  if Assigned(lvVersionStrings.Selected) then
+  if Assigned(ListViewVersionStrings.Selected) then
   begin
-    FSelectedItem := lvVersionStrings.Selected;
+    FSelectedItem := ListViewVersionStrings.Selected;
     idx := FDetails.IndexOf(FSelectedItem.Caption);
     if idx > -1 then
     begin
-      mmoMessage.Width := lvVersionStrings.Width - 2;
-      mmoMessage.Top := lvVersionStrings.Selected.DisplayRect(drLabel).Bottom + 1;
-      mmoMessage.Left := lvVersionStrings.Left + 1;
-      mmoMessage.Text := FDetails.Key [idx].Value;
-      mmoMessage.Visible := True;
-      mmoMessage.Enabled := True;
-      mmoMessage.SetFocus
+      RichEditMessage.Width := ListViewVersionStrings.Width - 2;
+      RichEditMessage.Top := ListViewVersionStrings.Selected.DisplayRect(drLabel).Bottom + 1;
+      RichEditMessage.Left := ListViewVersionStrings.Left + 1;
+      RichEditMessage.Text := FDetails.Key [idx].Value;
+      RichEditMessage.Visible := True;
+      RichEditMessage.Enabled := True;
+      RichEditMessage.SetFocus
     end
   end
 end;
@@ -346,22 +346,22 @@ end;
  | They'v existed the memo.  Re-coneal it, and change the modified      |
  | string valur                                                         |
  *----------------------------------------------------------------------*)
-procedure TfmVersionResource.mmoMessageExit(Sender: TObject);
+procedure TfmVersionResource.RichEditMessageExit(Sender: TObject);
 begin
-  mmoMessage.Enabled := False;
-  mmoMessage.Visible := False;
-  if mmoMessage.CanUndo or FAdding then
+  RichEditMessage.Enabled := False;
+  RichEditMessage.Visible := False;
+  if RichEditMessage.CanUndo or FAdding then
   begin
     if FAdding then
       AddUndoEntry(rstAddString)
     else
       AddUndoEntry(rstChangeString);
 
-                                // Update the resource
-    FDetails.SetKeyValue(FSelectedItem.Caption, mmoMessage.Text);
+    // Update the resource
+    FDetails.SetKeyValue(FSelectedItem.Caption, RichEditMessage.Text);
 
-                                // Update the list view
-    FSelectedItem.SubItems[0] := StringToCString (mmoMessage.Text)
+    // Update the list view
+    FSelectedItem.SubItems[0] := StringToCString (RichEditMessage.Text)
   end;
   FAdding := False;
 end;
@@ -371,7 +371,7 @@ end;
  |                                                                      |
  | They've finished editing the key name.  Update the resource          |
  *----------------------------------------------------------------------*)
-procedure TfmVersionResource.lvVersionStringsEdited(Sender: TObject;
+procedure TfmVersionResource.ListViewVersionStringsEdited(Sender: TObject;
   Item: TListItem; var S: String);
 begin
   if s <> Item.Caption then
@@ -386,11 +386,11 @@ end;
  |                                                                      |
  | Start modifying the key name                                         |
  *----------------------------------------------------------------------*)
-procedure TfmVersionResource.actStringModifyStringNameExecute(
+procedure TfmVersionResource.ActionStringModifyStringNameExecute(
   Sender: TObject);
 begin
-  if Assigned(lvVersionStrings.Selected) then
-    lvVersionStrings.Selected.EditCaption
+  if Assigned(ListViewVersionStrings.Selected) then
+    ListViewVersionStrings.Selected.EditCaption;
 end;
 
 (*----------------------------------------------------------------------*
@@ -406,22 +406,22 @@ end;
  |                                                                      |
  | If no item was selcted, add a new string.                            |
  *----------------------------------------------------------------------*)
-procedure TfmVersionResource.lvVersionStringsDblClick(Sender: TObject);
+procedure TfmVersionResource.ListViewVersionStringsDblClick(Sender: TObject);
 var
   p: TPoint;
 begin
-  if Assigned(lvVersionStrings.Selected) then
+  if Assigned(ListViewVersionStrings.Selected) then
   begin
     p := Mouse.CursorPos;
-    MapWindowPoints (HWND_DESKTOP, lvVersionStrings.Handle, p, 1);
+    MapWindowPoints (HWND_DESKTOP, ListViewVersionStrings.Handle, p, 1);
 
-    if p.x > lvVersionStrings.Columns [0].Width then
-      actStringModifyString.Execute
+    if p.x > ListViewVersionStrings.Columns [0].Width then
+      ActionStringModifyString.Execute
     else
-      actStringModifyStringName.Execute
+      ActionStringModifyStringName.Execute
   end
   else
-    actStringAddString.Execute
+    ActionStringAddString.Execute;
 end;
 
 (*----------------------------------------------------------------------*
@@ -433,10 +433,10 @@ procedure TfmVersionResource.UpdateActions;
 var
   sel: Boolean;
 begin
-  sel := Assigned(lvVersionStrings.Selected) and lvVersionStrings.Focused;
-  actStringDeleteString.Enabled := sel;
-  actStringModifyString.Enabled := sel;
-  actStringModifyStringName.Enabled := sel
+  sel := Assigned(ListViewVersionStrings.Selected) and ListViewVersionStrings.Focused;
+  ActionStringDeleteString.Enabled := sel;
+  ActionStringModifyString.Enabled := sel;
+  ActionStringModifyStringName.Enabled := sel;
 end;
 
 (*----------------------------------------------------------------------*
@@ -444,20 +444,20 @@ end;
  |                                                                      |
  | Add a new string.  Simply add it to the list view, then call Modify  |
  *----------------------------------------------------------------------*)
-procedure TfmVersionResource.actStringAddStringExecute(Sender: TObject);
+procedure TfmVersionResource.ActionStringAddStringExecute(Sender: TObject);
 var
   keyName: string;
 begin
   keyName := GetNewStringName;
-  with lvVersionStrings.Items.Add do
+  with ListViewVersionStrings.Items.Add do
   begin
     Caption := keyName;
     SubItems.Add ('');
     Selected := True;
     FAdding := True;
-    actStringModifyString.Enabled := True;
-    actStringModifyString.Execute
-  end
+    ActionStringModifyString.Enabled := True;
+    ActionStringModifyString.Execute;
+  end;
 end;
 
 (*----------------------------------------------------------------------*
@@ -473,25 +473,25 @@ begin
   repeat
     Result := Format(rstNewString, [m]);
 
-    if lvVersionStrings.FindCaption (0, Result, False, True, False) = nil then
+    if ListViewVersionStrings.FindCaption (0, Result, False, True, False) = nil then
       break;
 
-    Inc(m)
-  until m = 0
+    Inc(m);
+  until m = 0;
 end;
 
-procedure TfmVersionResource.PropertyListBox1PropertyChanged(
+procedure TfmVersionResource.PropertyListBoxPropertyChanged(
   Sender: TObject);
 begin
-  SaveFlags
+  SaveFlags;
 end;
 
 procedure TfmVersionResource.FormResize(Sender: TObject);
 begin
   inherited;
 
-  if mmoMessage.Visible then
-    mmoMessage.Width := lvVersionStrings.Width - 2;
+  if RichEditMessage.Visible then
+    RichEditMessage.Width := ListViewVersionStrings.Width - 2;
 end;
 
 end.

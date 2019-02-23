@@ -19,27 +19,27 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ActnList, Menus, StdCtrls, Contnrs, ComCtrls, ResourceForm, VirtualTrees,
-  unitResourceMessages, cmpCWRichEdit;
+  unitResourceMessages, cmpCWRichEdit, System.Actions;
 
 type
   TfmTextResource = class(TfmResource)
-    ActionList1: TActionList;
-    actStringsAdd: TAction;
-    actStringsChangeID: TAction;
-    actStringsDelete: TAction;
-    actStringsModify: TAction;
-    AddString1: TMenuItem;
-    AddString2: TMenuItem;
-    ChangeID1: TMenuItem;
-    ChangeID2: TMenuItem;
-    DeleteString1: TMenuItem;
-    DeleteString2: TMenuItem;
-    mmoMessage: TExRichEdit;
-    mnuStrings: TMenuItem;
-    mnuStringsMenu: TMainMenu;
-    ModifyString1: TMenuItem;
-    ModifyString2: TMenuItem;
-    pomStrings: TPopupMenu;
+    ActionList: TActionList;
+    ActionStringsAdd: TAction;
+    ActionStringsChangeID: TAction;
+    ActionStringsDelete: TAction;
+    ActionStringsModify: TAction;
+    MenuItemStrings: TMenuItem;
+    MainMenuStrings: TMainMenu;
+    MenuItemAddString1: TMenuItem;
+    MenuItemAddString2: TMenuItem;
+    MenuItemChangeID1: TMenuItem;
+    MenuItemChangeID2: TMenuItem;
+    MenuItemDeleteString1: TMenuItem;
+    MenuItemDeleteString2: TMenuItem;
+    MenuItemModifyString1: TMenuItem;
+    MenuItemModifyString2: TMenuItem;
+    PopupMenuStrings: TPopupMenu;
+    RichEditMessage: TExRichEdit;
     vstStrings: TVirtualStringTree;
     procedure vstStringsNewText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; NewText: string);
@@ -53,11 +53,11 @@ type
     procedure FormCreate(Sender: TObject);
     procedure vstStringsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
       Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
-    procedure actStringsModifyExecute(Sender: TObject);
-    procedure mmoMessageExit(Sender: TObject);
-    procedure actStringsDeleteExecute(Sender: TObject);
-    procedure actStringsAddExecute(Sender: TObject);
-    procedure actStringsChangeIDExecute(Sender: TObject);
+    procedure ActionStringsModifyExecute(Sender: TObject);
+    procedure RichEditMessageExit(Sender: TObject);
+    procedure ActionStringsDeleteExecute(Sender: TObject);
+    procedure ActionStringsAddExecute(Sender: TObject);
+    procedure ActionStringsChangeIDExecute(Sender: TObject);
   protected
     procedure SetObject(const Value: TObject); override;
     function GetMenuItem: TMenuItem; override;
@@ -105,7 +105,7 @@ resourcestring
  | Add a new string.  Just create a new item in the list view, then     |
  | modify it.                                                           |
  *----------------------------------------------------------------------*)
-procedure TfmTextResource.actStringsAddExecute(Sender: TObject);
+procedure TfmTextResource.ActionStringsAddExecute(Sender: TObject);
 var
   newID: Integer;
   si: TStringInfo;
@@ -123,11 +123,11 @@ begin
     si := TStringInfo.Create('', newId);
     FWorkStrings.Add(si);
     UpdateDisplay (si);
-    actStringsModifyExecute (nil);
+    ActionStringsModifyExecute (nil);
   end
 end;
 
-procedure TfmTextResource.actStringsChangeIDExecute(Sender: TObject);
+procedure TfmTextResource.ActionStringsChangeIDExecute(Sender: TObject);
 begin
   if Assigned(vstStrings.FocusedNode) then
     if not FIsStrings then
@@ -139,7 +139,7 @@ end;
  |                                                                      |
  | Delete the selected string                                           |
  *----------------------------------------------------------------------*)
-procedure TfmTextResource.actStringsDeleteExecute(Sender: TObject);
+procedure TfmTextResource.ActionStringsDeleteExecute(Sender: TObject);
 var
   idx: Integer;
   p: PVirtualNode;
@@ -170,32 +170,32 @@ end;
  | Allow the user to edit a string by unhiding and repositioning the    |
  | hidden memo                                                          |
  *----------------------------------------------------------------------*)
-procedure TfmTextResource.actStringsModifyExecute(Sender: TObject);
+procedure TfmTextResource.ActionStringsModifyExecute(Sender: TObject);
 var
   r: TRect;
 begin
   if Assigned(vstStrings.FocusedNode) then
   begin
-    mmoMessage.Width := vstStrings.Width - 2;
+    RichEditMessage.Width := vstStrings.Width - 2;
     r := vstStrings.GetDisplayRect(vstStrings.FocusedNode, 1, False);
-    mmoMessage.Left := r.Left + 2;
-    mmoMessage.Width := r.Right - r.Left + 2;
-    mmoMessage.Top := r.Bottom;
-    if mmoMessage.Top + mmoMessage.Height > vstStrings.Top + vstStrings.Height then
-      mmoMessage.Top := r.Top - mmoMessage.Height;
-    mmoMessage.Visible := True;
-    mmoMessage.Text := SelectedString.St;
-    mmoMessage.SetFocus
+    RichEditMessage.Left := r.Left + 2;
+    RichEditMessage.Width := r.Right - r.Left + 2;
+    RichEditMessage.Top := r.Bottom;
+    if RichEditMessage.Top + RichEditMessage.Height > vstStrings.Top + vstStrings.Height then
+      RichEditMessage.Top := r.Top - RichEditMessage.Height;
+    RichEditMessage.Visible := True;
+    RichEditMessage.Text := SelectedString.St;
+    RichEditMessage.SetFocus
   end
   else
-    actStringsAdd.Execute;
+    ActionStringsAdd.Execute;
 end;
 
 procedure TfmTextResource.FormCreate(Sender: TObject);
 begin
   inherited;
 
-  FWorkStrings := TObjectList.Create
+  FWorkStrings := TObjectList.Create;
 end;
 
 procedure TfmTextResource.FormDestroy(Sender: TObject);
@@ -216,15 +216,15 @@ end;
  *----------------------------------------------------------------------*)
 function TfmTextResource.GetMenuItem: TMenuItem;
 begin
-  Result := mnuStrings
+  Result := MenuItemStrings;
 end;
 
 (*----------------------------------------------------------------------*
- | TfmTextResource.mmoMessageExit                                       |
+ | TfmTextResource.RichEditMessageExit                                       |
  |                                                                      |
  | Finished editing the string.  Hide the memo, and update the resource |
  *----------------------------------------------------------------------*)
-procedure TfmTextResource.mmoMessageExit(Sender: TObject);
+procedure TfmTextResource.RichEditMessageExit(Sender: TObject);
 var
   st: string;
   adding: Boolean;
@@ -233,13 +233,13 @@ var
 begin
   adding := FAdding;
   FAdding := False;
-  mmoMessage.Visible := False;
+  RichEditMessage.Visible := False;
 
   si := SelectedString;
 
-  if mmoMessage.CanUndo or adding then  // ie.  If it's changed
+  if RichEditMessage.CanUndo or adding then  // ie.  If it's changed
   begin
-    ws := mmoMessage.Text;
+    ws := RichEditMessage.Text;
     si.St := ws;
 
     if adding then
@@ -253,9 +253,9 @@ begin
       else
         st := rstChangeString;
 
-    SaveResource (st);
-    mmoMessage.ClearUndoBuffer;
-  end
+    SaveResource(st);
+    RichEditMessage.ClearUndoBuffer;
+  end;
 end;
 
 function TfmTextResource.NodeN(n: Integer): PVirtualNode;
@@ -266,11 +266,11 @@ begin
     while (Result <> Nil) and (n > 0) do
     begin
       Result := vstStrings.GetNextSibling(Result);
-      Dec(n)
-    end
+      Dec(n);
+    end;
   end
   else
-    Result := Nil
+    Result := nil;
 end;
 
 function TfmTextResource.NodeString(node: PVirtualNode): TStringInfo;
@@ -278,7 +278,7 @@ begin
   if Assigned(node) and (Integer(node^.Index) < FWorkStrings.Count) then
     Result := TStringInfo (FWorkStrings [node^.Index])
   else
-    Result := Nil
+    Result := nil;
 end;
 
 (*----------------------------------------------------------------------*
@@ -312,7 +312,7 @@ end;
 
 function TfmTextResource.SelectedString: TStringInfo;
 begin
-  Result := NodeString (vstStrings.FocusedNode);
+  Result := NodeString(vstStrings.FocusedNode);
 end;
 
 (*----------------------------------------------------------------------*
@@ -349,16 +349,16 @@ var
 begin
   sel := Assigned(vstStrings.FocusedNode);
 
-  actStringsAdd.Enabled := FDetails is TMessageResourceDetails;
-  actStringsModify.Enabled := sel;
-  actStringsDelete.Enabled := sel;
-  actStringsChangeID.Enabled := sel and not FIsStrings;
+  ActionStringsAdd.Enabled := FDetails is TMessageResourceDetails;
+  ActionStringsModify.Enabled := sel;
+  ActionStringsDelete.Enabled := sel;
+  ActionStringsChangeID.Enabled := sel and not FIsStrings;
 
   if FChangeId then
   begin
     FChangeId := False;
-    actStringsChangeId.Execute
-  end
+    ActionStringsChangeId.Execute;
+  end;
 end;
 
 procedure TfmTextResource.UpdateDisplay(selectedString: TStringInfo);
@@ -371,9 +371,9 @@ begin
     if FWorkStrings.Count <> Integer(vstStrings.RootNodeCount) then
       vstStrings.RootNodeCount := FWorkStrings.Count
     else
-      vstStrings.ReinitNode(Nil, True);
+      vstStrings.ReinitNode(nil, True);
   finally
-    vstStrings.EndUpdate
+    vstStrings.EndUpdate;
   end;
 
   vstStrings.ClearSelection;
@@ -384,14 +384,14 @@ begin
     if p <> Nil then
     begin
       vstStrings.Selected [p] := True;
-      vstStrings.FocusedNode := p
-    end
-  end
+      vstStrings.FocusedNode := p;
+    end;
+  end;
 end;
 
 procedure TfmTextResource.UpdateFonts;
 begin
-  UseInternationalFont(mmoMessage.Font);
+  UseInternationalFont(RichEditMessage.Font);
   UseInternationalFont(vstStrings.Font);
 end;
 
@@ -411,10 +411,10 @@ begin
     if p.X <= vstStrings.Header.Columns [0].Width then
       FChangeId := True
     else
-      actStringsModify.Execute
+      ActionStringsModify.Execute;
   end
   else
-    actStringsAdd.Execute
+    ActionStringsAdd.Execute;
 end;
 
 procedure TfmTextResource.vstStringsGetText(Sender: TBaseVirtualTree;
@@ -423,7 +423,7 @@ procedure TfmTextResource.vstStringsGetText(Sender: TBaseVirtualTree;
 var
   si: TStringInfo;
 begin
-  si := NodeString (Node);
+  si := NodeString(Node);
 
   if si <> Nil then
   case Column of
@@ -433,8 +433,8 @@ begin
       else
         CellText := IntToStr(si.Id);
     1:
-      CellText := si.St
-  end
+      CellText := si.St;
+  end;
 end;
 
 (*----------------------------------------------------------------------*
@@ -446,7 +446,7 @@ procedure TfmTextResource.vstStringsKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if Key = VK_RETURN then
-    actStringsModify.Execute
+    ActionStringsModify.Execute;
 end;
 
 procedure TfmTextResource.vstStringsNewText(Sender: TBaseVirtualTree;
@@ -458,7 +458,7 @@ begin
   if Column <> 0 then
     Exit;
 
-  st := NodeString (node);
+  st := NodeString(node);
   if not Assigned(st) then
     Exit;
 
@@ -476,22 +476,22 @@ begin
 
       st.Id := NewId;
       SaveResource (rstChangeID)
-    end
+    end;
   except
-    raise
+    raise;
   end
 end;
 
 procedure TfmTextResource.vstStringsEditing(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
-  Allowed := (Column = 0) and (NodeString (Node) <> Nil);
+  Allowed := (Column = 0) and (NodeString(Node) <> nil);
 end;
 
 procedure TfmTextResource.TidyUp;
 begin
- if mmoMessage.Visible then
-   mmoMessageExit(nil);
+ if RichEditMessage.Visible then
+   RichEditMessageExit(nil);
 end;
 
 end.

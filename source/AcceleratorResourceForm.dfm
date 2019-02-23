@@ -41,7 +41,6 @@ inherited fmAcceleratorResource: TfmAcceleratorResource
     Top = 16
     Width = 97
     Height = 21
-    ItemHeight = 13
     TabOrder = 1
     Text = 'cbKey'
     Visible = False
@@ -53,7 +52,6 @@ inherited fmAcceleratorResource: TfmAcceleratorResource
     Top = 16
     Width = 97
     Height = 21
-    ItemHeight = 13
     TabOrder = 2
     Text = 'cbType'
     Visible = False

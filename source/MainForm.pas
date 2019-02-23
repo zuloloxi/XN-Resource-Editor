@@ -1020,7 +1020,7 @@ begin
       if dlg.ShowModal = mrOK then
       begin
         newLanguage := dlg.Language;
-        newName := dlg.ntedName.Text;
+        newName := dlg.EditName.Text;
 
         if res is TStringResourceDetails then
           newName := StringsIDToResID (newName);

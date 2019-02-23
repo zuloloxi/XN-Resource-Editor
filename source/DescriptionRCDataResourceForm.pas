@@ -8,9 +8,9 @@ uses
 
 type
   TfmRCDataDescriptionResource = class(TfmResource)
-    Label1: TLabel;
-    ntedDescription: TEdit;
-    procedure ntedDescriptionExit(Sender: TObject);
+    LabelDescription: TLabel;
+    EditDescription: TEdit;
+    procedure EditDescriptionExit(Sender: TObject);
   private
     procedure SaveResource (const undoDetails: string);
   protected
@@ -38,12 +38,12 @@ begin
   inherited;
 
   details := Obj as TRCDataDescriptionResourceDetails;
-  ntedDescription.Text := details.Description
+  EditDescription.Text := details.Description;
 end;
 
 procedure TfmRCDataDescriptionResource.UpdateFonts;
 begin
-  UseInternationalFont(ntedDescription.Font);
+  UseInternationalFont(EditDescription.Font);
 end;
 
 procedure TfmRCDataDescriptionResource.SaveResource (const undoDetails: string);
@@ -52,12 +52,12 @@ var
 begin
   AddUndoEntry (undoDetails);
   details := Obj as TRCDataDescriptionResourceDetails;
-  details.Description := ntedDescription.Text
+  details.Description := EditDescription.Text;
 end;
 
-procedure TfmRCDataDescriptionResource.ntedDescriptionExit(Sender: TObject);
+procedure TfmRCDataDescriptionResource.EditDescriptionExit(Sender: TObject);
 begin
-  if ntedDescription.CanUndo then
+  if EditDescription.CanUndo then
     SaveResource (rstChangeDescription);
 end;
 

@@ -2,11 +2,11 @@ object dlgResourceProperties: TdlgResourceProperties
   Left = 199
   Top = 124
   Caption = 'Resource Properties'
-  ClientHeight = 134
+  ClientHeight = 123
   ClientWidth = 304
   Color = clBtnFace
   Constraints.MaxHeight = 161
-  Constraints.MinHeight = 161
+  Constraints.MinHeight = 150
   Constraints.MinWidth = 252
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,36 +18,36 @@ object dlgResourceProperties: TdlgResourceProperties
   OnShow = FormShow
   DesignSize = (
     304
-    134)
+    123)
   PixelsPerInch = 96
   TextHeight = 13
-  object Label1: TLabel
-    Left = 16
-    Top = 16
+  object LabelName: TLabel
+    Left = 8
+    Top = 15
     Width = 28
     Height = 13
     Caption = '&Name'
   end
-  object Label2: TLabel
-    Left = 16
-    Top = 56
+  object LabelLanguage: TLabel
+    Left = 8
+    Top = 54
     Width = 48
     Height = 13
     Caption = '&Language'
-    FocusControl = cbLanguage
+    FocusControl = ComboBoxLanguage
   end
-  object cbLanguage: TComboBox
-    Left = 80
-    Top = 52
+  object ComboBoxLanguage: TComboBox
+    Left = 83
+    Top = 51
     Width = 213
     Height = 21
     Anchors = [akLeft, akTop, akRight]
     Sorted = True
     TabOrder = 1
   end
-  object btnOK: TButton
-    Left = 140
-    Top = 82
+  object ButtonOK: TButton
+    Left = 137
+    Top = 90
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -56,9 +56,9 @@ object dlgResourceProperties: TdlgResourceProperties
     ModalResult = 1
     TabOrder = 2
   end
-  object btnCancel: TButton
+  object ButtonCancel: TButton
     Left = 218
-    Top = 82
+    Top = 90
     Width = 75
     Height = 25
     Anchors = [akRight, akBottom]
@@ -67,10 +67,10 @@ object dlgResourceProperties: TdlgResourceProperties
     ModalResult = 2
     TabOrder = 3
   end
-  object ntedName: TEdit
-    Left = 80
+  object EditName: TEdit
+    Left = 83
     Top = 12
-    Width = 209
+    Width = 213
     Height = 21
     Anchors = [akLeft, akTop, akRight]
     TabOrder = 0

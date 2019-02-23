@@ -11,14 +11,9 @@ inherited fmTextResource: TfmTextResource
     Height = 455
     Align = alClient
     Header.AutoSizeIndex = 1
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'MS Sans Serif'
-    Header.Font.Style = []
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
     Header.Style = hsPlates
-    PopupMenu = pomStrings
+    PopupMenu = PopupMenuStrings
     TabOrder = 1
     TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.PaintOptions = [toShowDropmark, toShowHorzGridLines, toShowVertGridLines, toThemeAware, toUseBlendedImages, toFullVertGridLines]
@@ -38,82 +33,88 @@ inherited fmTextResource: TfmTextResource
       item
         Options = [coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
         Position = 1
-        Width = 595
+        Width = 597
         WideText = 'String'
       end>
   end
-  object mmoMessage: TExRichEdit
+  object RichEditMessage: TExRichEdit
     Left = 0
     Top = 48
     Width = 185
     Height = 73
-    Text = 'mmoMessage'
+    Text = 'RichEditMessage'
     RightMargin = 0
     AutoURLDetect = False
     AutoURLExecute = False
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
     Visible = False
-    OnExit = mmoMessageExit
+    OnExit = RichEditMessageExit
   end
-  object mnuStringsMenu: TMainMenu
+  object MainMenuStrings: TMainMenu
     Left = 648
     Top = 32
-    object mnuStrings: TMenuItem
+    object MenuItemStrings: TMenuItem
       Caption = '&Strings'
-      object AddString1: TMenuItem
-        Action = actStringsAdd
+      object MenuItemAddString1: TMenuItem
+        Action = ActionStringsAdd
       end
-      object ModifyString1: TMenuItem
-        Action = actStringsModify
+      object MenuItemModifyString1: TMenuItem
+        Action = ActionStringsModify
       end
-      object DeleteString1: TMenuItem
-        Action = actStringsDelete
+      object MenuItemDeleteString1: TMenuItem
+        Action = ActionStringsDelete
       end
-      object ChangeID1: TMenuItem
-        Action = actStringsChangeID
+      object MenuItemChangeID1: TMenuItem
+        Action = ActionStringsChangeID
       end
     end
   end
-  object ActionList1: TActionList
+  object ActionList: TActionList
     Left = 648
     Top = 72
-    object actStringsAdd: TAction
+    object ActionStringsAdd: TAction
       Category = 'Strings'
       Caption = '&Add String'
       ShortCut = 45
-      OnExecute = actStringsAddExecute
+      OnExecute = ActionStringsAddExecute
     end
-    object actStringsModify: TAction
+    object ActionStringsModify: TAction
       Category = 'Strings'
       Caption = '&Modify String'
-      OnExecute = actStringsModifyExecute
+      OnExecute = ActionStringsModifyExecute
     end
-    object actStringsDelete: TAction
+    object ActionStringsDelete: TAction
       Category = 'Strings'
       Caption = '&Delete String'
       ShortCut = 46
-      OnExecute = actStringsDeleteExecute
+      OnExecute = ActionStringsDeleteExecute
     end
-    object actStringsChangeID: TAction
+    object ActionStringsChangeID: TAction
       Category = 'Strings'
       Caption = '&Change ID'
-      OnExecute = actStringsChangeIDExecute
+      OnExecute = ActionStringsChangeIDExecute
     end
   end
-  object pomStrings: TPopupMenu
+  object PopupMenuStrings: TPopupMenu
     Left = 648
     Top = 120
-    object AddString2: TMenuItem
-      Action = actStringsAdd
+    object MenuItemAddString2: TMenuItem
+      Action = ActionStringsAdd
     end
-    object ModifyString2: TMenuItem
-      Action = actStringsModify
+    object MenuItemModifyString2: TMenuItem
+      Action = ActionStringsModify
     end
-    object DeleteString2: TMenuItem
-      Action = actStringsDelete
+    object MenuItemDeleteString2: TMenuItem
+      Action = ActionStringsDelete
     end
-    object ChangeID2: TMenuItem
-      Action = actStringsChangeID
+    object MenuItemChangeID2: TMenuItem
+      Action = ActionStringsChangeID
     end
   end
 end

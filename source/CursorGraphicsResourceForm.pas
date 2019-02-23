@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ActnList, ImgList, ComCtrls, ExtCtrls, ToolWin,
   IconCursorGraphicsResourceForm, cmpColorSelector, cmpSizingPageControl,
-  cmpBitmapEditor, cmpPropertyListBox, unitExIcon;
+  cmpBitmapEditor, cmpPropertyListBox, unitExIcon, System.Actions,
+  System.ImageList;
 
 type
   TfmCursorGraphicsResource = class(TfmIconCursorGraphicsResource)
@@ -132,13 +133,13 @@ procedure TfmCursorGraphicsResource.SetHotspot1Click(Sender: TObject);
 var
   pt: TPoint;
 begin
-  pt := PopupMenu1.PopupPoint;
+  pt := PopupMenu.PopupPoint;
   if pt.X = -1 then
     pt := Mouse.CursorPos;
   SetHotspot(pt);
   pt.x := -1;
   pt.y := -1;
-  TCrackPopupMenu (PopupMenu1).SetPopupPoint(pt);
+  TCrackPopupMenu (PopupMenu).SetPopupPoint(pt);
 end;
 
 procedure TfmCursorGraphicsResource.SetObject(const Value: TObject);
