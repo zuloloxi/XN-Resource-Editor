@@ -102,9 +102,9 @@ type
     ToolButtonText: TToolButton;
     MenuItemToolsPalette: TMenuItem;
     TrackBar: TTrackBar;
-    procedure BitmapEditorGetText(sender: TObject; font: TFont;
-      var txt: WideString);
     procedure FormShow(Sender: TObject);
+    procedure BitmapEditorGetText(Sender: TObject; Font: TFont;
+      var txt: WideString);
     procedure SizingPageControlDockDrop(Sender: TObject;
       Source: TDragDockObject; X, Y: Integer);
     procedure SizingPageControlUnDock(Sender: TObject; Client: TControl;
@@ -493,23 +493,23 @@ begin
   SaveResource (BitmapEditor.GetDrawingChangeDescription);
 end;
 
-procedure TfmGraphicsResource.BitmapEditorGetText(sender: TObject; font: TFont;
-  var txt: WideString);
+procedure TfmGraphicsResource.BitmapEditorGetText(Sender: TObject; Font: TFont;
+  var Txt: WideString);
 var
-  frm: TfmTextInput;
+  FormTextInput: TfmTextInput;
 begin
-  frm := TfmTextInput.Create(nil);
+  FormTextInput := TfmTextInput.Create(nil);
   try
-    frm.mmoText.Font.Assign(font);
-    if frm.ShowModal = mrOK then
+    FormTextInput.MemoText.Font.Assign(Font);
+    if FormTextInput.ShowModal = mrOK then
     begin
-      txt := frm.mmoText.Text;
-      font.Assign (frm.mmoText.Font)
+      Txt := FormTextInput.MemoText.Text;
+      Font.Assign(FormTextInput.MemoText.Font)
     end
     else
-      txt := ''
+      Txt := ''
   finally
-    frm.Free
+    FormTextInput.Free
   end;
 end;
 
@@ -599,7 +599,7 @@ var
   paletteEntries: array [0..255] of TPaletteEntry;
   pal: HPalette;
 begin
-  Result := Nil;
+  Result := nil;
   case pf of
     pf1Bit: pal := SystemPalette2;
     pf4Bit: pal := SystemPalette16;
@@ -614,7 +614,7 @@ begin
 
   if ColorCount = 0 then
   begin
-    Result := Nil;
+    Result := nil;
     exit
   end;
 
@@ -691,8 +691,8 @@ begin
 
             if newPf in [pf1Bit..pf8Bit] then
             begin
-              b1 := Nil;
-              b2 := Nil;
+              b1 := nil;
+              b2 := nil;
               try
                 if (newPf = pf8Bit) and (oldPf > pf8Bit) and not bmp.Empty then
                    b1:= ReduceColors (bmp, rmQuantizeWindows, dmFloydSteinberg, GetPixelFormatBitCount(newPf), 0)
@@ -913,7 +913,7 @@ begin
   else
     Msg := '';
 
-  SendMessage(Application.MainForm.Handle, WM_STATUSBAR, 0, Integer(PChar (Msg)));
+  SendMessage(Application.MainForm.Handle, WM_STATUSBAR, 0, Integer(PChar(Msg)));
 end;
 
 procedure TfmGraphicsResource.PopupMenuPopup(Sender: TObject);

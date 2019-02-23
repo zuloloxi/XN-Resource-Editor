@@ -7,24 +7,24 @@ uses
   StdCtrls;
 
 type
-  TfmTextInput = class(TForm)
-    mmoText: TMemo;
-    Button1: TButton;
-    Button2: TButton;
-    Button3: TButton;
-    FontDialog1: TFontDialog;
-    procedure Button2Click(Sender: TObject);
+  TFmTextInput = class(TForm)
+    MemoText: TMemo;
+    ButtonOK: TButton;
+    ButtonSelectFont: TButton;
+    ButtonCancel: TButton;
+    FontDialog: TFontDialog;
+    procedure ButtonSelectFontClick(Sender: TObject);
   end;
 
 implementation
 
 {$R *.dfm}
 
-procedure TfmTextInput.Button2Click(Sender: TObject);
+procedure TFmTextInput.ButtonSelectFontClick(Sender: TObject);
 begin
-  FontDialog1.Font.Assign(mmoText.Font);
-  if FontDialog1.Execute then
-    mmoText.Font.Assign (FontDialog1.Font)
+  FontDialog.Font.Assign(MemoText.Font);
+  if FontDialog.Execute then
+    MemoText.Font.Assign(FontDialog.Font)
 end;
 
 end.

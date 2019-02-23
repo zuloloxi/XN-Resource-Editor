@@ -222,7 +222,7 @@ var
   PropPageDetails: ^TPropertyPageDetails;
 begin
   Details := TPropertyPageDetails.Create(self, APropertyPageClass, AParent, ACaption, AHelpText, AHelpKeyWord, AParam);
-  if AParent = Nil then
+  if AParent = nil then
   begin
     FPropertyPageDetails.Add(Details);
     vstSections.RootNodeCount := FPropertyPageDetails.Count
@@ -230,7 +230,7 @@ begin
   else
   begin
     PropPageDetails := @AParent.FirstChild;
-    while PropPageDetails^ <> Nil do
+    while PropPageDetails^ <> nil do
       PropPageDetails := @PropPageDetails^.Sibling;
     PropPageDetails^ := Details
   end;
@@ -371,7 +371,7 @@ begin
   if Assigned(Details) then
     Result := Details.FData
   else
-    Result := Nil
+    Result := nil
 end;
 
 {*----------------------------------------------------------------------*
@@ -406,7 +406,7 @@ var
   end;
 
 begin
-  rv := Nil;
+  rv := nil;
   cont := True;
   for i := 0 to FPropertyPageDetails.Count - 1 do
   begin
@@ -417,7 +417,7 @@ begin
 
   // If 'cont', the iterator reached the end without being told to 'stop' on
   // a particular PropertyPageDetails.
-  if cont then Result := Nil else Result := rv
+  if cont then Result := nil else Result := rv
 end;
 
 {*----------------------------------------------------------------------*
@@ -449,7 +449,7 @@ begin
   end;
 
   n := vstSections.GetFirst;
-  if n <> Nil then
+  if n <> nil then
   begin
     vstSections.FocusedNode := n;
     vstSections.Selected[n] := True
@@ -475,7 +475,7 @@ begin
   if Assigned(obj) then
     Result := TPropertyPageDetails(obj^)
   else
-    Result := Nil
+    Result := nil
 end;
 
 {*----------------------------------------------------------------------*
@@ -517,7 +517,7 @@ begin
         FreeAndNil(Page);
     end
     else
-      Page := Nil;
+      Page := nil;
 
     if Assigned(Details) then
     begin
@@ -626,7 +626,7 @@ procedure TfmPropertyBase.vstSectionsInitNode(Sender: TBaseVirtualTree;
 var
   Details, parentDetails: TPropertyPageDetails;
 begin
-  if ParentNode = Nil then
+  if ParentNode = nil then
     Details := TPropertyPageDetails(FPropertyPageDetails [Node.Index])
   else
   begin
@@ -660,7 +660,7 @@ var
 begin
   FPropertyPageClass := APropertyPageClass;
   FParent := AParent;
-  tempPropertyPage := Nil;
+  tempPropertyPage := nil;
   try
 
   // In order to get the form's constraints, caption, etc. we need
@@ -749,7 +749,7 @@ end;
 function TPropertyPageDetails.GetChild(idx: Integer): TPropertyPageDetails;
 begin
   Result := FChild;
-  while (Result <> Nil) and (idx > 0) do
+  while (Result <> nil) and (idx > 0) do
   begin
     Result := Result.Sibling;
     Dec(idx)
@@ -767,7 +767,7 @@ var
 begin
   Result := 0;
   PropPageDetails := FChild;
-  while PropPageDetails <> Nil do
+  while PropPageDetails <> nil do
   begin
     Inc(Result);
     PropPageDetails := PropPageDetails.Sibling

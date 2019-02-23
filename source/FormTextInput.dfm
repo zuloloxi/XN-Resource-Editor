@@ -1,4 +1,4 @@
-object fmTextInput: TfmTextInput
+object FmTextInput: TFmTextInput
   Left = 0
   Top = 0
   BorderStyle = bsSizeToolWin
@@ -20,7 +20,7 @@ object fmTextInput: TfmTextInput
     210)
   PixelsPerInch = 96
   TextHeight = 13
-  object mmoText: TMemo
+  object MemoText: TMemo
     Left = 8
     Top = 8
     Width = 293
@@ -28,7 +28,7 @@ object fmTextInput: TfmTextInput
     Anchors = [akLeft, akTop, akRight, akBottom]
     TabOrder = 0
   end
-  object Button1: TButton
+  object ButtonOK: TButton
     Left = 307
     Top = 143
     Width = 75
@@ -39,7 +39,7 @@ object fmTextInput: TfmTextInput
     ModalResult = 1
     TabOrder = 1
   end
-  object Button2: TButton
+  object ButtonSelectFont: TButton
     Left = 307
     Top = 8
     Width = 75
@@ -47,9 +47,9 @@ object fmTextInput: TfmTextInput
     Anchors = [akTop, akRight]
     Caption = '&Font...'
     TabOrder = 2
-    OnClick = Button2Click
+    OnClick = ButtonSelectFontClick
   end
-  object Button3: TButton
+  object ButtonCancel: TButton
     Left = 307
     Top = 174
     Width = 75
@@ -60,7 +60,7 @@ object fmTextInput: TfmTextInput
     ModalResult = 2
     TabOrder = 3
   end
-  object FontDialog1: TFontDialog
+  object FontDialog: TFontDialog
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11

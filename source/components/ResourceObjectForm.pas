@@ -78,7 +78,7 @@ end;
  | TfmResourceObject.FormDestroy                                        |
  |                                                                      |
  | OnDestroy handler for the form.  Set the fmresourceObject global     |
- | variable to Nil                                                      |
+ | variable to nil                                                      |
  *----------------------------------------------------------------------*)
 procedure TfmResourceObject.FormDestroy(Sender: TObject);
 begin
