@@ -1,4 +1,4 @@
-object FmTextInput: TFmTextInput
+object FormTextInput: TFormTextInput
   Left = 0
   Top = 0
   BorderStyle = bsSizeToolWin

@@ -5,7 +5,7 @@ package MiscComponents;
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -25,6 +25,7 @@ package MiscComponents;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Misc. Components (Runtime)'}
 {$IMPLICITBUILD ON}
 
 requires
@@ -35,29 +36,29 @@ requires
   vclie;
 
 contains
-  cmpRunOnce in 'cmpRunOnce.pas',
-  cmpPersistentPosition in 'cmpPersistentPosition.pas',
-  cmpNTAboutBox in 'cmpNTAboutBox.pas',
-  cmpHyperlinkButton in 'cmpHyperlinkButton.pas',
-  cmpExSplitter in 'cmpExSplitter.pas',
-  cmpMessageDisplay in 'cmpMessageDisplay.pas',
-  unitHTMLStringsDisplayObject in 'unitHTMLStringsDisplayObject.pas',
-  cmpExWebBrowser in 'cmpExWebBrowser.pas',
-  cmpMRUList in 'cmpMRUList.pas',
-  cmpThemedScrollBox in 'cmpThemedScrollBox.pas',
-  cmpCWRichEdit in 'cmpCWRichEdit.pas',
-  cmpNewsRichEdit in 'cmpNewsRichEdit.pas',
-  cmpRuler in 'cmpRuler.pas',
-  cmpHexDump in 'cmpHexDump.pas',
-  cmpSplitterPanel in 'cmpSplitterPanel.pas',
-  cmpIniFilePersistentOptions in 'cmpIniFilePersistentOptions.pas',
-  cmpPersistentOptions in 'cmpPersistentOptions.pas',
-  cmpRegistryPersistentOptions in 'cmpRegistryPersistentOptions.pas',
-  cmpXMLPersistentOptions in 'cmpXMLPersistentOptions.pas',
-  cmpPropertyListBox in 'cmpPropertyListBox.pas',
-  unitHTMLHelpViewer in 'unitHTMLHelpViewer.pas',
-  cmpSizingPageControl in 'cmpSizingPageControl.pas',
   cmpColorSelector in 'cmpColorSelector.pas',
-  cmpCountryComboBox in 'cmpCountryComboBox.pas';
+  cmpCountryComboBox in 'cmpCountryComboBox.pas',
+  cmpCWRichEdit in 'cmpCWRichEdit.pas',
+  cmpExSplitter in 'cmpExSplitter.pas',
+  cmpExWebBrowser in 'cmpExWebBrowser.pas',
+  cmpHexDump in 'cmpHexDump.pas',
+  cmpHyperlinkButton in 'cmpHyperlinkButton.pas',
+  cmpIniFilePersistentOptions in 'cmpIniFilePersistentOptions.pas',
+  cmpMessageDisplay in 'cmpMessageDisplay.pas',
+  cmpMRUList in 'cmpMRUList.pas',
+  cmpNewsRichEdit in 'cmpNewsRichEdit.pas',
+  cmpNTAboutBox in 'cmpNTAboutBox.pas',
+  cmpPersistentOptions in 'cmpPersistentOptions.pas',
+  cmpPersistentPosition in 'cmpPersistentPosition.pas',
+  cmpPropertyListBox in 'cmpPropertyListBox.pas',
+  cmpRegistryPersistentOptions in 'cmpRegistryPersistentOptions.pas',
+  cmpRuler in 'cmpRuler.pas',
+  cmpRunOnce in 'cmpRunOnce.pas',
+  cmpSizingPageControl in 'cmpSizingPageControl.pas',
+  cmpSplitterPanel in 'cmpSplitterPanel.pas',
+  cmpThemedScrollBox in 'cmpThemedScrollBox.pas',
+  cmpXMLPersistentOptions in 'cmpXMLPersistentOptions.pas',
+  unitHTMLStringsDisplayObject in 'unitHTMLStringsDisplayObject.pas',
+  unitHTMLHelpViewer in 'unitHTMLHelpViewer.pas';
 
 end.

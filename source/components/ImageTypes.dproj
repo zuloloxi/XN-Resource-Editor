@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{2D4DA658-9902-4C0F-B175-D3009E8EFC6A}</ProjectGuid>
-        <MainSource>LowLevel.dpk</MainSource>
+        <ProjectGuid>{5AA09B6C-1997-4CE1-8D65-BA134761A29D}</ProjectGuid>
+        <MainSource>ImageTypes.dpk</MainSource>
         <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
@@ -52,6 +52,7 @@
         <BRCC_OutputDir>..\..\lib\$(Platform)\$(Config)</BRCC_OutputDir>
         <GenDll>true</GenDll>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_CBuilderOutput>All</DCC_CBuilderOutput>
         <GenPackage>true</GenPackage>
         <DCC_DcuOutput>..\..\lib\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_ExeOutput>..\..\lib\$(Platform)\$(Config)</DCC_ExeOutput>
@@ -60,7 +61,7 @@
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
-        <SanitizedProjectName>LowLevel</SanitizedProjectName>
+        <SanitizedProjectName>ImageTypes</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX32)'!=''">
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
@@ -98,21 +99,6 @@
         </DelphiCompile>
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
-        <DCCReference Include="unitExIniSettings.pas"/>
-        <DCCReference Include="unitExRegSettings.pas"/>
-        <DCCReference Include="unitExSettings.pas"/>
-        <DCCReference Include="unitExXMLSettings.pas"/>
-        <DCCReference Include="unitSearchString.pas"/>
-        <DCCReference Include="unitStreamTextReader.pas"/>
-        <DCCReference Include="unitCharsetMap.pas"/>
-        <DCCReference Include="MultiLanguage_tlb.pas"/>
-        <DCCReference Include="unitExFileSettings.pas"/>
-        <DCCReference Include="RichOle.pas"/>
-        <DCCReference Include="unitObjectCache.pas"/>
-        <DCCReference Include="unitProcesses.pas"/>
-        <DCCReference Include="GraphFlip.pas"/>
-        <DCCReference Include="unitHTMLHelp.pas"/>
-        <DCCReference Include="unitExGraphics.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -131,7 +117,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">LowLevel.dpk</Source>
+                    <Source Name="MainSource">ImageTypes.dpk</Source>
                 </Source>
                 <VersionInfo>
                     <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
@@ -171,9 +157,6 @@
             </Delphi.Personality>
             <Deployment Version="3"/>
             <Platforms>
-                <Platform value="Android">False</Platform>
-                <Platform value="iOSDevice32">False</Platform>
-                <Platform value="iOSSimulator">False</Platform>
                 <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>

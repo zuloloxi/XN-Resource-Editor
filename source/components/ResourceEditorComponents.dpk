@@ -5,7 +5,7 @@ package ResourceEditorComponents;
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -25,37 +25,37 @@ package ResourceEditorComponents;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Ressource Editor Components'}
 {$IMPLICITBUILD ON}
 
 requires
   rtl,
-  LowLevel,
   vcl,
-  ResourceUtils,
-  ImageTypes,
-  MiscComponents;
+  vclimg,
+  MiscComponents,
+  LowLevel;
 
 contains
-  ResourceEditorComponentsReg in 'ResourceEditorComponentsReg.pas',
+  cmpBitmapEditor in 'cmpBitmapEditor.pas',
   cmpDialogBox in 'cmpDialogBox.pas',
   cmpDialogEditor in 'cmpDialogEditor.pas',
+  cmpGradientShape in 'cmpGradientShape.pas',
   cmpMenuDesigner in 'cmpMenuDesigner.pas',
+  cmpStandardSystemMenu in 'cmpStandardSystemMenu.pas',
   DialogButtonControls in 'DialogButtonControls.pas',
   DialogComboBoxControls in 'DialogComboBoxControls.pas',
   DialogEditControls in 'DialogEditControls.pas',
   DialogHotkeyControls in 'DialogHotkeyControls.pas',
   DialogListboxControls in 'DialogListboxControls.pas',
+  DialogListViewControls in 'DialogListViewControls.pas',
   DialogProgressBarControls in 'DialogProgressBarControls.pas',
+  DialogResourceForm in 'DialogResourceForm.pas',
   DialogScrollbarControls in 'DialogScrollbarControls.pas',
   DialogSliderControls in 'DialogSliderControls.pas',
   DialogStaticControls in 'DialogStaticControls.pas',
   DialogStrings in 'DialogStrings.pas',
   DialogUpDownControls in 'DialogUpDownControls.pas',
-  cmpBitmapEditor in 'cmpBitmapEditor.pas',
-  DialogListViewControls in 'DialogListViewControls.pas',
-  cmpGradientShape in 'cmpGradientShape.pas',
-  cmpStandardSystemMenu in 'cmpStandardSystemMenu.pas',
-  DialogResourceForm in 'DialogResourceForm.pas',
+  ResourceEditorComponentsReg in 'ResourceEditorComponentsReg.pas',
   ResourceForm in 'ResourceForm.pas',
   ResourceObjectForm in 'ResourceObjectForm.pas' {fmResourceObject},
   unitCREdProperties in 'unitCREdProperties.pas',

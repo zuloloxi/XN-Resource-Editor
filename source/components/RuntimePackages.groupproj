@@ -3,9 +3,6 @@
         <ProjectGuid>{48D06CA4-6884-47FC-A0D6-8406DE8B3052}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="ImageTypes.dproj">
-            <Dependencies/>
-        </Projects>
         <Projects Include="LowLevel.dproj">
             <Dependencies/>
         </Projects>
@@ -20,15 +17,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="ImageTypes">
-        <MSBuild Projects="ImageTypes.dproj"/>
-    </Target>
-    <Target Name="ImageTypes:Clean">
-        <MSBuild Projects="ImageTypes.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="ImageTypes:Make">
-        <MSBuild Projects="ImageTypes.dproj" Targets="Make"/>
-    </Target>
     <Target Name="LowLevel">
         <MSBuild Projects="LowLevel.dproj"/>
     </Target>
@@ -48,13 +36,13 @@
         <MSBuild Projects="ResourceUtils.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="ImageTypes;LowLevel;ResourceUtils"/>
+        <CallTarget Targets="LowLevel;ResourceUtils"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="ImageTypes:Clean;LowLevel:Clean;ResourceUtils:Clean"/>
+        <CallTarget Targets="LowLevel:Clean;ResourceUtils:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="ImageTypes:Make;LowLevel:Make;ResourceUtils:Make"/>
+        <CallTarget Targets="LowLevel:Make;ResourceUtils:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

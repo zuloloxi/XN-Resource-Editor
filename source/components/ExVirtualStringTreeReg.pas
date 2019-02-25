@@ -1,4 +1,4 @@
-unit VirtualTreesExtensionsReg;
+unit ExVirtualStringTreeReg;
 
 interface
 

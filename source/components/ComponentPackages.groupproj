@@ -12,10 +12,10 @@
         <Projects Include="PropertyPageForms.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="VirtualTreesExtensionsD.dproj">
+        <Projects Include="ResourceEditorComponents.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="ResourceEditorComponents.dproj">
+        <Projects Include="VirtualTreesExtensions.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -53,15 +53,6 @@
     <Target Name="PropertyPageForms:Make">
         <MSBuild Projects="PropertyPageForms.dproj" Targets="Make"/>
     </Target>
-    <Target Name="VirtualTreesExtensionsD">
-        <MSBuild Projects="VirtualTreesExtensionsD.dproj"/>
-    </Target>
-    <Target Name="VirtualTreesExtensionsD:Clean">
-        <MSBuild Projects="VirtualTreesExtensionsD.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="VirtualTreesExtensionsD:Make">
-        <MSBuild Projects="VirtualTreesExtensionsD.dproj" Targets="Make"/>
-    </Target>
     <Target Name="ResourceEditorComponents">
         <MSBuild Projects="ResourceEditorComponents.dproj"/>
     </Target>
@@ -71,14 +62,23 @@
     <Target Name="ResourceEditorComponents:Make">
         <MSBuild Projects="ResourceEditorComponents.dproj" Targets="Make"/>
     </Target>
+    <Target Name="VirtualTreesExtensions">
+        <MSBuild Projects="VirtualTreesExtensions.dproj"/>
+    </Target>
+    <Target Name="VirtualTreesExtensions:Clean">
+        <MSBuild Projects="VirtualTreesExtensions.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VirtualTreesExtensions:Make">
+        <MSBuild Projects="VirtualTreesExtensions.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="MiscComponents;MiscComponentsD;PropertyPageForms;VirtualTreesExtensionsD;ResourceEditorComponents"/>
+        <CallTarget Targets="MiscComponents;MiscComponentsD;PropertyPageForms;ResourceEditorComponents;VirtualTreesExtensions"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="MiscComponents:Clean;MiscComponentsD:Clean;PropertyPageForms:Clean;VirtualTreesExtensionsD:Clean;ResourceEditorComponents:Clean"/>
+        <CallTarget Targets="MiscComponents:Clean;MiscComponentsD:Clean;PropertyPageForms:Clean;ResourceEditorComponents:Clean;VirtualTreesExtensions:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="MiscComponents:Make;MiscComponentsD:Make;PropertyPageForms:Make;VirtualTreesExtensionsD:Make;ResourceEditorComponents:Make"/>
+        <CallTarget Targets="MiscComponents:Make;MiscComponentsD:Make;PropertyPageForms:Make;ResourceEditorComponents:Make;VirtualTreesExtensions:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

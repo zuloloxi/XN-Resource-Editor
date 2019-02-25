@@ -25,6 +25,7 @@ package VirtualTreesExtensions;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Virtual String Tree Extension'}
 {$IMPLICITBUILD ON}
 
 requires

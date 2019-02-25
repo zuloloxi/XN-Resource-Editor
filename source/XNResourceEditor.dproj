@@ -184,7 +184,7 @@
             <Form>fmIconGraphicsResource</Form>
         </DCCReference>
         <DCCReference Include="TextInputForm.pas">
-            <Form>FmTextInput</Form>
+            <Form>FormTextInput</Form>
         </DCCReference>
         <DCCReference Include="components\ResourceObjectForm.pas">
             <Form>fmResourceObject</Form>

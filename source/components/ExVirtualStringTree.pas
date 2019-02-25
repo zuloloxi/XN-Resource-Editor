@@ -4,10 +4,10 @@ interface
 
 uses
   WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
-  Vcl.Controls, VirtualTrees, Vcl.Forms;
+  Vcl.Controls, Vcl.Forms, VirtualTrees;
 
 type
-  TVTIteratorProc = procedure (p: PVirtualNode; param: Integer; var continue: Boolean) of object;
+  TVTIteratorProc = procedure(p: PVirtualNode; param: Integer; var continue: Boolean) of object;
 
   TCustomExVirtualStringTree = class(TCustomVirtualStringTree)
   private
@@ -20,7 +20,6 @@ type
     function GetNodeObject(node: PVirtualNode): TObject;
     procedure SetNodeObject(node: PVirtualNode; const Value: TObject);
     procedure CheckObject(p: PVirtualNode; param: Integer; var continue: Boolean);
-    { Private declarations }
   protected
     procedure Loaded; override;
     procedure Resize; override;
@@ -33,17 +32,15 @@ type
     property ProportionalColumnSizes: Boolean read FProportionalColumnSizes write SetProportionalColumnSizes;
     function GetOptionsClass: TTreeOptionsClass; override;
   public
-    constructor Create (AOwner: TComponent); override;
-    procedure SelectAndFocusNode (node: PVirtualNode; clearSel: Boolean = True);
+    constructor Create(AOwner: TComponent); override;
+    procedure SelectAndFocusNode(node: PVirtualNode; clearSel: Boolean = True);
     function FindNodeObject(obj: TObject; root: PVirtualNode = Nil): PVirtualNode;
-    function ForEach (proc: TVTIteratorProc; param: Integer; root: PVirtualNode = Nil): PVirtualNode;
-
+    function ForEach(proc: TVTIteratorProc; param: Integer; root: PVirtualNode = Nil): PVirtualNode;
 
     property NodeObject [node: PVirtualNode]: TObject read GetNodeObject write SetNodeObject;
-  published
   end;
 
-  TExVirtualStringTree = class (TCustomExVirtualStringTree)
+  TExVirtualStringTree = class(TCustomExVirtualStringTree)
   private
     function GetOptions: TStringTreeOptions;
     procedure SetOptions(const Value: TStringTreeOptions);
@@ -232,7 +229,8 @@ type
 constructor TCustomExVirtualStringTree.Create(AOwner: TComponent);
 begin
   inherited;
-  NodeDataSize := 4
+
+  NodeDataSize := 4;
 end;
 
 procedure TCustomExVirtualStringTree.DoColumnResize(Column: TColumnIndex);
@@ -241,7 +239,7 @@ begin
   try
     inherited;
   finally
-    Dec(FResizeCount)
+    Dec(FResizeCount);
   end
 end;
 
@@ -249,7 +247,8 @@ procedure TCustomExVirtualStringTree.DoHeaderMouseUp(Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   inherited;
-  SaveColumnPCs
+
+  SaveColumnPCs;
 end;
 
 procedure TCustomExVirtualStringTree.SelectAndFocusNode(node: PVirtualNode; clearSel: Boolean = True);
@@ -259,8 +258,8 @@ begin
   if Assigned(node) then
   begin
     Selected [node] := True;
-    FocusedNode := node
-  end
+    FocusedNode := node;
+  end;
 end;
 
 function TCustomExVirtualStringTree.GetNodeObject(
@@ -268,11 +267,11 @@ function TCustomExVirtualStringTree.GetNodeObject(
 var
   obj: PObject;
 begin
-  obj := GetNodeData (node);
+  obj := GetNodeData(node);
   if Assigned(obj) and Assigned(obj^) then
     Result := obj^
   else
-    Result := nil
+    Result := nil;
 end;
 
 function TCustomExVirtualStringTree.GetOptionsClass: TTreeOptionsClass;
@@ -287,13 +286,13 @@ begin
   if ProportionalColumnSizes then
   begin
     FProportionalColumnSizes := False;
-    ProportionalColumnSizes := True
+    ProportionalColumnSizes := True;
   end
 end;
 
 procedure TCustomExVirtualStringTree.LockControl;
 begin
-  SendMessage (Handle, WM_SETREDRAW, 0, 0);
+  SendMessage(Handle, WM_SETREDRAW, 0, 0);
 end;
 
 procedure TCustomExVirtualStringTree.Resize;
@@ -302,6 +301,7 @@ var
   hasVertScrollBar: Boolean;
 begin
   inherited;
+
   if ProportionalColumnSizes and (FResizeCount = 0) and not(csDesigning in ComponentState) then
   begin
     Inc(FResizeCount);
@@ -313,10 +313,10 @@ begin
         if BorderStyle <> bsNone then
           Inc(bw, 2);
         ww := Width - 2 * bw;
-        hasVertScrollBar := (GetWindowLong (handle, GWL_STYLE) and WS_VSCROLL) <> 0;
+        hasVertScrollBar := (GetWindowLong(Handle, GWL_STYLE) and WS_VSCROLL) <> 0;
 
         if hasVertScrollBar then
-          ww := ww - GetSystemMetrics (SM_CXVSCROLL);
+          ww := ww - GetSystemMetrics(SM_CXVSCROLL);
 
         w := 0;
         for i := 0 to Columns.Count - 2 do
@@ -326,8 +326,6 @@ begin
           Inc(w, n)
         end;
 
-//        if hasVertScrollBar then
-//          ww := ww + GetSystemMetrics (SM_CXVSCROLL);
         Columns [Columns.Count - 1].Width := ww - w
       end
     finally
@@ -357,7 +355,7 @@ procedure TCustomExVirtualStringTree.SetNodeObject(node: PVirtualNode;
 var
   obj: PObject;
 begin
-  obj := GetNodeData (node);
+  obj := GetNodeData(node);
   if Assigned(obj) then
     obj^ := Value
 end;
@@ -383,7 +381,7 @@ begin
 
         if ClientWidth - w > Columns [Columns.Count - 1].Width then
           Columns [Columns.Count - 1].Width := ClientWidth - w;
-        SetLength (FColumnPCs, Header.Columns.Count);
+        SetLength(FColumnPCs, Header.Columns.Count);
 
         SaveColumnPCs
       end
@@ -395,13 +393,13 @@ end;
 
 procedure TCustomExVirtualStringTree.UnlockControl;
 begin
-  SendMessage (Handle, WM_SETREDRAW, 1, 0);
-  RedrawWindow(Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN)
+  SendMessage(Handle, WM_SETREDRAW, 1, 0);
+  RedrawWindow(Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN);
 end;
 
 function TCustomExVirtualStringTree.FindNodeObject(obj: TObject; root: PVirtualNode): PVirtualNode;
 begin
-  Result := ForEach (CheckObject, Integer (obj), root)
+  Result := ForEach(CheckObject, Integer(obj), root);
 end;
 
 function TCustomExVirtualStringTree.ForEach(proc: TVTIteratorProc; param: Integer;
@@ -410,18 +408,18 @@ var
   cont: Boolean;
   node: PVirtualNode;
 
-  procedure Iterate (n: PVirtualNode);
+  procedure Iterate(n: PVirtualNode);
   begin
     while n <> Nil do
     begin
-      proc (n, param, cont);
+      proc(n, param, cont);
       if not cont then
       begin
         node := n;
         break
       end;
 
-      Iterate (GetFirstChild (n));
+      Iterate(GetFirstChild(n));
       n := GetNextSibling(n)
     end
   end;
@@ -429,7 +427,7 @@ var
 begin
   if root = Nil then root := RootNode;
   node := Nil;
-  Iterate (GetFirstChild (root));
+  Iterate(GetFirstChild(root));
   Result := node
 end;
 
@@ -439,8 +437,9 @@ var
   obj: TObject;
 begin
   obj := GetNodeObject(p);
-  continue := Integer (obj) <> param
+  continue := Integer(obj) <> param
 end;
+
 
 { TExVirtualStringTree }
 

@@ -6,7 +6,7 @@ package MiscComponentsD;
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -26,7 +26,7 @@ package MiscComponentsD;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$DESCRIPTION 'Colin Wilson''s Miscellaneous Components'}
+{$DESCRIPTION 'XN - Misc. Components (Design-Time)'}
 {$IMPLICITBUILD ON}
 
 requires

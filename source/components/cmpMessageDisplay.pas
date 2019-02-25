@@ -851,7 +851,7 @@ begin
     Result := txt <> ''
   end
   else
-    Result := False
+    Result := False;
 end;
 
 (*----------------------------------------------------------------------*
@@ -862,7 +862,8 @@ end;
  |                                                                      |
  | The function returns true if the component is updating               |
  *----------------------------------------------------------------------*)
-function TMessageDisplay.GetSelLength: Integer;
+
+ function TMessageDisplay.GetSelLength: Integer;
 var
   d: TDisplayObjectLink;
 begin
@@ -870,7 +871,7 @@ begin
   if Assigned(d) then
     Result := d.GetSelLength
   else
-    Result := 0
+    Result := 0;
 end;
 
 function TMessageDisplay.GetText: WideString;
@@ -917,6 +918,7 @@ begin
       FFocusedObject := 0;
   end;
 end;
+
 (*----------------------------------------------------------------------*
  | function TMessageDisplay.ObjectAt                                    |
  |                                                                      |
@@ -947,11 +949,11 @@ begin
     if y < h then
     begin
       Result := i;
-      exit
+      exit;
     end
     else
-      Dec(y, h)
-  end
+      Dec(y, h);
+  end;
 end;
 
 (*----------------------------------------------------------------------*
@@ -966,9 +968,8 @@ begin
   if FocusedObject <> -1 then
   begin
     obj := Objects [FocusedObject];
-    obj.PageDown
-  end
-
+    obj.PageDown;
+  end;
 end;
 
 procedure TMessageDisplay.Paint;
@@ -977,7 +978,6 @@ var
   obj: TDisplayObjectLink;
   objNo: Integer;
   r: TRect;
-
 begin
   if IsUpdating then Exit;
 
@@ -1001,7 +1001,7 @@ begin
     Inc(objNo)
   end;
 
-  inherited Paint
+  inherited Paint;
 end;
 
 (*----------------------------------------------------------------------*
@@ -1043,8 +1043,8 @@ begin
       end
     end
   finally
-    printer.EndDoc
-  end
+    printer.EndDoc;
+  end;
 end;
 
 procedure TMessageDisplay.RecalcBounds;
@@ -1076,8 +1076,8 @@ begin
     else
       Objects [objIdx].Refresh;
   finally
-    EndUpdate
-  end
+    EndUpdate;
+  end;
 end;
 
 (*----------------------------------------------------------------------*
@@ -1090,8 +1090,8 @@ begin
   if FAutoFit <> Value then
   begin
     FAutoFit := Value;
-    RecreateWnd
-  end
+    RecreateWnd;
+  end;
 end;
 
 procedure TMessageDisplay.SetBorder(const Value: TBorderStyle);
@@ -1099,7 +1099,7 @@ begin
   if Value <> FBorder then
   begin
     FBorder := Value;
-    RecreateWnd
+    RecreateWnd;
   end;
 end;
 
@@ -1120,7 +1120,7 @@ begin
   if (csDesigning in ComponentState) then
     inherited
   else
-  if Assigned(parent) and parent is TScrollingWinControl then
+  if Assigned(parent) and (Parent is TScrollingWinControl) then
   begin
     sb := TScrollingWinControl (parent);
 
@@ -1848,6 +1848,6 @@ begin
 end;
 
 initialization
-  RegisterDisplayObjectLink (TGraphicDisplayObjectLink);
-  RegisterDisplayObjectLink (TWinControlObjectLink);
+  RegisterDisplayObjectLink(TGraphicDisplayObjectLink);
+  RegisterDisplayObjectLink(TWinControlObjectLink);
 end.

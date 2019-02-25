@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls;
 
 type
-  TFmTextInput = class(TForm)
+  TFormTextInput = class(TForm)
     MemoText: TMemo;
     ButtonOK: TButton;
     ButtonSelectFont: TButton;
@@ -19,7 +19,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TFmTextInput.ButtonSelectFontClick(Sender: TObject);
+procedure TFormTextInput.ButtonSelectFontClick(Sender: TObject);
 begin
   FontDialog.Font.Assign(MemoText.Font);
   if FontDialog.Execute then

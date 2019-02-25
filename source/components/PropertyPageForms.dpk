@@ -25,15 +25,15 @@ package PropertyPageForms;
 {$IMAGEBASE $400000}
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Property Page Forms'}
 {$IMPLICITBUILD ON}
 
 requires
   rtl,
   vcl,
-  VirtualTreesD,
-  MiscComponents,
-  vclie,
   vclimg,
+  VirtualTreesR,
+  MiscComponents,
   LowLevel;
 
 contains

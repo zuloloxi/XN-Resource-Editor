@@ -23,6 +23,11 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
         <Cfg_1>true</Cfg_1>
         <CfgParent>Base</CfgParent>
@@ -68,11 +73,16 @@ $(PostBuildEvent)]]></PostBuildEvent>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX32)'!=''">
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
+        <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <DCC_UsePackage>vclimg;vcl;rtl;vclie;LowLevel;$(DCC_UsePackage)</DCC_UsePackage>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <DCC_UsePackage>vclimg;vcl;rtl;vclie;$(DCC_UsePackage)</DCC_UsePackage>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
@@ -86,6 +96,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <DCC_Description>XN - Misc. Components (Runtime)</DCC_Description>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -105,30 +116,30 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="LowLevel.dcp"/>
         <DCCReference Include="vclimg.dcp"/>
         <DCCReference Include="vclie.dcp"/>
-        <DCCReference Include="cmpRunOnce.pas"/>
-        <DCCReference Include="cmpPersistentPosition.pas"/>
-        <DCCReference Include="cmpNTAboutBox.pas"/>
-        <DCCReference Include="cmpHyperlinkButton.pas"/>
-        <DCCReference Include="cmpExSplitter.pas"/>
-        <DCCReference Include="cmpMessageDisplay.pas"/>
-        <DCCReference Include="unitHTMLStringsDisplayObject.pas"/>
-        <DCCReference Include="cmpExWebBrowser.pas"/>
-        <DCCReference Include="cmpMRUList.pas"/>
-        <DCCReference Include="cmpThemedScrollBox.pas"/>
-        <DCCReference Include="cmpCWRichEdit.pas"/>
-        <DCCReference Include="cmpNewsRichEdit.pas"/>
-        <DCCReference Include="cmpRuler.pas"/>
-        <DCCReference Include="cmpHexDump.pas"/>
-        <DCCReference Include="cmpSplitterPanel.pas"/>
-        <DCCReference Include="cmpIniFilePersistentOptions.pas"/>
-        <DCCReference Include="cmpPersistentOptions.pas"/>
-        <DCCReference Include="cmpRegistryPersistentOptions.pas"/>
-        <DCCReference Include="cmpXMLPersistentOptions.pas"/>
-        <DCCReference Include="cmpPropertyListBox.pas"/>
-        <DCCReference Include="unitHTMLHelpViewer.pas"/>
-        <DCCReference Include="cmpSizingPageControl.pas"/>
         <DCCReference Include="cmpColorSelector.pas"/>
         <DCCReference Include="cmpCountryComboBox.pas"/>
+        <DCCReference Include="cmpCWRichEdit.pas"/>
+        <DCCReference Include="cmpExSplitter.pas"/>
+        <DCCReference Include="cmpExWebBrowser.pas"/>
+        <DCCReference Include="cmpHexDump.pas"/>
+        <DCCReference Include="cmpHyperlinkButton.pas"/>
+        <DCCReference Include="cmpIniFilePersistentOptions.pas"/>
+        <DCCReference Include="cmpMessageDisplay.pas"/>
+        <DCCReference Include="cmpMRUList.pas"/>
+        <DCCReference Include="cmpNewsRichEdit.pas"/>
+        <DCCReference Include="cmpNTAboutBox.pas"/>
+        <DCCReference Include="cmpPersistentOptions.pas"/>
+        <DCCReference Include="cmpPersistentPosition.pas"/>
+        <DCCReference Include="cmpPropertyListBox.pas"/>
+        <DCCReference Include="cmpRegistryPersistentOptions.pas"/>
+        <DCCReference Include="cmpRuler.pas"/>
+        <DCCReference Include="cmpRunOnce.pas"/>
+        <DCCReference Include="cmpSizingPageControl.pas"/>
+        <DCCReference Include="cmpSplitterPanel.pas"/>
+        <DCCReference Include="cmpThemedScrollBox.pas"/>
+        <DCCReference Include="cmpXMLPersistentOptions.pas"/>
+        <DCCReference Include="unitHTMLStringsDisplayObject.pas"/>
+        <DCCReference Include="unitHTMLHelpViewer.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -185,15 +196,12 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <VersionInfoKeys Name="CFBundleExecutable"/>
                 </VersionInfoKeys>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k170.bpl">Microsoft Office 2000 Beispiele für gekapselte Komponenten für Automatisierungsserver</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp170.bpl">Microsoft Office XP Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Beispiele für gekapselte Komponenten für Automatisierungsserver</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3"/>
             <Platforms>
-                <Platform value="Android">False</Platform>
-                <Platform value="iOSDevice32">False</Platform>
-                <Platform value="iOSSimulator">False</Platform>
                 <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">False</Platform>
@@ -204,30 +212,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
     <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
     <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Android'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy cmpNTAboutBox.dfm ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='iOSDevice32'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy cmpNTAboutBox.dfm ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='iOSSimulator'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy cmpNTAboutBox.dfm ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='OSX32'">
         <PreBuildEvent/>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
@@ -245,30 +229,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy cmpNTAboutBox.dfm ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Android'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy cmpNTAboutBox.dfm ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='iOSDevice32'">
-        <PreBuildEvent/>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>copy cmpNTAboutBox.dfm ..\..\lib\$(Platform)\$(Config)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='iOSSimulator'">
         <PreBuildEvent/>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>

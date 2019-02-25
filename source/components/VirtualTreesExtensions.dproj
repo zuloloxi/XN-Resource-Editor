@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{4860853A-3D4D-44A6-A5A2-67D3476537F1}</ProjectGuid>
-        <MainSource>VirtualTreesExtensionsD.dpk</MainSource>
+        <MainSource>VirtualTreesExtensions.dpk</MainSource>
         <ProjectVersion>18.3</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <Base>True</Base>
@@ -66,7 +66,7 @@
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
-        <SanitizedProjectName>VirtualTreesExtensionsD</SanitizedProjectName>
+        <SanitizedProjectName>VirtualTreesExtensions</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_OSX32)'!=''">
         <DCC_UsePackage>rtl;$(DCC_UsePackage)</DCC_UsePackage>
@@ -93,6 +93,7 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <DCC_Description>XN - Virtual String Tree Extension</DCC_Description>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -110,7 +111,7 @@
         <DCCReference Include="rtl.dcp"/>
         <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="VirtualTreesR.dcp"/>
-        <DCCReference Include="VirtualTreesExtensionsReg.pas"/>
+        <DCCReference Include="ExVirtualStringTreeReg.pas"/>
         <DCCReference Include="ExVirtualStringTree.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -130,7 +131,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">VirtualTreesExtensionsD.dpk</Source>
+                    <Source Name="MainSource">VirtualTreesExtensions.dpk</Source>
                 </Source>
                 <VersionInfo>
                     <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
@@ -167,11 +168,15 @@
                     <VersionInfoKeys Name="CFBundleAllowMixedLocalizations"/>
                     <VersionInfoKeys Name="CFBundleExecutable"/>
                 </VersionInfoKeys>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Microsoft Office 2000 Beispiele für gekapselte Komponenten für Automatisierungsserver</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Microsoft Office XP Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="..\..\..\..\Documents\Embarcadero\Studio\19.0\Bpl\VirtualTreesExtensionsD.bpl" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="..\..\..\..\Documents\Embarcadero\Studio\19.0\Bpl\VirtualTreesExtensions.bpl" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>VirtualTreesExtensionsD.bpl</RemoteName>
+                        <RemoteName>VirtualTreesExtensions.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

@@ -32,6 +32,5 @@ requires
   vcl;
 
 contains
-  unitEXIcon in 'unitEXIcon.pas';
 
 end.

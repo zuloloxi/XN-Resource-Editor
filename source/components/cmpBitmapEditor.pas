@@ -15,7 +15,7 @@ type
     dtGradRectTLBR, dtGradRectBLTR
   );
 
-  TOnGetText = procedure (sender: TObject; font: TFont; var txt: WideString) of object;
+  TOnGetText = procedure (Sender: TObject; Font: TFont; var Txt: WideString) of object;
 
   TBitmapEditor = class(TCustomControl)
   private
@@ -57,7 +57,7 @@ type
     procedure SetDrawBrush(const Value: TBrush);
     procedure SetDrawingTool(const Value: TDrawingTool);
     procedure SetDrawPen(const Value: TPen);
-    procedure ChangeSelectionRect(const rect: TRect);
+    procedure ChangeSelectionRect(const Rect: TRect);
     procedure RedrawBitmap;
     procedure Initialize;
     procedure SetTransparentColor(const Value: TColor);
@@ -138,18 +138,18 @@ uses
 
 { TBitmapEditor }
 
-procedure TBitmapEditor.ChangeSelectionRect(const rect: TRect);
+procedure TBitmapEditor.ChangeSelectionRect(const Rect: TRect);
 var
-  oldValid: Boolean;
+  OldValid: Boolean;
 begin
-  oldValid := SelectionValid;
+  OldValid := SelectionValid;
 
-  if rect.Left <> -2 then FSelectionRect.Left := rect.Left;
-  if rect.Top <> -2 then FSelectionRect.Top := rect.Top;
-  if rect.Right <> -2 then FSelectionRect.Right := rect.Right;
-  if rect.Bottom <> -2 then FSelectionRect.Bottom := rect.Bottom;
+  if Rect.Left <> -2 then FSelectionRect.Left := Rect.Left;
+  if Rect.Top <> -2 then FSelectionRect.Top := Rect.Top;
+  if Rect.Right <> -2 then FSelectionRect.Right := Rect.Right;
+  if Rect.Bottom <> -2 then FSelectionRect.Bottom := Rect.Bottom;
 
-  if SelectionValid or oldValid then
+  if SelectionValid or OldValid then
     Invalidate;
 
   if Assigned(OnSelectionRectChange) then
@@ -158,46 +158,46 @@ end;
 
 procedure TBitmapEditor.CopySelection;
 var
-  b: TBitmap;
-  s: TMemoryStream;
+  Bitmap: TBitmap;
+  MemoryStream: TMemoryStream;
   AData: THandle;
-  p: PChar;
+  LockPointer: PChar;
   Size: Integer;
-  r: TRect;
+  Rct: TRect;
 
 begin
-  s := nil;
-  b := TBitmap.Create;
+  MemoryStream := nil;
+  Bitmap := TBitmap.Create;
   try
-    s := TMemoryStream.Create;
-    b.PixelFormat := ClipboardPixelFormat;
-    b.Palette := ClipboardPalette;
-    b.Width := FSelectionRect.Right - FSelectionRect.Left + 1;
-    b.Height := FSelectionRect.Bottom - FSelectionRect.Top + 1;
+    MemoryStream := TMemoryStream.Create;
+    Bitmap.PixelFormat := ClipboardPixelFormat;
+    Bitmap.Palette := ClipboardPalette;
+    Bitmap.Width := FSelectionRect.Right - FSelectionRect.Left + 1;
+    Bitmap.Height := FSelectionRect.Bottom - FSelectionRect.Top + 1;
 
-    r := FSelectionRect;
-    Inc(r.Right);
-    Inc(r.Bottom);
+    Rct := FSelectionRect;
+    Inc(Rct.Right);
+    Inc(Rct.Bottom);
 
-    b.Canvas.CopyRect(rect(0, 0, b.Width, b.Height), DrawBmp.Canvas, r);
+    Bitmap.Canvas.CopyRect(Rect(0, 0, Bitmap.Width, Bitmap.Height), DrawBmp.Canvas, Rct);
 
-    b.SaveToStream (s);
-    Size := s.Size - SizeOf (TBitmapFileHeader);
+    Bitmap.SaveToStream (MemoryStream);
+    Size := MemoryStream.Size - SizeOf (TBitmapFileHeader);
 
     AData := GlobalAlloc (GMEM_DDESHARE, size);
     try
-      p := GlobalLock (AData);
-      Move ((PChar (s.Memory) + SizeOf (TBitmapFileHeader))^, p^, size);
-      GlobalUnlock (AData);
-      clipboard.SetAsHandle (CF_DIB, AData);
+      LockPointer := GlobalLock(AData);
+      Move((PChar(MemoryStream.Memory) + SizeOf (TBitmapFileHeader))^, LockPointer^, Size);
+      GlobalUnlock(AData);
+      clipboard.SetAsHandle(CF_DIB, AData);
     except
       GlobalFree (AData);
-      raise
-    end
+      raise;
+    end;
   finally
-    b.Free;
-    s.Free;
-  end
+    Bitmap.Free;
+    MemoryStream.Free;
+  end;
 end;
 
 constructor TBitmapEditor.Create(AOwner: TComponent);
@@ -234,6 +234,7 @@ end;
 procedure TBitmapEditor.CreateParams(var params: TCreateParams);
 begin
   inherited CreateParams (params);
+
   if BorderStyle = bsSingle then
     params.Style := params.Style or WS_BORDER;
 end;
@@ -241,7 +242,7 @@ end;
 procedure TBitmapEditor.CutSelection;
 begin
   CopySelection;
-  DeleteSelection
+  DeleteSelection;
 end;
 
 procedure TBitmapEditor.DeleteSelection;
@@ -260,9 +261,9 @@ begin
     FillRgn (DrawBmp.Canvas.Handle, hrgn, Brush.Handle);
   finally
     Brush.Free;
-    DeleteObject(hrgn)
+    DeleteObject(hrgn);
   end;
-  RedrawBitmap
+  RedrawBitmap;
 end;
 
 destructor TBitmapEditor.Destroy;
@@ -359,7 +360,7 @@ end;
 
 procedure TBitmapEditor.Initialize;
 var
-  r: TRect;
+  Rct: TRect;
 begin
   if Assigned(FPicture.Graphic) then
   begin
@@ -371,18 +372,18 @@ begin
   end
   else
   begin
-    r.Left := 0;
-    r.top := 0;
-    r.right := 32;
-    r.bottom := 32;
+    Rct.Left := 0;
+    Rct.top := 0;
+    Rct.right := 32;
+    Rct.bottom := 32;
     FDrawBmp.TransparentColor := TransparentColor;
-    FDrawBmp.Width := r.right;
-    FDrawBmp.Height := r.bottom;
+    FDrawBmp.Width := Rct.right;
+    FDrawBmp.Height := Rct.bottom;
     FDrawBmp.Canvas.pen.Color := clWhite;
-    FDrawBmp.Canvas.FillRect(r)
+    FDrawBmp.Canvas.FillRect(Rct)
   end;
 
-  ChangeSelectionRect(rect(-1, -1, -1, -1));
+  ChangeSelectionRect(Rect(-1, -1, -1, -1));
 
   ClientWidth := FDrawBmp.Width * Magnification;
   ClientHeight := FDrawBmp.Height * Magnification;
@@ -397,24 +398,24 @@ end;
 procedure TBitmapEditor.MouseDown(Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 var
-  p: TPoint;
+  LockPointer: TPoint;
   st: WideString;
 begin
   SetFocus;
   FCallEndChange := DrawingTool in [dtPencil..dtEllipse, dtBrush, dtText, dtEraser, dtAirbrush, dtGradRectLR, dtGradRectTB, dtGradRectTLBR, dtGradRectBLTR];
-  p.x := x div magnification;
-  p.y := y div magnification;
+  LockPointer.x := x div magnification;
+  LockPointer.y := y div magnification;
   FScratchBmp.Assign (FDrawBmp);
 
   if Button = mbLeft then
   begin
     FLButtonIsDown := True;
-    FPos := p;
+    FPos := LockPointer;
 
     case DrawingTool of
       dtPencil, dtLine:
         begin
-          FDrawBmp.Canvas.Pixels [p.x, p.y] := FDrawPen.Color;
+          FDrawBmp.Canvas.Pixels [LockPointer.x, LockPointer.y] := FDrawPen.Color;
           RedrawBitmap
         end;
       dtFloodFill:
@@ -422,7 +423,7 @@ begin
           with FDrawBmp.Canvas do
           begin
             Brush := FDrawBrush;
-            FloodFill (p.x, p.y, Pixels [p.x, p.y], fsSurface);
+            FloodFill (LockPointer.x, LockPointer.y, Pixels [LockPointer.x, LockPointer.y], fsSurface);
           end;
           RedrawBitmap
         end;
@@ -431,7 +432,7 @@ begin
 
       dtDropper:
         begin
-          FDrawPen.Color := FDrawBmp.Canvas.Pixels [p.x, p.y];
+          FDrawPen.Color := FDrawBmp.Canvas.Pixels [LockPointer.x, LockPointer.y];
           DrawingTool := FLastDrawingTool;
           ReleaseCapture;
           if Assigned(FOnDrawToolChange) and not(csDestroying in ComponentState) then
@@ -440,11 +441,11 @@ begin
 
       dtSelectRect,
       dtSelectArea:
-          ChangeSelectionRect(rect(p.x, p.y, -1, -1));
+          ChangeSelectionRect(Rect(LockPointer.x, LockPointer.y, -1, -1));
       dtEraser:
         begin
           FEraser.Color := TransparentColor;
-          FDrawBmp.Canvas.Pixels [p.x, p.y] := FEraser.Color;
+          FDrawBmp.Canvas.Pixels [LockPointer.x, LockPointer.y] := FEraser.Color;
           RedrawBitmap
         end;
       dtText:
@@ -455,7 +456,7 @@ begin
           if st <> '' then
           begin
             SetBkMode (FDrawBmp.Canvas.Handle, TRANSPARENT);
-            ExtTextOutW (FDrawBmp.Canvas.Handle, p.x, p.y, 0, Nil, PWideChar (st), Length (st), Nil);
+            ExtTextOutW (FDrawBmp.Canvas.Handle, LockPointer.x, LockPointer.y, 0, nil, PWideChar (st), Length (st), nil);
             RedrawBitmap;
             if FCallEndChange then
             begin
@@ -474,7 +475,7 @@ begin
         dtMagnifier: ZoomOut;
         dtDropper:
           begin
-            FDrawBrush.Color := FDrawBmp.Canvas.Pixels [p.x, p.y];
+            FDrawBrush.Color := FDrawBmp.Canvas.Pixels [LockPointer.x, LockPointer.y];
             DrawingTool := FLastDrawingTool;
             ReleaseCapture;
             if Assigned(FOnDrawToolChange) and not(csDestroying in ComponentState) then
@@ -486,29 +487,29 @@ end;
 
 procedure TBitmapEditor.MouseMove(Shift: TShiftState; X, Y: Integer);
 var
-  p: TPoint;
+  LockPointer: TPoint;
   hrgn: THandle;
-  r: TRect;
+  Rct: TRect;
   inRect: Boolean;
   gradType: TGradientShapeRectType;
 begin
-  p.x := x;
-  p.y := y;
-  ScreenToClient(p);
+  LockPointer.x := x;
+  LockPointer.y := y;
+  ScreenToClient(LockPointer);
   if Parent is TScrollingWinControl then
   begin
-    r := Parent.ClientRect;
-    MapWindowPoints (Parent.Handle, handle, r, 2);
-    IntersectRect(r, r, ClientRect)
+    Rct := Parent.ClientRect;
+    MapWindowPoints (Parent.Handle, handle, Rct, 2);
+    IntersectRect(Rct, Rct, ClientRect)
   end
   else
-    r := ClientRect;
+    Rct := ClientRect;
 
-  inRect := PtInRect(r, p);
+  inRect := PtInRect(Rct, LockPointer);
   if inRect  or (ssLeft in Shift) then
   begin
-    p.x := p.x div magnification;
-    p.y := p.y div magnification;
+    LockPointer.x := LockPointer.x div magnification;
+    LockPointer.y := LockPointer.y div magnification;
     if inRect and not FMouseCaptured then
     begin
       SetCapture (handle);
@@ -517,13 +518,13 @@ begin
 
     if not InRect and (DrawingTool in [dtSelectRect, dtSelectArea]) then
     begin
-      if p.x >= drawBmp.Width then p.x := drawBmp.Width - 1;
-      if p.y >= drawBmp.Height then p.y := drawBmp.Height - 1;
-      ChangeSelectionRect(rect(-2, -2, p.x, p.y));
+      if LockPointer.x >= drawBmp.Width then LockPointer.x := drawBmp.Width - 1;
+      if LockPointer.y >= drawBmp.Height then LockPointer.y := drawBmp.Height - 1;
+      ChangeSelectionRect(Rect(-2, -2, LockPointer.x, LockPointer.y));
     end
     else
     begin
-      if (p.x <> FPos.x) or (p.y <> FPos.y) then
+      if (LockPointer.x <> FPos.x) or (LockPointer.y <> FPos.y) then
         if FLButtonIsDown then
         begin
           case DrawingTool of
@@ -532,9 +533,9 @@ begin
                 begin
                   Pen := FDrawPen;
                   MoveTo (FPos.x, FPos.y);
-                  LineTo (p.x, p.y);
-                  Pixels [p.x, p.y] := FDrawPen.Color;
-                  FPos := p;
+                  LineTo (LockPointer.x, LockPointer.y);
+                  Pixels [LockPointer.x, LockPointer.y] := FDrawPen.Color;
+                  FPos := LockPointer;
                 end;
 
             dtLine :
@@ -544,8 +545,8 @@ begin
                 begin
                   Pen := FDrawPen;
                   MoveTo (FPos.x, FPos.y);
-                  LineTo (p.x, p.y);
-                  Pixels [p.x, p.y] := FDrawPen.Color;
+                  LineTo (LockPointer.x, LockPointer.y);
+                  Pixels [LockPointer.x, LockPointer.y] := FDrawPen.Color;
                 end
               end;
             dtFrameRect, dtFillRect, dtRect,
@@ -556,11 +557,11 @@ begin
                 FDrawBmp.Assign (FScratchBmp);
                 case DrawingTool of
                   dtFrameRect, dtFillRect, dtRect: 
-                    hrgn := CreateRectRgn (FPos.x, FPos.y, p.x + 1, p.y + 1);
+                    hrgn := CreateRectRgn (FPos.x, FPos.y, LockPointer.x + 1, LockPointer.y + 1);
                   dtFrameEllipse, dtFillEllipse, dtEllipse: 
-                    hrgn := CreateEllipticRgn (FPos.x, FPos.y, p.x + 1, p.y + 1);
+                    hrgn := CreateEllipticRgn (FPos.x, FPos.y, LockPointer.x + 1, LockPointer.y + 1);
                   dtFrameRoundRect, dtFillRoundRect, dtRoundRect: 
-                    hrgn := CreateRoundRectRgn (FPos.x, FPos.y, p.x + 1, p.y + 1, 5, 5);
+                    hrgn := CreateRoundRectRgn (FPos.x, FPos.y, LockPointer.x + 1, LockPointer.y + 1, 5, 5);
                   else
                     hrgn := 0;
                 end;
@@ -605,21 +606,21 @@ begin
                           else
                             gradType := gsrLR
                         end;
-                        GradientRect(FDrawBmp.Canvas.Handle, gradType, FPos.x, FPos.y, p.x + 1, p.y + 1, DrawPen.Color, DrawBrush.Color);
+                        GradientRect(FDrawBmp.Canvas.Handle, gradType, FPos.x, FPos.y, LockPointer.x + 1, LockPointer.y + 1, DrawPen.Color, DrawBrush.Color);
                       end
                   end
               end;
             dtSelectRect,
             dtSelectArea :
-              ChangeSelectionRect(rect(-2, -2, p.x, p.y));
+              ChangeSelectionRect(Rect(-2, -2, LockPointer.x, LockPointer.y));
             dtEraser :
               with FDrawBmp.Canvas do
               begin
                 Pen := FEraser;
                 MoveTo (FPos.x, FPos.y);
-                LineTo (p.x, p.y);
-                Pixels [p.x, p.y] := FEraser.Color;
-                FPos := p;
+                LineTo (LockPointer.x, LockPointer.y);
+                Pixels [LockPointer.x, LockPointer.y] := FEraser.Color;
+                FPos := LockPointer;
               end;
           end;
 
@@ -634,7 +635,7 @@ begin
       end
   end
   else
-  begin  // Pt not in rect, and not LButtonDown
+  begin  // Pt not in Rect, and not LButtonDown
     ReleaseCapture;
     FMouseCaptured := False;
     Invalidate
@@ -644,16 +645,16 @@ end;
 procedure TBitmapEditor.MouseUp(Button: TMouseButton; Shift: TShiftState;
   X, Y: Integer);
 var
-  p: TPoint;
+  LockPointer: TPoint;
 begin
   if button = mbLeft then
     FLButtonIsDown := False;
 
-  p.x := x;
-  p.y := y;
-  ScreenToClient(p);
+  LockPointer.x := x;
+  LockPointer.y := y;
+  ScreenToClient(LockPointer);
 
-  if PtInRect(ClientRect, p) then
+  if PtInRect(ClientRect, LockPointer) then
   begin
     SetCapture (handle);
     FMouseCaptured := True
@@ -689,7 +690,7 @@ end;
 procedure TBitmapEditor.Paint;
 var
   x: Integer;
-  r: TRect;
+  Rct: TRect;
   pts: array [0..4] of TPoint;
 begin
   PaintBitmap (FDrawBmp);
@@ -719,17 +720,17 @@ begin
   if SelectionValid then
     with FSelectionRect do
     begin
-      r.left := left * Magnification + Magnification div 2;
-      r.top := top * Magnification + Magnification div 2;
-      r.right := right * Magnification + Magnification div 2;
-      r.bottom := bottom * Magnification + Magnification div 2;
+      Rct.left := left * Magnification + Magnification div 2;
+      Rct.top := top * Magnification + Magnification div 2;
+      Rct.right := right * Magnification + Magnification div 2;
+      Rct.bottom := bottom * Magnification + Magnification div 2;
 
-      pts [0] := r.TopLeft;
-      pts [1].x := r.Right;
-      pts [1].y := r.Top;
-      pts [2] := r.BottomRight;
-      pts [3].x := r.Left;
-      pts [3].y := r.Bottom;
+      pts [0] := Rct.TopLeft;
+      pts [1].x := Rct.Right;
+      pts [1].y := Rct.Top;
+      pts [2] := Rct.BottomRight;
+      pts [3].x := Rct.Left;
+      pts [3].y := Rct.Bottom;
       pts [4] := pts [0];
 
       Canvas.Pen.Width := Magnification;
@@ -761,14 +762,14 @@ var
   s: TMemoryStream;
   f: TBitmapFileHeader;
   Data: THandle;
-  p: PChar;
+  LockPointer: PChar;
   Size: Integer;
-  r: TRect;
+  Rct: TRect;
 begin
   s := nil;
   b := TBitmap.Create;
   try
-    data := clipboard.GetAsHandle (CF_DIB);
+    data := clipboard.GetAsHandle(CF_DIB);
     if data = 0 then
       RaiseLastOSError;
 
@@ -780,9 +781,9 @@ begin
     s.Write (f, SizeOf (f));
 
     Size := GlobalSize (data);
-    p := GlobalLock (data);
+    LockPointer := GlobalLock (data);
     try
-      s.Write (p^, Size);
+      s.Write (LockPointer^, Size);
     finally
       GlobalUnlock (data)
     end;
@@ -792,11 +793,11 @@ begin
     b.Palette := FClipboardPalette;
     b.PixelFormat := FClipboardPixelFormat;
 
-    r := FSelectionRect;
-    Inc(r.Right);
-    Inc(r.Bottom);
+    Rct := FSelectionRect;
+    Inc(Rct.Right);
+    Inc(Rct.Bottom);
 
-    FDrawBmp.Canvas.StretchDraw (r, b);
+    FDrawBmp.Canvas.StretchDraw (Rct, b);
     Invalidate;
     Picture.Graphic.Assign (drawBmp);
     if Assigned(OnEndChange) then
@@ -874,7 +875,7 @@ end;
 
 procedure TBitmapEditor.SelectAll;
 begin
-  ChangeSelectionRect(rect(0, 0,drawBmp.Width - 1, drawBmp.Height - 1));
+  ChangeSelectionRect(Rect(0, 0,drawBmp.Width - 1, drawBmp.Height - 1));
 end;
 
 procedure TBitmapEditor.SetBorderStyle(const Value: TBorderStyle);
@@ -899,7 +900,7 @@ begin
     FDrawingTool := Value;
     Cursor := drawingCursors [FDrawingTool];
     if SelectionValid then
-      ChangeSelectionRect(rect(-1, -1, -1, -1));
+      ChangeSelectionRect(Rect(-1, -1, -1, -1));
   end
 end;
 
@@ -980,8 +981,8 @@ begin
   else
   begin
     ClientWidth := FPicture.Width * Magnification;
-    ClientHeight := FPicture.Height * Magnification
-  end
+    ClientHeight := FPicture.Height * Magnification;
+  end;
 end;
 
 procedure TBitmapEditor.ZoomIn;
@@ -990,7 +991,7 @@ begin
     Magnification := 2
   else
     if Magnification < 32 then
-      Magnification := Magnification + 2
+      Magnification := Magnification + 2;
 end;
 
 procedure TBitmapEditor.ZoomOut;
@@ -999,7 +1000,7 @@ begin
     Magnification := 1
   else
     if Magnification > 1 then
-      Magnification := Magnification - 2
+      Magnification := Magnification - 2;
 end;
 
 end.
