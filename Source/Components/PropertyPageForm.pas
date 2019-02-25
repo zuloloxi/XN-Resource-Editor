@@ -66,7 +66,8 @@ type
     function GetCaption: string; virtual;
     function GetHelpText: string; virtual;
   public
-    constructor Create (const ACaption, AHelpText, AHelpKeyWord: string; AMinCX, AMinCY: Integer; AParam: Integer = 0);
+    constructor Create (const ACaption, AHelpText, AHelpKeyWord: string;
+      AMinCX, AMinCY: Integer; AParam: Integer = 0);
     function Apply: Boolean; virtual;
     procedure Cancel; virtual;
     procedure Error; virtual;
@@ -131,8 +132,8 @@ begin
 // Stub
 end;
 
-constructor TPropertyPageData.Create(const ACaption, AHelpText, AHelpKeyWord: string; AMinCX, AMinCY: Integer;
-  AParam: Integer);
+constructor TPropertyPageData.Create(const ACaption, AHelpText,
+  AHelpKeyWord: string; AMinCX, AMinCY: Integer; AParam: Integer);
 begin
   FCaption := ACaption;
   FHelpText := AHelpText;

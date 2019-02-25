@@ -1,4 +1,4 @@
-object fmPropertyBase: TFormPropertyBase
+object FormPropertyBase: TFormPropertyBase
   Left = 374
   Top = 189
   ActiveControl = vstSections
@@ -54,7 +54,7 @@ object fmPropertyBase: TFormPropertyBase
     Header.MainColumn = -1
     Header.Options = [hoColumnResize, hoDrag]
     NodeDataSize = 4
-    PopupMenu = PopupMenu1
+    PopupMenu = PopupMenu
     TabOrder = 0
     OnFocusChanged = vstSectionsFocusChanged
     OnGetText = vstSectionsGetText
@@ -116,13 +116,7 @@ object fmPropertyBase: TFormPropertyBase
       OnClick = btnHelpClick
     end
   end
-  object PersistentPosition1: TPersistentPosition
-    Manufacturer = 'Woozle'
-    Product = 'XanaNews'
-    Left = 16
-    Top = 332
-  end
-  object PopupMenu1: TPopupMenu
+  object PopupMenu: TPopupMenu
     Left = 56
     Top = 328
     object ExpandAll1: TMenuItem

@@ -1,4 +1,4 @@
-object fmPropertyPage: TFormPropertyPage
+object FormPropertyPage: TFormPropertyPage
   Left = 335
   Top = 221
   BorderStyle = bsNone

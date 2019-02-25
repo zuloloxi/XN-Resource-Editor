@@ -6,7 +6,7 @@ procedure Register;
 
 implementation
 
-// {$R MiscComponentsReg.dcr}
+{$R MiscComponentsReg.dcr}
 
 uses
   Classes,
