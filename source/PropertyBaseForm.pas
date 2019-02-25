@@ -25,9 +25,9 @@ unit PropertyBaseForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, Contnrs, StdCtrls, PropertyPageForm,
-  cmpPersistentPosition, VirtualTrees;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, Menus, Contnrs, StdCtrls, VirtualTrees,
+  PropertyPageForm, cmpPersistentPosition;
 
 const
   WM_UPDATESPLITTER = WM_USER + $201;
@@ -183,12 +183,12 @@ end;
  | Parameters:                                                          |
  |   form: TForm                       The form to fix                 |
  *----------------------------------------------------------------------*}
-procedure FixFormConstraints (form: TForm);
+procedure FixFormConstraints(Form: TForm);
 begin
-  with form do
+  with Form do
   begin
-    Constraints.MinWidth := Constraints.MinWidth - GetSystemMetrics (SM_CXSIZEFRAME) * 2;
-    Constraints.MinHeight := Constraints.MinHeight - GetSystemMetrics (SM_CYSIZE) - 2 * getSystemMetrics (SM_CYSIZEFRAME);
+    Constraints.MinWidth := Constraints.MinWidth - GetSystemMetrics(SM_CXSIZEFRAME) * 2;
+    Constraints.MinHeight := Constraints.MinHeight - GetSystemMetrics(SM_CYSIZE) - 2 * getSystemMetrics(SM_CYSIZEFRAME);
   end
 end;
 
@@ -216,12 +216,15 @@ end;
  | The function returns the TPropertyPageDetails class for the Page     |
  *----------------------------------------------------------------------*}
 function TfmPropertyBase.AddPropertyPageDetails(
-  APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails; const ACaption: string; const AHelpText, AHelpKeyWord: string; AParam: Integer): TPropertyPageDetails;
+  APropertyPageClass: TPropertyPageClass; AParent: TPropertyPageDetails;
+  const ACaption: string; const AHelpText, AHelpKeyWord: string;
+  AParam: Integer): TPropertyPageDetails;
 var
   Details: TPropertyPageDetails;
   PropPageDetails: ^TPropertyPageDetails;
 begin
-  Details := TPropertyPageDetails.Create(self, APropertyPageClass, AParent, ACaption, AHelpText, AHelpKeyWord, AParam);
+  Details := TPropertyPageDetails.Create(self, APropertyPageClass, AParent,
+    ACaption, AHelpText, AHelpKeyWord, AParam);
   if AParent = nil then
   begin
     FPropertyPageDetails.Add(Details);
@@ -299,7 +302,7 @@ end;
 procedure TfmPropertyBase.DoCheckDataMatches(Details: TPropertyPageDetails;
   Param: Pointer; var Continue: Boolean);
 begin
-  Continue := Details.FData <> Param
+  Continue := Details.FData <> Param;
 end;
 
 {*----------------------------------------------------------------------*
@@ -312,7 +315,7 @@ end;
 procedure TfmPropertyBase.DoCheckFormClassMatches(
   Details: TPropertyPageDetails; Param: Pointer; var Continue: Boolean);
 begin
-  Continue := Details.FPropertyPageClass <> Param
+  Continue := Details.FPropertyPageClass <> Param;
 end;
 
 {*----------------------------------------------------------------------*
@@ -327,8 +330,8 @@ var
 begin
   PropPageDetails := PPoint(Param);
 
-  PropPageDetails.X := Max (Details.FData.MinX, PropPageDetails.X);
-  PropPageDetails.Y := Max (Details.FData.MinY, PropPageDetails.Y)
+  PropPageDetails.X := Max(Details.FData.MinX, PropPageDetails.X);
+  PropPageDetails.Y := Max(Details.FData.MinY, PropPageDetails.Y);
 end;
 
 {*----------------------------------------------------------------------*
@@ -343,7 +346,7 @@ begin
                 // nb.  FData.Initialized won't be set(and its data won't be
                 //      valid unless a Page has been selected.
     if Page.FData.Initialized then
-      Page.FData.Apply
+      Page.FData.Apply;
 end;
 
 {*----------------------------------------------------------------------*
@@ -371,7 +374,7 @@ begin
   if Assigned(Details) then
     Result := Details.FData
   else
-    Result := nil
+    Result := nil;
 end;
 
 {*----------------------------------------------------------------------*
@@ -394,15 +397,15 @@ var
   cont: Boolean;
   rv: TPropertyPageDetails;
 
-  procedure DoForEach (Details: TPropertyPageDetails);
+  procedure DoForEach(Details: TPropertyPageDetails);
   begin
     if Assigned(Details) then
     begin
       rv := Details;
       proc (Details, Param, cont);
-      if cont then DoForEach (Details.FirstChild);
-      if cont then DoForEach (Details.Sibling)
-    end
+      if cont then DoForEach(Details.FirstChild);
+      if cont then DoForEach(Details.Sibling);
+    end;
   end;
 
 begin
@@ -410,14 +413,17 @@ begin
   cont := True;
   for i := 0 to FPropertyPageDetails.Count - 1 do
   begin
-    DoForEach (TPropertyPageDetails(FPropertyPageDetails [i]));
+    DoForEach(TPropertyPageDetails(FPropertyPageDetails [i]));
     if not cont then
-      break
+      break;
   end;
 
   // If 'cont', the iterator reached the end without being told to 'stop' on
   // a particular PropertyPageDetails.
-  if cont then Result := nil else Result := rv
+  if cont then
+    Result := nil
+  else
+    Result := rv;
 end;
 
 {*----------------------------------------------------------------------*
@@ -475,7 +481,7 @@ begin
   if Assigned(obj) then
     Result := TPropertyPageDetails(obj^)
   else
-    Result := nil
+    Result := nil;
 end;
 
 {*----------------------------------------------------------------------*
@@ -537,7 +543,7 @@ begin
       try
         Page.PopulateControls(Details.FData);
       finally
-        TfmPropertyPageDummy (Page).FPopulating := False
+        TfmPropertyPageDummy (Page).FPopulating := False;
       end;
 
       if newPage then
@@ -550,8 +556,9 @@ begin
     FSelectedPage := Page;
   finally
     SendMessage(PanelOptions.Handle, WM_SETREDRAW, 1, 0);
-    RedrawWindow(PanelOptions.Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
-  end
+    RedrawWindow(PanelOptions.Handle, nil, 0,
+      RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
+  end;
 end;
 
 {*----------------------------------------------------------------------*
@@ -566,7 +573,7 @@ begin
   obj := vstSections.GetNodeData(Node);
 
   if Assigned(obj) then
-    obj^ := Details
+    obj^ := Details;
 end;
 
 {*----------------------------------------------------------------------*
@@ -593,7 +600,7 @@ var
   d: TPropertyPageDetails;
 begin
   d := GetNodePropertyPageDetails(Node);
-  CellText := d.FData.Caption
+  CellText := d.FData.Caption;
 end;
 
 
@@ -611,7 +618,7 @@ begin
   if Assigned(Details) then
     ChildCount := Details.ChildCount
   else
-    ChildCount := 0
+    ChildCount := 0;
 end;
 
 
@@ -692,7 +699,7 @@ begin
         helpKeyWord := tempData.HelpKeyWord;
 
       minX := tempData.MinX;
-      minY := tempData.MinY
+      minY := tempData.MinY;
     end
     else
 
@@ -752,7 +759,7 @@ begin
   while (Result <> nil) and (idx > 0) do
   begin
     Result := Result.Sibling;
-    Dec(idx)
+    Dec(idx);
   end
 end;
 

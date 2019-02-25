@@ -1,4 +1,4 @@
-unit FormResourceForm;
+unit RCDataResourceForm;
 
 interface
 

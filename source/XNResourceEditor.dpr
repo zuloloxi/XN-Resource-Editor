@@ -28,7 +28,7 @@ uses
   ResourcePropertiesDialog in 'ResourcePropertiesDialog.pas' {dlgResourceProperties},
   DescriptionRCDataResourceForm in 'DescriptionRCDataResourceForm.pas' {fmRCDataDescriptionResource},
   PackagesResourceForm in 'PackagesResourceForm.pas' {fmPackagesResource},
-  FormResourceForm in 'FormResourceForm.pas' {fmRCDataFormResource},
+  RCDataResourceForm in 'RCDataResourceForm.pas' {fmRCDataFormResource},
   XPManifestResourceForm in 'XPManifestResourceForm.pas' {fmXPManifestResource},
   AcceleratorResourceForm in 'AcceleratorResourceForm.pas' {fmAcceleratorResource},
   CloneResourceDialog in 'CloneResourceDialog.pas' {dlgCloneResource},
@@ -40,7 +40,7 @@ uses
   IconCursorGraphicsResourceForm in 'IconCursorGraphicsResourceForm.pas' {fmIconCursorGraphicsResource},
   CursorGraphicsResourceForm in 'CursorGraphicsResourceForm.pas' {fmCursorGraphicsResource},
   IconGraphicsResourceForm in 'IconGraphicsResourceForm.pas' {fmIconGraphicsResource},
-  FormTextInput in 'FormTextInput.pas' {FmTextInput},
+  TextInputForm in 'TextInputForm.pas' {FmTextInput},
   ResourceObjectForm in 'components\ResourceObjectForm.pas' {fmResourceObject},
   ResourceForm in 'components\ResourceForm.pas' {fmResourceForm};
 

@@ -1,4 +1,4 @@
-package VirtualTreesExtensionsD;
+package VirtualTreesExtensions;
 
 {$R *.res}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
@@ -33,7 +33,7 @@ requires
   VirtualTreesR;
 
 contains
-  VirtualTreesExtensionsReg in 'VirtualTreesExtensionsReg.pas',
+  ExVirtualStringTreeReg in 'ExVirtualStringTreeReg.pas',
   ExVirtualStringTree in 'ExVirtualStringTree.pas';
 
 end.

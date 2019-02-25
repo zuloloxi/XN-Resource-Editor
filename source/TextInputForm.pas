@@ -1,10 +1,9 @@
-unit FormTextInput;
+unit TextInputForm;
 
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls;
+  Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls;
 
 type
   TFmTextInput = class(TForm)

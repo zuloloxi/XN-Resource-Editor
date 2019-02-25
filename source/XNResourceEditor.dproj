@@ -149,7 +149,7 @@
         <DCCReference Include="PackagesResourceForm.pas">
             <Form>fmPackagesResource</Form>
         </DCCReference>
-        <DCCReference Include="FormResourceForm.pas">
+        <DCCReference Include="RCDataResourceForm.pas">
             <Form>fmRCDataFormResource</Form>
         </DCCReference>
         <DCCReference Include="XPManifestResourceForm.pas">
@@ -183,7 +183,7 @@
         <DCCReference Include="IconGraphicsResourceForm.pas">
             <Form>fmIconGraphicsResource</Form>
         </DCCReference>
-        <DCCReference Include="FormTextInput.pas">
+        <DCCReference Include="TextInputForm.pas">
             <Form>FmTextInput</Form>
         </DCCReference>
         <DCCReference Include="components\ResourceObjectForm.pas">

@@ -443,13 +443,13 @@ begin
 end;
 
 (*----------------------------------------------------------------------*
- | function GetGraphicsClass: TGraphicClass                            |
+ | function GetGraphicsClass: TGraphicClass                             |
  |                                                                      |
  | Get a graphic class associated with an extension                     |
  |                                                                      |
  | Parameters:                                                          |
  |                                                                      |
- |   ext: string                 The extension to find.                |
+ |   ext: string                 The extension to find.                 |
  |                                                                      |
  | The function returns the graphics class                              |
  *----------------------------------------------------------------------*)
@@ -490,8 +490,8 @@ end;
  | of another graphic.                                                  |
  |                                                                      |
  | Parameters:                                                          |
- |   graphic: TGraphic;                The original graphic            |
- |   newCls: TGraphicClass             The new graphic class           |
+ |   graphic: TGraphic;                The original graphic             |
+ |   newCls: TGraphicClass             The new graphic class            |
  *----------------------------------------------------------------------*}
 function CreateCompatibleGraphic (graphic: TGraphic; newCls: TGraphicClass): TGraphic;
 var
@@ -597,7 +597,7 @@ begin
 end;
 
 (*----------------------------------------------------------------------*
- | TfmMain.ActionEditSelectAll                                             |
+ | TfmMain.ActionEditSelectAll                                          |
  *----------------------------------------------------------------------*)
 procedure TfmMain.ActionEditSelectAllExecute(Sender: TObject);
 begin
@@ -1393,7 +1393,7 @@ begin
   else
     s := ExtractFileName(FileName);
   if ISDirty then
-    case MessageBox (Handle, PChar(Format(rstChanges, [s])), PChar(Application.Title), MB_YESNOCANCEL or MB_ICONQUESTION) of
+    case MessageBox(Handle, PChar(Format(rstChanges, [s])), PChar(Application.Title), MB_YESNOCANCEL or MB_ICONQUESTION) of
       ID_YES: Result := SaveFile;
       ID_CANCEL: Result := False;
       else
@@ -1615,11 +1615,9 @@ var
  |   *  nil                                                             |
  *----------------------------------------------------------------------*)
 procedure TfmMain.SwitchView(Details: TObject);
-
 var
   i: Integer;
   FormClass: TResourceObjectFormClass;
-
 begin { SwitchView }
   FormClass := nil;
   if Integer(Details) > 32 then        // It's a genuine TResourceDetails or TImageSection
