@@ -29,8 +29,8 @@ interface
 uses
   WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.ExtCtrls, VirtualTrees, PropertyPageForm, System.Contnrs, Vcl.StdCtrls,
-  cmpPersistentPosition, Vcl.Menus;
+  Vcl.ExtCtrls, Vcl.Menus, System.Contnrs, Vcl.StdCtrls, VirtualTrees,
+  PropertyPageForm, ComponentPersistentPosition;
 {$include 'compilers.inc'}  // Use Mike Lischke's version detection
 
 {$endregion}

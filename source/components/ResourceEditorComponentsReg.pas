@@ -8,13 +8,12 @@ implementation
 
 uses
   Classes,
-  cmpBitmapEditor,
-  cmpMenuDesigner,
-  cmpDialogBox,
-  cmpDialogEditor,
-  cmpGradientShape,
-  cmpStandardSystemMenu;
-  
+  ComponentBitmapEditor,
+  ComponentMenuDesigner,
+  ComponentDialogBox,
+  ComponentDialogEditor,
+  ComponentGradientShape,
+  ComponentStandardSystemMenu;
 
 procedure Register;
 begin
@@ -23,7 +22,8 @@ begin
     TMenuDesigner,
     TPopupMenuDesigner,
     TDialogBox,
-    TDialogEditor
+    TDialogEditor,
+    TStandardSystemMenu
   ])
 end;
 

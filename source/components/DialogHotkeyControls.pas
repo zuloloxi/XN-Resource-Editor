@@ -3,7 +3,7 @@ unit DialogHotkeyControls;
 interface
 
 uses 
-  Windows, Classes, SysUtils, cmpDialogEditor, DialogConsts, CommCtrl;
+  Windows, Classes, SysUtils, CommCtrl, ComponentDialogEditor, DialogConsts;
 
 type
   THotkeyControlInfo = class (TStandardControlInfo)

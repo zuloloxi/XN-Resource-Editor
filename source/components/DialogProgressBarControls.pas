@@ -3,7 +3,7 @@ unit DialogProgressbarControls;
 interface
 
 uses 
-  Windows, Classes, SysUtils, cmpDialogEditor, DialogConsts, CommCtrl;
+  Windows, Classes, SysUtils, CommCtrl, ComponentDialogEditor, DialogConsts;
 
 type
   TProgressBarControlInfo = class (TStandardControlInfo)

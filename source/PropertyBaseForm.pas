@@ -27,7 +27,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, Menus, Contnrs, StdCtrls, VirtualTrees,
-  PropertyPageForm, cmpPersistentPosition;
+  PropertyPageForm, ComponentPersistentPosition;
 
 const
   WM_UPDATESPLITTER = WM_USER + $201;

@@ -3,7 +3,7 @@ unit DialogUpDownControls;
 interface
 
 uses
-  Windows, Classes, SysUtils, CommCtrl, cmpDialogEditor, DialogConsts;
+  Windows, Classes, SysUtils, CommCtrl, ComponentDialogEditor, DialogConsts;
 
 type
   TUpDownControlInfo = class (TStandardControlInfo)

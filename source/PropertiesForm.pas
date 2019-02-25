@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   Menus, StdCtrls, ExtCtrls, VirtualTrees, PropertyBaseForm,
-  cmpPersistentPosition;
+  ComponentPersistentPosition;
 
 type
   TfmProperties = class(TfmPropertyBase)

@@ -4,7 +4,7 @@ interface
 
 uses
   WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
-  WinAPI.CommCtrl, Vcl.Controls, cmpDialogEditor, DialogConsts;
+  WinAPI.CommCtrl, Vcl.Controls, ComponentDialogEditor, DialogConsts;
 
 type
   TListviewControlInfo = class (TStandardControlInfo)

@@ -18,8 +18,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ActnList, Menus, StdCtrls, Contnrs, ComCtrls, ResourceForm, VirtualTrees,
-  unitResourceMessages, cmpCWRichEdit, System.Actions;
+  ActnList, Menus, StdCtrls, Contnrs, ComCtrls, System.Actions, ResourceForm,
+  VirtualTrees, ComponentCWRichEdit, unitResourceMessages;
 
 type
   TfmTextResource = class(TfmResource)

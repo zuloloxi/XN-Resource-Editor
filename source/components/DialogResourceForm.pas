@@ -14,8 +14,8 @@ uses
   WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus,
   Vcl.ExtCtrls, Vcl.ImgList, Vcl.ComCtrls, Vcl.ToolWin, Vcl.StdCtrls,
-  ResourceForm, cmpSizingPageControl, cmpDialogBox, cmpRuler,
-  cmpPropertyListBox, cmpDialogEditor, unitResourceDialogs;
+  ResourceForm, ComponentSizingPageControl, ComponentDialogBox, ComponentRuler,
+  ComponentPropertyListBox, ComponentDialogEditor, unitResourceDialogs;
 
 type
   TfmDialogResource = class(TfmResource)
@@ -304,9 +304,12 @@ var
   val: Variant;
 begin
 
-  case tcPropertyKind.TabIndex of       // Get the property kind
-    1: kind := pkStyle;
-    2: kind := pkExtended
+  // Get the property kind
+  case tcPropertyKind.TabIndex of
+    1:
+      kind := pkStyle;
+    2:
+      kind := pkExtended
     else
       kind := pkGeneral
   end;
@@ -318,8 +321,7 @@ begin
   try
     for i := 0 to info.PropertyCount [kind] - 1 do
     begin
-                                        // Add each property.
-
+      // Add each property.
       prop := TPropertyListProperty (PropertyListBox1.Properties.Add);
       propName := info.PropertyName [kind, i];
       prop.PropertyName := propName;
@@ -327,24 +329,27 @@ begin
       prop.Enabled := not VarIsEmpty (val);
 
       case info.PropertyType [kind, i] of
-        ptString: prop.PropertyType := cmpPropertyListBox.ptString;
-        ptInteger: prop.PropertyType := cmpPropertyListBox.ptInteger;
-        ptBoolean: prop.PropertyType := cmpPropertyListBox.ptBoolean;
-        ptSpecial :
+        ptString:
+          prop.PropertyType := ComponentPropertyListBox.ptString;
+        ptInteger:
+          prop.PropertyType := ComponentPropertyListBox.ptInteger;
+        ptBoolean:
+          prop.PropertyType := ComponentPropertyListBox.ptBoolean;
+        ptSpecial:
           begin
-            prop.PropertyType := cmpPropertyListBox.ptSpecial;
+            prop.PropertyType := ComponentPropertyListBox.ptSpecial;
             prop.OnSpecialButtonClick := DoSpecialButtonClick
           end;
 
-        ptEnum    :
+        ptEnum:
           begin
-                                        // Add enumerated property values
-            prop.PropertyType := cmpPropertyListBox.ptEnum;
+            // Add enumerated property values
+            prop.PropertyType := ComponentPropertyListBox.ptEnum;
             prop.EnumValues.Clear;
             prop.EnumValues.BeginUpdate;
             try
-              for j := 0 to info.PropertyEnumCount [kind, i] - 1 do
-                prop.EnumValues.Add (info.PropertyEnumName [kind, i, j])
+              for j := 0 to info.PropertyEnumCount[kind, i] - 1 do
+                prop.EnumValues.Add(info.PropertyEnumName [kind, i, j])
             finally
               prop.EnumValues.EndUpdate
             end
@@ -359,7 +364,7 @@ begin
   end;
 
   if reset then
-                                        // Select first property
+    // Select first property
     PropertyListBox1.SelectedPropertyNo := 0
   else
     PropertyListBox1.SelectedPropertyNo := idx;

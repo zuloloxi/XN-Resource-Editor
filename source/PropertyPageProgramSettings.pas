@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs, ExtCtrls,
-  StdCtrls, PropertyPageForm, cmpPersistentPosition;
+  StdCtrls, PropertyPageForm, ComponentPersistentPosition;
 
 type
   TPropertyPageProgramSettingsData = class (TPropertyPageData)

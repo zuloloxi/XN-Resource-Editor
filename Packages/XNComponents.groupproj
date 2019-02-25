@@ -1,0 +1,96 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{48D06CA4-6884-47FC-A0D6-8406DE8B3052}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="LowLevel.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ResourceUtils.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="MiscComponents.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="PropertyPageForms.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="ResourceEditorComponents.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="VirtualTreesExtensions.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="LowLevel">
+        <MSBuild Projects="LowLevel.dproj"/>
+    </Target>
+    <Target Name="LowLevel:Clean">
+        <MSBuild Projects="LowLevel.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="LowLevel:Make">
+        <MSBuild Projects="LowLevel.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ResourceUtils">
+        <MSBuild Projects="ResourceUtils.dproj"/>
+    </Target>
+    <Target Name="ResourceUtils:Clean">
+        <MSBuild Projects="ResourceUtils.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ResourceUtils:Make">
+        <MSBuild Projects="ResourceUtils.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="MiscComponents">
+        <MSBuild Projects="MiscComponents.dproj"/>
+    </Target>
+    <Target Name="MiscComponents:Clean">
+        <MSBuild Projects="MiscComponents.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="MiscComponents:Make">
+        <MSBuild Projects="MiscComponents.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="PropertyPageForms">
+        <MSBuild Projects="PropertyPageForms.dproj"/>
+    </Target>
+    <Target Name="PropertyPageForms:Clean">
+        <MSBuild Projects="PropertyPageForms.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PropertyPageForms:Make">
+        <MSBuild Projects="PropertyPageForms.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="ResourceEditorComponents">
+        <MSBuild Projects="ResourceEditorComponents.dproj"/>
+    </Target>
+    <Target Name="ResourceEditorComponents:Clean">
+        <MSBuild Projects="ResourceEditorComponents.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="ResourceEditorComponents:Make">
+        <MSBuild Projects="ResourceEditorComponents.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="VirtualTreesExtensions">
+        <MSBuild Projects="VirtualTreesExtensions.dproj"/>
+    </Target>
+    <Target Name="VirtualTreesExtensions:Clean">
+        <MSBuild Projects="VirtualTreesExtensions.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="VirtualTreesExtensions:Make">
+        <MSBuild Projects="VirtualTreesExtensions.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="LowLevel;ResourceUtils;MiscComponents;PropertyPageForms;ResourceEditorComponents;VirtualTreesExtensions"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="LowLevel:Clean;ResourceUtils:Clean;MiscComponents:Clean;PropertyPageForms:Clean;ResourceEditorComponents:Clean;VirtualTreesExtensions:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="LowLevel:Make;ResourceUtils:Make;MiscComponents:Make;PropertyPageForms:Make;ResourceEditorComponents:Make;VirtualTreesExtensions:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ActnList, Actions, Menus, ExtCtrls, ResourceForm, unitResourceMenus,
-  cmpMenuDesigner, cmpPropertyListBox;
+  ComponentMenuDesigner, ComponentPropertyListBox;
 
 type
   TfmMenuResource = class(TfmResource)

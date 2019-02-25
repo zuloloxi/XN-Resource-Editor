@@ -4,9 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, IconCursorGraphicsResourceForm, Menus, ActnList, ImgList,
-  ComCtrls, cmpColorSelector, ExtCtrls, ToolWin, cmpSizingPageControl,
-  cmpBitmapEditor, cmpPropertyListBox, System.Actions, System.ImageList;
+  Dialogs, ExtCtrls, ToolWin, Menus, ActnList, ImgList, ComCtrls,
+  System.Actions, System.ImageList,
+  IconCursorGraphicsResourceForm, ComponentColorSelector,
+  ComponentSizingPageControl, ComponentBitmapEditor, ComponentPropertyListBox;
 
 type
   TfmIconGraphicsResource = class(TfmIconCursorGraphicsResource)

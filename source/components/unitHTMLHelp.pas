@@ -304,7 +304,7 @@ const
   ATOM_HTMLHELP_API_ANSI    = 14;
   ATOM_HTMLHELP_API_UNICODE = 15;
 
-function HtmlHelp (hwndCaller: HWND; pszFile: PChar; uCommand: UINT; dwData: DWORD): DWORD; stdcall;
+function HtmlHelp(hwndCaller: HWND; pszFile: PChar; uCommand: UINT; dwData: DWORD): DWORD; stdcall;
 
 implementation
 
@@ -313,6 +313,5 @@ function HtmlHelp; external 'HHCTRL.OCX' index ATOM_HTMLHELP_API_UNICODE;
 {$else}
 function HtmlHelp; external 'HHCTRL.OCX' index ATOM_HTMLHELP_API_ANSI;
 {$endif}
-
 
 end.

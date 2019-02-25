@@ -1,0 +1,66 @@
+package MiscComponents;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Misc. Components (Runtime)'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  LowLevel,
+  vclimg,
+  vclie;
+
+contains
+  ComponentColorSelector in '..\Source\Components\ComponentColorSelector.pas',
+  ComponentCountryComboBox in '..\Source\Components\ComponentCountryComboBox.pas',
+  ComponentCWRichEdit in '..\Source\Components\ComponentCWRichEdit.pas',
+  ComponentExSplitter in '..\Source\Components\ComponentExSplitter.pas',
+  ComponentExWebBrowser in '..\Source\Components\ComponentExWebBrowser.pas',
+  ComponentHexDump in '..\Source\Components\ComponentHexDump.pas',
+  ComponentHyperlinkButton in '..\Source\Components\ComponentHyperlinkButton.pas',
+  ComponentIniFilePersistentOptions in '..\Source\Components\ComponentIniFilePersistentOptions.pas',
+  ComponentMessageDisplay in '..\Source\Components\ComponentMessageDisplay.pas',
+  ComponentMRUList in '..\Source\Components\ComponentMRUList.pas',
+  ComponentNewsRichEdit in '..\Source\Components\ComponentNewsRichEdit.pas',
+  ComponentNTAboutBox in '..\Source\Components\ComponentNTAboutBox.pas',
+  ComponentPersistentOptions in '..\Source\Components\ComponentPersistentOptions.pas',
+  ComponentPersistentPosition in '..\Source\Components\ComponentPersistentPosition.pas',
+  ComponentPropertyListBox in '..\Source\Components\ComponentPropertyListBox.pas',
+  ComponentRegistryPersistentOptions in '..\Source\Components\ComponentRegistryPersistentOptions.pas',
+  ComponentRuler in '..\Source\Components\ComponentRuler.pas',
+  ComponentRunOnce in '..\Source\Components\ComponentRunOnce.pas',
+  ComponentSizingPageControl in '..\Source\Components\ComponentSizingPageControl.pas',
+  ComponentSplitterPanel in '..\Source\Components\ComponentSplitterPanel.pas',
+  ComponentThemedScrollBox in '..\Source\Components\ComponentThemedScrollBox.pas',
+  ComponentXMLPersistentOptions in '..\Source\Components\ComponentXMLPersistentOptions.pas',
+  unitHTMLHelp in '..\Source\Components\unitHTMLHelp.pas',
+  unitHTMLStringsDisplayObject in '..\Source\Components\unitHTMLStringsDisplayObject.pas',
+  unitHTMLHelpViewer in '..\Source\Components\unitHTMLHelpViewer.pas',
+  MiscComponentsReg in '..\Source\Components\MiscComponentsReg.pas';
+
+end.

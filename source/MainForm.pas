@@ -22,9 +22,9 @@ uses
   StdCtrls, ShellApi, ExtDlgs, ActnMan, ActnCtrls, ActnMenus,
   Vcl.Imaging.pngimage, Vcl.Imaging.GIFImg, Vcl.Imaging.jpeg,
   System.Actions, System.ImageList, AppEvnts, XPStyleActnCtrls,
-  VirtualTrees, ExVirtualStringTree, cmpStandardSystemMenu,
-  cmpPersistentPosition, cmpMRUList, cmpNTAboutBox, ResourceForm,
-  unitResourceDetails, unitCREdProperties, unitHTMLHelpViewer,
+  VirtualTrees, ExVirtualStringTree, ComponentStandardSystemMenu,
+  ComponentPersistentPosition, ComponentMRUList, ComponentNTAboutBox,
+  ResourceForm, unitResourceDetails, unitCREdProperties, unitHTMLHelpViewer,
   unitResourceExaminer;
 {$endregion}
 
@@ -301,7 +301,7 @@ uses Registry, RawResourceForm,
      DialogResourceForm,                //   "      "   "   Dialogs
      DescriptionRCDataResourceForm,     //   "      "   "   RC Data Description
      PackagesResourceForm,              //   "      "   "   Borland 'package' RC data
-     FormResourceForm,                  //   "      "   "   Borland TForm data
+     RCDataResourceForm,                //   "      "   "   Borland TForm data
      XPManifestResourceForm,            //   "      "   "   XML XP Manifest
      AcceleratorResourceForm,           //   "      "   "   Accelerators
 

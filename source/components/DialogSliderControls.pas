@@ -2,7 +2,8 @@ unit DialogSliderControls;
 
 interface
 
-uses Windows, Classes, SysUtils, cmpDialogEditor, DialogConsts, CommCtrl;
+uses
+  Windows, Classes, SysUtils, CommCtrl, ComponentDialogEditor, DialogConsts;
 
 type
   TSliderControlInfo = class (TStandardControlInfo)

@@ -23,9 +23,9 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ActnList, Menus, ExtCtrls, ComCtrls, ImgList, ToolWin, Vcl.Imaging.GifImg,
-  ResourceForm, cmpPropertyListBox, cmpBitmapEditor, unitResourceGraphics,
-  cmpColorSelector, unitExIcon, cmpSizingPageControl, System.Actions,
-  System.ImageList;
+  System.Actions, System.ImageList, ResourceForm, ComponentPropertyListBox,
+  ComponentBitmapEditor, ComponentColorSelector, ComponentSizingPageControl,
+  unitResourceGraphics, unitExIcon;
 
 const
   WM_STATUSBAR = WM_USER + $203;
@@ -158,7 +158,7 @@ type
 implementation
 
 uses
-  ClipBrd, Jpeg, FormTextInput;
+  ClipBrd, Jpeg, TextInputForm;
 
 {$R *.DFM}
 
@@ -496,9 +496,9 @@ end;
 procedure TfmGraphicsResource.BitmapEditorGetText(Sender: TObject; Font: TFont;
   var Txt: WideString);
 var
-  FormTextInput: TfmTextInput;
+  FormTextInput: TFormTextInput;
 begin
-  FormTextInput := TfmTextInput.Create(nil);
+  FormTextInput := TFormTextInput.Create(nil);
   try
     FormTextInput.MemoText.Font.Assign(Font);
     if FormTextInput.ShowModal = mrOK then
@@ -507,9 +507,9 @@ begin
       Font.Assign(FormTextInput.MemoText.Font)
     end
     else
-      Txt := ''
+      Txt := '';
   finally
-    FormTextInput.Free
+    FormTextInput.Free;
   end;
 end;
 
