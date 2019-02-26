@@ -3,7 +3,8 @@ unit RawResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs,
   ResourceForm, ComponentHexDump, unitResourceDetails;
 
 type

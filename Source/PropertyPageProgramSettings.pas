@@ -3,8 +3,9 @@ unit PropertyPageProgramSettings;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs, ExtCtrls,
-  StdCtrls, PropertyPageForm, ComponentPersistentPosition;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.ExtCtrls, VCL.StdCtrls,
+  PropertyPageForm, ComponentPersistentPosition;
 
 type
   TPropertyPageProgramSettingsData = class (TPropertyPageData)

@@ -3,7 +3,8 @@ unit RCDataResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Controls, Forms, Dialogs, StdCtrls,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.StdCtrls,
   ResourceForm, unitResourceRCData;
 
 type

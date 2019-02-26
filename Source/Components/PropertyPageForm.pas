@@ -84,9 +84,9 @@ type
   TPropertyPageDataClass = class of TPropertyPageData;
 
   TFormPropertyPage = class(TForm)
-    Panel1: TPanel;
-    Bevel1: TBevel;
-    stSectionDetails: TLabel;
+    PanelTop: TPanel;
+    BevelTop: TBevel;
+    LabelSectionDetails: TLabel;
   private
     FAltKeyWord: string;
   protected
@@ -116,7 +116,7 @@ begin
     AData.Initialize;
     AData.FInitialized := True
   end;
-  stSectionDetails.Caption := AData.HelpText;
+  LabelSectionDetails.Caption := AData.HelpText;
   FAltKeyWord := AData.HelpKeyWord;
 end;
 
@@ -150,12 +150,12 @@ end;
 
 function TPropertyPageData.GetCaption: string;
 begin
-  Result := FCaption
+  Result := FCaption;
 end;
 
 function TPropertyPageData.GetHelpText: string;
 begin
-  Result := FHelpText
+  Result := FHelpText;
 end;
 
 procedure TPropertyPageData.Initialize;

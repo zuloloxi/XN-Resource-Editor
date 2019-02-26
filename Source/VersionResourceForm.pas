@@ -13,9 +13,11 @@ unit VersionResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, StdCtrls, ComCtrls, ExtCtrls, Menus, ActnList, Actions,
-  ComponentPropertyListBox, ComponentCWRichEdit, unitResourceVersionInfo;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  System.Actions,VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs,
+  VCL.StdCtrls, VCL.ComCtrls, VCL.ExtCtrls, VCL.Menus, VCL.ActnList,
+  ResourceForm, ComponentPropertyListBox, ComponentCWRichEdit,
+  unitResourceVersionInfo;
 
 //=======================================================================
 // TFormResource class

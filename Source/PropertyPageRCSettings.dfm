@@ -1,4 +1,4 @@
-inherited fmPropertyPageRCSettings: TFormPropertyPageRCSettings
+inherited FormPropertyPageRCSettings: TFormPropertyPageRCSettings
   ActiveControl = vstIncludePackages
   Caption = 'RC File Options'
   ClientHeight = 299
@@ -10,10 +10,10 @@ inherited fmPropertyPageRCSettings: TFormPropertyPageRCSettings
   ExplicitHeight = 299
   PixelsPerInch = 96
   TextHeight = 13
-  inherited Panel1: TPanel
+  inherited PanelTop: TPanel
     Width = 278
     ExplicitWidth = 278
-    inherited Bevel1: TBevel
+    inherited BevelTop: TBevel
       Width = 278
       ExplicitWidth = 269
     end

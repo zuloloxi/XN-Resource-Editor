@@ -3,9 +3,9 @@ unit PackagesResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ResourceForm, ComCtrls, ExtCtrls, ComponentPropertyListBox,
-  unitResourceRCData;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.ComCtrls,
+  VCL.ExtCtrls, ResourceForm, ComponentPropertyListBox, unitResourceRCData;
 
 type
   TFormPackagesResource = class(TFormResource)

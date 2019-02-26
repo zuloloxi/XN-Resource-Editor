@@ -21,8 +21,9 @@ unit GraphicsResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ActnList, Menus, ExtCtrls, ComCtrls, ImgList, ToolWin, Vcl.Imaging.GifImg,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.ActnList, VCL.Menus,
+  VCL.ExtCtrls, VCL.ComCtrls, VCL.ImgList, VCL.ToolWin, Vcl.Imaging.GifImg,
   System.Actions, System.ImageList, ResourceForm, ComponentPropertyListBox,
   ComponentBitmapEditor, ComponentColorSelector, ComponentSizingPageControl,
   unitResourceGraphics, unitExIcon;
@@ -158,7 +159,7 @@ type
 implementation
 
 uses
-  ClipBrd, Jpeg, TextInputForm;
+  VCL.ClipBrd, VCL.Imaging.Jpeg, TextInputForm;
 
 {$R *.DFM}
 

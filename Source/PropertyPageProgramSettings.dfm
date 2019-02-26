@@ -1,4 +1,4 @@
-inherited fmPropertyPageProgramSettings: TFormPropertyPageProgramSettings
+inherited FormPropertyPageProgramSettings: TFormPropertyPageProgramSettings
   Caption = 'XN Resource Editor Options'
   ClientHeight = 191
   ClientWidth = 318
@@ -22,10 +22,10 @@ inherited fmPropertyPageProgramSettings: TFormPropertyPageProgramSettings
     Height = 13
     Caption = 'Choose which parser to use when loading Windows modules'
   end
-  inherited Panel1: TPanel
+  inherited PanelTop: TPanel
     Width = 318
     ExplicitWidth = 318
-    inherited Bevel1: TBevel
+    inherited BevelTop: TBevel
       Width = 318
       ExplicitWidth = 269
     end

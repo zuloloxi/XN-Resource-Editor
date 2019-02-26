@@ -3,9 +3,10 @@ unit AcceleratorResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Menus, Graphics, Controls, Forms,
-  Dialogs, ResourceForm, ComCtrls, unitResourceAccelerator, StdCtrls, ActnList,
-  System.Actions;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  System.Actions, VCL.Menus, VCL.Graphics, VCL.Controls, VCL.Forms,
+  VCL.Dialogs, VCL.ComCtrls, VCL.StdCtrls, VCL.ActnList, ResourceForm,
+  unitResourceAccelerator;
 
 type
   TFormAcceleratorResource = class(TFormResource)

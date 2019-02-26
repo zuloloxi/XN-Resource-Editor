@@ -3,8 +3,9 @@ unit PropertiesForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Menus, StdCtrls, ExtCtrls, VirtualTrees, PropertyBaseForm,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.Menus,
+  VCL.StdCtrls, VCL.ExtCtrls, VirtualTrees, PropertyBaseForm,
   ComponentPersistentPosition;
 
 type

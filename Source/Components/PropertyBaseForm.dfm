@@ -19,14 +19,14 @@ object FormPropertyBase: TFormPropertyBase
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Splitter1: TSplitter
+  object Splitter: TSplitter
     Left = 169
     Top = 0
     Width = 4
     Height = 323
     Beveled = True
   end
-  object pnlOptions: TPanel
+  object PanelOptions: TPanel
     Left = 173
     Top = 0
     Width = 390
@@ -35,7 +35,7 @@ object FormPropertyBase: TFormPropertyBase
     BevelOuter = bvNone
     FullRepaint = False
     TabOrder = 1
-    object Bevel1: TBevel
+    object BevelBottom: TBevel
       Left = 0
       Top = 320
       Width = 390
@@ -62,7 +62,7 @@ object FormPropertyBase: TFormPropertyBase
     OnInitNode = vstSectionsInitNode
     Columns = <>
   end
-  object pnlButtons: TPanel
+  object PanelButtons: TPanel
     Left = 0
     Top = 323
     Width = 563
@@ -73,7 +73,7 @@ object FormPropertyBase: TFormPropertyBase
     DesignSize = (
       563
       35)
-    object btnOK: TButton
+    object ButtonOK: TButton
       Left = 241
       Top = 8
       Width = 75
@@ -82,9 +82,9 @@ object FormPropertyBase: TFormPropertyBase
       Caption = 'OK'
       Default = True
       TabOrder = 0
-      OnClick = btnOKClick
+      OnClick = ButtonOKClick
     end
-    object btnCancel: TButton
+    object ButtonCancel: TButton
       Left = 318
       Top = 8
       Width = 75
@@ -95,7 +95,7 @@ object FormPropertyBase: TFormPropertyBase
       ModalResult = 2
       TabOrder = 1
     end
-    object btnApply: TButton
+    object ButtonApply: TButton
       Left = 395
       Top = 8
       Width = 75
@@ -103,9 +103,9 @@ object FormPropertyBase: TFormPropertyBase
       Anchors = [akRight, akBottom]
       Caption = 'Apply'
       TabOrder = 2
-      OnClick = btnApplyClick
+      OnClick = ButtonApplyClick
     end
-    object btnHelp: TButton
+    object ButtonHelp: TButton
       Left = 480
       Top = 8
       Width = 75
@@ -113,19 +113,24 @@ object FormPropertyBase: TFormPropertyBase
       Anchors = [akRight, akBottom]
       Caption = 'Help'
       TabOrder = 3
-      OnClick = btnHelpClick
+      OnClick = ButtonHelpClick
     end
   end
   object PopupMenu: TPopupMenu
     Left = 56
     Top = 328
-    object ExpandAll1: TMenuItem
+    object MenuItemExpandAll: TMenuItem
       Caption = '&Expand All'
-      OnClick = ExpandAll1Click
+      OnClick = MenuItemExpandAllClick
     end
-    object CollapseAll1: TMenuItem
+    object MenuItemCollapseAll: TMenuItem
       Caption = '&Collapse All'
-      OnClick = CollapseAll1Click
+      OnClick = MenuItemCollapseAllClick
     end
+  end
+  object PersistentPosition: TPersistentPosition
+    Manufacturer = 'Woozle'
+    Left = 80
+    Top = 176
   end
 end

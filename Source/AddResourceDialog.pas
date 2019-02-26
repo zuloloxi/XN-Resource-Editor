@@ -3,8 +3,9 @@ unit AddResourceDialog;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ComCtrls, StdCtrls, unitResourceDetails, unitResourceJPEG;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls,
+  Vcl.StdCtrls, unitResourceDetails, unitResourceJPEG;
 
 type
   TFormAddResource = class(TForm)

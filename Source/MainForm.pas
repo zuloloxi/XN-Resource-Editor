@@ -17,15 +17,16 @@ interface
 {$region 'Interface Uses Section'}
 //------------------------------------------------------
 uses
-  Windows, Messages, SysUtils, SysConst, Classes, Graphics, Controls, Forms,
-  Dialogs, ComCtrls, Menus, ToolWin, ExtCtrls, ImgList, StdActns, ActnList,
-  StdCtrls, ShellApi, ExtDlgs, ActnMan, ActnCtrls, ActnMenus,
-  Vcl.Imaging.pngimage, Vcl.Imaging.GIFImg, Vcl.Imaging.jpeg,
-  System.Actions, System.ImageList, AppEvnts, XPStyleActnCtrls,
-  VirtualTrees, ExVirtualStringTree, ComponentStandardSystemMenu,
-  ComponentPersistentPosition, ComponentMRUList, ComponentNTAboutBox,
-  ResourceForm, unitResourceDetails, unitCREdProperties, unitHTMLHelpViewer,
-  unitResourceExaminer;
+  WinApi.Windows, WinApi.Messages, WinApi.ShellApi, System.SysUtils,
+  System.SysConst, System.Classes, System.Actions, System.ImageList,
+  VCL.Graphics, VCL.Controls, VCL.Forms, Vcl.Dialogs, VCL.ComCtrls, VCL.Menus,
+  VCL.ToolWin, Vcl.ExtCtrls, Vcl.ImgList, Vcl.StdActns, VCL.ActnList,
+  Vcl.StdCtrls, Vcl.ExtDlgs, Vcl.ActnMan, Vcl.ActnCtrls, Vcl.ActnMenus,
+  Vcl.Imaging.PngImage, Vcl.Imaging.GIFImg, Vcl.Imaging.Jpeg, VCL.AppEvnts,
+  VCL.XPStyleActnCtrls, VirtualTrees, ExVirtualStringTree,
+  ComponentStandardSystemMenu, ComponentPersistentPosition, ComponentMRUList,
+  ComponentNTAboutBox, ResourceForm, unitResourceDetails, unitCREdProperties,
+  unitHTMLHelpViewer, unitResourceExaminer;
 {$endregion}
 
 {$region 'Constant Definitions'}
@@ -273,44 +274,45 @@ implementation
 {$R *.DFM}
 
 {$region 'Implementation Uses Section'}
-uses Registry, RawResourceForm,
-     unitPEFile,                        // Accept resources from PE files
-     unitNTModule,                      // Use this instead if NT
-     unitResFile,                       // Accept resources from .RES files
-     unitRCFile,                        // Accept resources from .RC files
+uses
+  System.Win.Registry, RawResourceForm,
+   unitPEFile,                        // Accept resources from PE files
+   unitNTModule,                      // Use this instead if NT
+   unitResFile,                       // Accept resources from .RES files
+   unitRCFile,                        // Accept resources from .RC files
+   unitExIcon,
 
-     unitResourceGraphics,              // Decoder unit for Icons, Bitmaps, Cursors
-     unitResourceMessages,              //    "     "    "  String and Message tables
-     unitResourceVersionInfo,           //    "     "    "  Version Info
-     unitResourceMenus,                 //    "     "    "  Menus
-     unitResourceDialogs,               //    "     "    "  Dialogs
-     unitResourceRCData,                //    "     "    "  RCData
-     unitResourceJPEG,                  //    "     "    "  JPEG Images
-     unitResourceGIF,                   //    "     "    "  GIF Images
-     unitResourceXPManifests,           //    "     "    "  XP Manifests
-     unitResourceAccelerator,           //    "     "    "  Accelerator tables
-     unitResourceToolbar,
+   unitResourceGraphics,              // Decoder unit for Icons, Bitmaps, Cursors
+   unitResourceMessages,              //    "     "    "  String and Message tables
+   unitResourceVersionInfo,           //    "     "    "  Version Info
+   unitResourceMenus,                 //    "     "    "  Menus
+   unitResourceDialogs,               //    "     "    "  Dialogs
+   unitResourceRCData,                //    "     "    "  RCData
+   unitResourceJPEG,                  //    "     "    "  JPEG Images
+   unitResourceGIF,                   //    "     "    "  GIF Images
+   unitResourceXPManifests,           //    "     "    "  XP Manifests
+   unitResourceAccelerator,           //    "     "    "  Accelerator tables
+   unitResourceToolbar,
 
-     GroupResourceForm,                 // Display Form for Icons & cursor groups
-     IconGraphicsResourceForm,          // Editor   "   "  Icons
-     CursorGraphicsResourceForm,        // Editor   "   "  Cursors
-     GraphicsResourceForm,              // Editor   "   "  Other graphics - bitmaps etc.
-     TextResourceForm,                  //   "      "   "   String and MEssage tables
-     VersionResourceForm,               //   "      "   "   Version Info
-     MenuResourceForm,                  //   "      "   "   Menus
-     DialogResourceForm,                //   "      "   "   Dialogs
-     DescriptionRCDataResourceForm,     //   "      "   "   RC Data Description
-     PackagesResourceForm,              //   "      "   "   Borland 'package' RC data
-     RCDataResourceForm,                //   "      "   "   Borland TForm data
-     XPManifestResourceForm,            //   "      "   "   XML XP Manifest
-     AcceleratorResourceForm,           //   "      "   "   Accelerators
+   GroupResourceForm,                 // Display Form for Icons & cursor groups
+   IconGraphicsResourceForm,          // Editor   "   "  Icons
+   CursorGraphicsResourceForm,        // Editor   "   "  Cursors
+   GraphicsResourceForm,              // Editor   "   "  Other graphics - bitmaps etc.
+   TextResourceForm,                  //   "      "   "   String and MEssage tables
+   VersionResourceForm,               //   "      "   "   Version Info
+   MenuResourceForm,                  //   "      "   "   Menus
+   DialogResourceForm,                //   "      "   "   Dialogs
+   DescriptionRCDataResourceForm,     //   "      "   "   RC Data Description
+   PackagesResourceForm,              //   "      "   "   Borland 'package' RC data
+   RCDataResourceForm,                //   "      "   "   Borland TForm data
+   XPManifestResourceForm,            //   "      "   "   XML XP Manifest
+   AcceleratorResourceForm,           //   "      "   "   Accelerators
 
 
-     PropertiesForm,                    // Program properties dialog
-     AddResourceDialog,                 // Add Resource dialog
-     ResourcePropertiesDialog,
-     unitExIcon,
-     HelpContext, ResourceObjectForm, unitSearchString, CloneResourceDialog;
+   PropertiesForm,                    // Program properties dialog
+   AddResourceDialog,                 // Add Resource dialog
+   ResourcePropertiesDialog,
+   HelpContext, ResourceObjectForm, unitSearchString, CloneResourceDialog;
 {$endregion}
 
 {$region 'Resource String Definitions' }

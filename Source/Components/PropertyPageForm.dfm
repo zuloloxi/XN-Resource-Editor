@@ -14,7 +14,7 @@ object FormPropertyPage: TFormPropertyPage
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel1: TPanel
+  object PanelTop: TPanel
     Left = 0
     Top = 0
     Width = 373
@@ -25,7 +25,7 @@ object FormPropertyPage: TFormPropertyPage
     DesignSize = (
       373
       41)
-    object Bevel1: TBevel
+    object BevelTop: TBevel
       Left = 0
       Top = 38
       Width = 373
@@ -33,7 +33,7 @@ object FormPropertyPage: TFormPropertyPage
       Align = alBottom
       Shape = bsBottomLine
     end
-    object stSectionDetails: TLabel
+    object LabelSectionDetails: TLabel
       Left = 8
       Top = 6
       Width = 361

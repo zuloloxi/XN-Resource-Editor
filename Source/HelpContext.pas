@@ -3,7 +3,7 @@ unit HelpContext;
 interface
 
 uses
-  Windows, Classes, SysUtils;
+  WinApi.Windows, System.Classes, System.SysUtils;
 
 const
   NO_CONTEXTS = 2;

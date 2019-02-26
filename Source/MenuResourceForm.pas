@@ -3,8 +3,9 @@ unit MenuResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ActnList, Actions, Menus, ExtCtrls, ResourceForm, unitResourceMenus,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  System.Actions, VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs,
+  VCL.ActnList, VCL.Menus, VCL.ExtCtrls, ResourceForm, unitResourceMenus,
   ComponentMenuDesigner, ComponentPropertyListBox;
 
 type

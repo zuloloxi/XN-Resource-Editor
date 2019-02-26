@@ -3,8 +3,9 @@ unit PropertyPageRCSettings;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Menus, StdCtrls, ExtCtrls, VirtualTrees, PropertyPageForm,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.Menus, Vcl.StdCtrls, Vcl.ExtCtrls, VirtualTrees, PropertyPageForm,
   ComponentPersistentPosition, unitIncludePaths;
 
 type

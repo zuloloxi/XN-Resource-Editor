@@ -80,31 +80,31 @@ type
 // TFormPropertyBase is the base class for derived property tree forms
 
   TFormPropertyBase = class(TForm)
-    pnlOptions: TPanel;
+    PanelOptions: TPanel;
     vstSections: TVirtualStringTree;
-    Splitter1: TSplitter;
-    pnlButtons: TPanel;
-    Bevel1: TBevel;
-    btnOK: TButton;
-    btnCancel: TButton;
-    PersistentPosition1: TPersistentPosition;
-    btnApply: TButton;
+    Splitter: TSplitter;
+    PanelButtons: TPanel;
+    PersistentPosition: TPersistentPosition;
+    BevelBottom: TBevel;
+    ButtonOK: TButton;
+    ButtonCancel: TButton;
+    ButtonApply: TButton;
     PopupMenu: TPopupMenu;
-    ExpandAll1: TMenuItem;
-    CollapseAll1: TMenuItem;
-    btnHelp: TButton;
+    MenuItemExpandAll: TMenuItem;
+    MenuItemCollapseAll: TMenuItem;
+    ButtonHelp: TButton;
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure btnHelpClick(Sender: TObject);
-    procedure CollapseAll1Click(Sender: TObject);
-    procedure ExpandAll1Click(Sender: TObject);
-    procedure btnApplyClick(Sender: TObject);
+    procedure ButtonHelpClick(Sender: TObject);
+    procedure MenuItemCollapseAllClick(Sender: TObject);
+    procedure MenuItemExpandAllClick(Sender: TObject);
+    procedure ButtonApplyClick(Sender: TObject);
     procedure vstSectionsGetText(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
       var CellText: String);
     procedure FormShow(Sender: TObject);
     procedure vstSectionsFocusChanged(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Column: TColumnIndex);
-    procedure btnOKClick(Sender: TObject);
+    procedure ButtonOKClick(Sender: TObject);
     procedure vstSectionsInitNode(Sender: TBaseVirtualTree; ParentNode,
       Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vstSectionsInitChildren(Sender: TBaseVirtualTree;
@@ -283,13 +283,13 @@ end;
  |                                                                      |
  | OnClick handler for the 'Apply' button.                              |
  *----------------------------------------------------------------------*}
-procedure TFormPropertyBase.btnApplyClick(Sender: TObject);
+procedure TFormPropertyBase.ButtonApplyClick(Sender: TObject);
 begin
   if SaveSettings then
     DoApply;
 end;
 
-procedure TFormPropertyBase.btnHelpClick(Sender: TObject);
+procedure TFormPropertyBase.ButtonHelpClick(Sender: TObject);
 var
   kw: string;
   co: Integer;
@@ -327,7 +327,7 @@ end;
  |                                                                      |
  | Onclick handler for the OK button.                                   |
  *----------------------------------------------------------------------*}
-procedure TFormPropertyBase.btnOKClick(Sender: TObject);
+procedure TFormPropertyBase.ButtonOKClick(Sender: TObject);
 begin
   FSaved := True;
   if SaveSettings then
@@ -339,7 +339,7 @@ begin
   ForEachPropertyPageDetails (DoCancelPropertyPageSettings, nil);
 end;
 
-procedure TFormPropertyBase.CollapseAll1Click(Sender: TObject);
+procedure TFormPropertyBase.MenuItemCollapseAllClick(Sender: TObject);
 begin
   vstSections.FullCollapse;
 end;
@@ -442,7 +442,7 @@ begin
       bcontinue := page.FData.Apply
 end;
 
-procedure TFormPropertyBase.ExpandAll1Click(Sender: TObject);
+procedure TFormPropertyBase.MenuItemExpandAllClick(Sender: TObject);
 begin
   vstSections.FullExpand;
 end;
@@ -523,7 +523,7 @@ end;
 
 procedure TFormPropertyBase.FormDestroy(Sender: TObject);
 begin
-  PersistentPosition1.SetValue('Splitter', vstSections.Width);
+  PersistentPosition.SetValue('Splitter', vstSections.Width);
   if not FSaved then
     CancelChanges;
 end;
@@ -533,7 +533,7 @@ procedure TFormPropertyBase.FormKeyDown(Sender: TObject; var Key: Word;
 begin
   if key = VK_f1 then
   begin
-    btnHelpClick (nil);
+    ButtonHelpClick (nil);
     Key := 0
   end
 end;
@@ -562,8 +562,8 @@ begin
 
   if FUseConstraints then
   begin
-    pnlOptions.Constraints.MinWidth := FDetailsConstraints.X;
-    pnlOptions.Constraints.MinHeight := FDetailsConstraints.Y + Bevel1.Height;
+    PanelOptions.Constraints.MinWidth := FDetailsConstraints.X;
+    PanelOptions.Constraints.MinHeight := FDetailsConstraints.Y + BevelBottom.Height;
   end;
 
   n := vstSections.GetFirst;
@@ -608,12 +608,12 @@ var
   errorPage: TPropertyPageDetails;
 begin
   errorPage := ForEachPropertyPageDetails (DoSavePropertyPageSettings, nil);
-  Result := errorPage = Nil;
+  Result := errorPage = nil;
   if not result then
   begin
     SelectPage (errorPage);
-    errorPage.Data.Error
-  end
+    errorPage.Data.Error;
+  end;
 end;
 
 type
@@ -632,12 +632,12 @@ var
   newPage: Boolean;
 begin
         // (try to) provent flickering!
-  SendMessage (pnlOptions.Handle, WM_SETREDRAW, 0, 0);
+  SendMessage (PanelOptions.Handle, WM_SETREDRAW, 0, 0);
   try
                 // Free the old form (if there was one)
-    if pnlOptions.ControlCount > 1 then
+    if PanelOptions.ControlCount > 1 then
     begin
-      page := pnlOptions.Controls [1] as TFormPropertyPage;
+      page := PanelOptions.Controls [1] as TFormPropertyPage;
 
       if Assigned(Details) and (page.ClassType <> Details.FPropertyPageClass) then
         FreeAndNil (page);
@@ -652,7 +652,7 @@ begin
                   // Create new form of the correct class.
         page := Details.FPropertyPageClass.Create(self);
         FixFormConstraints (page);
-        page.Parent := pnlOptions;
+        page.Parent := PanelOptions;
         newPage := True;
       end
       else
@@ -675,8 +675,8 @@ begin
 
     FSelectedPage := page;
   finally
-    SendMessage (pnlOptions.Handle, WM_SETREDRAW, 1, 0);
-    RedrawWindow(pnlOptions.Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
+    SendMessage (PanelOptions.Handle, WM_SETREDRAW, 1, 0);
+    RedrawWindow(PanelOptions.Handle,nil,0, RDW_ERASE or RDW_FRAME or RDW_INVALIDATE or RDW_ALLCHILDREN or RDW_UPDATENOW);
   end
 end;
 
@@ -836,7 +836,7 @@ procedure TFormPropertyBase.WmUpdateSplitter(var msg: TMessage);
 var
   w: Integer;
 begin
-  w := PersistentPosition1.GetValue('Splitter');
+  w := PersistentPosition.GetValue('Splitter');
 
   if (w > 0) and (w < ClientWidth) then
     vstSections.Width := w;
@@ -921,7 +921,7 @@ begin
       if AHelpText <> '' then
         helpText := AHelpText
       else
-        helpText := tempPropertyPage.stSectionDetails.Caption;
+        helpText := tempPropertyPage.LabelSectionDetails.Caption;
 
       minX := tempPropertyPage.Constraints.MinWidth;
       minY := tempPropertyPage.Constraints.MinHeight;
@@ -993,7 +993,7 @@ end;
 
 procedure TFormPropertyPageDummy.PopulateControls(AData: TPropertyPageData);
 begin
-  stSectionDetails.Caption := AData.HelpText
+  LabelSectionDetails.Caption := AData.HelpText
 end;
 
 

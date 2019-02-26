@@ -15,7 +15,7 @@
 program XNResourceEditor;
 
 uses
-  Forms,
+  VCL.Forms,
   MainForm in 'MainForm.pas' {FormMain},
   RawResourceForm in 'RawResourceForm.pas' {fmRawResource},
   GraphicsResourceForm in 'GraphicsResourceForm.pas' {FormGraphicsResource},

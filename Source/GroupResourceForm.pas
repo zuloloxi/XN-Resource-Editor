@@ -3,8 +3,8 @@ unit GroupResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, ResourceForm;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes, VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs,
+  VCL.ExtCtrls, ResourceForm;
 
 type
   TFormGroupResource = class(TFormResource)
@@ -21,7 +21,7 @@ type
 implementation
 
 uses
-  ClipBrd, unitResourceGraphics;
+  VCL.ClipBrd, unitResourceGraphics;
 
 {$R *.DFM}
 

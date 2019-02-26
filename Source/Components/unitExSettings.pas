@@ -24,7 +24,7 @@ unit unitExSettings;
 interface
 
 uses
-  Windows, Classes, SysUtils;
+  WinApi.Windows, System.Classes, System.SysUtils;
 
 type
   TExSettingsType = (stUser, stMachine);
@@ -590,9 +590,9 @@ var
           sn := sctn + '\' + sl [i];
 
         if (ExcludeSections = Nil) or (ExcludeSections.IndexOf (sn) = -1) then
-          Exp (sn)
+          Exp(sn)
         else
-          Windows.Beep (440, 10)
+          WinApi.Windows.Beep(440, 10);
 
       end
     finally
@@ -617,7 +617,7 @@ begin
       Exp ('');
 
     finally
-      s.Free
+      s.Free;
     end
   end
 end;

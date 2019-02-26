@@ -3,8 +3,9 @@ unit DescriptionRCDataResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ResourceForm;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.StdCtrls,
+  ResourceForm;
 
 type
   TFormRCDataDescriptionResource = class(TFormResource)

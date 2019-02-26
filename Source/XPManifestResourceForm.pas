@@ -3,8 +3,9 @@ unit XPManifestResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ResourceForm, unitResourceXPManifests;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.StdCtrls,
+  ResourceForm, unitResourceXPManifests;
 
 type
   TFormXPManifestResource = class(TFormResource)

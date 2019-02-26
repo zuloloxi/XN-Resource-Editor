@@ -3,10 +3,10 @@ unit IconGraphicsResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, ToolWin, Menus, ActnList, ImgList, ComCtrls,
-  System.Actions, System.ImageList,
-  IconCursorGraphicsResourceForm, ComponentColorSelector,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  System.Actions, System.ImageList, VCL.Graphics, VCL.Controls, VCL.Forms,
+  VCL.Dialogs, VCL.ExtCtrls, VCL.ToolWin, VCL.Menus, VCL.ActnList, VCL.ImgList,
+  VCL.ComCtrls, IconCursorGraphicsResourceForm, ComponentColorSelector,
   ComponentSizingPageControl, ComponentBitmapEditor, ComponentPropertyListBox;
 
 type

@@ -3,8 +3,9 @@ unit PropertyPageForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, StdCtrls;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.ExtCtrls,
+  VCL.StdCtrls;
 
 type
   TPropertyPageData = class
@@ -41,8 +42,8 @@ type
   TPropertyPageDataClass = class of TPropertyPageData;
 
   TFormPropertyPage = class(TForm)
-    Panel1: TPanel;
-    Bevel1: TBevel;
+    PanelTop: TPanel;
+    BevelTop: TBevel;
     LabelSectionDetails: TLabel;
   private
     FAltKeyWord: string;

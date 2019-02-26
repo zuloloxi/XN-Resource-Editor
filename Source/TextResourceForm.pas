@@ -17,8 +17,9 @@ unit TextResourceForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ActnList, Menus, StdCtrls, Contnrs, ComCtrls, System.Actions, ResourceForm,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  System.Contnrs, System.Actions, VCL.Graphics, VCL.Controls, VCL.Forms,
+  VCL.Dialogs, VCL.ActnList, VCL.Menus, VCL.StdCtrls, VCL.ComCtrls, ResourceForm,
   VirtualTrees, ComponentCWRichEdit, unitResourceMessages;
 
 type

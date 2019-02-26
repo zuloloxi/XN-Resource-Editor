@@ -25,8 +25,9 @@ unit PropertyBaseForm;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, Menus, Contnrs, StdCtrls, VirtualTrees,
+  WinAPI.Windows, WinAPI.Messages, System.Contnrs, System.SysUtils,
+  System.Classes, VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs,
+  VCL.ExtCtrls, VCL.Menus, VCL.StdCtrls, VirtualTrees,
   PropertyPageForm, ComponentPersistentPosition;
 
 const
@@ -484,6 +485,7 @@ begin
     Result := nil;
 end;
 
+
 {*----------------------------------------------------------------------*
  | procedure TFormPropertyBase.SaveSettings                               |
  |                                                                      |
@@ -491,6 +493,7 @@ end;
  | settings held for XanaNews.  (This is called when the 'OK' button    |
  | is clicked)                                                          |
  *----------------------------------------------------------------------*}
+
 procedure TFormPropertyBase.SaveSettings;
 begin
   ForEachPropertyPageDetails(DoSavePropertyPageSettings, nil);
@@ -500,12 +503,14 @@ type
   TMyPanel = class (TPanel)
   end;
 
+
 {*----------------------------------------------------------------------*
  | procedure TFormPropertyBase.SelectPage                                 |
  |                                                                      |
  | Called when a node is selected in the tree.  Create a form of the    |
  | correct class and initialize it with data held in Details.FData      |
  *----------------------------------------------------------------------*}
+
 procedure TFormPropertyBase.SelectPage(Details: TPropertyPageDetails);
 var
   Page: TFormPropertyPage;
@@ -561,11 +566,13 @@ begin
   end;
 end;
 
+
 {*----------------------------------------------------------------------*
  | procedure TFormPropertyBase.SetNodePropertyPageDetails                 |
  |                                                                      |
  | Set the given tree node's data to point to the given details class   |
  *----------------------------------------------------------------------*}
+
 procedure TFormPropertyBase.SetNodePropertyPageDetails(Node: PVirtualNode;Details: TPropertyPageDetails);
 var
   obj: PObject;
@@ -576,12 +583,14 @@ begin
     obj^ := Details;
 end;
 
+
 {*----------------------------------------------------------------------*
  | procedure TFormPropertyBase.vstSectionsFocusChanged                    |
  |                                                                      |
  | OnFocusedChanged handler for the tree.  Create the Page for the      |
  | newly selected node.                                                 |
  *----------------------------------------------------------------------*}
+
 procedure TFormPropertyBase.vstSectionsFocusChanged(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex);
 begin
@@ -593,7 +602,8 @@ end;
  |                                                                      |
  | OnGetText handler for the tree                                       |
  *----------------------------------------------------------------------*}
-procedure TFormPropertyBase.vstSectionsGetText(Sender: TBaseVirtualTree;
+
+ procedure TFormPropertyBase.vstSectionsGetText(Sender: TBaseVirtualTree;
   Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 var
@@ -609,6 +619,7 @@ end;
  |                                                                      |
  | OnInitChild function for the tree                                    |
  *----------------------------------------------------------------------*}
+
 procedure TFormPropertyBase.vstSectionsInitChildren(Sender: TBaseVirtualTree;
   Node: PVirtualNode; var ChildCount: Cardinal);
 var
@@ -627,6 +638,7 @@ end;
  |                                                                      |
  | OnInitNode handler for the tree                                      |
  *----------------------------------------------------------------------*}
+
 procedure TFormPropertyBase.vstSectionsInitNode(Sender: TBaseVirtualTree;
   ParentNode, Node: PVirtualNode;
   var InitialStates: TVirtualNodeInitStates);
@@ -645,6 +657,7 @@ begin
     InitialStates := InitialStates + [ivsHasChildren];
 end;
 
+
 { TPropertyPageDetails }
 
 {*----------------------------------------------------------------------*
@@ -654,83 +667,85 @@ end;
  | class.  Don't initialize the data class (until its page is displayed)|
  | - but fill in its MinX, MaxX, Caption and HelpText properties        |
  *----------------------------------------------------------------------*}
-constructor TPropertyPageDetails.Create(AOwner: TFormPropertyBase; APropertyPageClass: TPropertyPageClass;
+
+ constructor TPropertyPageDetails.Create(AOwner: TFormPropertyBase; APropertyPageClass: TPropertyPageClass;
   AParent: TPropertyPageDetails; const ACaption, AHelpText, AHelpKeyWord: string; AParam: Integer);
 var
-  dataClass: TPropertyPageDataClass;
-  tempPropertyPage: TFormPropertyPage;
-  tempData: TPropertyPageData;
-  caption: string;
-  helpText: string;
-  helpKeyWord: string;
-  minX, minY: Integer;
+  DataClass: TPropertyPageDataClass;
+  TempPropertyPage: TFormPropertyPage;
+  TempData: TPropertyPageData;
+  Caption: string;
+  HelpText: string;
+  HelpKeyWord: string;
+  MinX, MinY: Integer;
 begin
   FPropertyPageClass := APropertyPageClass;
   FParent := AParent;
-  tempPropertyPage := nil;
+  TempPropertyPage := nil;
   try
 
-  // In order to get the form's constraints, caption, etc. we need
-  // to create a temporary instance of one.  But only the first
-  // time for each form class.  If we've already created a temporary
-  // instance for this class, use it's constraints & caption details.
+    // In order to get the form's constraints, caption, etc. we need
+    // to create a temporary instance of one.  But only the first
+    // time for each form class.  If we've already created a temporary
+    // instance for this class, use it's constraints & caption details.
 
-    dataClass := FPropertyPageClass.GetDataClass;
-    tempData := AOwner.FindSameData(FPropertyPageClass);
+    DataClass := FPropertyPageClass.GetDataClass;
+    TempData := AOwner.FindSameData(FPropertyPageClass);
 
-    if Assigned(tempData) then
+    if Assigned(TempData) then
 
-    begin       // We've already created data for this form class
-                // so use its settings
+    begin
+      // We've already created data for this form class
+      // so use its settings
 
       if ACaption <> '' then
-        caption := ACaption
+        Caption := ACaption
       else
-        caption := tempData.Caption;
+        Caption := TempData.Caption;
 
       if AHelpText <> '' then
-        helpText := AHelpText
+        HelpText := AHelpText
       else
-        helpText := tempData.HelpText;
+        HelpText := TempData.HelpText;
 
       if AHelpKeyWord <> '' then
-        helpKeyWord := AHelpKeyWord
+        HelpKeyWord := AHelpKeyWord
       else
-        helpKeyWord := tempData.HelpKeyWord;
+        HelpKeyWord := TempData.HelpKeyWord;
 
-      minX := tempData.MinX;
-      minY := tempData.MinY;
+      MinX := TempData.MinX;
+      MinY := TempData.MinY;
     end
     else
+    begin
+      // First time data is created for this form class.  So
+      // create a tempoary instance of the form to get its
+      // constraints and Caption.
 
-    begin       // First time data is created for this form class.  So
-                // create a tempoary instance of the form to get its
-                // constraints and caption.
+      TempPropertyPage := FPropertyPageClass.Create(nil);
+      FixFormConstraints (TempPropertyPage);
 
-      tempPropertyPage := FPropertyPageClass.Create(nil);
-      FixFormConstraints (tempPropertyPage);
-
-      if (ACaption = '') and (tempPropertyPage.Caption <> tempPropertyPage.Name) then
-        caption := tempPropertyPage.Caption
+      if (ACaption = '') and (TempPropertyPage.Caption <> TempPropertyPage.Name) then
+        Caption := TempPropertyPage.Caption
       else
-        caption := ACaption;
+        Caption := ACaption;
 
-      helpKeyWord := AHelpKeyWord;
+      HelpKeyWord := AHelpKeyWord;
 
       if AHelpText <> '' then
-        helpText := AHelpText
+        HelpText := AHelpText
       else
-        helpText := tempPropertyPage.LabelSectionDetails.Caption;
+        HelpText := TempPropertyPage.LabelSectionDetails.Caption;
 
-      minX := tempPropertyPage.Constraints.MinWidth;
-      minY := tempPropertyPage.Constraints.MinHeight;
+      MinX := TempPropertyPage.Constraints.MinWidth;
+      MinY := TempPropertyPage.Constraints.MinHeight;
     end;
 
                 // Create the data class.
-    FData := dataClass.Create(caption, helpText, helpKeyWord, minX, minY, AParam);
+    FData := DataClass.Create(Caption, HelpText, HelpKeyWord, MinX, MinY, AParam);
   finally
-    tempPropertyPage.Free
-  end
+    TempPropertyPage.Free;
+  end;
 end;
 
 {*----------------------------------------------------------------------*
@@ -739,6 +754,7 @@ end;
  | Recursively destroy a property Page Details class and its siblings & |
  | chidren.                                                             ||
  *----------------------------------------------------------------------*}
+
 destructor TPropertyPageDetails.Destroy;
 begin
   FData.Free;
@@ -753,6 +769,7 @@ end;
  |                                                                      |
  | Get the 'nth' child node of a Details class                          |
  *----------------------------------------------------------------------*}
+
 function TPropertyPageDetails.GetChild(idx: Integer): TPropertyPageDetails;
 begin
   Result := FChild;
@@ -768,6 +785,7 @@ end;
  |                                                                      |
  | Count the children for a given details node                          |
  *----------------------------------------------------------------------*}
+
 function TPropertyPageDetails.GetChildCount: Integer;
 var
   PropPageDetails: TPropertyPageDetails;
