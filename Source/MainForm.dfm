@@ -64,16 +64,19 @@ object FormMain: TFormMain
     Header.AutoSizeIndex = 0
     Header.Options = [hoColumnResize, hoDrag]
     Images = ImageListResources
+    IncrementalSearch = isAll
     PopupMenu = PopupMenuResources
     ProportionalColumnSizes = False
     StateImages = ImageListResources
     TabOrder = 2
     TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.SelectionOptions = [toRightClickSelect, toCenterScrollIntoView]
+    OnCompareNodes = vstResourcesCompareNodes
     OnEditing = vstResourcesEditing
     OnFocusChanged = vstResourcesFocusChanged
     OnGetText = vstResourcesGetText
     OnGetImageIndex = vstResourcesGetImageIndex
+    OnIncrementalSearch = vstResourcesIncrementalSearch
     OnInitChildren = vstResourcesInitChildren
     OnInitNode = vstResourcesInitNode
     OnNewText = vstResourcesNewText
@@ -339,7 +342,7 @@ object FormMain: TFormMain
     Left = 256
     Top = 118
     Bitmap = {
-      494C010112009000900010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010112009800980010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000E6CEC300E3CDC300DFCBC200DBC7BE00DCC4B900E5C9BB000000
@@ -1205,7 +1208,7 @@ object FormMain: TFormMain
     Filter = 'X Files (*.x)|*.x|Y Files (*.y)|*.y'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
     Left = 224
-    Top = 208
+    Top = 224
   end
   object PrintDialog: TPrintDialog
     Left = 280
@@ -1243,7 +1246,7 @@ object FormMain: TFormMain
     Left = 224
     Top = 177
     Bitmap = {
-      494C01010E009000900010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010E009800980010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1827,13 +1830,13 @@ object FormMain: TFormMain
   object ApplicationEvents: TApplicationEvents
     OnHelp = ApplicationEventsHelp
     OnMessage = ApplicationEventsMessage
-    Left = 252
-    Top = 206
+    Left = 324
+    Top = 230
   end
   object OpenDialogAllFiles: TOpenDialog
     Filter = 'Any File (*.*)|*.*'
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
-    Left = 284
-    Top = 214
+    Left = 276
+    Top = 222
   end
 end

@@ -214,6 +214,10 @@ type
     procedure vstResourcesGetImageIndex(Sender: TBaseVirtualTree;
       Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
       var Ghosted: Boolean; var ImageIndex: TImageIndex);
+    procedure vstResourcesCompareNodes(Sender: TBaseVirtualTree; Node1,
+      Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
+    procedure vstResourcesIncrementalSearch(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; const SearchText: string; var Result: Integer);
   private
     FResourceModule: TResourceModule;
     FUndo, FRedo: string;
@@ -1896,7 +1900,7 @@ procedure TFormMain.vstResourcesGetImageIndex(Sender: TBaseVirtualTree;
 var
   Details: TResourceDetails;
 begin
-  if Kind = ikOverlay then
+  if Kind in [ikOverlay, ikState] then
     Exit;
 
   Details := GetNodeResourceDetails(Node);
@@ -1906,7 +1910,7 @@ begin
     if vsExpanded in Node^.States then
       ImageIndex := imgOpenFolder
     else
-      ImageIndex := imgClosedFolder
+      ImageIndex := imgClosedFolder;
 end;
 
 procedure TFormMain.vstResourcesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex;
@@ -1916,6 +1920,15 @@ var
 begin
   if GetNodeElement(Node, elem) then
     CellText := elem.DisplayName
+end;
+
+procedure TFormMain.vstResourcesIncrementalSearch(Sender: TBaseVirtualTree;
+  Node: PVirtualNode; const SearchText: string; var Result: Integer);
+var
+  elem: TResExamElement;
+begin
+  if GetNodeElement(Node, elem) then
+    Result := CompareText(SearchText, elem.DisplayName);
 end;
 
 procedure TFormMain.vstResourcesInitChildren(Sender: TBaseVirtualTree;
@@ -1946,6 +1959,15 @@ begin
     if elem.Count > 0 then
       Include(InitialStates, ivsHasChildren)
   end
+end;
+
+procedure TFormMain.vstResourcesCompareNodes(Sender: TBaseVirtualTree; Node1,
+  Node2: PVirtualNode; Column: TColumnIndex; var Result: Integer);
+var
+  Elem1, Elem2: TResExamElement;
+begin
+  if GetNodeElement(Node1, Elem1) and GetNodeElement(Node2, Elem2) then
+    Result := CompareText(Elem1.DisplayName, Elem2.DisplayName);
 end;
 
 procedure TFormMain.vstResourcesEditing(Sender: TBaseVirtualTree;
