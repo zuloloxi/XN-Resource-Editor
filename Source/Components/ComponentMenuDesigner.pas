@@ -13,7 +13,7 @@ unit ComponentMenuDesigner;
 interface
 
 uses
-  WinAPI.Windows, WinAPI.Messages, Vcl.Menus, System.SysUtils, System.Classes,
+  WinAPI.Windows, WinAPI.Messages, Vcl.Menus, System.SysUtils, System.Classes, System.Types,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls;
 
 type

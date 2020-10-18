@@ -18,7 +18,7 @@ unit ResourceForm;
 interface
 
 uses
-  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes, System.Types,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   ResourceObjectForm, unitResourceDetails;
 

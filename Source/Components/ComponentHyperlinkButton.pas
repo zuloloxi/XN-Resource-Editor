@@ -3,7 +3,7 @@ unit ComponentHyperlinkButton;
 interface
 
 uses
-  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes, System.UITypes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ImgList;
 
 type

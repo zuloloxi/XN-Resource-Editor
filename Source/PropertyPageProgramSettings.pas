@@ -4,7 +4,7 @@ interface
 
 uses
   WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
-  VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.ExtCtrls, VCL.StdCtrls,
+  VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.ExtCtrls, VCL.StdCtrls,
   PropertyPageForm, ComponentPersistentPosition;
 
 type

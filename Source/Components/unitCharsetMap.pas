@@ -26,7 +26,7 @@ unit unitCharsetMap;
 interface
 
 uses
-  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
+  WinAPI.Windows, System.Classes, System.SysUtils, System.UITypes, Vcl.Graphics,
   WinAPI.RichEdit, System.Contnrs, MultiLanguage_TLB;
 
 var

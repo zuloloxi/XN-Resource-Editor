@@ -26,7 +26,7 @@ interface
 
 uses
   WinAPI.Windows, WinAPI.Messages, System.Contnrs, System.SysUtils,
-  System.Classes, VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs,
+  System.Classes, System.Types, VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs,
   VCL.ExtCtrls, VCL.Menus, VCL.StdCtrls, VirtualTrees,
   PropertyPageForm, ComponentPersistentPosition;
 

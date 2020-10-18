@@ -21,7 +21,7 @@ unit GraphicsResourceForm;
 interface
 
 uses
-  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes,
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Classes, System.UITypes,
   VCL.Graphics, VCL.Controls, VCL.Forms, VCL.Dialogs, VCL.ActnList, VCL.Menus,
   VCL.ExtCtrls, VCL.ComCtrls, VCL.ImgList, VCL.ToolWin, Vcl.Imaging.GifImg,
   System.Actions, System.ImageList, ResourceForm, ComponentPropertyListBox,

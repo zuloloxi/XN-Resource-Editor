@@ -27,8 +27,8 @@ unit ComponentCWRichEdit;
 interface
 
 uses
-  WinAPI.Windows, WinAPI.Messages, System.Classes, System.SysUtils, System.UITypes, Vcl.Forms,
-  Vcl.Graphics, Vcl.Controls, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.StdActns,
+  WinAPI.Windows, WinAPI.Messages, System.Classes, System.SysUtils, System.UITypes, System.Types,
+  Vcl.Forms, Vcl.Graphics, Vcl.Controls, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.StdActns,
   WinAPI.RichEdit, Vcl.Dialogs, RichOLE, WinAPI.CommDlg;
 
 type

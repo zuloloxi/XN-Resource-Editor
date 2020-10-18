@@ -25,7 +25,7 @@ unit ComponentDialogEditor;
 interface
 
 uses
-  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes,
+  WinAPI.Windows, WinAPI.Messages, System.SysUtils, System.Classes, System.Types, System.UITypes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, WinAPI.commctrl,
   WinAPI.RichEdit, Vcl.ExtCtrls, ComponentDialogBox, DialogConsts;
 

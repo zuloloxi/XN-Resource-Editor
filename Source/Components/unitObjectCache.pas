@@ -32,7 +32,7 @@ unit unitObjectCache;
 interface
 
 uses
-  Windows, Classes, SysUtils, Contnrs, SyncObjs;
+  WinAPI.Windows, System.Classes, System.SysUtils, System.Types, System.Contnrs, System.SyncObjs;
 
 type
   TObjectCacheProc = procedure (obj: TObject; idx, param: Integer; var continue: Boolean) of object;
