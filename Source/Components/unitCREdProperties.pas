@@ -189,7 +189,7 @@ begin
             case Properties [i].Value.tp of
               ptBool: FValues [i].boolVal := reg.ReadBool (Properties [i].Name);
               ptInteger: FValues [i].intVal := reg.ReadInteger (Properties [i].Name);
-              ptString: FValues [i].stringVal := reg.ReadString (Properties [i].Name);
+              ptString: FValues [i].stringVal := ShortString(reg.ReadString (Properties [i].Name));
               ptLString: FLStrings [FValues [i].strIdx] := reg.ReadString (Properties [i].Name);
             end
       finally
@@ -226,7 +226,7 @@ begin
          case Properties [i].Value.tp of
            ptBool: reg.WriteBool (Properties [i].Name, FValues [i].boolVal);
            ptInteger: reg.WriteInteger (Properties [i].Name, FValues [i].intVal);
-           ptString: reg.WriteString (Properties [i].Name, FValues [i].stringVal);
+           ptString: reg.WriteString (Properties [i].Name, string(FValues [i].stringVal));
            ptLString: reg.WriteString (Properties [i].Name, FLStrings [FValues [i].strIdx])
          end
     end

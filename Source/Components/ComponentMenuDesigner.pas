@@ -308,8 +308,8 @@ begin
 
   for i := 0 to Items.Count - 1 do
   begin
-    st := ExtractCaption (Utf8Decode (items.Items [i].Caption));
-    s1 := ExtractShortcut(Utf8Decode (items.Items [i].Caption));
+    st := ExtractCaption (Utf8ToWideString (RawByteString(items.Items [i].Caption)));
+    s1 := ExtractShortcut(Utf8ToWideString (RawByteString(items.Items [i].Caption)));
 
     if st <> '-' then
     begin
@@ -561,8 +561,8 @@ begin
   params.iRightMargin := rightMargin;
   params.iTabLength := 0;
 
-  st := ExtractCaption (Utf8Decode (item.Caption));          // Extract caption & shortcut
-  s1 := ExtractShortcut(Utf8Decode (item.Caption));
+  st := ExtractCaption (Utf8ToWideString (RawByteString(item.Caption)));          // Extract caption & shortcut
+  s1 := ExtractShortcut(Utf8ToWideString (RawByteString(item.Caption)));
 
   if stw = -1 then                              // Calculate string width if required (horiz menus)
     stw := DrawTextWidth (leftMargin, RightMargin, st);
@@ -1026,7 +1026,7 @@ begin
   for i := 0 to Items.Count - 1 do
   begin
     item := Items.Items [i];
-    st := Utf8Decode (item.Caption);
+    st := Utf8ToWideString (RawByteString(item.Caption));
     r.Left := xp;
     r.Right := xp + DrawTextWidth (mainMenuLeftMargin, mainMenuRightMargin, st);
     r.Top := tm;
