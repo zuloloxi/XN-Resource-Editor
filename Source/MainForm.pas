@@ -484,7 +484,7 @@ begin
               Result := TGIFImage
             else
               if ext = 'PNG' then
-                Result := TPngObject
+                Result := TPngImage
               else
                 Result := nil;
 end;
@@ -505,7 +505,7 @@ var
   bmp: TBitmap;
   gif: TGifImage;
 begin
-  viaBitmap := (newCls = TPNGObject);
+  viaBitmap := (newCls = TPngImage);
 
   Result := newCls.Create;
   try

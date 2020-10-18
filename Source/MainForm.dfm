@@ -83,8 +83,8 @@ object FormMain: TFormMain
     Columns = <
       item
         Position = 0
+        Text = 'Resources'
         Width = 203
-        WideText = 'Resources'
       end>
   end
   object ToolBarMenu: TToolBar
@@ -181,12 +181,12 @@ object FormMain: TFormMain
       Style = tbsDropDown
     end
     object ToolButtonFileSave: TToolButton
-      Left = 66
+      Left = 68
       Top = 0
       Action = ActionFileSave
     end
     object ToolButtonSplitter: TToolButton
-      Left = 89
+      Left = 91
       Top = 0
       Width = 8
       Caption = 'ToolButtonSplitter'
@@ -194,12 +194,12 @@ object FormMain: TFormMain
       Style = tbsSeparator
     end
     object ToolButtonAdd: TToolButton
-      Left = 97
+      Left = 99
       Top = 0
       Action = ActionResourceAddResource
     end
     object ToolButtonDelete: TToolButton
-      Left = 120
+      Left = 122
       Top = 0
       Action = ActionResourceDeleteResource
     end
@@ -342,7 +342,7 @@ object FormMain: TFormMain
     Left = 256
     Top = 118
     Bitmap = {
-      494C010112009800980010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010112009800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000005000000001002000000000000050
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000E6CEC300E3CDC300DFCBC200DBC7BE00DCC4B900E5C9BB000000
@@ -1238,6 +1238,7 @@ object FormMain: TFormMain
     Top = 56
   end
   object NTAboutBox: TNTAboutBox
+    DisplaySupportLink = False
     Left = 224
     Top = 147
   end
@@ -1245,7 +1246,7 @@ object FormMain: TFormMain
     Left = 224
     Top = 177
     Bitmap = {
-      494C01010E009800980010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010E009800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -118,13 +118,13 @@ begin
   with PropertyListBox.FindProperty(rstCaption) do
   begin
     Tag := taCaption;
-    PropertyValue := ExtractCaption (utf8Decode (item.Caption));
+    PropertyValue := ExtractCaption (UTF8ToWideString (RawByteString(item.Caption)));
   end;
 
   with PropertyListBox.FindProperty(rstShortcut) do
   begin
     Tag := taShortcut;
-    s := ExtractShortcut(Utf8Decode (item.Caption));
+    s := ExtractShortcut(Utf8ToWideString (RawByteString(item.Caption)));
 
     if s = '' then
       s := rstNone;
@@ -244,7 +244,7 @@ begin
   case PropertyListBox.SelectedPropertyNo of
     taCaption:
       begin
-        MenuDesigner.SelectedItem.Caption := Utf8Encode (MergeCaption (prop.PropertyValue, ExtractShortcut(Utf8Decode (MenuDesigner.SelectedItem.Caption))));
+        MenuDesigner.SelectedItem.Caption := String(Utf8Encode (MergeCaption (prop.PropertyValue, ExtractShortcut(Utf8ToString (RawByteString(MenuDesigner.SelectedItem.Caption))))));
         s := rstChangeItemCaption;
       end;
 
@@ -254,7 +254,7 @@ begin
         s := prop.EnumValues [idx];
         if s = rstNone then
           s := '';
-        MenuDesigner.SelectedItem.Caption := Utf8Encode (MergeCaption (ExtractCaption (Utf8Decode (MenuDesigner.SelectedItem.Caption)), s));
+        MenuDesigner.SelectedItem.Caption := string(Utf8Encode (MergeCaption (ExtractCaption (UTF8ToWideString (RawByteString(MenuDesigner.SelectedItem.Caption))), s)));
         s := rstChangeItemShortcut;
       end;
 
