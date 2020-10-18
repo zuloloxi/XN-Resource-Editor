@@ -17,7 +17,7 @@ unit unitResourceHTML;
 interface
 
 uses
-  Windows, Classes, SysUtils, unitResourceDetails;
+  WinAPI.Windows, System.Classes, System.SysUtils, System.AnsiStrings, unitResourceDetails;
 
 const
   RT_HTML = MakeIntResource(23);
@@ -55,7 +55,7 @@ var
   p: PAnsiChar;
 begin
   p := PAnsiChar (data);
-  Result := (StrLIComp (p, '<HTML', 5) = 0) or (StrLIComp (p, '<!', 2) = 0);
+  Result := (System.AnsiStrings.StrLIComp (p, '<HTML', 5) = 0) or (System.AnsiStrings.StrLIComp (p, '<!', 2) = 0);
 end;
 
 initialization

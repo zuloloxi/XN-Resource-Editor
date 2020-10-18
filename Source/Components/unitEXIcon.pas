@@ -1269,7 +1269,7 @@ begin
   for i := 0 to hdr.wCount - 1 do
   begin
 
-    stream.Seek (dirEntry [i].dwImageOffset, soFromBeginning);
+    stream.Seek (dirEntry [i].dwImageOffset, TSeekOrigin.soBeginning);
 
     fImages [i].FMemoryImage.CopyFrom (stream, dirEntry [i].dwBytesInRes);
 
@@ -1428,11 +1428,11 @@ begin
     dirEntry.dwBytesInRes := image.FMemoryImage.Size;
     if hdr.wType = 2 then
     begin
-      image.FMemoryImage.Seek (SizeOf (DWORD), soFromBeginning);
+      image.FMemoryImage.Seek (SizeOf (DWORD), TSeekOrigin.soBeginning);
       Dec(dirEntry.dwBytesInRes, SizeOf (DWORD))
     end
     else
-      image.FMemoryImage.Seek (0, soFromBeginning);
+      image.FMemoryImage.Seek (0, TSeekOrigin.soBeginning);
 
     dirEntry.dwImageOffset := dirSize;
     Stream.Write (dirEntry, SizeOf (dirEntry));
@@ -1751,7 +1751,7 @@ begin
 
     GetMem (buff, FMemoryImage.Size);
     try
-     FMemoryImage.Seek (0, soFromBeginning);
+     FMemoryImage.Seek (0, TSeekOrigin.soBeginning);
      Move (FMemoryImage.Memory^, buff^, FMemoryImage.Size);
 
       FHandle := CreateIconFromResourceEx (buff, FMemoryImage.Size, FisIcon, $00030000, info^.biWidth, info^.biHeight div 2, LR_DEFAULTCOLOR);
@@ -1941,7 +1941,7 @@ begin
     begin
       hotspot := MAKELONG (dirEntry [i].wPlanes, dirEntry [i].wBitCount);
 
-      stream.Seek (dirEntry [i].dwImageOffset, soFromBeginning);
+      stream.Seek (dirEntry [i].dwImageOffset, TSeekOrigin.soBeginning);
 
       fImages [i].FMemoryImage.Write (hotspot, SizeOf (hotspot));
       fImages [i].FMemoryImage.CopyFrom (stream, dirEntry [i].dwBytesInRes);
@@ -2017,7 +2017,7 @@ begin
 
     for i := 0 to ImageCount - 1 do
     begin
-      fImages [i].FMemoryImage.Seek (SizeOf (DWORD), soFromBeginning);
+      fImages [i].FMemoryImage.Seek (SizeOf (DWORD), TSeekOrigin.soBeginning);
       Stream.CopyFrom (images [i].FMemoryImage, images [i].FMemoryImage.Size - images [i].fMemoryImage.Position);
     end
   finally

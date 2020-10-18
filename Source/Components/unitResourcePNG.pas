@@ -17,7 +17,7 @@ unit unitResourcePNG;
 interface
 
 uses
-  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
+  WinAPI.Windows, System.Classes, System.SysUtils, System.AnsiStrings, Vcl.Graphics,
   Vcl.Imaging.PngImage, unitResourceDetails, unitResourceGraphics;
 
 type
@@ -53,7 +53,7 @@ end;
 procedure TPngResourceDetails.GetImage(Picture: TPicture);
 begin
   Picture.Graphic := TPngImage.Create;
-  Data.Seek (0, soFromBeginning);
+  Data.Seek (0, TSeekOrigin.soBeginning);
   TPngImage(Picture.Graphic).LoadFromStream(Data)
 end;
 
@@ -75,7 +75,7 @@ begin
   p := PAnsiChar(Data);
   Inc(p);
 
-  Result := (StrLIComp (p, 'PNG', 3) = 0);
+  Result := (System.AnsiStrings.StrLIComp (p, 'PNG', 3) = 0);
 end;
 
 initialization

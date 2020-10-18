@@ -25,7 +25,7 @@ unit unitParser;
 interface
 
 uses
-  Windows, Classes, SysUtils, unitStreamTextReader, unitCExpression, Character;
+  WinAPI.Windows, System.Classes, System.SysUtils, System.Character, unitStreamTextReader, unitCExpression;
 
 const
   ttUnknown = 0;
@@ -323,7 +323,7 @@ end;
 
 function TParser.IsFirstIdChar(ch: char): Boolean;
 begin
-  Result := TCharacter.IsLetter (ch) or (ch = '_')
+  Result := ch.IsLetter or (ch = '_')
 end;
 
 function TParser.IsFirstNumChar(ch: char): Boolean;
@@ -348,7 +348,7 @@ end;
 
 function TParser.IsWhitespace(ch: char): Boolean;
 begin
-  Result := TCharacter.IsWhitespace (ch)
+  Result := ch.IsWhitespace
 end;
 
 function TParser.NextChar (ch :Char): Char;
@@ -856,7 +856,7 @@ end;
 
 function TCPreProcessor.IsFirstNumChar(ch: char): Boolean;
 begin
-  Result := TCharacter.IsNumber (ch)
+  Result := ch.IsNumber
 end;
 
 function TCPreProcessor.IsIdentifier(const id: string): Boolean;

@@ -212,7 +212,7 @@ begin
     hdr.bfOffBits := SizeOf(hdr);
 
     s.Write (hdr, SizeOf(hdr));
-    RawData.Seek (0, soFromBeginning);
+    RawData.Seek (0, TSeekOrigin.soBeginning);
     s.CopyFrom (RawData, RawData.size);
 
     InternalGetImage (s, picture)
@@ -280,7 +280,7 @@ var
   hangOnToPalette: Boolean;
   newBmp: TBitmap;
 begin
-  s.Seek (0, soFromBeginning);
+  s.Seek (0, TSeekOrigin.soBeginning);
   picture.Bitmap.IgnorePalette := False;
   picture.Bitmap.LoadFromStream (s);
 
@@ -505,7 +505,7 @@ begin
 
     strm.Write (dirEntry, SizeOf(dirEntry));
     strm.CopyFrom (RawData, 0);
-    strm.Seek (0, soFromBeginning);
+    strm.Seek (0, TSeekOrigin.soBeginning);
 
     iconcursor.LoadFromStream (strm);
     picture.Graphic := iconcursor
@@ -703,7 +703,7 @@ begin
 
     if ResourceCount > 0 then
     begin
-      strm.Seek (0, soFromBeginning);
+      strm.Seek (0, TSeekOrigin.soBeginning);
       iconcursor.LoadFromStream (strm);
       picture.Graphic := iconcursor
     end

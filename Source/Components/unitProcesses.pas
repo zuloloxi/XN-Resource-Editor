@@ -623,7 +623,7 @@ begin
     FVersionCache := GetFileVersion (FileName);
     if FindFirst(FileName, faAnyFile, f) = 0 then
     try
-      FFileDateTime := FileDateToDateTime (f.Time);
+      FFileDateTime := f.TimeStamp;
       FFileSize := f.Size
     finally
       FindClose (f)

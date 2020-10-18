@@ -1,4 +1,4 @@
-object fmNTAboutBox: TFormNTAboutBox
+object FormNTAboutBox: TFormNTAboutBox
   Left = 192
   Top = 224
   BorderStyle = bsDialog

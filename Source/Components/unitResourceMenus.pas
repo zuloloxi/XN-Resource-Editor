@@ -390,7 +390,7 @@ begin
   offset := 0;
   st := TMemoryStream.Create;
   try
-    data.Seek (0, soFromBeginning);
+    data.Seek (0, TSeekOrigin.soBeginning);
     st.CopyFrom (data, sizeof (TMenuHeader));
 
     case PMenuHeader (st.Memory)^.wVersion of
@@ -404,8 +404,8 @@ begin
         end
     end;
 
-    st.Seek (offset, soFromBeginning);
-    data.Seek (0, soFromBeginning);
+    st.Seek (offset, TSeekOrigin.soBeginning);
+    data.Seek (0, TSeekOrigin.soBeginning);
     data.size := 0;
     data.CopyFrom (st, st.Size - offset);
   finally

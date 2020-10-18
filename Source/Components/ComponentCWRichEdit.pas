@@ -27,7 +27,7 @@ unit ComponentCWRichEdit;
 interface
 
 uses
-  WinAPI.Windows, WinAPI.Messages, System.Classes, System.SysUtils, Vcl.Forms,
+  WinAPI.Windows, WinAPI.Messages, System.Classes, System.SysUtils, System.UITypes, Vcl.Forms,
   Vcl.Graphics, Vcl.Controls, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.StdActns,
   WinAPI.RichEdit, Vcl.Dialogs, RichOLE, WinAPI.CommDlg;
 
@@ -124,7 +124,7 @@ type
     FWordWrap: Boolean;
     FBorderStyle: TBorderStyle;
     FAlignment: TAlignment;
-    FScrollBars: TScrollStyle;
+    FScrollBars: System.UITypes.TScrollStyle;
     FHideSelection: Boolean;
     FHideScrollBars: Boolean;
     FRichEditProvider: TRichEditProvider;
@@ -170,7 +170,7 @@ type
     function ProtectChange(StartPos, EndPos: Integer): Boolean;
     function SaveClipboard(NumObj, NumChars: Integer): Boolean;
     procedure SetAlignment(const Value: TAlignment);
-    procedure SetScrollBars(const Value: TScrollStyle);
+    procedure SetScrollBars(const Value: System.UITypes.TScrollStyle);
     procedure SetWordWrap(const Value: Boolean);
     procedure SetHideScrollBars(const Value: Boolean);
     procedure SetHideSelection(const Value: Boolean);
@@ -228,7 +228,7 @@ type
     property MultiLine: Boolean read FMultiLine write SetMultiLine default True;
     property ParentColor default False;
     property ReadOnly: Boolean read FReadOnly write SetReadOnly default False;
-    property ScrollBars: TScrollStyle read FScrollBars write SetScrollBars default ssNone;
+    property ScrollBars: System.UITypes.TScrollStyle read FScrollBars write SetScrollBars default ssNone;
     property WantReturns: Boolean read FWantReturns write FWantReturns default True;
     property WantTabs: Boolean read FWantTabs write FWantTabs default False;
     property WordWrap: Boolean read FWordWrap write SetWordWrap default True;
@@ -627,7 +627,7 @@ end;
 procedure TCustomExRichEdit.CreateParams(var params: TCreateParams);
 const
   Alignments: array[Boolean, TAlignment] of DWORD = ((ES_LEFT, ES_RIGHT, ES_CENTER),(ES_RIGHT, ES_LEFT, ES_CENTER));
-  ScrollBar: array[TScrollStyle] of DWORD = (0, WS_HSCROLL, WS_VSCROLL, WS_HSCROLL or WS_VSCROLL);
+  ScrollBar: array[System.UITypes.TScrollStyle] of DWORD = (0, WS_HSCROLL, WS_VSCROLL, WS_HSCROLL or WS_VSCROLL);
   WordWraps: array[Boolean] of DWORD = (0, ES_AUTOHSCROLL);
   MultiLines: array[Boolean] of DWORD = (0, ES_MULTILINE);
   HideScrollBars: array[Boolean] of DWORD = (ES_DISABLENOSCROLL, 0);
@@ -1162,7 +1162,7 @@ end;
  |                                                                      |
  | Set method for ScrollBars property                                   |
  *----------------------------------------------------------------------*)
-procedure TCustomExRichEdit.SetScrollBars(const Value: TScrollStyle);
+procedure TCustomExRichEdit.SetScrollBars(const Value: System.UITypes.TScrollStyle);
 begin
   if Value <> FScrollBars then
   begin

@@ -1073,13 +1073,13 @@ begin
 
   f := TMemoryStream.Create;    // Now calculate the checksum....
   try
-    s.Seek (0, soFromBeginning);
+    s.Seek (0, TSeekOrigin.soBeginning);
     f.LoadFromStream (s);
     ntHeaders := ChecksumMappedFile (f.Memory, f.Size, @oldCheckSum, @newCheckSum);
 
     if Assigned(ntHeaders) then
     begin
-      s.Seek (ckOffset, soFromBeginning);
+      s.Seek (ckOffset, TSeekOrigin.soBeginning);
       s.Write (newChecksum, sizeof (newChecksum))
     end
   finally
@@ -1498,7 +1498,7 @@ var
         section.FRawData.Write (entry, sizeof (entry));
         n := section.FRawData.Position;
         SaveToSection (node.nodes [i].next);
-        section.FRawData.Seek (n, soFromBeginning);
+        section.FRawData.Seek (n, TSeekOrigin.soBeginning);
       end
     end;
 
@@ -1517,7 +1517,7 @@ var
       else
         Inc(table.cNameEntries);
 
-    section.FRawData.Seek (tableOffset, soFromBeginning);
+    section.FRawData.Seek (tableOffset, TSeekOrigin.soBeginning);
     section.FRawData.Write (table, sizeof (table));
 
     tableOffset := tableOffset + sizeof (TResourceDirectoryTable) + DWORD (node.Count) * sizeof (TResourceDirectoryEntry);

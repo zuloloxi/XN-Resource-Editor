@@ -207,13 +207,13 @@ begin { ExportToStream }
           wValue := strg.FValue;
           SaveVersionHeader (stringInfoStream, 0, Length (strg.FValue) + 1, 1, strg.KeyName, wValue [1]);
           wSize := stringInfoStream.Size - p;
-          stringInfoStream.Seek (p, soFromBeginning);
+          stringInfoStream.Seek (p, TSeekOrigin.soBeginning);
           stringInfoStream.Write (wSize, sizeof (wSize));
           stringInfoStream.Seek (0, soFromEnd);
 
         end;
 
-        stringInfoStream.Seek (0, soFromBeginning);
+        stringInfoStream.Seek (0, TSeekOrigin.soBeginning);
         wSize := stringInfoStream.Size;
         stringInfoStream.Write (wSize, sizeof (wSize));
 
@@ -225,7 +225,7 @@ begin { ExportToStream }
       finally
         stringInfoStream.Free
       end;
-      strm.Seek (p, soFromBeginning);
+      strm.Seek (p, TSeekOrigin.soBeginning);
       strm.Write (wSize, sizeof (wSize));
       strm.Seek (0, soFromEnd)
     end;
@@ -247,17 +247,17 @@ begin { ExportToStream }
       end;
 
       wSize := strm.Size - p1;
-      strm.Seek (p1, soFromBeginning);
+      strm.Seek (p1, TSeekOrigin.soBeginning);
       strm.Write (wSize, sizeof (wSize));
       wSize := sizeof (Integer) * FTranslations.Count;
       strm.Write (wSize, sizeof (wSize));
 
       wSize := strm.Size - p;
-      strm.Seek (p, soFromBeginning);
+      strm.Seek (p, TSeekOrigin.soBeginning);
       strm.Write (wSize, sizeof (wSize));
     end;
 
-    strm.Seek (0, soFromBeginning);
+    strm.Seek (0, TSeekOrigin.soBeginning);
     wSize := strm.Size;
     strm.Write (wSize, sizeof (wSize));
     strm.Seek (0, soFromEnd);
@@ -511,7 +511,7 @@ begin
     Data.Write (w, sizeof (w));
 
   l := Data.Size;
-  Data.Seek(0, soFromBeginning);
+  Data.Seek(0, TSeekOrigin.soBeginning);
 
   Data.Write(l, sizeof (l))
 end;
@@ -595,8 +595,8 @@ begin
   st := TMemoryStream.Create;
   try
     ExportToStream (st);
-    st.Seek (0, soFromBeginning);
-    data.Seek (0, soFromBeginning);
+    st.Seek (0, TSeekOrigin.soBeginning);
+    data.Seek (0, TSeekOrigin.soBeginning);
     data.size := 0;
     data.CopyFrom (st, st.Size);
   finally

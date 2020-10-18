@@ -793,7 +793,7 @@ end;
 
 function TAnsiResourceDetails.GetText: AnsiString;
 begin
-  Data.Seek(0, soFromBeginning);
+  Data.Seek(0, TSeekOrigin.soBeginning);
   SetString (Result, PAnsiChar (Data.Memory), Data.Size);
 end;
 
@@ -889,7 +889,7 @@ function TUTF8ResourceDetails.GetText: UnicodeString;
 var
   st: UTF8String;
 begin
-  Data.Seek(0, soFromBeginning);
+  Data.Seek(0, TSeekOrigin.soBeginning);
   SetString (st, PAnsiChar (Data.Memory), Data.Size);
   Result := UTF8ToUnicodeString (st);   // ******
 //  raise Exception.Create('Must check bug is fixed!!!') 

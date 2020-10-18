@@ -24,7 +24,7 @@ unit unitSearchString;
 interface
 
 uses
-  Windows, Classes, SysUtils, StrUtils, unitCharsetMap;
+  WinAPI.Windows, System.Classes, System.SysUtils, System.StrUtils, System.AnsiStrings, unitCharsetMap;
 
 type
   TStrArray = array of String;
@@ -182,7 +182,7 @@ begin
   l := Length (search);
   if l = 1 then
   begin
-    pc := StrScan (PAnsiChar (s), search [1]);
+    pc := System.AnsiStrings.StrScan (PAnsiChar (s), search [1]);
     if pc = nil then
       p := 0
     else

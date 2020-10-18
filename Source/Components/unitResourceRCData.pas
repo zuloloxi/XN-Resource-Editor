@@ -17,7 +17,7 @@ unit unitResourceRCData;
 interface
 
 uses
-  WinAPI.Windows, System.Classes, System.SysUtils, System.Contnrs, System.ZLib,
+  WinAPI.Windows, System.Classes, System.SysUtils, System.AnsiStrings, System.Contnrs, System.ZLib,
   unitResourceDetails, unitResourceGraphics;
 
 type
@@ -367,11 +367,11 @@ begin
   s := Nil;
   m := TMemoryStream.Create;
   try
-    data.Seek (0, soFromBeginning);
+    data.Seek (0, TSeekOrigin.soBeginning);
     off := sofUnknown;
     ObjectBinaryToText(data, m, off);
     s := TStringList.Create;
-    m.Seek(0, soFromBeginning);
+    m.Seek(0, TSeekOrigin.soBeginning);
     s.LoadFromStream(m);
     st := s.Text;
     Result := UTF8ToUnicodeString (AnsiString (st))
@@ -394,7 +394,7 @@ begin
 
   try
     m := TMemoryStream.Create;
-    m1.Seek(0, soFromBeginning);
+    m1.Seek(0, TSeekOrigin.soBeginning);
     ObjectTextToBinary (m1, m);
     ChangeData (m);
 
@@ -407,7 +407,7 @@ end;
 class function TRCDataFormResourceDetails.SupportsRCData(
   const AName: UnicodeString; Size: Integer; data: Pointer): Boolean;
 begin
-  Result := (Size > 0) and (strlcomp (PAnsiChar (data), 'TPF0', 4) = 0);
+  Result := (Size > 0) and (System.AnsiStrings.strlcomp (PAnsiChar (data), 'TPF0', 4) = 0);
 end;
 
 { TRCDataCompressedBitmapResourceDetails }
@@ -505,7 +505,7 @@ var
   outs: Integer;
   ms: TMemoryStream;
 begin
-  data.Seek(0, soFromBeginning);
+  data.Seek(0, TSeekOrigin.soBeginning);
   ms := Nil;
   ZDecompress (data.Memory, data.Size, outb, outs);
   try

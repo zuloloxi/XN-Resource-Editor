@@ -117,7 +117,7 @@ end;
 procedure TJpegResourceDetails.GetImage(picture: TPicture);
 begin
   picture.graphic := TJpegImage.Create;
-  data.Seek (0, soFromBeginning);
+  data.Seek (0, TSeekOrigin.soBeginning);
   TJpegImage (picture.graphic).LoadFromStream (data);
   FWidth := picture.graphic.Width;
   FHeight := picture.graphic.Height;

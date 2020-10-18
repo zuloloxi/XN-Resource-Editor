@@ -26,7 +26,6 @@ type
     stMemAvail: TLabel;
     icoProduct1: TImage;
     OKBtn: TButton;
-    hlbSupport: THyperlinkButton;
     stThankYou: TLabel;
     lbDonations: TListBox;
     procedure FormShow(Sender: TObject);
@@ -240,7 +239,6 @@ begin
     if DisplaySupportLink then
     begin
       dlg.lblSupport.Visible := True;
-      dlg.hlbSupport.Visible := True
     end;
 
     dlg.FThanksTo := FThanksTo;

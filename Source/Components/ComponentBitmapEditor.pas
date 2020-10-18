@@ -790,7 +790,7 @@ begin
     finally
       GlobalUnlock (data)
     end;
-    s.Seek (0, soFromBeginning);
+    s.Seek (0, TSeekOrigin.soBeginning);
     b.LoadFromStream (s);
 
     b.Palette := FClipboardPalette;

@@ -92,7 +92,6 @@ type
     property Enabled;
     property Font;
     property Header;
-    property HintAnimation;
     property HintMode;
     property HotCursor;
     property Images;

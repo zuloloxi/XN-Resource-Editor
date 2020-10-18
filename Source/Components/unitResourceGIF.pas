@@ -17,7 +17,7 @@ unit unitResourceGIF;
 interface
 
 uses
-  WinAPI.Windows, System.Classes, System.SysUtils, Vcl.Graphics,
+  WinAPI.Windows, System.Classes, System.SysUtils, System.AnsiStrings, Vcl.Graphics,
   Vcl.Imaging.GIFImg, unitResourceDetails, unitResourceGraphics;
 
 type
@@ -57,7 +57,7 @@ var
 begin
   Gif := TGifImage.Create;
   Picture.Graphic := Gif;
-  Data.Seek (0, soFromBeginning);
+  Data.Seek (0, TSeekOrigin.soBeginning);
   TGifImage(Picture.Graphic).LoadFromStream (data);
 end;
 
@@ -98,7 +98,7 @@ var
 begin
   p := PAnsiChar(data);
 
-  Result := (StrLIComp (p, 'GIF87', 5) = 0) or (StrLIComp (p, 'GIF89', 5) = 0);
+  Result := (System.AnsiStrings.StrLIComp (p, 'GIF87', 5) = 0) or (System.AnsiStrings.StrLIComp (p, 'GIF89', 5) = 0);
 end;
 
 initialization
