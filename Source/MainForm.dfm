@@ -1238,7 +1238,6 @@ object FormMain: TFormMain
     Top = 56
   end
   object NTAboutBox: TNTAboutBox
-    DisplaySupportLink = True
     Left = 224
     Top = 147
   end
