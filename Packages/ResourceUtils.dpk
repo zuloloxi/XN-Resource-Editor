@@ -1,0 +1,65 @@
+package ResourceUtils;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Ressource Utils'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  vclimg,
+  LowLevel;
+
+contains
+  DialogConsts in '..\Source\Components\DialogConsts.pas',
+  unitCExpression in '..\Source\Components\unitCExpression.pas',
+  unitDisassembler in '..\Source\Components\unitDisassembler.pas',
+  unitNTModule in '..\Source\Components\unitNTModule.pas',
+  unitObjFile in '..\Source\Components\unitObjFile.pas',
+  unitParser in '..\Source\Components\unitParser.pas',
+  unitPEFile in '..\Source\Components\unitPEFile.pas',
+  unitPEModuleRW in '..\Source\Components\unitPEModuleRW.pas',
+  unitRCFile in '..\Source\Components\unitRCFile.pas',
+  unitResFile in '..\Source\Components\unitResFile.pas',
+  unitResourceAccelerator in '..\Source\Components\unitResourceAccelerator.pas',
+  unitResourceDetails in '..\Source\Components\unitResourceDetails.pas',
+  unitResourceDialogs in '..\Source\Components\unitResourceDialogs.pas',
+  unitResourceExaminer in '..\Source\Components\unitResourceExaminer.pas',
+  unitResourceGIF in '..\Source\Components\unitResourceGIF.pas',
+  unitResourceGraphics in '..\Source\Components\unitResourceGraphics.pas',
+  unitResourceHTML in '..\Source\Components\unitResourceHTML.pas',
+  unitResourceJPEG in '..\Source\Components\unitResourceJPEG.pas',
+  unitResourceMenus in '..\Source\Components\unitResourceMenus.pas',
+  unitResourceMessages in '..\Source\Components\unitResourceMessages.pas',
+  unitResourcePNG in '..\Source\Components\unitResourcePNG.pas',
+  unitResourceRCData in '..\Source\Components\unitResourceRCData.pas',
+  unitResourceToolbar in '..\Source\Components\unitResourceToolbar.pas',
+  unitResourceVersionInfo in '..\Source\Components\unitResourceVersionInfo.pas',
+  unitResourceXPManifests in '..\Source\Components\unitResourceXPManifests.pas';
+
+end.

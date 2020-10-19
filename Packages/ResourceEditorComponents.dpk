@@ -1,0 +1,67 @@
+package ResourceEditorComponents;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Ressource Editor Components'}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  vclimg,
+  MiscComponents,
+  ResourceUtils,
+  LowLevel;
+
+contains
+  ComponentBitmapEditor in '..\Source\Components\ComponentBitmapEditor.pas',
+  ComponentDialogBox in '..\Source\Components\ComponentDialogBox.pas',
+  ComponentDialogEditor in '..\Source\Components\ComponentDialogEditor.pas',
+  ComponentGradientShape in '..\Source\Components\ComponentGradientShape.pas',
+  ComponentMenuDesigner in '..\Source\Components\ComponentMenuDesigner.pas',
+  ComponentStandardSystemMenu in '..\Source\Components\ComponentStandardSystemMenu.pas',
+  DialogButtonControls in '..\Source\Components\DialogButtonControls.pas',
+  DialogComboBoxControls in '..\Source\Components\DialogComboBoxControls.pas',
+  DialogEditControls in '..\Source\Components\DialogEditControls.pas',
+  DialogHotkeyControls in '..\Source\Components\DialogHotkeyControls.pas',
+  DialogListboxControls in '..\Source\Components\DialogListboxControls.pas',
+  DialogListViewControls in '..\Source\Components\DialogListViewControls.pas',
+  DialogProgressBarControls in '..\Source\Components\DialogProgressBarControls.pas',
+  DialogResourceForm in '..\Source\Components\DialogResourceForm.pas',
+  DialogScrollbarControls in '..\Source\Components\DialogScrollbarControls.pas',
+  DialogSliderControls in '..\Source\Components\DialogSliderControls.pas',
+  DialogStaticControls in '..\Source\Components\DialogStaticControls.pas',
+  DialogStrings in '..\Source\Components\DialogStrings.pas',
+  DialogUpDownControls in '..\Source\Components\DialogUpDownControls.pas',
+  ResourceEditorComponentsReg in '..\Source\Components\ResourceEditorComponentsReg.pas',
+  ResourceForm in '..\Source\Components\ResourceForm.pas',
+  ResourceObjectForm in '..\Source\Components\ResourceObjectForm.pas' {fmResourceObject},
+  unitCREdProperties in '..\Source\Components\unitCREdProperties.pas',
+  unitIncludePaths in '..\Source\Components\unitIncludePaths.pas',
+  unitIncludePathPackages in '..\Source\Components\unitIncludePathPackages.pas';
+
+end.
+

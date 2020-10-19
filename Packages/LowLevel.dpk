@@ -1,0 +1,53 @@
+package LowLevel;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'XN - Low Level'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl;
+
+contains
+  GraphFlip in '..\Source\Components\GraphFlip.pas',
+  MultiLanguage_tlb in '..\Source\Components\MultiLanguage_tlb.pas',
+  RichOle in '..\Source\Components\RichOle.pas',
+  unitCharsetMap in '..\Source\Components\unitCharsetMap.pas',
+  unitExFileSettings in '..\Source\Components\unitExFileSettings.pas',
+  unitExGraphics in '..\Source\Components\unitExGraphics.pas',
+  unitExIcon in '..\Source\Components\unitExIcon.pas',
+  unitExIniSettings in '..\Source\Components\unitExIniSettings.pas',
+  unitExRegSettings in '..\Source\Components\unitExRegSettings.pas',
+  unitExSettings in '..\Source\Components\unitExSettings.pas',
+  unitExXMLSettings in '..\Source\Components\unitExXMLSettings.pas',
+  unitObjectCache in '..\Source\Components\unitObjectCache.pas',
+  unitProcesses in '..\Source\Components\unitProcesses.pas',
+  unitSearchString in '..\Source\Components\unitSearchString.pas',
+  unitStreamTextReader in '..\Source\Components\unitStreamTextReader.pas';
+
+end.
