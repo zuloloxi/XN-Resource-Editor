@@ -500,35 +500,84 @@ end;
  |   newCls: TGraphicClass             The new graphic class            |
  *----------------------------------------------------------------------*}
 function CreateCompatibleGraphic (graphic: TGraphic; newCls: TGraphicClass): TGraphic;
+
+  type
+    TRGB      = packed record b, g, r: Byte end;
+    TRGBA      = packed record b, g, r, a: Byte end;
+    TRGBAArray = array[0..0] of TRGBA;
+
+  function PNG4TransparentBitMap(bmp:TBitmap):TPNGImage;
+  //201011 Thomas Wassermann
+  var
+    x, y:Integer;
+    vBmpRGBA: ^TRGBAArray;
+    vPngRGB: ^TRGB;
+  begin
+    Assert(bmp.PixelFormat = pf32bit, 'bmp pixelformat not 32 bit');
+
+    Result := TPNGImage.CreateBlank(COLOR_RGBALPHA, 8, bmp.Width , bmp.Height);
+    Result.CreateAlpha;
+    Result.Canvas.CopyMode:= cmSrcCopy;
+    Result.Canvas.Draw(0,0,bmp);
+
+    for y := 0 to pred(bmp.Height) do begin
+      vBmpRGBA := bmp.ScanLine[y];
+      vPngRGB:= Result.Scanline[y];
+
+      for x := 0 to pred(bmp.width) do begin
+        Result.AlphaScanline[y][x] :=  vBmpRGBA[x].A;
+        if bmp.AlphaFormat in [afDefined,afPremultiplied] then begin
+          if vBmpRGBA[x].A <> 0 then begin
+            vPngRGB^.b:= round(vBmpRGBA[x].b/vBmpRGBA[x].A*255);
+            vPngRGB^.r:= round(vBmpRGBA[x].r/vBmpRGBA[x].A*255);
+            vPngRGB^.g:= round(vBmpRGBA[x].g/vBmpRGBA[x].A*255);
+          end else begin
+            vPngRGB^.b:= round(vBmpRGBA[x].b*255);
+            vPngRGB^.r:= round(vBmpRGBA[x].r*255);
+            vPngRGB^.g:= round(vBmpRGBA[x].g*255);
+          end;
+        end;
+        inc(vPngRGB);
+      end;
+    end;
+  end;
+
 var
-  viaBitmap: Boolean;
-  bmp: TBitmap;
   gif: TGifImage;
 begin
-  viaBitmap := (newCls = TPngImage);
-
-  Result := newCls.Create;
   try
-    if viaBitmap then           // Some conversions work better if you convert
-    begin                       // the original graphic to a bitmap, then convert
-      bmp := TBitmap.Create;    // that to the new format.
-      try
-        bmp.Assign (graphic);
-        Result.Assign (bmp)
-      finally
-        bmp.Free
-      end
+    // GIF images can do cool things with
+    // a special case, so that these get used
+    // dithering and palettes.  Treat as a
+    if newCls = TGifImage then
+    begin
+      Result := newCls.Create;
+      gif := TGifImage(Result);
+      gif.DitherMode := dmFloydSteinberg;
+      gif.ColorReduction := rmQuantizeWindows;
+      Result.Assign (graphic);
     end
     else
-      if newCls = TGifImage then        // GIF images can do cool things with
-      begin                             // dithering and palettes.  Treat as a
-        gif := TGifImage(Result);      // a special case, so that these get used
-        gif.DitherMode := dmFloydSteinberg;
-        gif.ColorReduction := rmQuantizeWindows;
-        Result.Assign (graphic);
+    // PNG from 32 Bit Bitmap loose Alpha Channel
+    // on doing an simple Assign
+    if newCls = TPngImage then
+    begin
+      if (graphic is TBitmap) and ((graphic as TBitmap).PixelFormat = pf32Bit) then
+      begin
+        Result:= PNG4TransparentBitMap(graphic as TBitmap);
       end
       else
+      begin
+        Result := newCls.Create;
         Result.Assign (graphic)
+      end;
+    end
+    else
+    // do an simple assign for anything else
+    begin
+      Result := newCls.Create;
+      Result.Assign (graphic)
+    end;
   except
     FreeAndNil(Result);
   end
@@ -815,7 +864,7 @@ begin
     if fmResourceObject.Obj is TGraphicsResourceDetails then
     begin
       pict := TPicture.Create;
-      TGraphicsResourceDetails(fmResourceObject.Obj).GetImage(pict)
+      TGraphicsResourceDetails(fmResourceObject.Obj).GetImage(pict);
     end;
 
   if Assigned(pict) then
